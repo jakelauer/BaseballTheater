@@ -1,0 +1,10 @@
+﻿{
+	"version": 3,
+	"file": "home.css",
+	"sources": [
+		"home.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AAAA,EAAE,CACF;EACC,SAAS,EAAE,CAAE,GADb",
+	"names": []
+}
