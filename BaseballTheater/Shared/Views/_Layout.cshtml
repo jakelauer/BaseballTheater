@@ -1,0 +1,46 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<title>@ViewBag.Title</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Lora:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		
+		@RenderSection("ExtraHead", false)
+
+	</head>
+<body>
+
+	<div id="body-wrapper">
+		@RenderBody()
+	</div>
+
+	@{
+		var scripts = new List<string>()
+			{
+				"libraries/modernizr-2.6.2.js",
+				"libraries/jquery-2.1.4.min.js",
+
+				"prototypes/mlb.js",
+
+				"base.js",
+			};
+
+		foreach (var script in scripts)
+		{
+			<script src="~/Shared/Scripts/@script" type="text/javascript"></script>
+		}
+	}
+
+	@RenderSection("Scripts", false)
+
+</body>
+
+</html>

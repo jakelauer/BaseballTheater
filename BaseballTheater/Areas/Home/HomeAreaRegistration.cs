@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Vanilla.Areas.Home
+namespace BaseballTheater.Areas.Home
 {
 	public class HomeAreaRegistration : AreaRegistration 
 	{
@@ -16,9 +16,9 @@ namespace Vanilla.Areas.Home
 		{
 			context.MapRoute(
 				"Home_default",
-				"{action}/{id}",
-				new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-				new[] { "Vanilla.Areas.Home" }
+				"{id}",
+				new { controller = AreaName, action = "Index", id = UrlParameter.Optional },
+				new[] { "BaseballTheater.Areas.Home" }
 			);
 		}
 	}

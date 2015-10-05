@@ -183,35 +183,36 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Game\GameAreaRegistration.cs" />
+    <Compile Include="Areas\Game\GameController.cs" />
+    <Compile Include="Areas\Game\Models\GameModel.cs" />
     <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
     <Compile Include="Areas\Home\HomeController.cs" />
     <Compile Include="Areas\Home\Models\HomeModel.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Home\Scripts\home.js" />
-    <Content Include="Areas\Home\Styles\home.css" />
-    <Content Include="Areas\Home\Styles\home.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Areas\Game\Styles\game.css">
+      <DependentUpon>game.scss</DependentUpon>
+    </Content>
+    <Content Include="Areas\Game\Styles\game.min.css">
+      <DependentUpon>game.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Home\Styles\home.css">
+      <DependentUpon>home.scss</DependentUpon>
+    </Content>
+    <Content Include="Areas\Home\Styles\home.min.css">
+      <DependentUpon>home.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\ai.0.15.0-build46802.js" />
     <Content Include="Scripts\ai.0.15.0-build46802.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -219,10 +220,18 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Home\Styles\home.css.map" />
     <Content Include="Areas\Home\Styles\home.scss" />
     <Content Include="Areas\Home\Views\Index.cshtml" />
     <Content Include="Areas\Home\Views\web.config" />
+    <Content Include="Areas\Game\Views\web.config" />
+    <Content Include="Areas\Home\Styles\home.css.map">
+      <DependentUpon>home.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Game\Views\Index.cshtml" />
+    <Content Include="Areas\Game\Styles\game.scss" />
+    <Content Include="Areas\Game\Styles\game.css.map">
+      <DependentUpon>game.css</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -235,6 +244,10 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Shared\Scripts\base.js" />
+    <Content Include="Shared\Scripts\libraries\jquery-2.1.4.min.js" />
+    <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
+    <Content Include="Shared\Scripts\prototypes\mlb.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -243,18 +256,13 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Shared\Views\web.config" />
+    <Content Include="Shared\Views\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -262,6 +270,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
+      <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
+      <Name>MlbDataServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

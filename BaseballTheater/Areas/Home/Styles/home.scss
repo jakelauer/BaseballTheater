@@ -1,4 +1,13 @@
-﻿.a 
+﻿.game-link
 {
-	font-size: 1;
+	display: inline-block;
+
+	margin-bottom: 10px;
+
+	.team-name
+	{
+		display: inline-block;
+
+		width: 100px;
+	}
 }

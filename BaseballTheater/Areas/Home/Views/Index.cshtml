@@ -1,6 +1,46 @@
-﻿
-@model BaseballTheater.HomeModel
+﻿@using BaseballTheater.Areas.Home.Models
+
+@model HomeModel
 
 @{
 	Layout = "~/Shared/Views/_Layout.cshtml";
+
+	var dayString = Model.Date.ToString("yyyyMMdd");
+	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
+	var dayAfterString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
+}
+
+<link href='~/Areas/Home/Styles/home.css' rel='stylesheet' type='text/css'>
+
+
+<script type="text/javascript">
+	var SERVER_VARS = {
+		RequestedDate: {
+			Year: "@Model.Date.ToString("yyyy")",
+			Month: "@Model.Date.ToString("MM")",
+			Day: "@Model.Date.ToString("dd")"
+		}
+	};
+</script>
+
+
+<a href="/@dayBeforeString">&laquo; Day Before</a> --- @Model.Date.ToString("MMMM d, yyyy") --- <a href="/@dayAfterString">Day After &raquo;</a>
+<br />
+<br />
+<br />
+
+@foreach (var game in Model.GameCollection.GameSummaries.Where(a => a.Linescore != null))
+{
+	<div>
+		<a href="/game/@dayString/@game.GamePk" class="game-link">
+			<div class="team-score away">
+				<span class="team-name">@game.AwayTeamName</span>
+				<span class="team-score">@game.Linescore.Runs.Away</span>
+			</div>
+			<div class="team-score home">
+				<span class="team-name">@game.HomeTeamName</span>
+				<span class="team-score">@game.Linescore.Runs.Home</span>
+			</div>
+		</a>
+	</div>
 }

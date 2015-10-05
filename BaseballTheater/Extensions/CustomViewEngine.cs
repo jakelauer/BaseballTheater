@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Vanilla.Extensions
+namespace BaseballTheater.Extensions
 {
 	public class CustomViewEngine : RazorViewEngine
 	{
