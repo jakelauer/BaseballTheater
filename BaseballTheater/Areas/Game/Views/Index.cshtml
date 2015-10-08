@@ -1,0 +1,32 @@
+﻿@using BaseballTheater.Areas.Game.Models
+
+@model GameModel
+
+@{
+	Layout = "~/Shared/Views/_Layout.cshtml";
+
+}
+
+<link href='~/Areas/Game/Styles/game.css' rel='stylesheet' type='text/css'>
+
+@if (Model.HighlightsCollection != null)
+{
+	foreach (var highlight in Model.HighlightsCollection.Highlights)
+	{
+		<div class="highlight">
+			<h2>@highlight.Headline - @highlight.Duration</h2>
+			<div class="video">
+				@foreach (var url in highlight.Urls)
+				{
+					var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
+
+					<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+				}
+			</div>
+		</div>
+	}
+}
+else
+{
+	<p class="error">No highlights found for this game</p>
+}
