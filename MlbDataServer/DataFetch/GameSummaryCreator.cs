@@ -1,7 +1,7 @@
 ﻿using MlbDataServer.DataStructures;
 using System;
 
-namespace MlbDataServer
+namespace MlbDataServer.DataFetch
 {
 	public class GameSummaryCreator
 	{

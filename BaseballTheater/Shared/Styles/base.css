@@ -1,0 +1,17 @@
+﻿html, body { font-size: 14px; }
+
+body { box-sizing: border-box; width: 100%; max-width: 960px; margin: 0 auto; padding: 60px 10px 0; font-family: 'PT Serif', serif; }
+
+body * { box-sizing: border-box; }
+
+body #body-wrapper { min-height: 800px; }
+
+header { position: fixed; z-index: 100; top: 0; left: 0; height: 50px; width: 100%; background: #EEE; color: #FFF; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); }
+
+header .header-content { width: 100%; max-width: 960px; margin: 0 auto; }
+
+header .logo { position: relative; display: inline-block; margin: 5px; color: #ce0f0f; text-decoration: none; font-size: 30px; font-family: 'Alfa Slab One', cursive; }
+
+footer { padding: 20px 0; text-align: center; }
+
+/*# sourceMappingURL=base.css.map */

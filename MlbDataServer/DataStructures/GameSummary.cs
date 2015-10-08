@@ -18,8 +18,8 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("event_time")]
 		public string EventTime { get; set; }
 
-		[XmlAttribute("status")]
-		public string Status { get; set; }
+		[XmlElement("status")]
+		public GameStatus Status { get; set; }
 
 		[XmlAttribute("inning")]
 		public string Inning { get; set; }

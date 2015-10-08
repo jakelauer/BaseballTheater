@@ -213,6 +213,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\team_logos.png" />
     <Content Include="Scripts\ai.0.15.0-build46802.js" />
     <Content Include="Scripts\ai.0.15.0-build46802.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -232,6 +233,7 @@
     <Content Include="Areas\Game\Styles\game.css.map">
       <DependentUpon>game.css</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\baseballtheater %282%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -248,6 +250,18 @@
     <Content Include="Shared\Scripts\libraries\jquery-2.1.4.min.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\prototypes\mlb.js" />
+    <Content Include="Shared\Styles\base.css">
+      <DependentUpon>base.scss</DependentUpon>
+    </Content>
+    <Content Include="Shared\Styles\base.min.css">
+      <DependentUpon>base.css</DependentUpon>
+    </Content>
+    <Content Include="Shared\Styles\teams.css">
+      <DependentUpon>teams.scss</DependentUpon>
+    </Content>
+    <Content Include="Shared\Styles\teams.min.css">
+      <DependentUpon>teams.css</DependentUpon>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -259,6 +273,14 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
+    <Content Include="Shared\Styles\teams.scss" />
+    <Content Include="Shared\Styles\teams.css.map">
+      <DependentUpon>teams.css</DependentUpon>
+    </Content>
+    <Content Include="Shared\Styles\base.scss" />
+    <Content Include="Shared\Styles\base.css.map">
+      <DependentUpon>base.css</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

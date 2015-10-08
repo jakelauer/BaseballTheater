@@ -7,7 +7,7 @@
 
 	var dayString = Model.Date.ToString("yyyyMMdd");
 	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
-	var dayAfterString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
+	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
 }
 
 <link href='~/Areas/Home/Styles/home.css' rel='stylesheet' type='text/css'>
@@ -24,23 +24,73 @@
 </script>
 
 
-<a href="/@dayBeforeString">&laquo; Day Before</a> --- @Model.Date.ToString("MMMM d, yyyy") --- <a href="/@dayAfterString">Day After &raquo;</a>
-<br />
-<br />
-<br />
+<div class="day-nav">
+	<a href="/@dayBeforeString"><i class="fa fa-chevron-circle-left"></i></a>
+	@Model.Date.ToString("MMMM d, yyyy")
+	<a href="/@dayAfterString"><i class="fa fa-chevron-circle-right"></i></a>
+</div>
 
-@foreach (var game in Model.GameCollection.GameSummaries.Where(a => a.Linescore != null))
+@if (Model.GameCollection != null && Model.GameCollection.GameSummaries != null)
 {
-	<div>
-		<a href="/game/@dayString/@game.GamePk" class="game-link">
-			<div class="team-score away">
-				<span class="team-name">@game.AwayTeamName</span>
-				<span class="team-score">@game.Linescore.Runs.Away</span>
-			</div>
-			<div class="team-score home">
-				<span class="team-name">@game.HomeTeamName</span>
-				<span class="team-score">@game.Linescore.Runs.Home</span>
-			</div>
-		</a>
-	</div>
+	foreach (var game in Model.GameCollection.GameSummaries)
+	{
+		<div class="game-summary">
+			<a href="/game/@dayString/@game.GamePk" class="game-link">
+
+				<table>
+					<tr>
+						<td class="status">@game.Status.Status</td>
+						@if (game.Linescore != null)
+						{
+							for (var i = 0; i < game.Linescore.Innings.Length; i++)
+							{
+								<td class="inning">@(i + 1)</td>
+							}
+							<td class="runs">R</td>
+							<td class="hits">H</td>
+							<td class="errors">E</td>
+						}
+					</tr>
+					<tr class="team away">
+						<td class="team-info">
+							<span class="team-logo dark @game.AwayFileCode"></span>
+							<span class="team-name">@game.AwayTeamName</span>
+						</td>
+						@if (game.Linescore != null)
+						{
+							for (var i = 0; i < game.Linescore.Innings.Length; i++)
+							{
+								var inning = game.Linescore.Innings[i];
+								<td class="inning">@inning.Away</td>
+							}
+							<td class="runs">@game.Linescore.Runs.Away</td>
+							<td class="hits">@game.Linescore.Hits.Away</td>
+							<td class="errors">@game.Linescore.Errors.Away</td>
+						}
+					</tr>
+					<tr class="team home">
+						<td class="team-info">
+							<span class="team-logo dark @game.HomeFileCode"></span>
+							<span class="team-name">@game.HomeTeamName</span>
+						</td>
+						@if (game.Linescore != null)
+						{
+							for (var i = 0; i < game.Linescore.Innings.Length; i++)
+							{
+								var inning = game.Linescore.Innings[i];
+								<td class="inning">@inning.Home</td>
+							}
+							<td class="runs">@game.Linescore.Runs.Home</td>
+							<td class="hits">@game.Linescore.Hits.Home</td>
+							<td class="errors">@game.Linescore.Errors.Home</td>
+						}
+					</tr>
+				</table>
+			</a>
+		</div>
+	}
+}
+else
+{
+	<p class="error">No games for this date</p>
 }

@@ -1,0 +1,276 @@
+﻿
+.team-logo {
+	color: #c2c2c2;
+	display: inline-block;
+	margin: 0!important;
+	text-transform: none;
+
+	&.ari::before 
+	{
+		background-position: 0 -32px!important
+	}
+
+	&.atl::before 
+	{
+		background-position: 0 -64px!important
+	}
+
+	&.bal::before {
+		background-position: 0 -96px!important
+	}
+
+	&.bos::before {
+		background-position: 0 -128px!important
+	}
+
+	&.chc::before {
+		background-position: 0 -160px!important
+	}
+
+	&.cin::before {
+		background-position: 0 -192px!important
+	}
+
+	&.cle::before {
+		background-position: 0 -224px!important
+	}
+
+	&.col::before {
+		background-position: 0 -256px!important
+	}
+
+	&.cws::before {
+		background-position: 0 -288px!important
+	}
+
+	&.det::before {
+		background-position: 0 -320px!important
+	}
+
+	&.hou::before {
+		background-position: 0 -352px!important
+	}
+
+	&.kc::before {
+		background-position: 0 -384px!important
+	}
+
+	&.ana::before,&.laa::before {
+		background-position: 0 -416px!important
+	}
+
+	&.lad::before {
+		background-position: 0 -448px!important
+	}
+
+	&.mia::before {
+		background-position: 0 -480px!important
+	}
+
+	&.mil::before {
+		background-position: 0 -512px!important
+	}
+
+	&.min::before {
+		background-position: 0 -543px!important
+	}
+
+	&.nym::before {
+		background-position: 0 -576px!important
+	}
+
+	&.nyy::before {
+		background-position: 0 -608px!important
+	}
+
+	&.oak::before {
+		background-position: 0 -640px!important
+	}
+
+	&.phi::before {
+		background-position: 0 -672px!important
+	}
+
+	&.pit::before {
+		background-position: 0 -704px!important
+	}
+
+	&.sd::before {
+		background-position: 0 -736px!important
+	}
+
+	&.sea::before {
+		background-position: 0 -768px!important
+	}
+
+	&.sf::before {
+		background-position: 0 -800px!important
+	}
+
+	&.stl::before {
+		background-position: 0 -832px!important
+	}
+
+	&.tb::before {
+		background-position: 0 -864px!important
+	}
+
+	&.tex::before {
+		background-position: 0 -896px!important
+	}
+
+	&.tor::before {
+		background-position: 0 -928px!important
+	}
+
+	&.was::before,&.wsh::before {
+		background-position: 0 -960px!important
+	}
+
+	&.al::before {
+		background-position: 0 -1090px!important
+	}
+
+	&.nl::before {
+		background-position: 0 -1122px!important
+	}
+
+	&.dark {
+		color: #000
+	}
+
+	&.dark.ari::before {
+		background-position: -32px -32px!important
+	}
+
+	&.dark.atl::before {
+		background-position: -32px -64px!important
+	}
+
+	&.dark.bal::before {
+		background-position: -32px -96px!important
+	}
+
+	&.dark.bos::before {
+		background-position: -32px -128px!important
+	}
+
+	&.dark.chc::before {
+		background-position: -32px -160px!important
+	}
+
+	&.dark.cin::before {
+		background-position: -32px -192px!important
+	}
+
+	&.dark.cle::before {
+		background-position: -32px -224px!important
+	}
+
+	&.dark.col::before {
+		background-position: -32px -256px!important
+	}
+
+	&.dark.cws::before {
+		background-position: -32px -288px!important
+	}
+
+	&.dark.det::before {
+		background-position: -32px -320px!important
+	}
+
+	&.dark.hou::before {
+		background-position: -32px -352px!important
+	}
+
+	&.dark.kc::before {
+		background-position: -32px -384px!important
+	}
+
+	&.dark.ana::before,&.dark.laa::before {
+		background-position: -32px -416px!important
+	}
+
+	&.dark.lad::before {
+		background-position: -32px -448px!important
+	}
+
+	&.dark.mia::before {
+		background-position: -32px -480px!important
+	}
+
+	&.dark.mil::before {
+		background-position: -32px -512px!important
+	}
+
+	&.dark.min::before {
+		background-position: -32px -543px!important
+	}
+
+	&.dark.nym::before {
+		background-position: -32px -576px!important
+	}
+
+	&.dark.nyy::before {
+		background-position: -32px -608px!important
+	}
+
+	&.dark.oak::before {
+		background-position: -32px -640px!important
+	}
+
+	&.dark.phi::before {
+		background-position: -32px -672px!important
+	}
+
+	&.dark.pit::before {
+		background-position: -32px -704px!important
+	}
+
+	&.dark.sd::before {
+		background-position: -32px -736px!important
+	}
+
+	&.dark.sea::before {
+		background-position: -32px -768px!important
+	}
+
+	&.dark.sf::before {
+		background-position: -32px -800px!important
+	}
+
+	&.dark.stl::before {
+		background-position: -32px -832px!important
+	}
+
+	&.dark.tb::before {
+		background-position: -32px -864px!important
+	}
+
+	&.dark.tex::before {
+		background-position: -32px -896px!important
+	}
+
+	&.dark.tor::before 
+	{
+		background-position: -32px -928px!important
+	}
+
+	&.dark.was::before,&.dark.wsh::before 
+	{
+		background-position: -32px -960px!important
+	}
+
+	&::before 
+	{
+		background: url(/img/team_logos.png) no-repeat 0 0;
+		background-size: 64px auto;
+		background-position: -32px 0!important;
+		content: "";
+		display: inline-block;
+		height: 32px;
+		margin-right: 5px;
+		width: 32px;
+		vertical-align: middle
+	}
+}

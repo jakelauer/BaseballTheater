@@ -1,8 +1,7 @@
 ﻿
-using MlbDataServer;
+using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using System;
-using System.Threading.Tasks;
 
 namespace BaseballTheater.Areas.Home.Models
 {
@@ -15,9 +14,16 @@ namespace BaseballTheater.Areas.Home.Models
 		public HomeModel(DateTime date)
 		{
 			this.Date = date;
+			var today = DateTime.UtcNow.AddHours(-8);
 
 			var gameSummaryCreator = new GameSummaryCreator();
 			GameCollection = gameSummaryCreator.GetSummaryCollection(this.Date);
+
+			if (GameCollection != null && GameCollection.GameSummaries == null && this.Date.Day == today.Day)
+			{
+				this.Date = date.AddDays(-1);
+				GameCollection = gameSummaryCreator.GetSummaryCollection(this.Date);
+			}
 		}
 	}
 }

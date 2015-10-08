@@ -48,4 +48,11 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("away")]
 		public int Away { get; set; }
 	}
+
+	[Serializable]
+	public class GameStatus
+	{
+		[XmlAttribute("status")]
+		public string Status { get; set; }
+	}
 }

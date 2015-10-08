@@ -11,28 +11,34 @@ namespace MlbDataServer
 		{
 			T deserializedData = default(T);
 
-			var request = WebRequest.Create(url);
-			request.Timeout = 30 * 60 * 1000;
-			request.UseDefaultCredentials = true;
-			request.Proxy.Credentials = request.Credentials;
-			var response = request.GetResponse();
-
-			var serializer = new XmlSerializer(typeof(T));
-			using (var stream = response.GetResponseStream())
+			try
 			{
-				if (stream == null) return deserializedData;
+				var request = WebRequest.Create(url);
+				request.Timeout = 30*60*1000;
+				request.UseDefaultCredentials = true;
+				request.Proxy.Credentials = request.Credentials;
+				var response = request.GetResponse();
 
-				try
+				var serializer = new XmlSerializer(typeof (T));
+				using (var stream = response.GetResponseStream())
 				{
-					var reader = new StreamReader(stream);
-					deserializedData = (T)serializer.Deserialize(reader);
+					if (stream == null) return deserializedData;
 
-					reader.Close();
+					try
+					{
+						var reader = new StreamReader(stream);
+						deserializedData = (T) serializer.Deserialize(reader);
+
+						reader.Close();
+					}
+					catch (Exception e)
+					{
+						Console.Write(e);
+					}
 				}
-				catch (Exception e)
-				{
-					Console.Write(e);
-				}
+			}
+			catch (Exception)
+			{
 			}
 
 
