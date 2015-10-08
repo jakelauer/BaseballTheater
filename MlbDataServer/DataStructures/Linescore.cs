@@ -43,10 +43,10 @@ namespace MlbDataServer.DataStructures
 	public class HomeAway
 	{
 		[XmlAttribute("home")]
-		public int Home { get; set; }
+		public string Home { get; set; }
 
 		[XmlAttribute("away")]
-		public int Away { get; set; }
+		public string Away { get; set; }
 	}
 
 	[Serializable]
