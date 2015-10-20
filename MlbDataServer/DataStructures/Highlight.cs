@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace MlbDataServer.DataStructures
 {
-	[Serializable]
+	[Serializable, XmlRoot("media")]
 	public class Highlight
 	{
 		[XmlAttribute("type")]
@@ -11,6 +11,9 @@ namespace MlbDataServer.DataStructures
 
 		[XmlAttribute("id")]
 		public long Id { get; set; }
+
+		[XmlAttribute("date")]
+		public string Date { get; set; }
 
 		[XmlElement("headline")]
 		public string Headline { get; set; }
@@ -30,6 +33,10 @@ namespace MlbDataServer.DataStructures
 		[XmlArray("thumbnails")]
 		[XmlArrayItem("thumb")]
 		public string[] Thumbs { get; set; }
+
+		[XmlArray("keywords")]
+		[XmlArrayItem("keyword")]
+		public Keyword[] Keywords { get; set; }
 	}
 
 }

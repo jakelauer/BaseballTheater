@@ -37,8 +37,9 @@ namespace MlbDataServer
 					}
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				Console.Write(e);
 			}
 
 

@@ -93,6 +93,7 @@
     <Compile Include="DataStructures\Highlight.cs" />
     <Compile Include="DataStructures\HighlightsCollection.cs" />
     <Compile Include="DataStructures\GameSummaryCollection.cs" />
+    <Compile Include="DataStructures\Keyword.cs" />
     <Compile Include="DataStructures\Linescore.cs" />
     <Compile Include="DataStructures\GameDay.cs" />
     <Compile Include="DataFetch\GameDetailCreator.cs" />

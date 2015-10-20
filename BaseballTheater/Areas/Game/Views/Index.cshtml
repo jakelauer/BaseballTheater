@@ -5,6 +5,10 @@
 @{
 	Layout = "~/Shared/Views/_Layout.cshtml";
 
+	if (Model.GameSummary != null)
+	{
+		ViewBag.Title = Model.GameSummary.AwayTeamName + " @ " + Model.GameSummary.HomeTeamName + " - " + Model.Date.ToString("MMMM d, yyyy");
+	}
 }
 
 <link href='~/Areas/Game/Styles/game.css' rel='stylesheet' type='text/css'>
@@ -16,11 +20,18 @@
 		<div class="highlight">
 			<h2>@highlight.Headline - @highlight.Duration</h2>
 			<div class="video">
-				@foreach (var url in highlight.Urls)
+				@if (highlight.Urls != null)
 				{
-					var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
+					foreach (var url in highlight.Urls)
+					{
+						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
-					<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+						<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+					}
+				}
+				else
+				{
+					<p>Oops, MLB messed up and there's no video file. <a href="http://m.mlb.com/video/v@(highlight.Id)" target="_blank">See?</a> Broken.</p>
 				}
 			</div>
 		</div>

@@ -8,11 +8,14 @@ namespace BaseballTheater.Areas.Game.Models
 {
 	public class GameModel
 	{
+		public DateTime Date { get; set; }
 		public GameSummary GameSummary { get; set; }
 		public HighlightsCollection HighlightsCollection { get; set; }
 
 		public GameModel(DateTime date, int gamePk)
 		{
+			this.Date = date;
+
 			var gameSummaryCreator = new GameSummaryCreator();
 			var gameCollection = gameSummaryCreator.GetSummaryCollection(date);
 			this.GameSummary = gameCollection.GameSummaries.FirstOrDefault(game => game.GamePk == gamePk);
@@ -24,7 +27,7 @@ namespace BaseballTheater.Areas.Game.Models
 			if (HighlightsCollection == default(HighlightsCollection)) return;
 
 
-			foreach (var highlight in HighlightsCollection.Highlights)
+			foreach (var highlight in HighlightsCollection.Highlights.Where(a => a != null && a.Urls != null))
 			{
 				for (var i = 0; i < highlight.Urls.Length; i++)
 				{

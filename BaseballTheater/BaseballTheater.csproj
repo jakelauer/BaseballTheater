@@ -213,6 +213,31 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\android-icon-144x144.png" />
+    <Content Include="img\android-icon-192x192.png" />
+    <Content Include="img\android-icon-36x36.png" />
+    <Content Include="img\android-icon-48x48.png" />
+    <Content Include="img\android-icon-72x72.png" />
+    <Content Include="img\android-icon-96x96.png" />
+    <Content Include="img\apple-icon-114x114.png" />
+    <Content Include="img\apple-icon-120x120.png" />
+    <Content Include="img\apple-icon-144x144.png" />
+    <Content Include="img\apple-icon-152x152.png" />
+    <Content Include="img\apple-icon-180x180.png" />
+    <Content Include="img\apple-icon-57x57.png" />
+    <Content Include="img\apple-icon-60x60.png" />
+    <Content Include="img\apple-icon-72x72.png" />
+    <Content Include="img\apple-icon-76x76.png" />
+    <Content Include="img\apple-icon-precomposed.png" />
+    <Content Include="img\apple-icon.png" />
+    <Content Include="img\favicon-16x16.png" />
+    <Content Include="img\favicon-32x32.png" />
+    <Content Include="img\favicon-96x96.png" />
+    <Content Include="img\favicon.ico" />
+    <Content Include="img\ms-icon-144x144.png" />
+    <Content Include="img\ms-icon-150x150.png" />
+    <Content Include="img\ms-icon-310x310.png" />
+    <Content Include="img\ms-icon-70x70.png" />
     <Content Include="img\team_logos.png" />
     <Content Include="Scripts\ai.0.15.0-build46802.js" />
     <Content Include="Scripts\ai.0.15.0-build46802.min.js" />
@@ -233,6 +258,7 @@
     <Content Include="Areas\Game\Styles\game.css.map">
       <DependentUpon>game.css</DependentUpon>
     </Content>
+    <Content Include="img\manifest.json" />
     <None Include="Properties\PublishProfiles\baseballtheater %282%29.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
