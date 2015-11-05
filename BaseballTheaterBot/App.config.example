@@ -3,8 +3,8 @@
   <connectionStrings>
     <!-- The format of the connection string is "DefaultEndpointsProtocol=https;AccountName=NAME;AccountKey=KEY" -->
     <!-- For local execution, the value can be set either in this config file or through environment variables -->
-    <add name="AzureWebJobsDashboard" connectionString="DefaultEndpointsProtocol=https;AccountName=jakelauer;AccountKey=PG1belz4Wtgy6gzfv6bhrp7eNWmXC6UCIPgFBPRAJeAglzwztmI28q+Sf12NMRe6U+PH2eVskcUGEkFNGVDyEQ==" />
-    <add name="AzureWebJobsStorage" connectionString="DefaultEndpointsProtocol=https;AccountName=jakelauer;AccountKey=PG1belz4Wtgy6gzfv6bhrp7eNWmXC6UCIPgFBPRAJeAglzwztmI28q+Sf12NMRe6U+PH2eVskcUGEkFNGVDyEQ==" />
+    <add name="AzureWebJobsDashboard" connectionString="yourconnectionstring" />
+    <add name="AzureWebJobsStorage" connectionString="yourConnectionString" />
   </connectionStrings>
     <startup> 
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
