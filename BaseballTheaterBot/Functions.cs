@@ -1,16 +1,12 @@
-﻿using System;
-using Microsoft.Azure.WebJobs;
-using System.IO;
+﻿using Microsoft.Azure.WebJobs;
 
 namespace RedditBot
 {
 	public class Functions
 	{
 		public static void HelloWorldFunction(
-			[QueueTrigger("inputText")] string inputText,
-			[Blob("helloworld/out.txt")] out string output)
+			[QueueTrigger("inputText")] string inputText)
 		{
-			output = inputText;
 		}
 	}
 }

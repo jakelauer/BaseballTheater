@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace MlbDataServer.DataStructures
 {
-	[Serializable]
+	[Serializable, XmlRoot("game")]
 	public class GameSummary
 	{
 		[XmlAttribute("id")]
@@ -11,6 +11,9 @@ namespace MlbDataServer.DataStructures
 
 		[XmlAttribute("game_pk")]
 		public int GamePk { get; set; }
+
+		[XmlAttribute("time_date")]
+		public string Date { get; set; }
 
 		[XmlAttribute("game_type")]
 		public string GameType { get; set; }

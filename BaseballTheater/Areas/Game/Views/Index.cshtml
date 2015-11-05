@@ -13,14 +13,14 @@
 
 <link href='~/Areas/Game/Styles/game.css' rel='stylesheet' type='text/css'>
 
-@if (Model.HighlightsCollection != null)
+@if (Model.HighlightsCollection != null && Model.HighlightsCollection.Highlights != null)
 {
 	foreach (var highlight in Model.HighlightsCollection.Highlights)
 	{
 		<div class="highlight">
 			<h2>@highlight.Headline - @highlight.Duration</h2>
 			<div class="video">
-				@if (highlight.Urls != null)
+				@if (highlight.Urls != null && highlight.Thumbs != null)
 				{
 					foreach (var url in highlight.Urls)
 					{

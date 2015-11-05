@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace MlbDataServer.DataStructures
@@ -37,6 +38,24 @@ namespace MlbDataServer.DataStructures
 		[XmlArray("keywords")]
 		[XmlArrayItem("keyword")]
 		public Keyword[] Keywords { get; set; }
+
+		public string GetGameDetailDirectory
+		{
+			get
+			{
+				var keyword = this.Keywords.FirstOrDefault(a => a.Type == "game_events_location_plist");
+				if (keyword != null)
+				{
+					var gameEventsLocationPlist = keyword.Value;
+					var splitDirectory = gameEventsLocationPlist.Split('/');
+					splitDirectory = splitDirectory.Take(splitDirectory.Length - 1).ToArray();
+					var rootDirectory = string.Join("/", splitDirectory);
+					return rootDirectory;
+				}
+
+				return null;
+			}
+		}
 	}
 
 }
