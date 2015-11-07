@@ -86,8 +86,9 @@ namespace RedditBot
 				ServerTimeout = TimeSpan.FromMinutes(10)
 			};
 
+			var allComments = _commentIds.Concat(_newCommentIds);
 			var textToWrite = "";
-			foreach (var commentId in _newCommentIds)
+			foreach (var commentId in allComments)
 			{
 				textToWrite += " " + commentId;
 			}
@@ -168,7 +169,7 @@ namespace RedditBot
 										: null;
 
 									var redditFormatLink = string.Format(
-										"|More from this game|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| {4}| \r\n\r\n ^^I ^^am ^^a ^^[bot](http://reddit.com/r/BaseballTheaterBot)",
+										"|More from this game|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| {4}| \r\n\r\n ^^I ^^am ^^a ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://reddit.com/r/BaseballTheaterBot)",
 										gameSummary.AwayTeamName,
 										gameSummary.HomeTeamName,
 										date.ToString("MM/dd/yyyy"),
@@ -189,7 +190,7 @@ namespace RedditBot
 
 									Console.WriteLine(baseballTheaterUrl);
 								}
-							}
+							} 
 							else
 							{
 								Console.WriteLine("No game available for id " + contentId);

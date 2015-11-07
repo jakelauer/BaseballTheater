@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.WebJobs;
-
+﻿
 namespace RedditBot
 {
 	// To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
@@ -12,10 +11,6 @@ namespace RedditBot
 			var redditAccess = new RedditAccess();
 
 			redditAccess.ListenForPrompt();
-
-			var host = new JobHost();
-			// The following code ensures that the WebJob will be running continuously
-			host.RunAndBlock();
 		}
 	}
 }
