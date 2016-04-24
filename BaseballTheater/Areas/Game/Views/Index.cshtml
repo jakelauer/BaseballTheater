@@ -20,10 +20,13 @@
 		<div class="highlight">
 			<h2>@highlight.Headline - @highlight.Duration</h2>
 			<div class="video">
-				@if (highlight.Urls != null && highlight.Thumbs != null)
+				@if (highlight.Urls != null && highlight.Thumbs != null && highlight.Urls.Any(a => a.EndsWith("mp4")))
 				{
-					foreach (var url in highlight.Urls)
+					var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
+					var url = urls.FirstOrDefault();
+					if (url != null)
 					{
+
 						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
 						<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>

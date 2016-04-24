@@ -17,7 +17,7 @@ namespace MlbDataServer.DataFetch
 				? directory
 				: UrlBase + directory;
 
-			this.HighlightsXmlUrl = this.DirectoryUrl + "/media/highlights.xml";
+			this.HighlightsXmlUrl = this.DirectoryUrl + "/media/mobile.xml";
 			this.GameCenterXmlUrl = this.DirectoryUrl + "/gamecenter.xml";
 			this.GameSummaryXmlUrl = this.DirectoryUrl + "/linescore.xml";
 		}
