@@ -1,16 +1,30 @@
-﻿.highlight {
-  margin: 15px 0 45px;
+﻿.highlights
+{
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+
+	-ms-flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
 }
 
 .highlight
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0;
+{
+	width: 50%;
+	margin: 15px 0 45px;
+	padding: 0 10px;
 }
 
-.highlight
-video {
-  width: 100%;
-  height: auto;
-  background-size: cover;
-}
+	.highlight h2
+	{
+		font-size: 1.5rem;
+		margin-bottom: 0;
+	}
+
+	.highlight video
+	{
+		width: 100%;
+		height: auto;
+		background-size: cover;
+	}

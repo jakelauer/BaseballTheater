@@ -15,30 +15,33 @@
 
 @if (Model.HighlightsCollection != null && Model.HighlightsCollection.Highlights != null)
 {
-	foreach (var highlight in Model.HighlightsCollection.Highlights.OrderByDescending(a => a.Condensed || a.Recap).ThenBy(a => a.DateObj))
-	{
-		<div class="highlight">
-			<h2>@highlight.Headline - @highlight.Duration</h2>
-			<div class="video">
-				@if (highlight.Urls != null && highlight.Thumbs != null && highlight.Urls.Any(a => a.EndsWith("mp4")))
-				{
-					var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
-					var url = urls.FirstOrDefault();
-					if (url != null)
+	<div class="highlights">
+		@foreach (var highlight in Model.HighlightsCollection.Highlights.OrderByDescending(a => a.Condensed || a.Recap).ThenBy(a => a.DateObj))
+		{
+			<div class="highlight">
+				<h2>@highlight.Headline - @highlight.Duration</h2>
+				<div class="video">
+					@if (highlight.Urls != null && highlight.Thumbs != null && highlight.Urls.Any(a => a.EndsWith("mp4")))
 					{
+						var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
+						var url = urls.FirstOrDefault();
+						if (url != null)
+						{
 
-						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
+							var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
-						<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+							<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+						}
 					}
-				}
-				else
-				{
-					<p>Oops, MLB messed up and there's no video file. <a href="http://m.mlb.com/video/v@(highlight.Id)" target="_blank">See?</a> Broken.</p>
-				}
+					else
+					{
+						<p>Oops, MLB messed up and there's no video file. <a href="http://m.mlb.com/video/v@(highlight.Id)" target="_blank">See?</a> Broken.
+						</p>
+					}
+				</div>
 			</div>
-		</div>
-	}
+		}
+	</div>
 }
 else
 {

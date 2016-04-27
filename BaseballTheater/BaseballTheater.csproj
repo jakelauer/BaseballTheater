@@ -200,12 +200,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Game\Styles\game.css">
-      <DependentUpon>game.scss</DependentUpon>
-    </Content>
-    <Content Include="Areas\Game\Styles\game.min.css">
-      <DependentUpon>game.css</DependentUpon>
-    </Content>
+    <Content Include="Areas\Game\Styles\game.css" />
     <Content Include="Areas\Home\Styles\home.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -242,10 +237,6 @@
     <Content Include="Areas\Home\Views\web.config" />
     <Content Include="Areas\Game\Views\web.config" />
     <Content Include="Areas\Game\Views\Index.cshtml" />
-    <Content Include="Areas\Game\Styles\game.scss" />
-    <Content Include="Areas\Game\Styles\game.css.map">
-      <DependentUpon>game.css</DependentUpon>
-    </Content>
     <Content Include="images\manifest.json" />
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
     <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
