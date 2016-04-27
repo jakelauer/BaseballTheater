@@ -126,6 +126,6 @@
 
 .team-logo.dark.was::before, .team-logo.dark.wsh::before { background-position: -32px -960px !important; }
 
-.team-logo::before { background: url(/img/team_logos.png) no-repeat 0 0; background-size: 64px auto; background-position: -32px 0 !important; content: ""; display: inline-block; height: 32px; margin-right: 5px; width: 32px; vertical-align: middle; }
+.team-logo::before { background: url(/images/team_logos.png) no-repeat 0 0; background-size: 64px auto; background-position: -32px 0 !important; content: ""; display: inline-block; height: 32px; margin-right: 5px; width: 32px; vertical-align: middle; }
 
 /*# sourceMappingURL=teams.css.map */

@@ -206,69 +206,65 @@
     <Content Include="Areas\Game\Styles\game.min.css">
       <DependentUpon>game.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Home\Styles\home.css">
-      <DependentUpon>home.scss</DependentUpon>
-    </Content>
-    <Content Include="Areas\Home\Styles\home.min.css">
-      <DependentUpon>home.css</DependentUpon>
-    </Content>
+    <Content Include="Areas\Home\Styles\home.css" />
+    <Content Include="css\jquery-ui.css" />
+    <Content Include="css\jquery-ui.structure.css" />
+    <Content Include="css\jquery-ui.structure.min.css" />
+    <Content Include="css\jquery-ui.theme.css" />
+    <Content Include="css\jquery-ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="img\android-icon-144x144.png" />
-    <Content Include="img\android-icon-192x192.png" />
-    <Content Include="img\android-icon-36x36.png" />
-    <Content Include="img\android-icon-48x48.png" />
-    <Content Include="img\android-icon-72x72.png" />
-    <Content Include="img\android-icon-96x96.png" />
-    <Content Include="img\apple-icon-114x114.png" />
-    <Content Include="img\apple-icon-120x120.png" />
-    <Content Include="img\apple-icon-144x144.png" />
-    <Content Include="img\apple-icon-152x152.png" />
-    <Content Include="img\apple-icon-180x180.png" />
-    <Content Include="img\apple-icon-57x57.png" />
-    <Content Include="img\apple-icon-60x60.png" />
-    <Content Include="img\apple-icon-72x72.png" />
-    <Content Include="img\apple-icon-76x76.png" />
-    <Content Include="img\apple-icon-precomposed.png" />
-    <Content Include="img\apple-icon.png" />
-    <Content Include="img\favicon-16x16.png" />
-    <Content Include="img\favicon-32x32.png" />
-    <Content Include="img\favicon-96x96.png" />
-    <Content Include="img\favicon.ico" />
-    <Content Include="img\ms-icon-144x144.png" />
-    <Content Include="img\ms-icon-150x150.png" />
-    <Content Include="img\ms-icon-310x310.png" />
-    <Content Include="img\ms-icon-70x70.png" />
-    <Content Include="img\team_logos.png" />
-    <Content Include="Scripts\ai.0.15.0-build46802.js" />
-    <Content Include="Scripts\ai.0.15.0-build46802.min.js" />
+    <Content Include="images\android-icon-144x144.png" />
+    <Content Include="images\android-icon-192x192.png" />
+    <Content Include="images\android-icon-36x36.png" />
+    <Content Include="images\android-icon-48x48.png" />
+    <Content Include="images\android-icon-72x72.png" />
+    <Content Include="images\android-icon-96x96.png" />
+    <Content Include="images\apple-icon-114x114.png" />
+    <Content Include="images\apple-icon-120x120.png" />
+    <Content Include="images\apple-icon-144x144.png" />
+    <Content Include="images\apple-icon-152x152.png" />
+    <Content Include="images\apple-icon-180x180.png" />
+    <Content Include="images\apple-icon-57x57.png" />
+    <Content Include="images\apple-icon-60x60.png" />
+    <Content Include="images\apple-icon-72x72.png" />
+    <Content Include="images\apple-icon-76x76.png" />
+    <Content Include="images\apple-icon-precomposed.png" />
+    <Content Include="images\apple-icon.png" />
+    <Content Include="images\favicon-16x16.png" />
+    <Content Include="images\favicon-32x32.png" />
+    <Content Include="images\favicon-96x96.png" />
+    <Content Include="images\favicon.ico" />
+    <Content Include="images\ms-icon-144x144.png" />
+    <Content Include="images\ms-icon-150x150.png" />
+    <Content Include="images\ms-icon-310x310.png" />
+    <Content Include="images\ms-icon-70x70.png" />
+    <Content Include="images\team_logos.png" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Home\Styles\home.scss" />
     <Content Include="Areas\Home\Views\Index.cshtml" />
     <Content Include="Areas\Home\Views\web.config" />
     <Content Include="Areas\Game\Views\web.config" />
-    <Content Include="Areas\Home\Styles\home.css.map">
-      <DependentUpon>home.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Game\Views\Index.cshtml" />
     <Content Include="Areas\Game\Styles\game.scss" />
     <Content Include="Areas\Game\Styles\game.css.map">
       <DependentUpon>game.css</DependentUpon>
     </Content>
-    <Content Include="img\manifest.json" />
+    <Content Include="images\manifest.json" />
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.js" />
-    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
+    <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
+    <Content Include="images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
+    <Content Include="images\ui-bg_glass_55_fbf8ee_1x400.png" />
+    <Content Include="images\ui-bg_highlight-hard_100_eeeeee_1x100.png" />
+    <Content Include="images\ui-bg_highlight-hard_100_f6f6f6_1x100.png" />
+    <Content Include="images\ui-bg_highlight-soft_15_cc0000_1x100.png" />
+    <Content Include="images\ui-icons_004276_256x240.png" />
+    <Content Include="images\ui-icons_cc0000_256x240.png" />
+    <Content Include="images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Shared\Scripts\libraries\jquery-ui.js" />
     <Content Include="Shared\Scripts\base.js" />
-    <Content Include="Shared\Scripts\libraries\jquery-2.1.4.min.js" />
+    <Content Include="Shared\Scripts\libraries\jquery.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\prototypes\mlb.js" />
     <Content Include="Shared\Styles\base.css">
@@ -304,7 +300,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
