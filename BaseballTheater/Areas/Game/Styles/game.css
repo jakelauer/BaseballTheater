@@ -12,7 +12,7 @@
 .highlight
 {
 	width: 50%;
-	margin: 15px 0 45px;
+	margin: 15px auto 45px;
 	padding: 0 10px;
 }
 
@@ -28,3 +28,19 @@
 		height: auto;
 		background-size: cover;
 	}
+
+@media all and (max-width: 1200px)
+{
+	.highlight
+	{
+		width: 75%;
+	}
+}
+
+@media all and (max-width: 800px)
+{
+	.highlight
+	{
+		width: 100%;
+	}
+}
