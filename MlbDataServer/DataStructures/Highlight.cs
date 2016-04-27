@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -15,6 +16,14 @@ namespace MlbDataServer.DataStructures
 
 		[XmlAttribute("date")]
 		public string Date { get; set; }
+
+		public DateTime DateObj
+		{
+			get
+			{
+				return DateTime.Parse(Date, CultureInfo.InvariantCulture);
+			}
+		}
 
 		[XmlElement("headline")]
 		public string Headline { get; set; }
