@@ -11,9 +11,6 @@ namespace BaseballTheater
 			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
 						"~/Shared/Scripts/libraries/modernizr-*",
 						"~/Shared/Scripts/libraries/jquery*"));
-
-			bundles.Add(new StyleBundle("~/cssbundle").Include(
-					  "~/css/*.css"));
 		}
 	}
 }

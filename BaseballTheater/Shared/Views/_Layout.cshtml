@@ -16,6 +16,7 @@
 		<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/css/pikaday.min.css"/>
 		<link rel="stylesheet" href="~/Shared/Styles/base.css?v=1">
 		<link rel="stylesheet" href="~/Shared/Styles/teams.css?v=1">
 		
@@ -40,58 +41,68 @@
 		
 		@RenderSection("ExtraHead", false)
 
-		@Styles.Render("~/cssbundle")
-
 		<title>@ViewBag.Title</title>
 	</head>
 <body>
-	<header>
-		<div class="header-content">
-			<a class="logo" href="/">Baseball Theater</a>
-		</div>
-	</header>
-	<div id="body-wrapper">
-		@RenderBody()
+
+
+
+
+<header>
+	<div class="header-content">
+		<a class="logo" href="/">Baseball Theater</a>
 	</div>
+</header>
+<div id="body-wrapper">
+	@RenderBody()
+</div>
 
-	<footer>
-		&copy; @DateTime.Now.Year
-		Created by Jake Lauer (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
-	</footer>
+<footer>
+	&copy; @DateTime.Now.Year
+	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
+</footer>
 
-	@Scripts.Render("~/bundles/lib")
+@Scripts.Render("~/bundles/lib")
 
-	@{
-		var scripts = new List<string>()
-			{
-
-				//"prototypes/mlb.js",
-
-				"base.js",
-			};
-
-
-
-		foreach (var script in scripts)
-		{
-			<script src="~/Shared/Scripts/@script" type="text/javascript"></script>
-		}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js"></script>
+	
+@{
+	var scripts = new List<string>()
+	{
+		"base.js",
+	};
+	foreach (var script in scripts)
+	{
+		<script src="~/Shared/Scripts/@script" type="text/javascript"></script>
 	}
+}
 
-	@RenderSection("Scripts", false)
+@RenderSection("Scripts", false)
 
-	<script>
-		(function (i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date(); a = s.createElement(o),
-			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+<script>
+	(function(i, s, o, g, r, a, m)
+	{
+		i['GoogleAnalyticsObject'] = r;
+		i[r] = i[r] || function()
+		{
+			(i[r].q = i[r].q || []).push(arguments)
+		}, i[r].l = 1 * new Date();
+		a = s.createElement(o),
+			m = s.getElementsByTagName(o)[0];
+		a.async = 1;
+		a.src = g;
+		m.parentNode.insertBefore(a, m)
+	})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-		ga('create', 'UA-23730353-4', 'auto');
-		ga('send', 'pageview');
+	ga('create', 'UA-23730353-4', 'auto');
+	ga('send', 'pageview');
 
-	</script>
+</script>
+
+
+
+
 
 </body>
 

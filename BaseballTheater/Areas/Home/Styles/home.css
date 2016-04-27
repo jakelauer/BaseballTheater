@@ -3,6 +3,13 @@
 	cursor: pointer;
 }
 
+#calendarpicker
+{
+	font-size: 1.5rem;
+	text-align: center;
+	border: 0;
+}
+
 #datepicker-wrapper
 {
 	position: relative;
@@ -23,7 +30,7 @@
 
 	.leagues > div
 	{
-		margin: 0 20px;
+		padding: 0 10px;
 	}
 
 .game-summary
@@ -119,4 +126,23 @@
 	{
 		display: none !important;
 	}
+}
+
+@media all and (max-width: 800px)
+{
+	.leagues
+	{
+		-ms-flex-wrap: wrap;
+		-webkit-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+
+		.leagues > div
+		{
+			-ms-flex: none;
+			-webkit-flex: none;
+			flex: none;
+
+			width: 100%;
+		}
 }

@@ -1,15 +1,18 @@
 ﻿jQuery(function ($) {
 
 
-	$(".calendar .fa").on("click", function() {
-		$("#datepicker-wrapper").toggle();
-	});
 
-	$("#datepicker").datepicker({
-		dateFormat: "yymmdd",
-		onSelect: function(dateText, inst)
+	var picker = new Pikaday({
+		field: $('#calendarpicker')[0],
+		format: 'MMM DD, YYYY',
+		onSelect: function(date)
 		{
+			var dateText = moment(date).format("YYYYMMDD");
 			window.location = "/" + dateText;
 		}
+	});
+
+	$(".fa-calendar").on("click", function() {
+		picker.show();
 	});
 });
