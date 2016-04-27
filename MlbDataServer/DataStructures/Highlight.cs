@@ -39,6 +39,12 @@ namespace MlbDataServer.DataStructures
 		[XmlArrayItem("keyword")]
 		public Keyword[] Keywords { get; set; }
 
+		[XmlAttribute("condensed")]
+		public bool Condensed { get; set; }
+
+		[XmlAttribute("recap")]
+		public bool Recap { get; set; }
+
 		public string GetGameDetailDirectory
 		{
 			get

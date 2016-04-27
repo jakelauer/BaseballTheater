@@ -15,7 +15,7 @@
 
 @if (Model.HighlightsCollection != null && Model.HighlightsCollection.Highlights != null)
 {
-	foreach (var highlight in Model.HighlightsCollection.Highlights)
+	foreach (var highlight in Model.HighlightsCollection.Highlights.OrderByDescending(a => a.Condensed || a.Recap))
 	{
 		<div class="highlight">
 			<h2>@highlight.Headline - @highlight.Duration</h2>
