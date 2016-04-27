@@ -1,4 +1,5 @@
 ﻿@using BaseballTheater.Areas.Home.Models
+@using MlbDataServer.DataStructures
 
 @model HomeModel
 
@@ -39,65 +40,83 @@
 
 @if (Model.GameCollection != null && Model.GameCollection.GameSummaries != null)
 {
-	foreach (var game in Model.GameCollection.GameSummaries)
-	{
-		<div class="game-summary">
-			<a href="/game/@dayString/@game.GamePk" class="game-link">
-
-				<table>
-					<tr>
-						<td class="status">@game.Status.Status</td>
-						@if (game.Linescore != null)
-						{
-							for (var i = 0; i < game.Linescore.Innings.Length; i++)
-							{
-								<td class="inning">@(i + 1)</td>
-							}
-							<td class="runs">R</td>
-							<td class="hits">H</td>
-							<td class="errors">E</td>
-						}
-					</tr>
-					<tr class="team away">
-						<td class="team-info">
-							<span class="team-logo dark @game.AwayFileCode"></span>
-							<span class="team-name">@game.AwayTeamName</span>
-						</td>
-						@if (game.Linescore != null)
-						{
-							for (var i = 0; i < game.Linescore.Innings.Length; i++)
-							{
-								var inning = game.Linescore.Innings[i];
-								<td class="inning">@inning.Away</td>
-							}
-							<td class="runs">@game.Linescore.Runs.Away</td>
-							<td class="hits">@game.Linescore.Hits.Away</td>
-							<td class="errors">@game.Linescore.Errors.Away</td>
-						}
-					</tr>
-					<tr class="team home">
-						<td class="team-info">
-							<span class="team-logo dark @game.HomeFileCode"></span>
-							<span class="team-name">@game.HomeTeamName</span>
-						</td>
-						@if (game.Linescore != null)
-						{
-							for (var i = 0; i < game.Linescore.Innings.Length; i++)
-							{
-								var inning = game.Linescore.Innings[i];
-								<td class="inning">@inning.Home</td>
-							}
-							<td class="runs">@game.Linescore.Runs.Home</td>
-							<td class="hits">@game.Linescore.Hits.Home</td>
-							<td class="errors">@game.Linescore.Errors.Home</td>
-						}
-					</tr>
-				</table>
-			</a>
+	<div class="leagues">
+		<div>
+			<h2>American League</h2>
+			@foreach (var game in Model.GameCollection.GameSummaries.Where(a => a.League == "AA"))
+			{
+				@GameSummary(game, dayString)
+			}
 		</div>
-	}
+		<div>
+			<h2>National League</h2>
+			@foreach (var game in Model.GameCollection.GameSummaries.Where(a => a.League == "NN"))
+			{
+				@GameSummary(game, dayString)
+			}
+		</div>
+	</div>
 }
 else
 {
 	<p class="error">No games for this date</p>
+}
+
+
+@helper GameSummary(GameSummary game, string dayString)
+{
+	<div class="game-summary">
+		<a href="/game/@dayString/@game.GamePk" class="game-link">
+
+			<table>
+				<tr>
+					<td class="status">@game.Status.Status</td>
+					@if (game.Linescore != null)
+					{
+						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						{
+							<td class="inning">@(i + 1)</td>
+						}
+						<td class="runs">R</td>
+						<td class="hits">H</td>
+						<td class="errors">E</td>
+					}
+				</tr>
+				<tr class="team away">
+					<td class="team-info">
+						<span class="team-logo dark @game.AwayFileCode"></span>
+						<span class="team-name">@game.AwayTeamName</span>
+					</td>
+					@if (game.Linescore != null)
+					{
+						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						{
+							var inning = game.Linescore.Innings[i];
+							<td class="inning">@inning.Away</td>
+						}
+						<td class="runs">@game.Linescore.Runs.Away</td>
+						<td class="hits">@game.Linescore.Hits.Away</td>
+						<td class="errors">@game.Linescore.Errors.Away</td>
+					}
+				</tr>
+				<tr class="team home">
+					<td class="team-info">
+						<span class="team-logo dark @game.HomeFileCode"></span>
+						<span class="team-name">@game.HomeTeamName</span>
+					</td>
+					@if (game.Linescore != null)
+					{
+						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						{
+							var inning = game.Linescore.Innings[i];
+							<td class="inning">@inning.Home</td>
+						}
+						<td class="runs">@game.Linescore.Runs.Home</td>
+						<td class="hits">@game.Linescore.Hits.Home</td>
+						<td class="errors">@game.Linescore.Errors.Home</td>
+					}
+				</tr>
+			</table>
+		</a>
+	</div>
 }

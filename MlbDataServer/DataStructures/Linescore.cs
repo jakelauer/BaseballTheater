@@ -55,4 +55,10 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("status")]
 		public string Status { get; set; }
 	}
+
+	public enum League
+	{
+		AA,
+		NN
+	}
 }

@@ -14,6 +14,18 @@
 		position: absolute;
 	}
 
+.leagues
+{
+	display: -ms-flexbox;
+	display: -webkit-flex;	
+	display: flex;
+}
+
+	.leagues > div
+	{
+		margin: 0 20px;
+	}
+
 .game-summary
 {
 	padding-bottom: 30px;
@@ -101,7 +113,7 @@
 	font-size: 1.5em;
 }
 
-@media all and (max-width: 960px)
+@media all and (max-width: 1200px)
 {
 	.team-name
 	{

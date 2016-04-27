@@ -24,6 +24,9 @@ namespace MlbDataServer.DataStructures
 		[XmlElement("status")]
 		public GameStatus Status { get; set; }
 
+		[XmlAttribute("league")]
+		public string League { get; set; }
+
 		[XmlAttribute("inning")]
 		public string Inning { get; set; }
 
