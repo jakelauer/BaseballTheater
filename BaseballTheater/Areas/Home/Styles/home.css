@@ -1,4 +1,9 @@
-﻿#datepicker-wrapper
+﻿.calendar
+{
+	cursor: pointer;
+}
+
+#datepicker-wrapper
 {
 	position: relative;
 	display: none;
