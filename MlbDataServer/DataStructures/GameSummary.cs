@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace MlbDataServer.DataStructures
@@ -18,8 +19,19 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("game_type")]
 		public string GameType { get; set; }
 
-		[XmlAttribute("event_time")]
+		[XmlAttribute("time")]
 		public string EventTime { get; set; }
+
+		[XmlAttribute("ampm")]
+		public string EventTimeAmPm { get; set; }
+
+		public DateTime DateObj
+		{
+			get
+			{
+				return Date != null ? DateTime.Parse(Date, CultureInfo.InvariantCulture) : DateTime.UtcNow;
+			}
+		}
 
 		[XmlElement("status")]
 		public GameStatus Status { get; set; }

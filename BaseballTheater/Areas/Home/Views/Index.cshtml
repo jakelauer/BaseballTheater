@@ -10,10 +10,11 @@
 	var inputBoxString = Model.Date.ToString("MMM dd yyyy");
 	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
 	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
-	
-	var alGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AA");
-	var nlGames = Model.GameCollection.GameSummaries.Where(a => a.League == "NN");
-	var ilGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AN" || a.League == "NA");
+
+	var allGames = Model.GameCollection.GameSummaries.OrderByDescending(a => a.Linescore != null).ThenBy(a => a.DateObj);
+	var alGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AA").OrderBy(a => a.DateObj);
+	var nlGames = Model.GameCollection.GameSummaries.Where(a => a.League == "NN").OrderBy(a => a.DateObj);
+	var ilGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AN" || a.League == "NA").OrderBy(a => a.DateObj);
 }
 
 <link href='~/Areas/Home/Styles/home.css' rel='stylesheet' type='text/css'>
@@ -22,13 +23,32 @@
 
 <div class="day-nav">
 	<a href="/@dayBeforeString"><i class="fa fa-chevron-circle-left"></i></a>
-	<input type="text" id="calendarpicker" value="@inputBoxString" size="@inputBoxString.Length" />
+	<input type="text" id="calendarpicker" value="@inputBoxString" size="@(inputBoxString.Length + 1)" />
 	<i class="fa fa-calendar" aria-hidden="true"></i>
 	<a href="/@dayAfterString"><i class="fa fa-chevron-circle-right"></i></a>
 </div>
 
 @if (Model.GameCollection != null && Model.GameCollection.GameSummaries != null)
 {
+	<div class="leagues">
+		@foreach (var game in allGames)
+		{
+			@GameSummary(game, dayString)
+		}
+	</div>
+	
+	@*<div class="leagues">
+		@if (ilGames.Any())
+		{
+			<div class="il">
+				<h2>Interleague</h2>
+				@foreach (var game in ilGames)
+				{
+					@GameSummary(game, dayString)
+				}
+			</div>
+		}
+	</div>
 	<div class="leagues">
 		@if (alGames.Any())
 		{
@@ -50,17 +70,7 @@
 				}
 			</div>
 		}
-		@if (ilGames.Any())
-		{
-			<div>
-				<h2>Interleague</h2>
-				@foreach (var game in ilGames)
-				{
-					@GameSummary(game, dayString)
-				}
-			</div>
-		}
-	</div>
+	</div>*@
 }
 else
 {
@@ -70,15 +80,30 @@ else
 
 @helper GameSummary(GameSummary game, string dayString)
 {
+	var inningCount = 9;
+	if (game.Linescore != null && game.Linescore.Innings.Length > inningCount)
+	{
+		inningCount = game.Linescore.Innings.Length;
+	}
+	
+	
 	<div class="game-summary">
 		<a href="/game/@dayString/@game.GamePk" class="game-link">
 
 			<table>
 				<tr>
-					<td class="status">@game.Status.Status</td>
+					<td class="status">
+						<small>
+							@game.Status.Status
+							@if (game.Linescore == null)
+							{
+								<text> - @(game.EventTime + game.EventTimeAmPm)</text>
+							}
+						</small>
+					</td>
 					@if (game.Linescore != null)
 					{
-						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						for (var i = 0; i < inningCount; i++)
 						{
 							<td class="inning">@(i + 1)</td>
 						}
@@ -94,10 +119,18 @@ else
 					</td>
 					@if (game.Linescore != null)
 					{
-						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						for (var i = 0; i < inningCount; i++)
 						{
-							var inning = game.Linescore.Innings[i];
-							<td class="inning">@inning.Away</td>
+							var value = "-";
+							if (game.Linescore.Innings.Length > i)
+							{
+								var inning = game.Linescore.Innings[i];
+								if (inning.Away != null)
+								{
+									value = inning.Away;
+								}
+							}
+							<td class="inning">@value</td>
 						}
 						<td class="runs">@game.Linescore.Runs.Away</td>
 						<td class="hits">@game.Linescore.Hits.Away</td>
@@ -111,10 +144,18 @@ else
 					</td>
 					@if (game.Linescore != null)
 					{
-						for (var i = 0; i < game.Linescore.Innings.Length; i++)
+						for (var i = 0; i < inningCount; i++)
 						{
-							var inning = game.Linescore.Innings[i];
-							<td class="inning">@inning.Home</td>
+							var value = "-";
+							if (game.Linescore.Innings.Length > i)
+							{
+								var inning = game.Linescore.Innings[i];
+								if (inning.Home != null)
+								{
+									value = inning.Home;
+								}
+							}
+							<td class="inning">@value</td>
 						}
 						<td class="runs">@game.Linescore.Runs.Home</td>
 						<td class="hits">@game.Linescore.Hits.Home</td>
