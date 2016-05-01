@@ -137,3 +137,28 @@ footer {
 	text-align: center;
 	font-size: 1.5em;
 }
+
+@media all and (max-width: 1200px)
+{
+	.game-link table .team-info .team-name
+	{
+		display: none;
+	}
+}
+
+@media all and (max-width: 800px)
+{
+	.game-link table .team-info .team-name
+	{
+		display: inline-block;
+	}
+}
+
+@media all and (max-width: 600px)
+{
+	
+	.game-link table .team-info .team-name
+	{
+		display: none;
+	}
+}
