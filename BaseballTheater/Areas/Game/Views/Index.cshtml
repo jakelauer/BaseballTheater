@@ -30,7 +30,7 @@
 
 							var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
-							<video src="@url" controls preload="none" style="background-image: url(@thumbnail)"></video>
+							<video src="@url" controls preload="none" poster="@thumbnail"></video>
 						}
 					}
 					else

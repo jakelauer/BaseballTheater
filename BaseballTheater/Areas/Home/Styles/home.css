@@ -37,6 +37,8 @@
 		padding: 10px;
 	}
 
+
+
 .game-summary
 {
 	padding-bottom: 30px;
@@ -146,4 +148,9 @@
 
 			width: 100%;
 		}
+		
+	.leagues .game-summary
+	{
+		width: 100%;
+	}
 }
