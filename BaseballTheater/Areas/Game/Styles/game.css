@@ -46,7 +46,6 @@
 		.highlight video:hover
 		{
 			cursor: pointer;
-			box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 		}
 
 @media all and (max-width: 1200px)
