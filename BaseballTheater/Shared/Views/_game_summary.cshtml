@@ -1,0 +1,91 @@
+﻿@model MlbDataServer.DataStructures.GameSummary
+
+@{
+	var game = Model;
+	
+	var inningCount = 9;
+	if (game.Linescore != null && game.Linescore.Innings.Length > inningCount)
+	{
+		inningCount = game.Linescore.Innings.Length;
+	}
+
+	var dayString = game.DateObj.ToString("yyyyMMdd");
+}
+
+<div class="game-summary">
+	<a href="/game/@dayString/@game.GamePk" class="game-link"></a>
+
+	<table>
+		<tr>
+			<td class="status">
+				<small>
+					@game.Status.Status
+					@if (game.Linescore == null)
+					{
+						<text> - @(game.EventTime + game.EventTimeAmPm)</text>
+					}
+				</small>
+			</td>
+			@if (game.Linescore != null)
+			{
+				for (var i = 0; i < inningCount; i++)
+				{
+					<td class="inning">@(i + 1)</td>
+				}
+				<td class="runs">R</td>
+				<td class="hits">H</td>
+				<td class="errors">E</td>
+			}
+		</tr>
+		<tr class="team away">
+			<td class="team-info">
+				<span class="team-logo dark @game.AwayFileCode"></span>
+				<span class="team-name">@game.AwayTeamName</span>
+			</td>
+			@if (game.Linescore != null)
+			{
+				for (var i = 0; i < inningCount; i++)
+				{
+					var value = "-";
+					if (game.Linescore.Innings.Length > i)
+					{
+						var inning = game.Linescore.Innings[i];
+						if (inning.Away != null)
+						{
+							value = inning.Away;
+						}
+					}
+					<td class="inning">@value</td>
+				}
+				<td class="runs">@game.Linescore.Runs.Away</td>
+				<td class="hits">@game.Linescore.Hits.Away</td>
+				<td class="errors">@game.Linescore.Errors.Away</td>
+			}
+		</tr>
+		<tr class="team home">
+			<td class="team-info">
+				<span class="team-logo dark @game.HomeFileCode"></span>
+				<span class="team-name">@game.HomeTeamName</span>
+			</td>
+			@if (game.Linescore != null)
+			{
+				for (var i = 0; i < inningCount; i++)
+				{
+					var value = "-";
+					if (game.Linescore.Innings.Length > i)
+					{
+						var inning = game.Linescore.Innings[i];
+						if (inning.Home != null)
+						{
+							value = inning.Home;
+						}
+					}
+					<td class="inning">@value</td>
+				}
+				<td class="runs">@game.Linescore.Runs.Home</td>
+				<td class="hits">@game.Linescore.Hits.Home</td>
+				<td class="errors">@game.Linescore.Errors.Home</td>
+			}
+		</tr>
+	</table>
+</div>
