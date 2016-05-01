@@ -25,6 +25,7 @@ header {
   height: 50px;
   width: 100%;
   background: #EEE;
+	background: #ce0f0f;
   color: #FFF;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -32,15 +33,16 @@ header .header-content {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  text-align: center;
 }
 header .logo {
   position: relative;
-  display: inline-block;
-  margin: 5px;
-  color: #ce0f0f;
+  color: #EEE;
   text-decoration: none;
-  font-size: 30px;
+  font-size: 26px;
+  line-height: 50px;
   font-family: 'Alfa Slab One', cursive;
+  text-align: center;
 }
 
 footer {
