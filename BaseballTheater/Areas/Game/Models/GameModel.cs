@@ -35,7 +35,7 @@ namespace BaseballTheater.Areas.Game.Models
 
 					if (url.Contains("1200K"))
 					{
-						var testUrl = url.Replace("1200K", "1800K");
+						var testUrl = url.Replace("1200K", "2500K");
 						if (RemoteFileExists(testUrl))
 						{
 							highlight.Urls[i] = testUrl;

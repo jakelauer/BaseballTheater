@@ -7,7 +7,7 @@
 	Layout = "~/Shared/Views/_Layout.cshtml";
 
 	var dayString = Model.Date.ToString("yyyyMMdd");
-	var inputBoxString = Model.Date.ToString("MMM dd yyyy");
+	var inputBoxString = Model.Date.ToString("MMM dd, yyyy");
 	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
 	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
 

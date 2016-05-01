@@ -128,9 +128,9 @@
 
 @media all and (max-width: 1200px)
 {
-	.team-name
+	.game-link table .team-info .team-name
 	{
-		display: none !important;
+		display: none;
 	}
 }
 
@@ -152,5 +152,19 @@
 	.leagues .game-summary
 	{
 		width: 100%;
+	}
+	
+	.game-link table .team-info .team-name
+	{
+		display: inline-block;
+	}
+}
+
+@media all and (max-width: 600px)
+{
+	
+	.game-link table .team-info .team-name
+	{
+		display: none;
 	}
 }
