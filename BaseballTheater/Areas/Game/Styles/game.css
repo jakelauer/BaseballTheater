@@ -48,6 +48,16 @@
 			cursor: pointer;
 		}
 
+.game-summary
+{
+	margin-top: 30px;
+}
+
+	.game-summary .game-link
+	{
+		display: none;
+	}
+
 @media all and (max-width: 1200px)
 {
 	.highlight

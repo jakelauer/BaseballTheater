@@ -273,6 +273,7 @@
     <Content Include="Shared\Styles\teams.css.map">
       <DependentUpon>teams.css</DependentUpon>
     </Content>
+    <Content Include="Shared\Views\_game_summary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

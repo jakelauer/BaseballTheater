@@ -47,3 +47,93 @@ footer {
   padding: 20px 0;
   text-align: center;
 }
+
+
+
+
+.game-summary
+{
+	position: relative;
+	display: block;
+
+	max-width: 800px;
+	margin: 0 auto;
+	padding-bottom: 30px;
+
+	background: #FFF;
+	
+	text-decoration: none;
+	color: black;
+	
+	transition: 0.15s;
+}
+
+	.game-summary .game-link
+	{
+		position: absolute;
+
+		top: 10px;
+		left: 10px;
+		right: 10px;
+		bottom: 10px;
+	}
+
+	.game-summary .game-link:hover
+	{
+		background: rgba(206, 15, 15, 0.05);
+	}
+
+.game-summary table
+{
+	width: 100%;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+.game-summary table th,
+.game-summary table td
+{
+	padding: 6px 0;
+	border: 1px solid #DDD;
+	text-align: center;
+}
+
+.game-summary table .team-info,
+.game-summary table .status
+{
+	padding-left: 5px;
+	padding-right: 7px;
+	border-right: 3px solid #DDD;
+	text-align: left;
+	font-weight: bold;
+	line-height: 29px;
+}
+
+.game-summary table .team-info .team-name
+{
+	display: inline-block;
+}
+
+.game-summary table .runs,
+.game-summary table .hits,
+.game-summary table .errors
+{
+	font-weight: bold;
+	width: 40px;
+}
+
+.game-summary table .runs
+{
+	border-left: 3px solid #DDD;
+}
+
+.game-summary table .inning
+{
+	width: 40px;
+}
+
+.game-summary .error
+{
+	text-align: center;
+	font-size: 1.5em;
+}

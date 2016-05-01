@@ -33,7 +33,9 @@
 	<div class="leagues">
 		@foreach (var game in allGames)
 		{
-			@GameSummary(game, dayString)
+			@*@GameSummary(game, dayString)*@
+			
+			Html.RenderPartial("_game_summary", game);
 		}
 	</div>
 	

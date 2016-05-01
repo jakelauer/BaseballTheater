@@ -39,10 +39,6 @@
 
 
 
-.game-summary
-{
-	padding-bottom: 30px;
-}
 
 .day-nav
 {
@@ -55,75 +51,6 @@
 {
 	margin: 0 10px;
 	color: #ce0f0f;
-}
-
-.game-link
-{
-	display: block;
-	text-decoration: none;
-	background: #FFF;
-	color: black;
-	transition: 0.15s;
-}
-
-.game-link:hover
-{
-	background: rgba(206, 15, 15, 0.05);
-}
-
-.game-link table
-{
-	width: 100%;
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-
-.game-link table th,
-.game-link table td
-{
-	padding: 6px 0;
-	border: 1px solid #DDD;
-	text-align: center;
-}
-
-.game-link table .team-info,
-.game-link table .status
-{
-	padding-left: 5px;
-	padding-right: 7px;
-	border-right: 3px solid #DDD;
-	text-align: left;
-	font-weight: bold;
-	line-height: 29px;
-}
-
-.game-link table .team-info .team-name
-{
-	display: inline-block;
-}
-
-.game-link table .runs,
-.game-link table .hits,
-.game-link table .errors
-{
-	font-weight: bold;
-	width: 40px;
-}
-
-.game-link table .runs
-{
-	border-left: 3px solid #DDD;
-}
-
-.game-link table .inning
-{
-	width: 40px;
-}
-
-.game-link .error
-{
-	text-align: center;
-	font-size: 1.5em;
 }
 
 @media all and (max-width: 1200px)

@@ -13,6 +13,10 @@
 
 <link href='~/Areas/Game/Styles/game.css' rel='stylesheet' type='text/css'>
 
+
+
+@Html.Partial("_game_summary", Model.GameSummary)
+
 @if (Model.HighlightsCollection != null && Model.HighlightsCollection.Highlights != null)
 {
 	<div class="highlights">
