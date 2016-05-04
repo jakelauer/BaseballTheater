@@ -11,6 +11,15 @@ namespace BaseballTheater
 			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
 						"~/Shared/Scripts/libraries/modernizr-*",
 						"~/Shared/Scripts/libraries/jquery*"));
+
+			bundles.Add(new StyleBundle("~/stylebundles/main")
+				.IncludeDirectory("~/Shared/Styles/", "*.css"));
+
+			bundles.Add(new StyleBundle("~/stylebundles/game")
+				.IncludeDirectory("~/Areas/Game/Styles/", "*.css"));
+
+			bundles.Add(new StyleBundle("~/stylebundles/home")
+				.IncludeDirectory("~/Areas/Home/Styles/", "*.css"));
 		}
 	}
 }
