@@ -48,6 +48,32 @@
 			cursor: pointer;
 		}
 
+	.highlight .links
+	{
+		display: -ms-flex;
+		display: -webkit-flex;
+		display: flex;
+
+		width: 50%;
+		margin: 0 auto;
+
+		margin-top: 5px;
+	}
+
+		.highlight .links *
+		{
+			-ms-flex: 1 0;
+			-webkit-flex: 1 0;
+			flex: 1 0;
+
+			text-decoration: none;
+		}
+
+		.highlight .links a
+		{
+			color: blue;
+		}
+
 .game-summary
 {
 	margin-top: 30px;

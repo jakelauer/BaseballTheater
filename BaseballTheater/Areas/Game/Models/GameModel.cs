@@ -1,6 +1,7 @@
 ﻿using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
@@ -35,11 +36,22 @@ namespace BaseballTheater.Areas.Game.Models
 
 					if (url.Contains("1200K"))
 					{
-						var testUrl = url.Replace("1200K", "2500K");
-						if (RemoteFileExists(testUrl))
+						var urls = new List<string>(highlight.Urls);
+
+						var url2500 = url.Replace("1200K", "2500K");
+						var url1800 = url.Replace("1200K", "1800K");
+
+						if (RemoteFileExists(url1800))
 						{
-							highlight.Urls[i] = testUrl;
+							urls.Add(url1800);
 						}
+
+						if (RemoteFileExists(url2500))
+						{
+							urls.Add(url2500);
+						}
+
+						highlight.Urls = urls.ToArray();
 					}
 				}
 			}

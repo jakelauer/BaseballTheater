@@ -142,7 +142,7 @@ footer {
 
 @media all and (max-width: 1200px)
 {
-	.game-link table .team-info .team-name
+	.game-summary table .team-info .team-name
 	{
 		display: none;
 	}
@@ -150,7 +150,7 @@ footer {
 
 @media all and (max-width: 800px)
 {
-	.game-link table .team-info .team-name
+	.game-summary table .team-info .team-name
 	{
 		display: inline-block;
 	}
@@ -159,7 +159,7 @@ footer {
 @media all and (max-width: 600px)
 {
 	
-	.game-link table .team-info .team-name
+	.game-summary table .team-info .team-name
 	{
 		display: none;
 	}
