@@ -7,15 +7,12 @@
 @{
 	Layout = "~/Shared/Views/_Layout.cshtml";
 
-	var dayString = Model.Date.ToString("yyyyMMdd");
 	var inputBoxString = Model.Date.ToString("MMM dd, yyyy");
 	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
 	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
 
 	var allGames = Model.GameCollection.GameSummaries.OrderByDescending(a => a.Linescore != null).ThenBy(a => a.DateObj);
-	var alGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AA").OrderBy(a => a.DateObj);
-	var nlGames = Model.GameCollection.GameSummaries.Where(a => a.League == "NN").OrderBy(a => a.DateObj);
-	var ilGames = Model.GameCollection.GameSummaries.Where(a => a.League == "AN" || a.League == "NA").OrderBy(a => a.DateObj);
+	
 }
 
 @Styles.Render("~/stylebundles/home")
@@ -34,138 +31,12 @@
 	<div class="leagues">
 		@foreach (var game in allGames)
 		{
-			@*@GameSummary(game, dayString)*@
-			
 			Html.RenderPartial("_game_summary", game);
 		}
 	</div>
-	
-	@*<div class="leagues">
-		@if (ilGames.Any())
-		{
-			<div class="il">
-				<h2>Interleague</h2>
-				@foreach (var game in ilGames)
-				{
-					@GameSummary(game, dayString)
-				}
-			</div>
-		}
-	</div>
-	<div class="leagues">
-		@if (alGames.Any())
-		{
-			<div>
-				<h2>American League</h2>
-				@foreach (var game in alGames)
-				{
-					@GameSummary(game, dayString)
-				}
-			</div>
-		}
-		@if (nlGames.Any())
-		{
-			<div>
-				<h2>National League</h2>
-				@foreach (var game in nlGames)
-				{
-					@GameSummary(game, dayString)
-				}
-			</div>
-		}
-	</div>*@
 }
 else
 {
 	<p class="error">No games for this date</p>
 }
 
-
-@helper GameSummary(GameSummary game, string dayString)
-{
-	var inningCount = 9;
-	if (game.Linescore != null && game.Linescore.Innings.Length > inningCount)
-	{
-		inningCount = game.Linescore.Innings.Length;
-	}
-	
-	
-	<div class="game-summary">
-		<a href="/game/@dayString/@game.GamePk" class="game-link">
-
-			<table>
-				<tr>
-					<td class="status">
-						<small>
-							@game.Status.Status
-							@if (game.Linescore == null)
-							{
-								<text> - @(game.EventTime + game.EventTimeAmPm)</text>
-							}
-						</small>
-					</td>
-					@if (game.Linescore != null)
-					{
-						for (var i = 0; i < inningCount; i++)
-						{
-							<td class="inning">@(i + 1)</td>
-						}
-						<td class="runs">R</td>
-						<td class="hits">H</td>
-						<td class="errors">E</td>
-					}
-				</tr>
-				<tr class="team away">
-					<td class="team-info">
-						<span class="team-logo dark @game.AwayFileCode"></span>
-						<span class="team-name">@game.AwayTeamName</span>
-					</td>
-					@if (game.Linescore != null)
-					{
-						for (var i = 0; i < inningCount; i++)
-						{
-							var value = "-";
-							if (game.Linescore.Innings.Length > i)
-							{
-								var inning = game.Linescore.Innings[i];
-								if (inning.Away != null)
-								{
-									value = inning.Away;
-								}
-							}
-							<td class="inning">@value</td>
-						}
-						<td class="runs">@game.Linescore.Runs.Away</td>
-						<td class="hits">@game.Linescore.Hits.Away</td>
-						<td class="errors">@game.Linescore.Errors.Away</td>
-					}
-				</tr>
-				<tr class="team home">
-					<td class="team-info">
-						<span class="team-logo dark @game.HomeFileCode"></span>
-						<span class="team-name">@game.HomeTeamName</span>
-					</td>
-					@if (game.Linescore != null)
-					{
-						for (var i = 0; i < inningCount; i++)
-						{
-							var value = "-";
-							if (game.Linescore.Innings.Length > i)
-							{
-								var inning = game.Linescore.Innings[i];
-								if (inning.Home != null)
-								{
-									value = inning.Home;
-								}
-							}
-							<td class="inning">@value</td>
-						}
-						<td class="runs">@game.Linescore.Runs.Home</td>
-						<td class="hits">@game.Linescore.Hits.Home</td>
-						<td class="errors">@game.Linescore.Errors.Home</td>
-					}
-				</tr>
-			</table>
-		</a>
-	</div>
-}
