@@ -45,6 +45,19 @@ header .logo {
   text-align: center;
 }
 
+header .feedback-link
+{
+	position: absolute;
+
+	right: 10px;
+	top: 0;
+
+	height: 100%;
+	color: white;
+	font-size: 26px;
+	line-height: 50px;
+}
+
 footer {
   padding: 20px 0;
   text-align: center;
