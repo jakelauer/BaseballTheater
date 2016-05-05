@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using RedditSharp.Things;
 
 namespace RedditBot
 {
@@ -21,7 +22,7 @@ namespace RedditBot
 		private readonly Reddit _reddit = new Reddit();
 		private List<string> _commentIds = new List<string>();
 		private List<string> _newCommentIds = new List<string>();
-		private const string CommentIdFilePath = "http://jakelauer.blob.core.windows.net/ids/ids.txt";
+		private const string CommentIdFilePath = @"C:\baseballtheater.txt";
 
 		private CloudBlobContainer BlobContainer { get; set; }
 
@@ -57,22 +58,14 @@ namespace RedditBot
 		{
 			try
 			{
-				var blob = BlobContainer.GetBlockBlobReference("ids.txt");
-				var options = new BlobRequestOptions()
-				{
-					ServerTimeout = TimeSpan.FromMinutes(10)
-				};
-
 				var allIds = "";
-				using (var memoryStream = new MemoryStream())
+				using (var file = new StreamReader(CommentIdFilePath))
 				{
-					blob.DownloadToStream(memoryStream);
-					allIds = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+					allIds = file.ReadToEnd();
 				}
-
 				_commentIds = allIds.Split(' ').ToList();
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Console.WriteLine(e);
 			}
@@ -80,23 +73,25 @@ namespace RedditBot
 
 		private void WriteIdsToFile()
 		{
-			var blob = BlobContainer.GetBlockBlobReference("ids.txt");
-			var options = new BlobRequestOptions()
+			try
 			{
-				ServerTimeout = TimeSpan.FromMinutes(10)
-			};
+				var allComments = _commentIds.Concat(_newCommentIds);
+				var textToWrite = "";
+				foreach (var commentId in allComments)
+				{
+					textToWrite += " " + commentId;
+				}
 
-			var allComments = _commentIds.Concat(_newCommentIds);
-			var textToWrite = "";
-			foreach (var commentId in allComments)
+				using (var file = new StreamWriter(CommentIdFilePath))
+				{
+					file.Write(textToWrite);
+				}
+			}
+			catch (Exception e)
 			{
-				textToWrite += " " + commentId;
+				Console.WriteLine(e);
 			}
 
-			using (var stream = new MemoryStream(Encoding.Default.GetBytes(textToWrite), false))
-			{
-				blob.UploadFromStream(stream, null, options);
-			}
 		}
 
 		/// <summary>
@@ -105,12 +100,7 @@ namespace RedditBot
 		/// </summary>
 		public void ListenForPrompt()
 		{
-			var cloudAccount = CloudStorageAccount.Parse(AuthConfig.StorageConnectionString);
-			var blobClient = cloudAccount.CreateCloudBlobClient();
-			const string containerName = "ids";
-			BlobContainer = blobClient.GetContainerReference(containerName);
-			BlobContainer.CreateIfNotExists();
-
+			Console.WriteLine("RedditBot Started");
 			ReadIdsFromFile();
 
 			if (!HasLoggedIn(AuthConfig.Username, AuthConfig.Password))
@@ -121,28 +111,33 @@ namespace RedditBot
 			var linkParser = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-](.mp4))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
+			Console.WriteLine("Getting MLBVideoConverterBot Comments");
 			var user = _reddit.GetUser("MLBVideoConverterBot");
 			var index = 0;
-			foreach (var comment in user.Comments.Take(25))
+			foreach (var comment in user.Comments.Take(2))
 			{
 				if (!_commentIds.Contains(comment.Id))
 				{
+					Console.WriteLine(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
 					var commentBody = comment.Body;
 
 					if (linkParser.IsMatch(commentBody))
 					{
 						var link = linkParser.Match(commentBody).Value;
-						var pieces = link.Split('_');
-						var contentId = pieces[pieces.Length - 2];
+						var contentId = GetContentIdFromVideoUrl(link);
+						var url = GetMlbXmlFileFromVideoUrl(contentId);
 
-						var x = contentId[contentId.Length - 3];
-						var y = contentId[contentId.Length - 2];
-						var z = contentId[contentId.Length - 1];
 
-						var url = string.Format("http://mlb.com/gen/multimedia/detail/{0}/{1}/{2}/{3}.xml", x, y, z, contentId);
-
-						var xmlLoader = new XmlLoader();
-						var highlight = xmlLoader.GetXml<Highlight>(url);
+						Highlight highlight = null;
+						try
+						{
+							var xmlLoader = new XmlLoader();
+							highlight = xmlLoader.GetXml<Highlight>(url);
+						}
+						catch (Exception e)
+						{
+							this.logGameNotFound(contentId, comment, e);
+						}
 
 						if (highlight != null)
 						{
@@ -159,28 +154,24 @@ namespace RedditBot
 								if (gameSummary != null)
 								{
 									var gamePk = gamePkKeyword.Value;
-									var date = DateTime.Parse(highlight.Date, CultureInfo.InvariantCulture);
+									var date = DateTimeOffset.Parse(highlight.Date, CultureInfo.InvariantCulture);
 									var dateString = date.ToString("yyyyMMdd");
 
 									var baseballTheaterUrl = string.Format("http://baseball.theater/game/{0}/{1}", dateString, gamePk);
 
-									var videoCount = allHighlights != null && allHighlights.Highlights != null
-										? allHighlights.Highlights.Length.ToString(CultureInfo.InvariantCulture)
-										: null;
-
 									var redditFormatLink = string.Format(
-										"|More from this game|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| {4}| \r\n\r\n ^^I ^^am ^^a ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://reddit.com/r/BaseballTheaterBot)",
+										"|More highlights from this game at baseball.theater|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| \r\n\r\n ^^I ^^am ^^a ^^new ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://np.reddit.com/r/BaseballTheaterBot)",
 										gameSummary.AwayTeamName,
 										gameSummary.HomeTeamName,
 										date.ToString("MM/dd/yyyy"),
-										baseballTheaterUrl,
-										videoCount != null ? videoCount + "videos" : ""
+										baseballTheaterUrl
 										);
 
 									try
 									{
 										comment.Reply(redditFormatLink);
 										AddIdToList(comment.Id);
+										Thread.Sleep(15000);
 									}
 									catch (RateLimitException e)
 									{
@@ -193,8 +184,7 @@ namespace RedditBot
 							} 
 							else
 							{
-								Console.WriteLine("No game available for id " + contentId);
-								AddIdToList(comment.Id);
+								this.logGameNotFound(contentId, comment);
 							}
 						}
 						else
@@ -213,6 +203,43 @@ namespace RedditBot
 			}
 
 			WriteIdsToFile();
+		}
+
+		private void logGameNotFound(string contentId, Comment comment, Exception e = null)
+		{
+			Console.WriteLine("No game available for ID " + contentId);
+			if (e != null)
+			{
+				Console.WriteLine(e);
+			}
+			AddIdToList(comment.Id);
+		}
+
+		private string GetContentIdFromVideoUrl(string videoUrl)
+		{
+			var contentId = "";
+			if (videoUrl.IndexOf("mlbtv_", StringComparison.Ordinal) > -1)
+			{
+				var pieces = videoUrl.Split('_');
+				contentId = pieces[pieces.Length - 2];
+			}
+			else
+			{
+				var pieces = videoUrl.Split('/');
+				contentId = pieces[pieces.Length - 3];
+			}
+
+			return contentId;
+		}
+
+		private string GetMlbXmlFileFromVideoUrl(string contentId)
+		{
+			var x = contentId[contentId.Length - 3];
+			var y = contentId[contentId.Length - 2];
+			var z = contentId[contentId.Length - 1];
+
+			var url = string.Format("http://mlb.com/gen/multimedia/detail/{0}/{1}/{2}/{3}.xml", x, y, z, contentId);
+			return url;
 		}
 	}
 }

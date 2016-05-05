@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using System.Web.Mvc;
+using MlbDataServer.DataStructures;
 
 namespace BaseballTheater.Areas.Game
 {
@@ -13,6 +14,11 @@ namespace BaseballTheater.Areas.Game
 			var dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
 
 			var model = new GameModel(dateTime, id);
+
+			if (model.GameSummary == default(GameSummary))
+			{
+				return HttpNotFound();
+			}
 
 			return View(model);
 		}

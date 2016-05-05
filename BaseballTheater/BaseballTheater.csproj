@@ -284,9 +284,17 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseballTheaterBot\RedditBot.csproj">
+      <Project>{51e3ded2-c774-4ef8-a114-3819051aa361}</Project>
+      <Name>RedditBot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
       <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
       <Name>MlbDataServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RedditSharp\RedditSharp.csproj">
+      <Project>{a368cb75-75f0-4489-904d-b5cebb0fe624}</Project>
+      <Name>RedditSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
