@@ -28,7 +28,7 @@
 				@if (highlight.Urls != null && highlight.Thumbs != null && highlight.Urls.Any(a => a.EndsWith("mp4")))
 				{
 					var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
-					var bigurl = urls.FirstOrDefault();
+					var bigurl = urls.LastOrDefault();
 					if (bigurl != null)
 					{
 

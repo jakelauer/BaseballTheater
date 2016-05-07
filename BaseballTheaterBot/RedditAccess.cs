@@ -36,12 +36,12 @@ namespace RedditBot
 			try
 			{
 				var user = _reddit.LogIn(username, password);
-				Console.WriteLine("User logged in");
+				TimeLog("User logged in");
 				return true;
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				TimeLog(ex.Message);
 				return false;
 			}
 		}
@@ -67,31 +67,55 @@ namespace RedditBot
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				TimeLog(e);
 			}
 		}
 
-		private void WriteIdsToFile()
+		private void WriteIdsToFile(IEnumerable<string> idsOverride = null)
 		{
 			try
 			{
-				var allComments = _commentIds.Concat(_newCommentIds);
+				var allComments = idsOverride ?? _commentIds.Concat(_newCommentIds);
 				var textToWrite = "";
 				foreach (var commentId in allComments)
 				{
 					textToWrite += " " + commentId;
 				}
 
-				using (var file = new StreamWriter(CommentIdFilePath))
+				using (var file = new StreamWriter(CommentIdFilePath, true))
 				{
 					file.Write(textToWrite);
 				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e);
+				TimeLog(e);
 			}
+		}
 
+		private void WriteIdToFile(string id)
+		{
+			try
+			{
+				var textToWrite = " " + id;
+
+				using (var file = new StreamWriter(CommentIdFilePath, true))
+				{
+					file.Write(textToWrite);
+				}
+
+				TruncateFile();
+			}
+			catch (Exception e)
+			{
+				TimeLog(e);
+			}
+		}
+
+		private void TruncateFile()
+		{
+			var commentsToLeave = _commentIds.Skip(_commentIds.Count - 10).Take(10);
+			WriteIdsToFile(commentsToLeave);
 		}
 
 		/// <summary>
@@ -100,7 +124,7 @@ namespace RedditBot
 		/// </summary>
 		public void ListenForPrompt()
 		{
-			Console.WriteLine("RedditBot Started");
+			TimeLog("RedditBot Started");
 			ReadIdsFromFile();
 
 			if (!HasLoggedIn(AuthConfig.Username, AuthConfig.Password))
@@ -111,14 +135,15 @@ namespace RedditBot
 			var linkParser = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-](.mp4))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
-			Console.WriteLine("Getting MLBVideoConverterBot Comments");
+			TimeLog("Getting MLBVideoConverterBot Comments");
 			var user = _reddit.GetUser("MLBVideoConverterBot");
 			var index = 0;
-			foreach (var comment in user.Comments.Take(2))
+			var comments = user.Comments.Take(5).OrderByDescending(a => a.Created);
+			foreach (var comment in comments)
 			{
 				if (!_commentIds.Contains(comment.Id))
 				{
-					Console.WriteLine(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
+					TimeLog(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
 					var commentBody = comment.Body;
 
 					if (linkParser.IsMatch(commentBody))
@@ -171,15 +196,26 @@ namespace RedditBot
 									{
 										comment.Reply(redditFormatLink);
 										AddIdToList(comment.Id);
-										Thread.Sleep(15000);
+										TimeLog("Comment published. Sleeping for 1 min");
+										Thread.Sleep(60000);
+										WriteIdToFile(comment.Id);
 									}
 									catch (RateLimitException e)
 									{
-										Console.WriteLine("Rate limit exceeded, waiting for " + (int)e.TimeToReset.TotalMilliseconds + " milliseconds");
-										Thread.Sleep((int)e.TimeToReset.TotalMilliseconds);
+										var ms = (int)e.TimeToReset.TotalMilliseconds;
+										var remaining = (int) e.TimeToReset.TotalMilliseconds;
+										var loopMs = 200;
+										for (var i = 0; i < ms / loopMs; i++)
+										{
+											TimeLog("Rate limit exceeded, waiting for " + remaining + " milliseconds", true);
+											Thread.Sleep(loopMs);
+
+											remaining -= loopMs;
+										}
+
 									}
 
-									Console.WriteLine(baseballTheaterUrl);
+									TimeLog(baseballTheaterUrl);
 								}
 							} 
 							else
@@ -189,7 +225,7 @@ namespace RedditBot
 						}
 						else
 						{
-							Console.WriteLine("Highlight null for id " + contentId);
+							TimeLog("Highlight null for id " + contentId);
 							AddIdToList(comment.Id);
 						}
 					}
@@ -198,19 +234,17 @@ namespace RedditBot
 				}
 				else
 				{
-					Console.WriteLine("Id already in file: " + comment.Id);
+					TimeLog("Id already in file: " + comment.Id);
 				}
 			}
-
-			WriteIdsToFile();
 		}
 
 		private void logGameNotFound(string contentId, Comment comment, Exception e = null)
 		{
-			Console.WriteLine("No game available for ID " + contentId);
+			TimeLog("No game available for ID " + contentId);
 			if (e != null)
 			{
-				Console.WriteLine(e);
+				TimeLog(e);
 			}
 			AddIdToList(comment.Id);
 		}
@@ -240,6 +274,25 @@ namespace RedditBot
 
 			var url = string.Format("http://mlb.com/gen/multimedia/detail/{0}/{1}/{2}/{3}.xml", x, y, z, contentId);
 			return url;
+		}
+
+		private static void TimeLog(string message, bool isUpdate = false)
+		{
+			var dateString = DateTime.UtcNow.ToString("hh:mm:ss:fff tt");
+			var cr = isUpdate ? "\r" : "\r\n";
+
+			var finalString = string.Format("{0}{1} | {2}", 
+				cr, 
+				dateString, 
+				message);
+
+			Console.Write(finalString);
+		}
+
+		private static void TimeLog<T>(T thing, bool isUpdate = false)
+		{
+			var tString = thing.ToString();
+			TimeLog(tString, isUpdate);
 		}
 	}
 }
