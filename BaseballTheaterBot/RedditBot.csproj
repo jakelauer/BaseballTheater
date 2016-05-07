@@ -94,8 +94,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="App.config.example" />
     <None Include="Config\AuthConfig.cs.example" />
     <Compile Include="Config\AuthConfig.cs" />
     <Compile Include="Program.cs" />

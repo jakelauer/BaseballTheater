@@ -46,7 +46,7 @@
 				<span class="team-logo dark @game.AwayFileCode"></span>
 				<span class="team-name">@game.AwayTeamName</span>
 			</td>
-			@if (game.Linescore != null)
+			@if (game.Linescore != null && game.Linescore.Innings != null)
 			{
 				for (var i = startAtInningIndex; i < inningCount; i++)
 				{
