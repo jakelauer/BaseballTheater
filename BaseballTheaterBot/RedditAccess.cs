@@ -21,8 +21,9 @@ namespace RedditBot
 	{
 		private readonly Reddit _reddit = new Reddit();
 		private List<string> _commentIds = new List<string>();
-		private List<string> _newCommentIds = new List<string>();
 		private const string CommentIdFilePath = @"C:\baseballtheater.txt";
+		private const int CommentsToTest = 10;
+		private const int CommentsToSave = CommentsToTest * 2;
 
 		private CloudBlobContainer BlobContainer { get; set; }
 
@@ -48,10 +49,7 @@ namespace RedditBot
 
 		private void AddIdToList(string commentId)
 		{
-			if (!_newCommentIds.Contains(commentId))
-			{
-				_newCommentIds.Add(commentId);
-			}
+			_commentIds.Add(commentId);
 		}
 
 		private void ReadIdsFromFile()
@@ -71,18 +69,17 @@ namespace RedditBot
 			}
 		}
 
-		private void WriteIdsToFile(IEnumerable<string> idsOverride = null)
+		private void WriteIdsToFile(IEnumerable<string> ids)
 		{
 			try
 			{
-				var allComments = idsOverride ?? _commentIds.Concat(_newCommentIds);
 				var textToWrite = "";
-				foreach (var commentId in allComments)
+				foreach (var commentId in ids)
 				{
 					textToWrite += " " + commentId;
 				}
 
-				using (var file = new StreamWriter(CommentIdFilePath, true))
+				using (var file = new StreamWriter(CommentIdFilePath))
 				{
 					file.Write(textToWrite);
 				}
@@ -95,26 +92,13 @@ namespace RedditBot
 
 		private void WriteIdToFile(string id)
 		{
-			try
-			{
-				var textToWrite = " " + id;
 
-				using (var file = new StreamWriter(CommentIdFilePath, true))
-				{
-					file.Write(textToWrite);
-				}
-
-				TruncateFile();
-			}
-			catch (Exception e)
-			{
-				TimeLog(e);
-			}
+			TruncateFile();
 		}
 
 		private void TruncateFile()
 		{
-			var commentsToLeave = _commentIds.Skip(_commentIds.Count - 10).Take(10);
+			var commentsToLeave = _commentIds.Skip(_commentIds.Count - CommentsToSave).Take(CommentsToSave);
 			WriteIdsToFile(commentsToLeave);
 		}
 
@@ -138,7 +122,7 @@ namespace RedditBot
 			TimeLog("Getting MLBVideoConverterBot Comments");
 			var user = _reddit.GetUser("MLBVideoConverterBot");
 			var index = 0;
-			var comments = user.Comments.Take(5).OrderByDescending(a => a.Created);
+			var comments = user.Comments.Take(CommentsToTest + 5).OrderByDescending(a => a.Created);
 			foreach (var comment in comments)
 			{
 				if (!_commentIds.Contains(comment.Id))
@@ -194,11 +178,30 @@ namespace RedditBot
 
 									try
 									{
-										comment.Reply(redditFormatLink);
-										AddIdToList(comment.Id);
-										TimeLog("Comment published. Sleeping for 1 min");
-										Thread.Sleep(60000);
-										WriteIdToFile(comment.Id);
+										var parent = comment.GetParent();
+
+										var parentComment = parent as Comment;
+										var parentPost = parent as Post;
+
+
+										var succeeded = false;
+										if (parentComment != null)
+										{
+											parentComment.Reply(redditFormatLink);
+											succeeded = true;
+										}
+										else if (parentPost != null)
+										{
+											parentPost.Comment(redditFormatLink);
+											succeeded = true;
+										}
+
+										if (succeeded)
+										{
+											AddIdToList(comment.Id);
+											TimeLog("Comment published.");
+											WriteIdToFile(comment.Id);
+										}
 									}
 									catch (RateLimitException e)
 									{
@@ -279,12 +282,14 @@ namespace RedditBot
 		private static void TimeLog(string message, bool isUpdate = false)
 		{
 			var dateString = DateTime.UtcNow.ToString("hh:mm:ss:fff tt");
-			var cr = isUpdate ? "\r" : "\r\n";
+			var cr = isUpdate ? "\r" : "";
+			var crEnd = isUpdate ? "" : "\r\n";
 
-			var finalString = string.Format("{0}{1} | {2}", 
+			var finalString = string.Format("{0}{1} | {2}{3}", 
 				cr, 
 				dateString, 
-				message);
+				message,
+				crEnd);
 
 			Console.Write(finalString);
 		}
