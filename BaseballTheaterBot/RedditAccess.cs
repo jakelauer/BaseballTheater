@@ -20,7 +20,7 @@ namespace RedditBot
 	class RedditAccess
 	{
 		private readonly Reddit _reddit = new Reddit();
-		private List<string> _commentIds = new List<string>();
+		private List<string> _thingIds = new List<string>();
 		private const string CommentIdFilePath = @"C:\baseballtheater.txt";
 		private const int CommentsToTest = 10;
 		private const int CommentsToSave = CommentsToTest * 5;
@@ -56,7 +56,7 @@ namespace RedditBot
 
 		private void AddIdToList(string commentId)
 		{
-			_commentIds.Add(commentId);
+			_thingIds.Add(commentId);
 		}
 
 		private void ReadIdsFromFile()
@@ -68,7 +68,7 @@ namespace RedditBot
 				{
 					allIds = file.ReadToEnd();
 				}
-				_commentIds = allIds.Split(' ').ToList();
+				_thingIds = allIds.Split(' ').ToList();
 			}
 			catch (Exception e)
 			{
@@ -105,7 +105,7 @@ namespace RedditBot
 
 		private void TruncateFile()
 		{
-			var commentsToLeave = _commentIds.Skip(_commentIds.Count - CommentsToSave).Take(CommentsToSave);
+			var commentsToLeave = _thingIds.Skip(_thingIds.Count - CommentsToSave).Take(CommentsToSave);
 			WriteIdsToFile(commentsToLeave);
 		}
 
@@ -123,10 +123,9 @@ namespace RedditBot
 				return;
 			}
 
-			var user = _reddit.GetUser("MLBVideoConverterBot");
-
 			try
 			{
+				var user = _reddit.GetUser("MLBVideoConverterBot");
 				TimeLog("Getting MLBVideoConverterBot Comments");
 				var things = user.Comments.Take(CommentsToTest).OrderByDescending(a => a.Created);
 				this.ProcessThings(things);
@@ -138,6 +137,7 @@ namespace RedditBot
 
 			try
 			{
+				TimeLog("Getting direct video link posts");
 				var domain = _reddit.GetDomain("mediadownloads.mlb.com");
 				var posts = domain.Posts.Take(CommentsToTest).OrderByDescending(a => a.Created);
 				this.ProcessThings(posts);
@@ -146,10 +146,39 @@ namespace RedditBot
 			{
 				TimeLog(e);
 			}
+
+			TimeLog("All done! Closing in 10 seconds.");
+			Thread.Sleep(10000);
 		}
 
 		private void DoReply(Thing replyToThis, string gamePk, Highlight highlight, GameSummary gameSummary)
 		{
+			var replyToThisComment = replyToThis as Comment;
+			var replyToThisPost = replyToThis as Post;
+
+			if (replyToThisComment != null)
+			{
+				if (replyToThisComment.Author.ToLower() == "mlbvideoconverterbot")
+				{
+					var parent = replyToThisComment.GetParent();
+					if (parent != null)
+					{
+						replyToThis = parent;
+
+						replyToThisComment = replyToThis as Comment;
+						replyToThisPost = replyToThis as Post;
+					}
+				}
+			}
+
+			if (_thingIds.Contains(replyToThis.Id))
+			{
+				TimeLog("Id already in file: " + replyToThis.Id);
+				return;
+			}
+
+			TimeLog(string.Format("Thing ID {0} found and is not yet replied to", replyToThis.Id));
+
 			var date = DateTimeOffset.Parse(highlight.Date, CultureInfo.InvariantCulture);
 			var dateString = date.ToString("yyyyMMdd");
 
@@ -165,9 +194,6 @@ namespace RedditBot
 
 			try
 			{
-				var replyToThisComment = replyToThis as Comment;
-				var replyToThisPost = replyToThis as Post;
-
 				var succeeded = false;
 				if (replyToThisComment != null)
 				{
@@ -278,28 +304,11 @@ namespace RedditBot
 
 				if (comment != null)
 				{
-					if (_commentIds.Contains(comment.Id))
-					{
-						TimeLog("Id already in file: " + comment.Id);
-						continue;
-					}
-					
-					TimeLog(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
-
 					var commentBody = comment.Body;
 					if (!CommentVideoRegex.IsMatch(commentBody))
 					{
 						TimeLog(string.Format("Comment ID {0}: No video found in string", comment.Id));
 						continue;
-					}
-
-					if (comment.Author.ToLower() == "mlbvideoconverterbot")
-					{
-						var parent = comment.GetParent();
-						if (parent != null)
-						{
-							replyToThis = parent;
-						}
 					}
 
 					var link = CommentVideoRegex.Match(commentBody).Value;
