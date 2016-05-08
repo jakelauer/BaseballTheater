@@ -4,7 +4,6 @@ using MlbDataServer;
 using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using RedditBot.Config;
-using RedditSharp;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using RedditSharp;
 using RedditSharp.Things;
 
 namespace RedditBot
@@ -23,9 +23,16 @@ namespace RedditBot
 		private List<string> _commentIds = new List<string>();
 		private const string CommentIdFilePath = @"C:\baseballtheater.txt";
 		private const int CommentsToTest = 10;
-		private const int CommentsToSave = CommentsToTest * 2;
+		private const int CommentsToSave = CommentsToTest * 5;
+		
+		private Regex CommentVideoRegex { get; set; }
 
 		private CloudBlobContainer BlobContainer { get; set; }
+
+		public RedditAccess()
+		{
+			CommentVideoRegex = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-](.mp4))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+		}
 
 		/// <summary>
 		/// Logs a user in and then returns True if 
@@ -116,133 +123,93 @@ namespace RedditBot
 				return;
 			}
 
-			var linkParser = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-](.mp4))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-
-			TimeLog("Getting MLBVideoConverterBot Comments");
 			var user = _reddit.GetUser("MLBVideoConverterBot");
-			var index = 0;
-			var comments = user.Comments.Take(CommentsToTest + 5).OrderByDescending(a => a.Created);
-			foreach (var comment in comments)
+
+			try
 			{
-				if (!_commentIds.Contains(comment.Id))
-				{
-					TimeLog(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
-					var commentBody = comment.Body;
+				TimeLog("Getting MLBVideoConverterBot Comments");
+				var things = user.Comments.Take(CommentsToTest).OrderByDescending(a => a.Created);
+				this.ProcessThings(things);
+			}
+			catch (Exception e)
+			{
+				TimeLog(e);
+			}
 
-					if (linkParser.IsMatch(commentBody))
-					{
-						var link = linkParser.Match(commentBody).Value;
-						var contentId = GetContentIdFromVideoUrl(link);
-						var url = GetMlbXmlFileFromVideoUrl(contentId);
-
-
-						Highlight highlight = null;
-						try
-						{
-							var xmlLoader = new XmlLoader();
-							highlight = xmlLoader.GetXml<Highlight>(url);
-						}
-						catch (Exception e)
-						{
-							this.logGameNotFound(contentId, comment, e);
-						}
-
-						if (highlight != null)
-						{
-							var gamePkKeyword = highlight.Keywords.FirstOrDefault(a => a.Type == "game_pk");
-
-							var baseDirectory = highlight.GetGameDetailDirectory;
-
-							if (gamePkKeyword != null && baseDirectory != null)
-							{
-								var gameDetailCreator = new GameDetailCreator(baseDirectory, true);
-								var gameSummary = gameDetailCreator.GetGameSummary();
-								var allHighlights = gameDetailCreator.GetHighlights();
-
-								if (gameSummary != null)
-								{
-									var gamePk = gamePkKeyword.Value;
-									var date = DateTimeOffset.Parse(highlight.Date, CultureInfo.InvariantCulture);
-									var dateString = date.ToString("yyyyMMdd");
-
-									var baseballTheaterUrl = string.Format("http://baseball.theater/game/{0}/{1}", dateString, gamePk);
-
-									var redditFormatLink = string.Format(
-										"|More highlights from this game at baseball.theater|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| \r\n\r\n ^^I ^^am ^^a ^^new ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://np.reddit.com/r/BaseballTheaterBot)",
-										gameSummary.AwayTeamName,
-										gameSummary.HomeTeamName,
-										date.ToString("MM/dd/yyyy"),
-										baseballTheaterUrl
-										);
-
-									try
-									{
-										var parent = comment.GetParent();
-
-										var parentComment = parent as Comment;
-										var parentPost = parent as Post;
-
-
-										var succeeded = false;
-										if (parentComment != null)
-										{
-											parentComment.Reply(redditFormatLink);
-											succeeded = true;
-										}
-										else if (parentPost != null)
-										{
-											parentPost.Comment(redditFormatLink);
-											succeeded = true;
-										}
-
-										if (succeeded)
-										{
-											AddIdToList(comment.Id);
-											TimeLog("Comment published.");
-											WriteIdToFile(comment.Id);
-										}
-									}
-									catch (RateLimitException e)
-									{
-										var ms = (int)e.TimeToReset.TotalMilliseconds;
-										var remaining = (int) e.TimeToReset.TotalMilliseconds;
-										var loopMs = 200;
-										for (var i = 0; i < ms / loopMs; i++)
-										{
-											TimeLog("Rate limit exceeded, waiting for " + remaining + " milliseconds", true);
-											Thread.Sleep(loopMs);
-
-											remaining -= loopMs;
-										}
-
-									}
-
-									TimeLog(baseballTheaterUrl);
-								}
-							} 
-							else
-							{
-								this.logGameNotFound(contentId, comment);
-							}
-						}
-						else
-						{
-							TimeLog("Highlight null for id " + contentId);
-							AddIdToList(comment.Id);
-						}
-					}
-
-					index++;
-				}
-				else
-				{
-					TimeLog("Id already in file: " + comment.Id);
-				}
+			try
+			{
+				var domain = _reddit.GetDomain("mediadownloads.mlb.com");
+				var posts = domain.Posts.Take(CommentsToTest).OrderByDescending(a => a.Created);
+				this.ProcessThings(posts);
+			}
+			catch (Exception e)
+			{
+				TimeLog(e);
 			}
 		}
 
-		private void logGameNotFound(string contentId, Comment comment, Exception e = null)
+		private void DoReply(Thing replyToThis, string gamePk, Highlight highlight, GameSummary gameSummary)
+		{
+			var date = DateTimeOffset.Parse(highlight.Date, CultureInfo.InvariantCulture);
+			var dateString = date.ToString("yyyyMMdd");
+
+			var baseballTheaterUrl = string.Format("http://baseball.theater/game/{0}/{1}", dateString, gamePk);
+
+			var redditFormatLink = string.Format(
+				"|More highlights from this game at baseball.theater|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| \r\n\r\n ^^I ^^am ^^a ^^new ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://np.reddit.com/r/BaseballTheaterBot)",
+				gameSummary.AwayTeamName,
+				gameSummary.HomeTeamName,
+				date.ToString("MM/dd/yyyy"),
+				baseballTheaterUrl
+				);
+
+			try
+			{
+				var replyToThisComment = replyToThis as Comment;
+				var replyToThisPost = replyToThis as Post;
+
+				var succeeded = false;
+				if (replyToThisComment != null)
+				{
+					replyToThisComment.Reply(redditFormatLink);
+					succeeded = true;
+				}
+				else if (replyToThisPost != null)
+				{
+					replyToThisPost.Comment(redditFormatLink);
+					succeeded = true;
+				}
+
+				if (succeeded)
+				{
+					AddIdToList(replyToThis.Id);
+					TimeLog("Comment published.");
+					WriteIdToFile(replyToThis.Id);
+
+					TimeLog(baseballTheaterUrl);
+				}
+			}
+			catch (RateLimitException e)
+			{
+				var ms = (int) e.TimeToReset.TotalMilliseconds;
+				var remaining = (int) e.TimeToReset.TotalMilliseconds;
+				const int loopMs = 200;
+
+				for (var i = 0; i < ms/loopMs; i++)
+				{
+					TimeLog("Rate limit exceeded, waiting for " + remaining + " milliseconds", true);
+					Thread.Sleep(loopMs);
+
+					remaining -= loopMs;
+				}
+			}
+			catch (Exception e)
+			{
+				TimeLog(e);
+			}
+		}
+
+		private void logGameNotFound(string contentId, Thing comment, Exception e = null)
 		{
 			TimeLog("No game available for ID " + contentId);
 			if (e != null)
@@ -298,6 +265,98 @@ namespace RedditBot
 		{
 			var tString = thing.ToString();
 			TimeLog(tString, isUpdate);
+		}
+
+		private void ProcessThings(IEnumerable<Thing> things)
+		{
+			foreach (var thing in things)
+			{
+				var replyToThis = thing;
+				var comment = thing as Comment;
+				var post = thing as Post;
+				var contentId = "";
+
+				if (comment != null)
+				{
+					if (_commentIds.Contains(comment.Id))
+					{
+						TimeLog("Id already in file: " + comment.Id);
+						continue;
+					}
+					
+					TimeLog(string.Format("Comment ID {0} found and is not yet replied to", comment.Id));
+
+					var commentBody = comment.Body;
+					if (!CommentVideoRegex.IsMatch(commentBody))
+					{
+						TimeLog(string.Format("Comment ID {0}: No video found in string", comment.Id));
+						continue;
+					}
+
+					if (comment.Author.ToLower() == "mlbvideoconverterbot")
+					{
+						var parent = comment.GetParent();
+						if (parent != null)
+						{
+							replyToThis = parent;
+						}
+					}
+
+					var link = CommentVideoRegex.Match(commentBody).Value;
+					contentId = GetContentIdFromVideoUrl(link);
+				}
+
+				if (post != null)
+				{
+					contentId = GetContentIdFromVideoUrl(post.Url.ToString());
+				}
+				
+				var url = GetMlbXmlFileFromVideoUrl(contentId);
+
+
+				Highlight highlight = null;
+				try
+				{
+					var xmlLoader = new XmlLoader();
+					highlight = xmlLoader.GetXml<Highlight>(url);
+				}
+				catch (Exception e)
+				{
+					this.logGameNotFound(contentId, thing, e);
+				}
+
+				if (highlight != null)
+				{
+					var gamePkKeyword = highlight.Keywords.FirstOrDefault(a => a.Type == "game_pk");
+					var baseDirectory = highlight.GetGameDetailDirectory;
+
+					if (gamePkKeyword != null && baseDirectory != null)
+					{
+						var gamePk = gamePkKeyword.Value;
+						var gameDetailCreator = new GameDetailCreator(baseDirectory, true);
+						var gameSummary = gameDetailCreator.GetGameSummary();
+						var allHighlights = gameDetailCreator.GetHighlights();
+
+						if (gameSummary != null &&
+							allHighlights != null &&
+							allHighlights.Highlights != null &&
+							allHighlights.Highlights.Length > 0)
+						{
+
+							this.DoReply(replyToThis, gamePk, highlight, gameSummary);
+						}
+					}
+					else
+					{
+						this.logGameNotFound(contentId, thing);
+					}
+				}
+				else
+				{
+					TimeLog("Highlight null for id " + contentId);
+					AddIdToList(thing.Id);
+				}
+			}
 		}
 	}
 }

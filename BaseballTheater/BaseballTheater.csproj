@@ -77,6 +77,10 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RedditSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RedditSharp\RedditSharp\bin\Debug\RedditSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -291,10 +295,6 @@
     <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
       <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
       <Name>MlbDataServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RedditSharp\RedditSharp.csproj">
-      <Project>{a368cb75-75f0-4489-904d-b5cebb0fe624}</Project>
-      <Name>RedditSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
