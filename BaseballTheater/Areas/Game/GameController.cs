@@ -13,7 +13,7 @@ namespace BaseballTheater.Areas.Game
 		{
 			var dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
 
-			var model = new GameModel(dateTime, id);
+			var model = new GameModel(dateTime, id, Request);
 
 			if (model.GameSummary == default(GameSummary))
 			{

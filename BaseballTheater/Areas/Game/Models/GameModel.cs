@@ -5,16 +5,18 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Web;
+using BaseballTheater.Shared.Models;
 
 namespace BaseballTheater.Areas.Game.Models
 {
-	public class GameModel
+	public class GameModel : BaseModel
 	{
 		public DateTime Date { get; set; }
 		public GameSummary GameSummary { get; set; }
 		public HighlightsCollection HighlightsCollection { get; set; }
 
-		public GameModel(DateTime date, int gamePk)
+		public GameModel(DateTime date, int gamePk, HttpRequestBase request) : base(request)
 		{
 			this.Date = date;
 

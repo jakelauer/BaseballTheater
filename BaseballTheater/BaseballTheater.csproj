@@ -201,6 +201,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shared\Models\BaseModel.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -255,7 +256,6 @@
     <Content Include="Shared\Scripts\base.js" />
     <Content Include="Shared\Scripts\libraries\jquery.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
-    <Content Include="Shared\Scripts\prototypes\mlb.js" />
     <Content Include="Shared\Styles\base.css" />
     <Content Include="Shared\Styles\teams.css" />
     <Content Include="Web.config" />

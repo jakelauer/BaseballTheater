@@ -11,7 +11,7 @@
 	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
 	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
 
-	
+
 }
 
 @Styles.Render("~/stylebundles/home")
@@ -28,9 +28,10 @@
 @if (Model.GameCollection != null && Model.GameCollection.GameSummaries != null)
 {
 	var allGames = Model.GameCollection.GameSummaries.OrderByDescending(a => a.Linescore != null).ThenBy(a => a.DateObj);
-	
+
 	<div class="leagues">
-		@foreach (var game in allGames)
+		@foreach (var game in allGames
+			.OrderByDescending(a => a.AwayFileCode == Model.FavoriteTeam || a.HomeFileCode == Model.FavoriteTeam))
 		{
 			Html.RenderPartial("_game_summary", game);
 		}

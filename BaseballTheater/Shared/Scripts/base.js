@@ -1,7 +1,5 @@
 ﻿jQuery(function ($) {
 
-
-
 	var picker = new Pikaday({
 		field: $('#calendarpicker')[0],
 		format: 'MMM DD, YYYY',
@@ -27,4 +25,21 @@
 			video.paused ? video.play() : video.pause();
 		});
 	}
+
+	$("#favorite-team").on("change", function () {
+		var val = $(this).val();
+
+		var cookieDate = new Date;
+		cookieDate.setFullYear(cookieDate.getFullYear() + 1);
+
+		var expires = cookieDate.toLocaleDateString();
+
+		document.cookie = "favoriteteam=" + val + "; expires=" + expires + ";";
+
+		location.search = Date.now();
+	});
+
+	$("header .expand-links").on("click", function() {
+		$("header").toggleClass("expanded");
+	});
 });

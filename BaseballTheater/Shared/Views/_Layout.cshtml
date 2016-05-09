@@ -1,9 +1,45 @@
 ﻿@using System.Web.Optimization;
 
+@model BaseballTheater.Shared.Models.BaseModel
+
 @{
 	Layout = null;
 
 	ViewBag.Title = ViewBag.Title != null ? ViewBag.Title + " | Baseball Theather" : "Baseball Theater";
+
+	var teams = new Dictionary<string, string>()
+	{
+		{ "ari", "Arizona Diamondbacks" },
+		{ "atl", "Atlanta Braves" },
+		{ "bal", "Baltimore Orioles" },
+		{ "bos", "Boston Red Sox" },
+		{ "chc", "Chicago Cubs" },
+		{ "cws", "Chicago White Sox" },
+		{ "cin", "Cincinnati Reds" },
+		{ "cle", "Cleveland Indians" },
+		{ "col", "Colorado Rockies" },
+		{ "det", "Detroit Tigers" },
+		{ "mia", "Miami Marlins" },
+		{ "hou", "Houston Astros" },
+		{ "kc", "Kansas City Royals" },
+		{ "laa,ana", "Los Angeles Angels" },
+		{ "la", "Los Angeles Dodgers" },
+		{ "mil", "Milwaukee Brewers" },
+		{ "min", "Minnesota Twins" },
+		{ "nym", "New York Mets" },
+		{ "nyy", "New York Yankees" },
+		{ "oak", "Oakland Athletics" },
+		{ "phi", "Philadelphia Phillies" },
+		{ "pit", "Pittsburgh Pirates" },
+		{ "sd", "San Diego Padres" },
+		{ "sf", "San Francisco Giants" },
+		{ "sea", "Seattle Mariners" },
+		{ "stl", "St. Louis Cardinals" },
+		{ "tb", "Tampa Bay Rays" },
+		{ "tex", "Texas Rangers" },
+		{ "tor", "Toronto Blue Jays" },
+		{ "was,wsh", "Washington Nationals" }
+	};
 }
 
 <!DOCTYPE html>
@@ -51,8 +87,25 @@
 <header>
 	<div class="header-content">
 		<a class="logo" href="/">Baseball <i class="fa fa-film" aria-hidden="true"></i> Theater</a>
+
+		<div class="expand-links">
+			<i class="fa fa-angle-down" aria-hidden="true"></i>
+		</div>
+		<div class="links">
+			<select id="favorite-team">
+				<option>- Select Favorite Team -</option>
+				@foreach (var team in teams)
+				{
+					var selected = team.Key == Model.FavoriteTeam ? "selected" : "";
+
+					<option value="@team.Key" @selected>@team.Value</option>
+				}
+			</select>
+			<a href="mailto:baseballtheater@gmail.com" title="Send me your ideas!" target="_blank">
+				Feedback
+			</a>
+		</div>
 	</div>
-	<a class="feedback-link" href="mailto:baseballtheater@gmail.com" title="Send me your ideas!" target="_blank"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></a>
 </header>
 <div id="body-wrapper">
 	@RenderBody()

@@ -2,16 +2,18 @@
 using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using System;
+using System.Web;
+using BaseballTheater.Shared.Models;
 
 namespace BaseballTheater.Areas.Home.Models
 {
-	public class HomeModel
+	public class HomeModel : BaseModel
 	{
 		public DateTime Date { get; set; }
 
 		public GameSummaryCollection GameCollection { get; set; }
 
-		public HomeModel(DateTime date)
+		public HomeModel(DateTime date, HttpRequestBase request) : base(request)
 		{
 			this.Date = date;
 			var today = DateTime.UtcNow.AddHours(-8);

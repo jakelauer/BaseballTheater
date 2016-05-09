@@ -18,7 +18,7 @@ namespace BaseballTheater.Areas.Home
 
 			var dateTime = DateTime.ParseExact(dateString, "yyyyMMdd", null);
 
-			var model = new HomeModel(dateTime);
+			var model = new HomeModel(dateTime, Request);
 
 			return View(model);
 
