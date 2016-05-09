@@ -24,7 +24,7 @@
 .team-logo.chc::before {
   background-position: 0 -160px !important;
 }
-
+ 
 .team-logo.cin::before {
   background-position: 0 -192px !important;
 }
@@ -57,7 +57,7 @@
   background-position: 0 -416px !important;
 }
 
-.team-logo.lad::before {
+.team-logo.la::before {
   background-position: 0 -448px !important;
 }
 
@@ -189,7 +189,7 @@
   background-position: -32px -416px !important;
 }
 
-.team-logo.dark.lad::before {
+.team-logo.dark.la::before {
   background-position: -32px -448px !important;
 }
 

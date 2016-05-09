@@ -1,17 +1,15 @@
-﻿using Microsoft.WindowsAzure.Storage;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.WindowsAzure.Storage.Blob;
 using MlbDataServer;
 using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using RedditBot.Config;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using RedditSharp;
 using RedditSharp.Things;
 

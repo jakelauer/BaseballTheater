@@ -257,12 +257,7 @@
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\prototypes\mlb.js" />
     <Content Include="Shared\Styles\base.css" />
-    <Content Include="Shared\Styles\teams.css">
-      <DependentUpon>teams.scss</DependentUpon>
-    </Content>
-    <Content Include="Shared\Styles\teams.min.css">
-      <DependentUpon>teams.css</DependentUpon>
-    </Content>
+    <Content Include="Shared\Styles\teams.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -273,10 +268,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
-    <Content Include="Shared\Styles\teams.scss" />
-    <Content Include="Shared\Styles\teams.css.map">
-      <DependentUpon>teams.css</DependentUpon>
-    </Content>
     <Content Include="Shared\Views\_game_summary.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -311,7 +302,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53986</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
