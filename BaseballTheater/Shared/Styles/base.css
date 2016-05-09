@@ -64,10 +64,12 @@ header .logo
 	color: #EEE;
 	font-family: 'Alfa Slab One', cursive;
 	font-size: 26px;
+	left: 50%;
 	line-height: 50px;
-	position: relative;
+	position: absolute;
 	text-align: center;
 	text-decoration: none;
+	transform: translateX(-50%);
 }
 
 header .links,
