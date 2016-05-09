@@ -40,9 +40,9 @@ header
 	transition: 0.25s;
 }
 
-	header.expanded
+	header .expand-links
 	{
-		height: 100px;
+		display: none;
 	}
 
 header .header-content
@@ -201,6 +201,16 @@ footer
 	.game-summary table .team-info .team-name
 	{
 		display: inline-block;
+	}
+
+	header .expand-links
+	{
+		display: block;
+	}
+
+	header.expanded
+	{
+		height: 100px;
 	}
 
 	header .links
