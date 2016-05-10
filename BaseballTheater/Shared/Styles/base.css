@@ -225,6 +225,12 @@ footer
 		{
 			display: block;
 		}
+
+	header .logo
+	{
+		position: relative;
+		left: 0;
+	}
 }
 
 @media all and (max-width: 600px)
