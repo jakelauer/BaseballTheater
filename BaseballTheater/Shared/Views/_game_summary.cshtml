@@ -12,6 +12,8 @@
 	}
 
 	var dayString = game.DateObj.ToString("yyyyMMdd");
+
+	var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
 }
 
 <div class="game-summary">
@@ -24,7 +26,9 @@
 					@game.Status.Status
 					@if (game.Linescore == null)
 					{
-						<text> - @(game.EventTime + game.EventTimeAmPm)</text>
+						<span data-time="@game.DateObj">
+							 - @eventTimeString
+						</span>
 					}
 				</small>
 			</td>

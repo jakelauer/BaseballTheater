@@ -204,7 +204,7 @@ namespace RedditBot
 			var baseballTheaterUrl = string.Format("http://baseball.theater/game/{0}/{1}", dateString, gamePk);
 
 			var redditFormatLink = string.Format(
-				"More highlights from this game at baseball.theater: \r\n\r\n[**{0} @ {1}, {2}**]({3})\r\n\r\n---\r\n\r\n[More info and feedback](http://np.reddit.com/r/BaseballTheaterBot)\r\n\r\n^^^^^^^^^^^^^^^^^^^^^^^^^^^gamepk={4}",
+				"More highlights from this game: \r\n\r\n[**{0} @ {1}, {2}**]({3})\r\n\r\n---\r\n\r\n[More info and feedback](http://np.reddit.com/r/BaseballTheaterBot)\r\n\r\n^^^^^^^^^^^^^^^^^^^^^^^^^^^gamepk={4}",
 				gameSummary.AwayTeamName,
 				gameSummary.HomeTeamName,
 				date.ToString("MM/dd/yyyy"),

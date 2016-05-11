@@ -25,6 +25,9 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("ampm")]
 		public string EventTimeAmPm { get; set; }
 
+		[XmlAttribute("time_zone")]
+		public string TimeZone { get; set; }
+
 		public DateTime DateObj
 		{
 			get
