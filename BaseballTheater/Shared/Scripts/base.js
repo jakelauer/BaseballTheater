@@ -29,12 +29,7 @@
 	$("#favorite-team").on("change", function () {
 		var val = $(this).val();
 
-		var cookieDate = new Date;
-		cookieDate.setFullYear(cookieDate.getFullYear() + 1);
-
-		var expires = cookieDate.toLocaleDateString();
-
-		document.cookie = "favoriteteam=" + val + "; expires=" + expires + ";";
+		document.cookie = "favoriteteam=" + val + "; expires=Fri, 31 Dec 9999 23:59:59 GMT;";
 
 		location.search = Date.now();
 	});
