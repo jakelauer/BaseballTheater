@@ -17,14 +17,34 @@
 	if (!Modernizr.touch)
 	{
 		$("video").on("click", function() {
-			$("video").not($(this)).each(function() {
-				$(this)[0].pause();
-			});
-
-			var video = $(this)[0];
-			video.paused ? video.play() : video.pause();
+			var video = this;
+			setTimeout(function() {
+				if (!video.paused)
+				{
+					video.pause();
+				}
+			}, 1000 / 60);
 		});
 	}
+
+	$(".video .play-cover").on("click", function() {
+		var $video = $(this).parent();
+		var video = $video.find("video")[0];
+
+		video.play();
+		$(this).hide();
+	});
+
+	$(".video video").on("pause", function() {
+		$(this).siblings(".play-cover").show();
+	});
+
+	$(".video video").on("play", function () {
+		$("video").not($(this)).each(function() {
+			this.pause();
+		});
+		$(this).siblings(".play-cover").hide();
+	});
 
 	$("#favorite-team").on("change", function () {
 		var val = $(this).val();

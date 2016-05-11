@@ -32,6 +32,18 @@
 		padding-bottom: 56.25%; /* 16:9 */
 	}
 
+		.highlight .video .play-cover
+		{
+			position: absolute;
+
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+
+			cursor: pointer;
+		}
+
 	.highlight video
 	{
 		position: absolute;

@@ -35,7 +35,8 @@
 						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
 						<div class="video">
-							<video src="@bigurl" controls preload="none" style="background-image: url(@thumbnail)"></video>
+							<video muted mute src="@bigurl" controls preload="none" style="background-image: url(@thumbnail)"></video>
+							<div class="play-cover"></div>
 						</div>
 
 						<div class="links">
