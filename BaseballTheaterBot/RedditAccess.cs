@@ -22,14 +22,17 @@ namespace RedditBot
 		private const string CommentIdFilePath = @"C:\baseballtheater.txt";
 		private const int CommentsToTest = 10;
 		private const int CommentsToSave = CommentsToTest * 5;
-		
+
 		private Regex CommentVideoRegex { get; set; }
+		private Regex GamePkRegex { get; set; }
 
 		private CloudBlobContainer BlobContainer { get; set; }
 
 		public RedditAccess()
 		{
 			CommentVideoRegex = new Regex(@"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-](.mp4))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+			GamePkRegex = new Regex(@".*gameid=([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 		}
 
 		/// <summary>
@@ -98,10 +101,10 @@ namespace RedditBot
 		private void WriteIdToFile(string id)
 		{
 
-			TruncateFile();
+			TruncateCommentsFile();
 		}
 
-		private void TruncateFile()
+		private void TruncateCommentsFile()
 		{
 			var commentsToLeave = _thingIds.Skip(_thingIds.Count - CommentsToSave).Take(CommentsToSave);
 			WriteIdsToFile(commentsToLeave);
@@ -154,6 +157,8 @@ namespace RedditBot
 			var replyToThisComment = replyToThis as Comment;
 			var replyToThisPost = replyToThis as Post;
 
+			var parentPost = replyToThisPost;
+
 			if (replyToThisComment != null)
 			{
 				if (replyToThisComment.Author.ToLower() == "mlbvideoconverterbot")
@@ -175,6 +180,22 @@ namespace RedditBot
 				return;
 			}
 
+			TimeLog("Getting parent post, checking for existing comments in thread");
+
+			parentPost = replyToThisComment != null
+				? this._reddit.GetPost(replyToThisComment.Subreddit, replyToThisComment.LinkId)
+				: replyToThisPost;
+
+			if (parentPost != null)
+			{
+				var existingComments = parentPost.Comments.Where(a => a.Author == "BaseballTheaterBot");
+				if (existingComments.Any(a => GamePkRegex.Match(a.Body).Value == gamePk))
+				{
+					TimeLog(string.Format("Already posted game {0} in this thread {1}", gamePk, parentPost.Id));
+					return;
+				}
+			}
+
 			TimeLog(string.Format("Thing ID {0} found and is not yet replied to", replyToThis.Id));
 
 			var date = DateTimeOffset.Parse(highlight.Date, CultureInfo.InvariantCulture);
@@ -183,11 +204,12 @@ namespace RedditBot
 			var baseballTheaterUrl = string.Format("http://baseball.theater/game/{0}/{1}", dateString, gamePk);
 
 			var redditFormatLink = string.Format(
-				"|More highlights from this game at baseball.theater|\r\n :--|:--:|--:\r\n [**{0} @ {1}, {2}**]({3})| \r\n\r\n ^^I ^^am ^^a ^^new ^^bot! ^^Let ^^me ^^know ^^if [^^something ^^goes ^^wrong](http://np.reddit.com/r/BaseballTheaterBot)",
+				"More highlights from this game at baseball.theater: \r\n\r\n[**{0} @ {1}, {2}**]({3})\r\n\r\n---\r\n\r\n[More info and feedback](http://np.reddit.com/r/BaseballTheaterBot)\r\n\r\n^^^^^^^^^^^^^^^^^^^^^^^^^^^gamepk={4}",
 				gameSummary.AwayTeamName,
 				gameSummary.HomeTeamName,
 				date.ToString("MM/dd/yyyy"),
-				baseballTheaterUrl
+				baseballTheaterUrl,
+				gameSummary.GamePk
 				);
 
 			try
