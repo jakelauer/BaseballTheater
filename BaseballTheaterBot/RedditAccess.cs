@@ -159,8 +159,20 @@ namespace RedditBot
 
 			var parentPost = replyToThisPost;
 
+			if (parentPost != null && parentPost.SubredditName != "baseball")
+			{
+				TimeLog("Item is not in r/baseball");
+				return;
+			}
+
 			if (replyToThisComment != null)
 			{
+				if (replyToThisComment.Subreddit != "baseball")
+				{
+					TimeLog("Item is not in r/baseball");
+					return;
+				}
+
 				if (replyToThisComment.Author.ToLower() == "mlbvideoconverterbot")
 				{
 					var parent = replyToThisComment.GetParent();
