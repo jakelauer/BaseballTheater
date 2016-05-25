@@ -29,13 +29,14 @@
 				{
 					var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
 					var bigurl = urls.LastOrDefault();
+					var medurl = urls.ElementAtOrDefault(urls.Count() - 2);
 					if (bigurl != null)
 					{
 
 						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
 						<div class="video">
-							<video src="@bigurl" controls preload="none" style="background-image: url(@thumbnail)"></video>
+							<video src="@medurl" controls preload="none" poster="@thumbnail"></video>
 							<div class="play-cover"></div>
 						</div>
 
