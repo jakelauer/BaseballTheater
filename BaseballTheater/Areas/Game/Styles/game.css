@@ -51,8 +51,8 @@
 		width: 100%;
 		height: 100%;
 
-		background-size: cover;
-		background-position: 50%;
+		-o-object-fit: cover;
+		object-fit: cover;
 	}
 
 		.highlight video:hover
