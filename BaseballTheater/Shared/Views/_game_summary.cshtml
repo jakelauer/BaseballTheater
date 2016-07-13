@@ -5,7 +5,7 @@
 
 	var startAtInningIndex = 0;
 	var inningCount = 9;
-	if (game.Linescore != null && game.Linescore.Innings.Length > inningCount)
+	if (game != null && game.Linescore != null && game.Linescore.Innings != null && game.Linescore.Innings.Length > inningCount)
 	{
 		inningCount = game.Linescore.Innings.Length;
 		startAtInningIndex = inningCount - 9;
