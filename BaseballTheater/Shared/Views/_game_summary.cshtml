@@ -5,18 +5,22 @@
 
 	var startAtInningIndex = 0;
 	var inningCount = 9;
+	var dayString = "";
 	if (game != null && game.Linescore != null && game.Linescore.Innings != null && game.Linescore.Innings.Length > inningCount)
 	{
 		inningCount = game.Linescore.Innings.Length;
 		startAtInningIndex = inningCount - 9;
 	}
 
-	var dayString = game.DateObj.ToString("yyyyMMdd");
+	if (game != null)
+	{
+		dayString = game.DateObj.ToString("yyyyMMdd");
+	}
 
 	var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
 }
 
-<div class="game-summary">
+<div class="game-summary" data-homecode="@game.HomeFileCode" data-awaycode="@game.AwayFileCode">
 	<a href="/game/@dayString/@game.GamePk" class="game-link"></a>
 
 	<table>
@@ -63,11 +67,11 @@
 							value = inning.Away;
 						}
 					}
-					<td class="inning">@value</td>
+					<td class="inning score-box">@value</td>
 				}
-				<td class="runs">@game.Linescore.Runs.Away</td>
-				<td class="hits">@game.Linescore.Hits.Away</td>
-				<td class="errors">@game.Linescore.Errors.Away</td>
+				<td class="runs score-box">@game.Linescore.Runs.Away</td>
+				<td class="hits score-box">@game.Linescore.Hits.Away</td>
+				<td class="errors score-box">@game.Linescore.Errors.Away</td>
 			}
 		</tr>
 		<tr class="team home">
@@ -75,7 +79,7 @@
 				<span class="team-logo dark @game.HomeFileCode"></span>
 				<span class="team-name">@game.HomeTeamName</span>
 			</td>
-			@if (game.Linescore != null)
+			@if (game.Linescore != null && game.Linescore.Innings != null)
 			{
 				for (var i = startAtInningIndex; i < inningCount; i++)
 				{
@@ -88,11 +92,11 @@
 							value = inning.Home;
 						}
 					}
-					<td class="inning">@value</td>
+					<td class="inning score-box">@value</td>
 				}
-				<td class="runs">@game.Linescore.Runs.Home</td>
-				<td class="hits">@game.Linescore.Hits.Home</td>
-				<td class="errors">@game.Linescore.Errors.Home</td>
+				<td class="runs score-box">@game.Linescore.Runs.Home</td>
+				<td class="hits score-box">@game.Linescore.Hits.Home</td>
+				<td class="errors score-box">@game.Linescore.Errors.Home</td>
 			}
 		</tr>
 	</table>

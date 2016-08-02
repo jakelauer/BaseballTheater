@@ -57,4 +57,23 @@
 	$("header .expand-links").on("click", function() {
 		$("header").toggleClass("expanded");
 	});
+
+	if (Cookies.get("hidescores") === "true")
+	{
+		$("#scoreshidden").attr("checked", "checked");
+		$(".score-box").text("▨");
+		$(".highlight.recap h2").text("Recap");
+	}
+	else
+	{
+		$(".Game .settings").hide();
+	}
+
+	$(".highlight.recap h2").addClass("on");
+
+	$("#scoreshidden").on("change", function () {
+		var checked = $(this).is(":checked");
+		Cookies.set("hidescores", checked, { expires: 999 });
+		location.reload();
+	});
 });

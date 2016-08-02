@@ -24,6 +24,16 @@
 		margin-bottom: 10px;
 	}
 
+	.highlight.recap h2
+	{
+		opacity: 0;
+	}
+
+	.highlight.recap h2.on
+	{
+		opacity: 1;
+	}
+
 	.highlight .video {
 		position: relative;
 		width: 100%;

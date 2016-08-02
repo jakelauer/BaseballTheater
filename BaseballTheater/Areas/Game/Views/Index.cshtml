@@ -5,6 +5,7 @@
 
 @{
 	Layout = "~/Shared/Views/_Layout.cshtml";
+	ViewBag.BodyClass = "Game";
 
 	if (Model.GameSummary != null)
 	{
@@ -14,7 +15,14 @@
 
 @Styles.Render("~/stylebundles/game")
 
-
+<div class="settings flex">
+	<div class="tools flex">
+		<div class="hide-scores">
+			<input type="checkbox" name="scoreshidden" id="scoreshidden" />
+			<label for="scoreshidden">Hide Scores</label>
+		</div>
+	</div>
+</div>
 
 @Html.Partial("_game_summary", Model.GameSummary)
 
@@ -23,16 +31,17 @@
 	<div class="highlights">
 		@foreach (var highlight in Model.HighlightsCollection.Highlights.OrderByDescending(a => a.Condensed || a.Recap).ThenBy(a => a.DateObj))
 		{
-			<div class="highlight">
+			var recapClass = highlight.Recap ? "recap" : "";
+			
+			<div class="highlight @recapClass">
 				<h2>@highlight.Headline - @highlight.Duration</h2>
 				@if (highlight.Urls != null && highlight.Thumbs != null && highlight.Urls.Any(a => a.EndsWith("mp4")))
 				{
 					var urls = highlight.Urls.Where(a => a.EndsWith("mp4")).OrderBy(a => a);
 					var bigurl = urls.LastOrDefault();
-					var medurl = urls.ElementAtOrDefault(urls.Count() - 2);
+					var medurl = urls.ElementAtOrDefault(urls.Count() - 3);
 					if (bigurl != null)
 					{
-
 						var thumbnail = highlight.Thumbs.LastOrDefault() ?? highlight.Thumb;
 
 						<div class="video">

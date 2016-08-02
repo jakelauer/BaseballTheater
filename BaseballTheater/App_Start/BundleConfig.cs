@@ -10,6 +10,7 @@ namespace BaseballTheater
 		{
 			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
 						"~/Shared/Scripts/libraries/modernizr-*",
+						"~/Shared/Scripts/libraries/cookies.js",
 						"~/Shared/Scripts/libraries/jquery*"));
 
 			bundles.Add(new StyleBundle("~/stylebundles/main")
@@ -20,6 +21,10 @@ namespace BaseballTheater
 
 			bundles.Add(new StyleBundle("~/stylebundles/home")
 				.IncludeDirectory("~/Areas/Home/Styles/", "*.css"));
+
+			bundles.Add(new ScriptBundle("~/scriptbundles/home")
+				.IncludeDirectory("~/Areas/Home/Scripts/", "*.js")
+				);
 		}
 	}
 }

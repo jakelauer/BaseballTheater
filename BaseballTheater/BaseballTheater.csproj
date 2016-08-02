@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Game\Styles\game.css" />
+    <Content Include="Areas\Home\Scripts\index.js" />
     <Content Include="Areas\Home\Styles\home.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -254,6 +255,7 @@
     <Content Include="images\ui-icons_cc0000_256x240.png" />
     <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="Shared\Scripts\base.js" />
+    <Content Include="Shared\Scripts\libraries\cookies.js" />
     <Content Include="Shared\Scripts\libraries\jquery.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Styles\base.css" />
