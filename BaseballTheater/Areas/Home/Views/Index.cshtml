@@ -66,9 +66,7 @@
 			<option>- Select Favorite Team -</option>
 			@foreach (var team in teams)
 			{
-				var selected = team.Key == Model.FavoriteTeam ? "selected" : "";
-
-				<option value="@team.Key" @selected>@team.Value</option>
+				<option value="@team.Key">@team.Value</option>
 			}
 		</select>
 		<div class="hide-scores">

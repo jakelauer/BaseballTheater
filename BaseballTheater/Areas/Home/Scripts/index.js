@@ -7,4 +7,6 @@
 		var $games = $(".game-summary[data-homecode=" + team + "], .game-summary[data-awaycode=" + team + "]");
 		$(".leagues").prepend($games);
 	}
+
+	$("#favorite-team").val(favoriteteam);
 });
