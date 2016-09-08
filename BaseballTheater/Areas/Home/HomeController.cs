@@ -1,12 +1,12 @@
-﻿using BaseballTheater.Areas.Home.Models;
-using System;
+﻿using System;
 using System.Web.Mvc;
+using BaseballTheater.Areas.Home.Models;
 
 namespace BaseballTheater.Areas.Home
 {
 	public class HomeController : Controller
 	{
-		[OutputCache(Duration = 60)]
+		[OutputCache(Duration = 120)]
 		public ActionResult Index(string id = "")
 		{
 			var dateString = id;

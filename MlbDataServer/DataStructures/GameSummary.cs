@@ -32,7 +32,14 @@ namespace MlbDataServer.DataStructures
 		{
 			get
 			{
-				return Date != null ? DateTime.Parse(Date, CultureInfo.InvariantCulture) : DateTime.UtcNow;
+				try
+				{
+					return Date != null ? DateTime.Parse(Date, CultureInfo.InvariantCulture) : DateTime.UtcNow;
+				}
+				catch
+				{
+					return DateTime.UtcNow;
+				}
 			}
 		}
 

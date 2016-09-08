@@ -1,14 +1,14 @@
-﻿using BaseballTheater.Areas.Game.Models;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Web.Mvc;
+using BaseballTheater.Areas.Game.Models;
 using MlbDataServer.DataStructures;
 
 namespace BaseballTheater.Areas.Game
 {
 	public class GameController : Controller
 	{
-		[OutputCache(Duration = 60)]
+		[OutputCache(Duration = 120)]
 		public ActionResult Index(string date, int id)
 		{
 			var dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture);
