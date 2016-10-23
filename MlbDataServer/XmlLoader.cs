@@ -2,18 +2,24 @@
 using System.IO;
 using System.Net;
 using System.Xml.Serialization;
+using NLog;
 
 namespace MlbDataServer
 {
 	public class XmlLoader
 	{
+		private static Logger Logger = LogManager.GetCurrentClassLogger();
+
 		public T GetXml<T>(string url)
 		{
 			T deserializedData = default(T);
 
+			Logger.Info(url);
+
 			try
 			{
-				var request = WebRequest.Create(url);
+				var request = (HttpWebRequest)WebRequest.Create(url);
+				request.KeepAlive = true;
 				request.Timeout = 30*60*1000;
 				request.UseDefaultCredentials = true;
 				request.Proxy.Credentials = request.Credentials;
@@ -33,13 +39,13 @@ namespace MlbDataServer
 					}
 					catch (Exception e)
 					{
-						Console.Write(e);
+						Logger.Error(e);
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				Console.Write(e);
+				Logger.Error(e);
 			}
 
 
