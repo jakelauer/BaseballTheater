@@ -28,8 +28,13 @@ namespace BaseballTheater.Areas.Game.Models
 
 			var gameDetailCreator = new GameDetailCreator(this.GameSummary.GameDataDirectory);
 			HighlightsCollection = gameDetailCreator.GetHighlights();
-			if (HighlightsCollection == default(HighlightsCollection)) return;
 
+			if (HighlightsCollection == null
+				|| HighlightsCollection == default(HighlightsCollection)
+				|| HighlightsCollection.Highlights == null)
+			{
+				return;
+			}
 
 			foreach (var highlight in HighlightsCollection.Highlights.Where(a => a != null && a.Urls != null))
 			{
