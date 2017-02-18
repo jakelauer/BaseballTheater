@@ -9,8 +9,8 @@ namespace BaseballTheater.Areas.Home.Models
 {
 	public class HomeModel : BaseModel
 	{
+        public bool isOpeningDay { get; set; }
 		public DateTime Date { get; set; }
-
 		public GameSummaryCollection GameCollection { get; set; }
 
 		public HomeModel(DateTime date, HttpRequestBase request) : base(request)

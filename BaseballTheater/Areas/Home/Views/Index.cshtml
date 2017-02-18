@@ -5,45 +5,45 @@
 @model HomeModel
 
 @{
-	Layout = "~/Shared/Views/_Layout.cshtml";
+    Layout = "~/Shared/Views/_Layout.cshtml";
 
-	var inputBoxString = Model.Date.ToString("MMM dd, yyyy");
-	var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
-	var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
+    var inputBoxString = Model.Date.ToString("MMM dd, yyyy");
+    var dayBeforeString = Model.Date.AddDays(-1).ToString("yyyyMMdd");
+    var dayAfterString = Model.Date.AddDays(1).ToString("yyyyMMdd");
 
-	var teams = new Dictionary<string, string>()
-	{
-		{ "ari", "Arizona Diamondbacks" },
-		{ "atl", "Atlanta Braves" },
-		{ "bal", "Baltimore Orioles" },
-		{ "bos", "Boston Red Sox" },
-		{ "chc", "Chicago Cubs" },
-		{ "cws", "Chicago White Sox" },
-		{ "cin", "Cincinnati Reds" },
-		{ "cle", "Cleveland Indians" },
-		{ "col", "Colorado Rockies" },
-		{ "det", "Detroit Tigers" },
-		{ "mia", "Miami Marlins" },
-		{ "hou", "Houston Astros" },
-		{ "kc", "Kansas City Royals" },
-		{ "laa,ana", "Los Angeles Angels" },
-		{ "la", "Los Angeles Dodgers" },
-		{ "mil", "Milwaukee Brewers" },
-		{ "min", "Minnesota Twins" },
-		{ "nym", "New York Mets" },
-		{ "nyy", "New York Yankees" },
-		{ "oak", "Oakland Athletics" },
-		{ "phi", "Philadelphia Phillies" },
-		{ "pit", "Pittsburgh Pirates" },
-		{ "sd", "San Diego Padres" },
-		{ "sf", "San Francisco Giants" },
-		{ "sea", "Seattle Mariners" },
-		{ "stl", "St. Louis Cardinals" },
-		{ "tb", "Tampa Bay Rays" },
-		{ "tex", "Texas Rangers" },
-		{ "tor", "Toronto Blue Jays" },
-		{ "was,wsh", "Washington Nationals" }
-	};
+    var teams = new Dictionary<string, string>()
+    {
+        { "ari", "Arizona Diamondbacks" },
+        { "atl", "Atlanta Braves" },
+        { "bal", "Baltimore Orioles" },
+        { "bos", "Boston Red Sox" },
+        { "chc", "Chicago Cubs" },
+        { "cws", "Chicago White Sox" },
+        { "cin", "Cincinnati Reds" },
+        { "cle", "Cleveland Indians" },
+        { "col", "Colorado Rockies" },
+        { "det", "Detroit Tigers" },
+        { "mia", "Miami Marlins" },
+        { "hou", "Houston Astros" },
+        { "kc", "Kansas City Royals" },
+        { "laa,ana", "Los Angeles Angels" },
+        { "la", "Los Angeles Dodgers" },
+        { "mil", "Milwaukee Brewers" },
+        { "min", "Minnesota Twins" },
+        { "nym", "New York Mets" },
+        { "nyy", "New York Yankees" },
+        { "oak", "Oakland Athletics" },
+        { "phi", "Philadelphia Phillies" },
+        { "pit", "Pittsburgh Pirates" },
+        { "sd", "San Diego Padres" },
+        { "sf", "San Francisco Giants" },
+        { "sea", "Seattle Mariners" },
+        { "stl", "St. Louis Cardinals" },
+        { "tb", "Tampa Bay Rays" },
+        { "tex", "Texas Rangers" },
+        { "tor", "Toronto Blue Jays" },
+        { "was,wsh", "Washington Nationals" }
+    };
 }
 
 @Styles.Render("~/stylebundles/home")
@@ -78,8 +78,12 @@
 
 @if (Model.GameCollection != null && Model.GameCollection.GameSummaries != null)
 {
-	var allGames = Model.GameCollection.GameSummaries.OrderByDescending(a => a.Linescore != null).ThenBy(a => a.DateObj);
+    var allGames = Model.GameCollection.GameSummaries.OrderByDescending(a => a.Linescore != null).ThenBy(a => a.DateObj);
 
+    if (Model.isOpeningDay)
+    {
+        <h2 style="text-align: center;">Opening Day @Model.Date.ToString("yyyy")</h2>
+    }
 	<div class="leagues">
 		@foreach (var game in allGames)
 		{
@@ -92,7 +96,6 @@ else
 	<p class="error">
 		<br/><br/>
 		We couldn't find any games for this date.<br/><br/>
-		Sometimes things don't load correctly, so try again in a few minutes, or <a href="?@(Guid.NewGuid().ToString())">click here</a> to force a retry.
 	</p>
 }
 

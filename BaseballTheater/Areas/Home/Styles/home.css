@@ -24,12 +24,14 @@
 .leagues
 {
 	display: -ms-flexbox;
-	display: -webkit-flex;	
+	display: -webkit-flex;
 	display: flex;
+
 	-ms-flex-wrap: wrap;
 	-webkit-flex-wrap: wrap;
 	flex-wrap: wrap;
 }
+
 
 	.leagues .game-summary
 	{
@@ -48,6 +50,7 @@
 	display: flex;
 }
 
+
 @media all and (max-width: 1200px)
 {
 }
@@ -58,15 +61,16 @@
 	{
 	}
 
-		.leagues > div
-		{
-			-ms-flex: none;
-			-webkit-flex: none;
-			flex: none;
+	.leagues > div
+	{
+		flex: none;
 
-			width: 100%;
-		}
-		
+		width: 100%;
+
+		-ms-flex: none;
+		-webkit-flex: none;
+	}
+
 	.leagues .game-summary
 	{
 		width: 100%;
@@ -77,6 +81,7 @@
 		margin-top: 1rem;
 	}
 }
+
 
 @media all and (max-width: 600px)
 {

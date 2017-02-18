@@ -2,7 +2,7 @@
 
 	var picker = new Pikaday({
 		field: $('#calendarpicker')[0],
-		format: 'MMM DD, YYYY',
+		format: "MMM DD, YYYY",
 		onSelect: function(date)
 		{
 			var dateText = moment(date).format("YYYYMMDD");
