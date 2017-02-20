@@ -8,10 +8,8 @@ namespace BaseballTheater
 		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-						"~/Shared/Scripts/libraries/modernizr-*",
-						"~/Shared/Scripts/libraries/cookies.js",
-						"~/Shared/Scripts/libraries/jquery*"));
+			bundles.Add(new ScriptBundle("~/bundles/lib")
+				.IncludeDirectory("~/Shared/Scripts/libraries", "*.js", true));
 
 			bundles.Add(new StyleBundle("~/stylebundles/main")
 				.IncludeDirectory("~/Shared/Styles/", "*.css"));
@@ -23,8 +21,10 @@ namespace BaseballTheater
 				.IncludeDirectory("~/Areas/Home/Styles/", "*.css"));
 
 			bundles.Add(new ScriptBundle("~/scriptbundles/home")
-				.IncludeDirectory("~/Areas/Home/Scripts/", "*.js")
-				);
+				.IncludeDirectory("~/Areas/Home/Scripts/", "*.js"));
+
+			bundles.Add(new ScriptBundle("~/scriptbundles/mlbdataserver")
+				.IncludeDirectory("~/Shared/Scripts/MlbDataServer", "*.js", true));
 		}
 	}
 }

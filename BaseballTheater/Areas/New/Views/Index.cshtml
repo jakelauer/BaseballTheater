@@ -1,0 +1,21 @@
+﻿@using System.Web.Optimization
+@using BaseballTheater.Areas.Home.Models
+@using MlbDataServer.DataStructures
+
+@model HomeModel
+
+@{
+	Layout = "~/Shared/Views/_Layout.cshtml";
+}
+
+@Styles.Render("~/stylebundles/new")
+
+@section Scripts
+{
+	@Scripts.Render("~/scriptbundles/new")
+}
+
+@{ 
+	Html.RenderPartial("_Partials/_GameSummary");
+	Html.RenderPartial("_Partials/_GameDetail");
+}
