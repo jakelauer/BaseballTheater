@@ -218,12 +218,14 @@
     <Compile Include="Areas\Game\GameAreaRegistration.cs" />
     <Compile Include="Areas\Game\GameController.cs" />
     <Compile Include="Areas\Game\Models\GameModel.cs" />
-    <Compile Include="Areas\New\BundleConfig.cs" />
-    <Compile Include="Areas\New\NewAreaRegistration.cs" />
-    <Compile Include="Areas\New\NewController.cs" />
+    <Compile Include="Areas\Home\BundleConfig.cs" />
     <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
     <Compile Include="Areas\Home\HomeController.cs" />
     <Compile Include="Areas\Home\Models\HomeModel.cs" />
+    <Compile Include="Areas\OldHome\BundleConfig.cs" />
+    <Compile Include="Areas\OldHome\OldHomeAreaRegistration.cs" />
+    <Compile Include="Areas\OldHome\OldHomeController.cs" />
+    <Compile Include="Areas\OldHome\Models\HomeModel.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -234,11 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Game\Styles\game.css" />
-    <Content Include="Areas\New\Styles\new.css" />
-    <Content Include="Areas\Home\Scripts\index.js" />
     <Content Include="Areas\Home\Styles\home.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Areas\OldHome\Scripts\index.js" />
+    <Content Include="Areas\OldHome\Styles\home.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -272,23 +272,23 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Home\Views\Index.cshtml" />
-    <Content Include="Areas\Home\Views\web.config" />
+    <Content Include="Areas\OldHome\Views\Index.cshtml" />
+    <Content Include="Areas\OldHome\Views\web.config" />
     <Content Include="Areas\Game\Views\web.config" />
     <Content Include="Areas\Game\Views\Index.cshtml" />
     <Content Include="images\manifest.json" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\New\Views\Index.cshtml" />
-    <Content Include="Areas\New\Views\web.config" />
+    <Content Include="Areas\Home\Views\Index.cshtml" />
+    <Content Include="Areas\Home\Views\web.config" />
     <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\New\Views\_Partials\_GameDetail.cshtml" />
+    <Content Include="Areas\Home\Views\_Partials\_GameDetail.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Areas\New\Views\_Partials\_GameSummary.cshtml" />
+    <Content Include="Areas\Home\Views\_Partials\_GameSummary.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -324,7 +324,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
@@ -332,7 +331,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -349,6 +347,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\Game\game.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />
@@ -358,12 +357,17 @@
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\highlight.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\keyword.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\linescore.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\teams.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\Utils\xml_loader.ts" />
-    <TypeScriptCompile Include="Areas\New\Scripts\new.ts" />
+    <TypeScriptCompile Include="Areas\Home\Scripts\home.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\global_components.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

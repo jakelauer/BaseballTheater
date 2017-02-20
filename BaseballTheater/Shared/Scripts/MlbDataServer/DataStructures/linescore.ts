@@ -1,42 +1,67 @@
 ﻿namespace Theater
 {
-	export class Linescore
+	export interface ILinescore
 	{
-		public innings: Inning[];
-		public runs: Runs;
-		public hits: Hits;
-		public errors: Errors;
+		inning: IInning[];
+		r: IRuns;
+		h: IHits;
+		e: IErrors;
 	}
 
-	export class HomeAway
+	export class Linescore implements ILinescore
 	{
-		public home: string;
-		public away: string;
+		public inning: IInning[];
+		public r: IRuns;
+		public h: IHits;
+		public e: IErrors;
+
+		public startingInning = 0;
+
+		constructor(data: ILinescore)
+		{
+			this.inning = data.inning;
+			this.r = data.r;
+			this.h = data.h;
+			this.e = data.e;
+			
+			var inningCount = 9;
+			if (this.inning.length > inningCount)
+			{
+				inningCount = this.inning.length;
+				this.startingInning = inningCount - 9;
+			}
+		}
 	}
 
-	export class Inning extends HomeAway
+	export interface IHomeAway
+	{
+		home: string;
+		away: string;
+	}
+
+	export interface IInning extends IHomeAway
 	{
 
 	}
 
-	export class Runs extends HomeAway
+	export interface IRuns extends IHomeAway
 	{
 
 	}
 
-	export class Hits extends HomeAway
+	export interface IHits extends IHomeAway
 	{
 
 	}
 
-	export class Errors extends HomeAway
+	export interface IErrors extends IHomeAway
 	{
 
 	}
 
-	export class GameStatus
+	export interface IGameStatus
 	{
-		public status: string;
+		status: string;
 	}
 
 	export enum League

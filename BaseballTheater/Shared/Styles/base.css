@@ -67,15 +67,18 @@ select option
 
 header .logo
 {
-	color: #EEE;
-	font-family: 'Alfa Slab One', cursive;
-	font-size: 26px;
-	left: 50%;
-	line-height: 50px;
 	position: absolute;
+	left: 50%;
+
+	font-family: "Alfa Slab One", cursive;
+	font-size: 26px;
+	line-height: 50px;
+
+	transform: translateX(-50%);
 	text-align: center;
 	text-decoration: none;
-	transform: translateX(-50%);
+
+	color: #EEE;
 }
 
 header .links,

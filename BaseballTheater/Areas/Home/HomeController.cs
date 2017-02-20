@@ -6,41 +6,27 @@ namespace BaseballTheater.Areas.Home
 {
 	public class HomeController : Controller
 	{
-		[OutputCache(Duration = 120)]
+		[OutputCache(Duration = 1)]
 		public ActionResult Index(string id = "")
-        {
-            var dateString = id;
-            var isOpeningDay = false;
-            if (dateString == "")
-            {
-                var endingDay2016String = "20161102";
-                var openingDay2017String = "20170402";
+		{
+			var dateString = id;
+			if (dateString == "")
+			{
+				var endingDay2016String = "20161102";
+				var openingDay2017String = "20170402";
 
-                DateTime openingDay2017 = DateTime.ParseExact(openingDay2017String, "yyyyMMdd", null);
+				DateTime openingDay2017 = DateTime.ParseExact(openingDay2017String, "yyyyMMdd", null);
 
-                var today = DateTime.UtcNow.AddHours(-8);
+				var today = DateTime.UtcNow.AddHours(-8);
 
-                if (today >= openingDay2017)
-                {
-                    dateString = today.ToString("yyyyMMdd");
+				dateString = today >= openingDay2017 
+					? today.ToString("yyyyMMdd") 
+					: endingDay2016String;
+			}
 
-                    isOpeningDay = dateString == openingDay2017String;
-                }
-                else
-                {
-                    dateString = endingDay2016String;
-                }
-            }
-
-			var dateTime = DateTime.ParseExact(dateString, "yyyyMMdd", null);
-
-			var model = new HomeModel(dateTime, Request)
-            {
-                isOpeningDay = isOpeningDay
-            };
+			var model = new HomeModel(Request, dateString);
 
 			return View(model);
-
 		}
 	}
 }

@@ -81,19 +81,20 @@
 
 	@Scripts.Render("~/bundles/lib")
 	@Scripts.Render("~/scriptbundles/mlbdataserver")
+	@Scripts.Render("~/scriptbundles/site")
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js"></script>
 	
 @{
-	var scripts = new List<string>()
+	@*var scripts = new List<string>()
 	{
 		"base.js",
 	};
 	foreach (var script in scripts)
 	{
 		<script src="~/Shared/Scripts/@script" type="text/javascript"></script>
-	}
+	}*@
 }
 
 @RenderSection("Scripts", false)

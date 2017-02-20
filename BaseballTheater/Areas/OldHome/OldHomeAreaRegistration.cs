@@ -1,15 +1,15 @@
 ﻿using System.Web.Mvc;
 using System.Web.Optimization;
 
-namespace BaseballTheater.Areas.New
+namespace BaseballTheater.Areas.OldHome
 {
-	public class NewAreaRegistration : AreaRegistration 
+	public class OldHomeAreaRegistration : AreaRegistration 
 	{
 		public override string AreaName 
 		{
 			get 
 			{
-				return "New";
+				return "OldHome";
 			}
 		}
 
@@ -18,10 +18,10 @@ namespace BaseballTheater.Areas.New
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 			context.MapRoute(
-				"New_default",
-				"new/{id}",
+				"oldHome_default",
+				"oldHome/{id}",
 				new { controller = AreaName, action = "Index", id = UrlParameter.Optional },
-				new[] { "BaseballTheater.Areas.New" }
+				new[] { "BaseballTheater.Areas.OldHome" }
 			);
 		}
 	}
