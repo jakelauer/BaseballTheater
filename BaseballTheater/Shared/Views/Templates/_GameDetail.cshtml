@@ -4,8 +4,12 @@
 	<div class="highlight">
 		<h2>{{highlight.headline}}</h2>
 		<div class="video">
-			<video v-bind:src="getDefaultUrl(highlight)" v-bind:poster="getDefaultThumb(highlight)" controls preload="none"></video>
-			<div class="play-cover"></div>
+			<video v-bind:src="getDefaultUrl(highlight)" controls preload="none" 
+			       v-bind:poster="getDefaultThumb(highlight)" 
+			       v-on:click="pauseVideo" 
+			       v-on:play="onPlay(highlight)" 
+				   v-on:pause="onPause(highlight)"></video>
+			<div class="play-cover" v-on:click="playVideo" v-if="!highlight.isPlaying"></div>
 		</div>
 
 		<div class="links">

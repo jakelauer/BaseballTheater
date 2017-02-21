@@ -41,13 +41,11 @@
 					this.games.push(gameSummary);
 				});
 			}
-			else if(data.game instanceof Object)
-			{
-				// have to do this nefarious stuff because the xml2js library can output an object if there is just one game
-				var gameSummary = new GameSummary((data.game as any) as IGameSummary);
-				this.games.push(gameSummary);
-			}
-			else if (data.game === undefined)
+			else if(data.game instanceof Object) {
+			    // have to do this nefarious stuff because the xml2js library can output an object if there is just one game
+			    const gameSummary = new GameSummary((data.game as any) as IGameSummary);
+			    this.games.push(gameSummary);
+			} else if (data.game === undefined)
 			{
 				console.debug("No games found for date");
 			}

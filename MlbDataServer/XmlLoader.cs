@@ -2,19 +2,14 @@
 using System.IO;
 using System.Net;
 using System.Xml.Serialization;
-using NLog;
 
 namespace MlbDataServer
 {
 	public class XmlLoader
 	{
-		private static Logger Logger = LogManager.GetCurrentClassLogger();
-
 		public T GetXml<T>(string url)
 		{
 			T deserializedData = default(T);
-
-			Logger.Info(url);
 
 			try
 			{
@@ -39,13 +34,11 @@ namespace MlbDataServer
 					}
 					catch (Exception e)
 					{
-						Logger.Error(e);
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				Logger.Error(e);
 			}
 
 

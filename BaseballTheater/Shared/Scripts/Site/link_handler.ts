@@ -25,8 +25,8 @@
 
 				var $el = $(e.currentTarget);
 				var href = $el.attr("href");
-				history.pushState(null, null, href);
-				$(window).trigger("statechange");
+
+				LinkHandler.pushState(href);
 			});
 
 			$(window).on("popstate statechange", (e) =>
@@ -41,6 +41,12 @@
 					//this.loadNew(location.pathname);
 				}
 			});
+		}
+
+		public static pushState(href: string)
+		{
+			history.pushState(null, null, href);
+			$(window).trigger("statechange");
 		}
 
 		private async loadNew(href: string)

@@ -10,7 +10,6 @@
 
 	export interface IPageParams
 	{
-		bodySelector: string;
 		matchingUrl: RegExp;
 		page: Page;
 	}

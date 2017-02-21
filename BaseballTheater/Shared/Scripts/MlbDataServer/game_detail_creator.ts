@@ -25,21 +25,19 @@
 			return await Utils.XmlLoader.load<IHighlightsCollection>(this.highlightsUrl);
 		}
 
-		public async getGameCenter(): Promise<IGameCenter>
-		{
-			var gameCenterObj = await Utils.XmlLoader.load<IGameCenter>(this.gameCenterUrl);
+		public async getGameCenter(): Promise<IGameCenter> {
+		    const gameCenterObj = await Utils.XmlLoader.load<IGameCenter>(this.gameCenterUrl);
 
-			return gameCenterObj;
-		}
+		    return gameCenterObj;
+	    }
 
-		public async getGameSUmmary()
-		{
-			var gameSummaryObj = await Utils.XmlLoader.load<IGameSummary>(this.gameSummaryUrl);
+	    public async getGameSUmmary() {
+	        const gameSummaryObj = await Utils.XmlLoader.load<IGameSummary>(this.gameSummaryUrl);
 
-			return gameSummaryObj;
-		}
+	        return gameSummaryObj;
+	    }
 
-		private async get<T>(url: string): Promise<T>
+	    private async get<T>(url: string): Promise<T>
 		{
 			try
 			{

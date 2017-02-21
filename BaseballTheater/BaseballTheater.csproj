@@ -94,14 +94,6 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog.Web, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.Web.4.2.1\lib\net35\NLog.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="RedditSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RedditSharp\RedditSharp\bin\Debug\RedditSharp.dll</HintPath>
@@ -215,13 +207,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Game\BundleConfig.cs" />
-    <Compile Include="Areas\Game\GameAreaRegistration.cs" />
-    <Compile Include="Areas\Game\GameController.cs" />
-    <Compile Include="Areas\Game\Models\GameModel.cs" />
-    <Compile Include="Areas\Home\BundleConfig.cs" />
-    <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
-    <Compile Include="Areas\Home\HomeController.cs" />
+    <Compile Include="Areas\App\BundleConfig.cs" />
+    <Compile Include="Areas\App\AppAreaRegistration.cs" />
+    <Compile Include="Areas\App\AppController.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -231,11 +219,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Game\Styles\game.css" />
-    <Content Include="Areas\Home\Styles\home.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Areas\App\Styles\game.css" />
+    <Content Include="Areas\App\Styles\game-list.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\android-icon-144x144.png" />
     <Content Include="images\android-icon-192x192.png" />
@@ -264,26 +250,12 @@
     <Content Include="images\ms-icon-70x70.png" />
     <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Areas\Game\Views\web.config" />
-    <Content Include="Areas\Game\Views\Index.cshtml" />
     <Content Include="images\manifest.json" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Areas\Home\Views\Index.cshtml" />
-    <Content Include="Areas\Home\Views\web.config" />
-    <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\App\Views\Index.cshtml" />
+    <Content Include="Areas\App\Views\web.config" />
+    <Content Include="Shared\Scripts\libraries\jquery-3.js" />
     <Content Include="Shared\Views\Templates\_GameDetail.cshtml" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Shared\Views\Templates\_GameSummary.cshtml" />
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
     <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
     <Content Include="images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
@@ -294,15 +266,8 @@
     <Content Include="images\ui-icons_004276_256x240.png" />
     <Content Include="images\ui-icons_cc0000_256x240.png" />
     <Content Include="images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\base.js" />
     <Content Include="Shared\Scripts\libraries\cookies.js" />
-    <Content Include="Shared\Scripts\libraries\jquery.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\libraries\moment.js" />
     <Content Include="Shared\Scripts\libraries\vue.js" />
@@ -319,15 +284,12 @@
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Home\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseballTheaterBot\RedditBot.csproj">
@@ -340,7 +302,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Areas\Game\Scripts\game.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\game.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />
@@ -354,13 +318,14 @@
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\Utils\xml_loader.ts" />
-    <TypeScriptCompile Include="Areas\Home\Scripts\home.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\game_list.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\global_components.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

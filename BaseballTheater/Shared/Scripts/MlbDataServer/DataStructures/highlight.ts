@@ -10,19 +10,28 @@
 		duration: string;
 		url: IUrl[];
 		thumb: string;
-		thumbnails: IThumb[];
+		thumbnails: IThumbnails;
 		keywords: Keyword[];
 		condensed: boolean;
 		recap: boolean;
+
+		isPlaying: boolean;
+	}
+
+	export interface IThumbnails
+	{
+		thumb: IThumb[];
 	}
 
 	export interface IThumb
 	{
 		__text: string;
+
 	}
 
 	export interface IUrl
 	{
+		type: string;
 		__text: string;
 	}
 }

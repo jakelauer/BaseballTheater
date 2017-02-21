@@ -10,7 +10,6 @@
 
 	initializeSite = () =>
 	{
-		Site.GlobalComponents.registerComponents();
 		Site.LinkHandler.Instance.initialize();
 		initializeCurrentPage();
 	}
@@ -22,7 +21,7 @@
 			currentPage.page.destroy();
 		}
 
-		for (var page of pages)
+		for (let page of pages)
 		{
 			if(page.matchingUrl.test(location.pathname))
 			{
@@ -62,7 +61,7 @@
 		$("#body-wrapper").removeClass("loading");
 	};
 
-	$(document).on("ready", () =>
+	$(document).ready(() =>
 	{
 		initializeSite();
 	});

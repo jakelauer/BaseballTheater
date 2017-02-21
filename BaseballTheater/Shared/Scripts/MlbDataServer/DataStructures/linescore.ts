@@ -24,7 +24,7 @@
 			this.h = data.h;
 			this.e = data.e;
 			
-			var inningCount = 9;
+			let inningCount = 9;
 			if (this.inning.length > inningCount)
 			{
 				inningCount = this.inning.length;

@@ -6,18 +6,18 @@
 
 		private static buildUrl(date: moment.Moment)
 		{
-			var yearFolder = `year_${date.format("YYYY")}`;
-			var monthFolder = `month_${date.format("MM")}`;
-			var dayFolder = `day_${date.format("DD")}`;
+			const yearFolder = `year_${date.format("YYYY")}`;
+			const monthFolder = `month_${date.format("MM")}`;
+			const dayFolder = `day_${date.format("DD")}`;
 
 			return `${this.urlBase}/components/game/mlb/${yearFolder}/${monthFolder}/${dayFolder}/master_scoreboard.xml`;
 		}
 
 		public static async getSummaryCollection(date: moment.Moment)
 		{
-			var url = this.buildUrl(date);
+			const url = this.buildUrl(date);
 
-			var gameSummaryCollection = await Utils.XmlLoader.load<IGameSummaryCollection>(url);
+			const gameSummaryCollection = await Utils.XmlLoader.load<IGameSummaryCollection>(url);
 
 			return gameSummaryCollection;
 		}

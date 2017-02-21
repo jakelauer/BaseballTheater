@@ -1,11 +1,8 @@
-﻿using Microsoft.Azure.WebJobs;
-
-namespace RedditBot
+﻿namespace RedditBot
 {
 	public class Functions
 	{
-		public static void HelloWorldFunction(
-			[QueueTrigger("inputText")] string inputText)
+		public static void HelloWorldFunction(string inputText)
 		{
 		}
 	}

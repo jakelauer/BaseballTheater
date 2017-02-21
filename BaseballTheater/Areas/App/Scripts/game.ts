@@ -8,13 +8,9 @@
 	export class Game extends Site.Page
 	{
 		public static Instance = new Game();
+
 		private date: moment.Moment = null;
 		private gamePk: string;
-
-		private highlightsVueData: IHighlightsVueData = {
-			highlights: []
-		}
-		private highlightsVue: vuejs.Vue;
 
 		public initialize()
 		{
@@ -31,12 +27,6 @@
 
 		public dataBind()
 		{
-			this.highlightsVue = new Vue({
-				el: ".highlights",
-				data: this.highlightsVueData,
-				methods: {
-				}
-			});
 		}
 
 		public renew(pathname: string)
@@ -46,21 +36,24 @@
 
 		public destroy()
 		{
-			this.highlightsVueData.highlights = [];
+			App.Instance.highlightsVueData.highlights = [];
 		}
 
 		private async getData()
 		{
 			try
 			{
-				var currentGame = await this.getCurrentGame();
-				var highlightsCollection = await this.getHighlights(currentGame);
+				const currentGame = await this.getCurrentGame();
+				const highlightsCollection = await this.getHighlights(currentGame);
 				if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
 				{
-					this.highlightsVueData.highlights = highlightsCollection.highlights.media;
+					for (var highlight of highlightsCollection.highlights.media)
+					{
+						highlight.isPlaying = false;
+					}
+					App.Instance.highlightsVueData.highlights = highlightsCollection.highlights.media;
 				}
-			}
-			catch (e)
+			} catch (e)
 			{
 				console.log(e);
 			}
@@ -70,14 +63,14 @@
 		{
 			return new Promise((resolve, reject) =>
 			{
-				var summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.date);
+				const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.date);
 
 				summaries.then((result) =>
 				{
-					var gameSummaryCollection = new GameSummaryCollection(result);
+					const gameSummaryCollection = new GameSummaryCollection(result);
 					if (gameSummaryCollection.games && gameSummaryCollection.games.games)
 					{
-						let gameList = gameSummaryCollection.games.games;
+						const gameList = gameSummaryCollection.games.games;
 						for (let game of gameList)
 						{
 							if (game.game_pk === this.gamePk)
@@ -92,33 +85,33 @@
 			});
 		}
 
-		private async getHighlights(currentGame: GameSummary)
+		private async getHighlights(currentGame: GameSummary): Promise<IHighlightsCollection>
 		{
 			if (currentGame !== null)
 			{
-				var gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
-				var highlights = await gameDetailCreator.getHighlights();
+				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+				const highlights = await gameDetailCreator.getHighlights();
 				return highlights;
 			}
+
+			return null;
 		}
 
 		private getDateFromPath(pathname: string)
 		{
-			let pathnameDateString = pathname.split("/")[2].replace(/[^0-9]/, "");
-			let date = moment(pathnameDateString, "YYYYMMDD");
+			const pathnameDateString = pathname.split("/")[2].replace(/[^0-9]/, "");
+			const date = moment(pathnameDateString, "YYYYMMDD");
 			return date;
 		}
 
 		private getGamePkFromPath(pathname: string)
 		{
-			let pathnamePk = pathname.split("/")[3].replace(/[^0-9]/, "");
+			const pathnamePk = pathname.split("/")[3].replace(/[^0-9]/, "");
 			return pathnamePk;
 		}
-
 	}
 
 	Site.addPage({
-		bodySelector: "body.Game",
 		page: Game.Instance,
 		matchingUrl: /^\/game\/(.*)/
 	});

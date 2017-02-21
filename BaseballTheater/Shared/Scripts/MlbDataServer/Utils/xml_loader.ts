@@ -24,10 +24,10 @@
 
 		private static xmlToJson(xmlString: string)
 		{
-			var x2js = new X2JS({
-				attributePrefix: ""
+			const x2js = new X2JS({
+			    attributePrefix: ""
 			});
-			var json = x2js.xml_str2json(xmlString);
+			const json = x2js.xml_str2json(xmlString);
 			return json;
 		}
 	}
