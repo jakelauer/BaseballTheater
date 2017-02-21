@@ -57,11 +57,8 @@
 
 @media all and (max-width: 800px)
 {
-	.leagues
-	{
-	}
 
-	.leagues > div
+	.game-list > div
 	{
 		flex: none;
 
@@ -71,7 +68,7 @@
 		-webkit-flex: none;
 	}
 
-	.leagues .game-summary
+	.game-list .game-summary
 	{
 		width: 100%;
 	}

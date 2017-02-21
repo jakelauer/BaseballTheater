@@ -8,7 +8,7 @@
 		headline: string;
 		blurb: string;
 		duration: string;
-		url: string[];
+		url: IUrl[];
 		thumb: string;
 		thumbnails: IThumb[];
 		keywords: Keyword[];
@@ -17,6 +17,11 @@
 	}
 
 	export interface IThumb
+	{
+		__text: string;
+	}
+
+	export interface IUrl
 	{
 		__text: string;
 	}

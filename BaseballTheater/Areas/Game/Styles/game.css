@@ -96,14 +96,14 @@
 			color: blue;
 		}
 
-.game-summary
+.Game .game-summary
 {
 	margin-top: 30px;
 	padding-left: 10px;
 	padding-right: 10px;
 }
 
-	.game-summary .game-link
+	.Game .game-summary .game-link
 	{
 		display: none;
 	}

@@ -1,13 +1,16 @@
 ﻿
 
-<template id="game-detail">
-	<div id="highlights">
-		<div v-for="highlight in highlights">
-			{{highlight.headline}}
-			<div class="video">
-				<video v-bind:src="highlight.url[0]" v-bind:poster="highlight.thumbnails.thumb[0].__text" controls preload="none"></video>
-				<div class="play-cover"></div>
-			</div>
+<template id="highlight">
+	<div class="highlight">
+		<h2>{{highlight.headline}}</h2>
+		<div class="video">
+			<video v-bind:src="getDefaultUrl(highlight)" v-bind:poster="getDefaultThumb(highlight)" controls preload="none"></video>
+			<div class="play-cover"></div>
+		</div>
+
+		<div class="links">
+			<span>Direct: </span>
+			<a v-for="link in getLinks(highlight)" v-bind:href="link.url">{{link.label}}</a>
 		</div>
 	</div>
 </template>

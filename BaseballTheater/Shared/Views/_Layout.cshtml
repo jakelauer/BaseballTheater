@@ -23,6 +23,8 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/css/pikaday.min.css"/>
 
 		@Styles.Render("~/stylebundles/main")
+		@Styles.Render("~/stylebundles/home")
+		@Styles.Render("~/stylebundles/game")
 
 		<link rel="apple-touch-icon" sizes="57x57" href="/images/apple-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="/images/apple-icon-60x60.png">
@@ -67,7 +69,12 @@
 	</div>
 </header>
 <div id="body-wrapper">
-	@RenderBody()
+	<div class="loading-spinner">
+		<img src="~/images/ring.svg" />
+	</div>
+	<div class="body-content">
+		@RenderBody()
+	</div>
 </div>
 
 <footer>
@@ -82,20 +89,11 @@
 	@Scripts.Render("~/bundles/lib")
 	@Scripts.Render("~/scriptbundles/mlbdataserver")
 	@Scripts.Render("~/scriptbundles/site")
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js"></script>
 	
-@{
-	@*var scripts = new List<string>()
-	{
-		"base.js",
-	};
-	foreach (var script in scripts)
-	{
-		<script src="~/Shared/Scripts/@script" type="text/javascript"></script>
-	}*@
-}
+	@Scripts.Render("~/scriptbundles/home")
+	@Scripts.Render("~/scriptbundles/game")
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js"></script>
 
 @RenderSection("Scripts", false)
 

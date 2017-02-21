@@ -14,9 +14,6 @@ namespace BaseballTheater
 			bundles.Add(new StyleBundle("~/stylebundles/main")
 				.IncludeDirectory("~/Shared/Styles/", "*.css"));
 
-			bundles.Add(new StyleBundle("~/stylebundles/game")
-				.IncludeDirectory("~/Areas/Game/Styles/", "*.css"));
-
 			bundles.Add(new ScriptBundle("~/scriptbundles/mlbdataserver")
 				.IncludeDirectory("~/Shared/Scripts/MlbDataServer", "*.js", true));
 

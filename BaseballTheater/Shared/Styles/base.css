@@ -3,6 +3,11 @@
 	font-size: 14px;
 }
 
+html
+{
+	overflow-y: scroll;
+}
+
 body
 {
 	box-sizing: border-box;
@@ -111,6 +116,38 @@ footer
 	padding: 20px 0;
 	text-align: center;
 }
+
+.loading-spinner
+{
+	position: fixed;
+	z-index: 999;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	transition: background 0.25s;
+	pointer-events: none;
+
+	opacity: 0;
+	background: rgba(255, 255, 255, 0);
+}
+	
+	.loading-spinner img
+	{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+
+	.loading .loading-spinner
+	{
+		pointer-events: auto;
+
+		opacity: 1;
+		background: rgba(255, 255, 255, 0.5);
+	}
 
 .game-summary
 {

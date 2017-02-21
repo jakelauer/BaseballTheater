@@ -1,8 +1,10 @@
 ﻿namespace Theater.Site
 {
-	var pages: { [bodySelector: string]: IPageParams } = {};
-	var initializeCurrentPage: () => void;
+	var pages: IPageParams[] = [];
+	var initializedPages: IPageParams[] = [];
+	export var initializeCurrentPage: () => void;
 	var initializeSite: () => void;
+	var siteLoadingTimeout = 0;
 
 	export var currentPage: IPageParams = null;
 
@@ -20,16 +22,21 @@
 			currentPage.page.destroy();
 		}
 
-		for (var bodySelector in pages)
+		for (var page of pages)
 		{
-			if (pages.hasOwnProperty(bodySelector))
+			if(page.matchingUrl.test(location.pathname))
 			{
-				if ($("body").is(bodySelector))
+				currentPage = page;
+				if (initializedPages.indexOf(page) > -1)
 				{
-					let page = pages[bodySelector].page;
-					currentPage = pages[bodySelector];
-					page.initialize();
-					page.dataBind();
+					currentPage.page.renew(location.pathname);
+				}
+				else
+				{
+					initializedPages.push(page);
+
+					currentPage.page.initialize();
+					currentPage.page.dataBind();
 				}
 			}
 		}
@@ -37,10 +44,25 @@
 
 	export var addPage = (params: IPageParams) =>
 	{
-		pages[params.bodySelector] = params;
+		pages.push(params);
 	};
 
-	$(document).on("ready newPageCreated", () =>
+	export var startLoading = () =>
+	{
+		clearTimeout(siteLoadingTimeout);
+		siteLoadingTimeout = setTimeout(() =>
+		{
+			$("#body-wrapper").addClass("loading");
+		}, 250);
+	};
+
+	export var stopLoading = () =>
+	{
+		clearTimeout(siteLoadingTimeout);
+		$("#body-wrapper").removeClass("loading");
+	};
+
+	$(document).on("ready", () =>
 	{
 		initializeSite();
 	});

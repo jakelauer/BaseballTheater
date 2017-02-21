@@ -4,7 +4,7 @@ namespace Theater
 	export interface IGameSummary
 	{
 		id: string;
-		game_pk: number;
+		game_pk: string;
 		time_date: string;
 		game_type: string;
 		time: string;
@@ -26,7 +26,7 @@ namespace Theater
 	export class GameSummary implements IGameSummary
 	{
 		public id: string;
-		public game_pk: number;
+		public game_pk: string;
 		public time_date: string;
 		public game_type: string;
 		public time: string;

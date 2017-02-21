@@ -1,5 +1,16 @@
 ﻿namespace Theater
 {
+	interface IHomeVueData
+	{
+		gameSummaries: GameSummary[];
+	}
+
+	interface ISettingsVueData
+	{
+		teams: { [filecode: string]: string };
+		date: moment.Moment;
+	}
+
 	export class Home extends Site.Page
 	{
 		public static Instance = new Home();
@@ -8,7 +19,7 @@
 		private settingsVue: vuejs.Vue;
 		private dateString: string = null;
 
-		private vueData: IHomeVueData = {
+		private homeVueData: IHomeVueData = {
 			gameSummaries: []
 		};
 
@@ -33,14 +44,18 @@
 
 		private getGameSummariesForDate(date: moment.Moment)
 		{
+			Site.startLoading();
+
 			var summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(date);
 
 			summaries.then((result) =>
 			{
 				console.log(result);
 				var gameSummaryCollection = new GameSummaryCollection(result);
-				this.vueData.gameSummaries = gameSummaryCollection.games.games;
-				console.log(this.vueData);
+				this.homeVueData.gameSummaries = gameSummaryCollection.games.games;
+				console.log(this.homeVueData);
+
+				Site.stopLoading();
 			});
 		}
 
@@ -48,7 +63,7 @@
 		{
 			this.gameListVue = new Vue({
 				el: ".game-list",
-				data: this.vueData
+				data: this.homeVueData
 			});
 
 			this.settingsVue = new Vue({
@@ -85,8 +100,7 @@
 
 		public destroy()
 		{
-			this.gameListVue.$destroy();
-			this.settingsVue.$destroy();
+			this.homeVueData.gameSummaries = [];
 		}
 
 		private getDefaultDate()
@@ -119,17 +133,6 @@
 
 			return dateString;
 		}
-	}
-
-	interface IHomeVueData
-	{
-		gameSummaries: GameSummary[];
-	}
-
-	interface ISettingsVueData
-	{
-		teams: { [filecode: string]: string };
-		date: moment.Moment;
 	}
 
 	Site.addPage({

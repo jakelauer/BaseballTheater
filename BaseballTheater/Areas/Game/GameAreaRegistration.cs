@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.Optimization;
 
 namespace BaseballTheater.Areas.Game
 {
@@ -12,8 +13,10 @@ namespace BaseballTheater.Areas.Game
 			}
 		}
 
-		public override void RegisterArea(AreaRegistrationContext context) 
+		public override void RegisterArea(AreaRegistrationContext context)
 		{
+			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
 			context.MapRoute(
 				"Game_default",
 				"Game/{date}/{id}",

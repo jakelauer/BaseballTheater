@@ -20,19 +20,19 @@
 			this.gameSummaryUrl = this.directoryUrl + "/linescore.xml";
 		}
 
-		public async GetHighlights()
+		public async getHighlights()
 		{
 			return await Utils.XmlLoader.load<IHighlightsCollection>(this.highlightsUrl);
 		}
 
-		public async GetGameCenter(): Promise<IGameCenter>
+		public async getGameCenter(): Promise<IGameCenter>
 		{
 			var gameCenterObj = await Utils.XmlLoader.load<IGameCenter>(this.gameCenterUrl);
 
 			return gameCenterObj;
 		}
 
-		public async GetGameSUmmary()
+		public async getGameSUmmary()
 		{
 			var gameSummaryObj = await Utils.XmlLoader.load<IGameSummary>(this.gameSummaryUrl);
 

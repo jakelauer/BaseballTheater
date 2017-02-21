@@ -215,17 +215,13 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Game\BundleConfig.cs" />
     <Compile Include="Areas\Game\GameAreaRegistration.cs" />
     <Compile Include="Areas\Game\GameController.cs" />
     <Compile Include="Areas\Game\Models\GameModel.cs" />
     <Compile Include="Areas\Home\BundleConfig.cs" />
     <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
     <Compile Include="Areas\Home\HomeController.cs" />
-    <Compile Include="Areas\Home\Models\HomeModel.cs" />
-    <Compile Include="Areas\OldHome\BundleConfig.cs" />
-    <Compile Include="Areas\OldHome\OldHomeAreaRegistration.cs" />
-    <Compile Include="Areas\OldHome\OldHomeController.cs" />
-    <Compile Include="Areas\OldHome\Models\HomeModel.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -237,8 +233,6 @@
   <ItemGroup>
     <Content Include="Areas\Game\Styles\game.css" />
     <Content Include="Areas\Home\Styles\home.css" />
-    <Content Include="Areas\OldHome\Scripts\index.js" />
-    <Content Include="Areas\OldHome\Styles\home.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -268,12 +262,11 @@
     <Content Include="images\ms-icon-150x150.png" />
     <Content Include="images\ms-icon-310x310.png" />
     <Content Include="images\ms-icon-70x70.png" />
+    <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\OldHome\Views\Index.cshtml" />
-    <Content Include="Areas\OldHome\Views\web.config" />
     <Content Include="Areas\Game\Views\web.config" />
     <Content Include="Areas\Game\Views\Index.cshtml" />
     <Content Include="images\manifest.json" />
@@ -282,13 +275,12 @@
     </Content>
     <Content Include="Areas\Home\Views\Index.cshtml" />
     <Content Include="Areas\Home\Views\web.config" />
-    <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Home\Views\_Partials\_GameDetail.cshtml" />
+    <Content Include="Shared\Views\Templates\_GameDetail.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Areas\Home\Views\_Partials\_GameSummary.cshtml" />
+    <Content Include="Shared\Views\Templates\_GameSummary.cshtml" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -331,6 +323,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Home\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -347,7 +340,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Areas\Game\game.ts" />
+    <TypeScriptCompile Include="Areas\Game\Scripts\game.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />
