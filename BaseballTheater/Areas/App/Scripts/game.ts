@@ -71,7 +71,7 @@
 					if (gameSummaryCollection.games && gameSummaryCollection.games.games)
 					{
 						const gameList = gameSummaryCollection.games.games;
-						for (let game of gameList)
+						for (var game of gameList)
 						{
 							if (game.game_pk === this.gamePk)
 							{
