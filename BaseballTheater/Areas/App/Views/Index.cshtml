@@ -1,0 +1,48 @@
+﻿@using System.Web.Optimization
+
+@{
+	Layout = "~/Shared/Views/_Layout.cshtml";
+	ViewBag.BodyClass += " GameList ";
+}
+
+@{ 
+	Html.RenderPartial("Templates/_GameSummary");
+	Html.RenderPartial("Templates/_GameDetail");
+}
+
+<div class="settings flex" v-if="showingGameList">
+	<div class="day-nav">
+		<a v-bind:href="getUrlDayBefore(date)">
+			<i class="fa fa-chevron-circle-left"></i>
+		</a>
+		<input type="text" id="calendarpicker" v-bind:value="getFriendlyDate(date)" v-bind:size="getFriendlyDate(date).length + 1" />
+		<i class="fa fa-calendar" aria-hidden="true"></i>
+		<a v-bind:href="getUrlDayAfter(date)">
+			<i class="fa fa-chevron-circle-right"></i>
+		</a>
+	</div>
+
+	<div class="tools flex">
+		<select id="favorite-team" v-on:change="setFavoriteTeam">
+			<option>- Select Favorite Team -</option>
+			
+			<option v-for="(teamName, teamCode) in teams" v-bind:value="teamCode" v-bind:selected="isFavoriteTeam(teamCode)">{{teamName}}</option>
+		</select>
+		<div class="hide-scores">
+			<input type="checkbox" id="scoreshidden" v-on:change="onChangeHideScores" v-bind:checked="hideScores" />
+			<label for="scoreshidden">Hide Scores</label>
+		</div>
+	</div>
+</div>
+
+<div class="game-list" v-if="gameSummaries">
+	<game-summary v-for="game in gameSummaries" v-bind:game="game">
+		
+	</game-summary>
+</div>
+
+<div class="highlights" v-if="highlights">
+	<highlight v-for="highlight in highlights" v-bind:highlight="highlight">
+		
+	</highlight>
+</div>

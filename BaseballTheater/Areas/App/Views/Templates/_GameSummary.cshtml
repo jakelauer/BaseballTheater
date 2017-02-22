@@ -1,0 +1,164 @@
+﻿
+
+<template id="game-summary">
+	<div class="game-summary" v-bind:data-homecode="game.homeFileCode" v-bind:data-awaycode="game.away_file_code">
+		<a v-bind:href="getGameLink(game)" class="game-link"></a>
+		<table>
+			<tr class="headers">
+				<td class="status">
+					<small v-if="game">
+						{{game.status.status}}
+						<span v-bind:data-time="game.date" v-if="game.linescore">
+								
+						</span>
+					</small>
+				</td>
+				<template v-if="game.linescore">
+					<td class="inning" v-for="n in (game.linescore.inning.length - game.linescore.startingInning)">
+						<strong>{{n}}</strong>
+					</td>
+					<td class="runs">R</td>
+					<td class="hits">H</td>
+					<td class="errors">E</td>
+				</template>
+			</tr>
+			<tr class="team away">
+				<td class="team-info">
+					<span class="team-logo dark" v-bind:class="game.away_file_code"></span>
+					<span class="team-name">{{game.away_team_name}}</span>
+				</td>
+				<template v-if="game.linescore">
+					<td class="inning score-box" v-for="n in (game.linescore.inning.length - game.linescore.startingInning)">
+						{{lineScoreItem(game.linescore.inning[n - 1].away)}}
+					</td>
+					<td class="runs score-box">{{lineScoreItem(game.linescore.r.away)}}</td>
+					<td class="hits score-box">{{lineScoreItem(game.linescore.h.away)}}</td>
+					<td class="errors score-box">{{lineScoreItem(game.linescore.e.away)}}</td>
+				</template>
+			</tr>
+
+			<tr class="team home">
+				<td class="team-info">
+					<span class="team-logo dark" v-bind:class="game.home_file_code"></span>
+					<span class="team-name">{{game.home_team_name}}</span>
+				</td>
+				<template v-if="game.linescore">
+					<td class="inning score-box" v-for="n in (game.linescore.inning.length - game.linescore.startingInning)">
+						<span v-if="game.linescore.inning[n-1].home != null">{{lineScoreItem(game.linescore.inning[n - 1].home)}}</span>
+						<span v-else>{{lineScoreItem("-")}}</span>
+					</td>
+					<td class="runs score-box">{{lineScoreItem(game.linescore.r.home)}}</td>
+					<td class="hits score-box">{{lineScoreItem(game.linescore.h.home)}}</td>
+					<td class="errors score-box">{{lineScoreItem(game.linescore.e.home)}}</td>
+				</template>
+			</tr>
+		</table>
+	</div>
+</template>
+
+@*
+
+
+	@{
+		var game = Model;
+
+		var startAtInningIndex = 0;
+		var inningCount = 9;
+		var dayString = "";
+		if (game != null && game.Linescore != null && game.Linescore.Innings != null && game.Linescore.Innings.Length > inningCount)
+		{
+			inningCount = game.Linescore.Innings.Length;
+			startAtInningIndex = inningCount - 9;
+		}
+
+		if (game != null)
+		{
+			dayString = game.DateObj.ToString("yyyyMMdd");
+		}
+
+		var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
+	}
+
+	<div class="game-summary" data-homecode="@game.HomeFileCode" data-awaycode="@game.AwayFileCode">
+		<a href="/game/@dayString/@game.GamePk" class="game-link"></a>
+
+		<table>
+			<tr>
+				<td class="status">
+					<small>
+						@game.Status.Status
+						@if (game.Linescore == null)
+						{
+							<span data-time="@game.DateObj">
+								 - @eventTimeString
+							</span>
+						}
+					</small>
+				</td>
+				@if (game.Linescore != null)
+				{
+					for (var i = startAtInningIndex; i < inningCount; i++)
+					{
+						<td class="inning">
+							<strong>@(i + 1)</strong>
+						</td>
+					}
+					<td class="runs">R</td>
+					<td class="hits">H</td>
+					<td class="errors">E</td>
+				}
+			</tr>
+			<tr class="team away">
+				<td class="team-info">
+					<span class="team-logo dark @game.AwayFileCode"></span>
+					<span class="team-name">@game.AwayTeamName</span>
+				</td>
+				@if (game.Linescore != null && game.Linescore.Innings != null)
+				{
+					for (var i = startAtInningIndex; i < inningCount; i++)
+					{
+						var value = "-";
+						if (game.Linescore.Innings.Length > i)
+						{
+							var inning = game.Linescore.Innings[i];
+							if (inning.Away != null)
+							{
+								value = inning.Away;
+							}
+						}
+						<td class="inning score-box">@value</td>
+					}
+					<td class="runs score-box">@game.Linescore.Runs.Away</td>
+					<td class="hits score-box">@game.Linescore.Hits.Away</td>
+					<td class="errors score-box">@game.Linescore.Errors.Away</td>
+				}
+			</tr>
+			<tr class="team home">
+				<td class="team-info">
+					<span class="team-logo dark @game.HomeFileCode"></span>
+					<span class="team-name">@game.HomeTeamName</span>
+				</td>
+				@if (game.Linescore != null && game.Linescore.Innings != null)
+				{
+					for (var i = startAtInningIndex; i < inningCount; i++)
+					{
+						var value = "-";
+						if (game.Linescore.Innings.Length > i)
+						{
+							var inning = game.Linescore.Innings[i];
+							if (inning.Home != null)
+							{
+								value = inning.Home;
+							}
+						}
+						<td class="inning score-box">@value</td>
+					}
+					<td class="runs score-box">@game.Linescore.Runs.Home</td>
+					<td class="hits score-box">@game.Linescore.Hits.Home</td>
+					<td class="errors score-box">@game.Linescore.Errors.Home</td>
+				}
+			</tr>
+		</table>
+	</div>
+
+*@

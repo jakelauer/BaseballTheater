@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace BaseballTheater
 {
@@ -8,23 +7,14 @@ namespace BaseballTheater
 		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-						"~/Shared/Scripts/libraries/modernizr-*",
-						"~/Shared/Scripts/libraries/cookies.js",
-						"~/Shared/Scripts/libraries/jquery*"));
+			bundles.Add(new ScriptBundle("~/bundles/lib")
+				.IncludeDirectory("~/Shared/Scripts/libraries", "*.js", true));
 
-			bundles.Add(new StyleBundle("~/stylebundles/main")
-				.IncludeDirectory("~/Shared/Styles/", "*.css"));
+			bundles.Add(new ScriptBundle("~/scriptbundles/mlbdataserver")
+				.IncludeDirectory("~/Shared/Scripts/MlbDataServer", "*.js", true));
 
-			bundles.Add(new StyleBundle("~/stylebundles/game")
-				.IncludeDirectory("~/Areas/Game/Styles/", "*.css"));
-
-			bundles.Add(new StyleBundle("~/stylebundles/home")
-				.IncludeDirectory("~/Areas/Home/Styles/", "*.css"));
-
-			bundles.Add(new ScriptBundle("~/scriptbundles/home")
-				.IncludeDirectory("~/Areas/Home/Scripts/", "*.js")
-				);
+			bundles.Add(new ScriptBundle("~/scriptbundles/site")
+				.IncludeDirectory("~/Shared/Scripts/Site", "*.js", true));
 		}
 	}
 }

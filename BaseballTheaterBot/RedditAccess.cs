@@ -1,17 +1,16 @@
-﻿using System;
+﻿using MlbDataServer;
+using MlbDataServer.DataFetch;
+using MlbDataServer.DataStructures;
+using RedditBot.Config;
+using RedditSharp;
+using RedditSharp.Things;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Microsoft.WindowsAzure.Storage.Blob;
-using MlbDataServer;
-using MlbDataServer.DataFetch;
-using MlbDataServer.DataStructures;
-using RedditBot.Config;
-using RedditSharp;
-using RedditSharp.Things;
 
 namespace RedditBot
 {
@@ -25,8 +24,6 @@ namespace RedditBot
 
 		private Regex CommentVideoRegex { get; set; }
 		private Regex GamePkRegex { get; set; }
-
-		private CloudBlobContainer BlobContainer { get; set; }
 
 		public RedditAccess()
 		{

@@ -1,0 +1,13 @@
+{
+  "name": "someProj",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "gulp-util": "~3.0.8",
+    "gulp": "~3.9.1",
+    "gulp-csscomb": "~3.0.8"
+  }
+}

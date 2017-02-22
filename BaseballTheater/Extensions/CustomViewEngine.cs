@@ -41,7 +41,7 @@ namespace BaseballTheater.Extensions
 				"~/Shared/Views/{0}.cshtml"
 			};
 
-			PartialViewLocationFormats = new[] 
+			PartialViewLocationFormats = new[]
 			{
 				"~/Views/{1}/{0}.cshtml",
 				"~/Views/Shared/{0}.cshtml",

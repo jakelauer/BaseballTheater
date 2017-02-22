@@ -1,0 +1,86 @@
+﻿.calendar
+{
+	cursor: pointer;
+}
+
+#calendarpicker
+{
+	font-size: 1.5rem;
+	text-align: center;
+	border: 0;
+}
+
+#datepicker-wrapper
+{
+	position: relative;
+	display: none;
+}
+
+	#datepicker
+	{
+		position: absolute;
+	}
+
+.game-list
+{
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+
+	-ms-flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+
+
+	.game-list .game-summary
+	{
+		width: 50%;
+		padding: 10px;
+	}
+
+
+
+.flex
+{
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+
+
+@media all and (max-width: 1200px)
+{
+}
+
+@media all and (max-width: 800px)
+{
+
+	.game-list > div
+	{
+		flex: none;
+
+		width: 100%;
+
+		-ms-flex: none;
+		-webkit-flex: none;
+	}
+
+	.game-list .game-summary
+	{
+		width: 100%;
+	}
+
+	.settings .tools
+	{
+		margin-top: 1rem;
+	}
+}
+
+
+@media all and (max-width: 600px)
+{
+	
+}

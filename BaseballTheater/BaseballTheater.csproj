@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -23,6 +24,7 @@
     <ApplicationInsightsResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsAnnotationResourceId>
     <UseGlobalApplicationHostFile />
+    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +34,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind />
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +55,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind />
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
@@ -77,14 +105,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NLog.Web, Version=0.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.Web.4.2.1\lib\net35\NLog.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RedditSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -200,12 +220,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\Game\GameAreaRegistration.cs" />
-    <Compile Include="Areas\Game\GameController.cs" />
-    <Compile Include="Areas\Game\Models\GameModel.cs" />
-    <Compile Include="Areas\Home\HomeAreaRegistration.cs" />
-    <Compile Include="Areas\Home\HomeController.cs" />
-    <Compile Include="Areas\Home\Models\HomeModel.cs" />
+    <Compile Include="Areas\App\BundleConfig.cs" />
+    <Compile Include="Areas\App\AppAreaRegistration.cs" />
+    <Compile Include="Areas\App\AppController.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -215,9 +232,8 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Game\Styles\game.css" />
-    <Content Include="Areas\Home\Scripts\index.js" />
-    <Content Include="Areas\Home\Styles\home.css" />
+    <Content Include="Areas\App\Styles\game.css" />
+    <Content Include="Areas\App\Styles\game-list.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="images\android-icon-144x144.png" />
@@ -245,21 +261,14 @@
     <Content Include="images\ms-icon-150x150.png" />
     <Content Include="images\ms-icon-310x310.png" />
     <Content Include="images\ms-icon-70x70.png" />
+    <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Areas\Home\Views\Index.cshtml" />
-    <Content Include="Areas\Home\Views\web.config" />
-    <Content Include="Areas\Game\Views\web.config" />
-    <Content Include="Areas\Game\Views\Index.cshtml" />
     <Content Include="images\manifest.json" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="Areas\App\Views\Index.cshtml" />
+    <Content Include="Areas\App\Views\web.config" />
+    <Content Include="Shared\Scripts\libraries\jquery-3.js" />
+    <Content Include="Areas\App\Views\Templates\_GameDetail.cshtml" />
+    <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
     <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
     <Content Include="images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
@@ -272,10 +281,12 @@
     <Content Include="images\ui-icons_ffffff_256x240.png" />
     <Content Include="Shared\Scripts\base.js" />
     <Content Include="Shared\Scripts\libraries\cookies.js" />
-    <Content Include="Shared\Scripts\libraries\jquery.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
-    <Content Include="Shared\Styles\base.css" />
-    <Content Include="Shared\Styles\teams.css" />
+    <Content Include="Shared\Scripts\libraries\moment.js" />
+    <Content Include="Shared\Scripts\libraries\vue.js" />
+    <Content Include="Shared\Scripts\libraries\x2js.js" />
+    <Content Include="Areas\App\Styles\base.css" />
+    <Content Include="Areas\App\Styles\teams.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -283,18 +294,16 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
+    <Content Include="Shared\Views\_favicons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseballTheaterBot\RedditBot.csproj">
@@ -306,11 +315,38 @@
       <Name>MlbDataServer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\game.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_summary.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_summary_collection.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\highlights_collection.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\highlight.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\keyword.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\linescore.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\teams.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\Utils\xml_loader.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\game_list.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">

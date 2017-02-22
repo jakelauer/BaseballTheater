@@ -1,0 +1,349 @@
+﻿html, body
+{
+	font-size: 14px;
+}
+
+html
+{
+	overflow-y: scroll;
+}
+
+body
+{
+	box-sizing: border-box;
+	font-family: 'PT Serif', serif;
+	margin: 0 auto;
+	max-width: 1400px;
+	padding: 60px 10px 0;
+	width: 100%;
+}
+
+body *
+{
+	box-sizing: border-box;
+}
+
+body #body-wrapper
+{
+	min-height: 800px;
+}
+
+header
+{
+	overflow: hidden;
+	background: #EEE;
+	background: #ce0f0f;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	color: #FFF;
+	height: 50px;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+
+	transition: 0.25s;
+}
+
+	header .expand-links
+	{
+		display: none;
+	}
+
+header .header-content
+{
+	text-align: center;
+	width: 100%;
+	padding: 0 20px;
+}
+
+select
+{
+	border: 1px solid rgba(0,0,0,0.25);
+	color: white;
+	background: #ce0f0f;
+	height: 20px;
+}
+
+select option
+{
+	background: rgb(206, 15, 15);
+}
+
+header .logo
+{
+	position: absolute;
+	left: 50%;
+
+	font-family: "Alfa Slab One", cursive;
+	font-size: 26px;
+	line-height: 50px;
+
+	transform: translateX(-50%);
+	text-align: center;
+	text-decoration: none;
+
+	color: #EEE;
+}
+
+header .links,
+header .expand-links
+{
+	position: relative;
+	float: right;
+}
+
+	header .links a,
+	header .expand-links i
+	{
+		line-height: 50px;
+		height: 50px;
+		margin-left: 20px;
+		
+		color: white;
+		text-decoration: none;
+	}
+
+	
+	header .expand-links i
+	{
+		font-size: 26px;
+		cursor: pointer;
+	}
+
+footer
+{
+	padding: 20px 0;
+	text-align: center;
+}
+
+.loading-spinner
+{
+	position: fixed;
+	z-index: 999;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	transition: background 0.25s;
+	pointer-events: none;
+
+	opacity: 0;
+}
+	
+	.loading-spinner img
+	{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+
+	.loading .loading-spinner
+	{
+		pointer-events: auto;
+
+		opacity: 1;
+	}
+
+.game-summary
+{
+	background: #FFF;
+	color: black;
+	display: block;
+	margin: 0 auto;
+	max-width: 800px;
+	padding-bottom: 30px;
+	position: relative;
+	text-decoration: none;
+	transition: 0.15s;
+}
+
+.game-summary .game-link
+{
+	bottom: 10px;
+	left: 10px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.game-summary .game-link:hover
+{
+	background: rgba(206, 15, 15, 0.05);
+}
+
+.game-summary table
+{
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.game-summary table th,
+.game-summary table td
+{
+	border: 1px solid #DDD;
+	padding: 6px 0;
+	text-align: center;
+}
+
+.game-summary table tr:first-child td
+{
+	background-color: #F5F5F5;
+}
+
+.game-summary table .team-info,
+.game-summary table .status
+{
+	border-right: 3px solid #DDD;
+	font-weight: bold;
+	line-height: 29px;
+	padding-left: 5px;
+	padding-right: 7px;
+	text-align: left;
+}
+
+.game-summary table .team-info .team-name
+{
+	display: inline-block;
+}
+
+.game-summary table .runs,
+.game-summary table .hits,
+.game-summary table .errors
+{
+	font-weight: bold;
+	width: 40px;
+}
+
+.game-summary table .runs
+{
+	border-left: 3px solid #DDD;
+}
+
+.game-summary table .inning
+{
+	width: 40px;
+}
+
+.error
+{
+	font-size: 1.5em;
+	text-align: center;
+}
+
+
+
+.settings
+{
+	margin: 1rem 0;
+}
+
+	.settings .day-nav
+	{
+		-ms-flex: 1 0;
+		-webkit-flex: 1 0;
+		flex: 1 0;
+		
+		font-size: 1.5rem;
+
+		justify-content: flex-start;
+	}
+
+	
+		.settings .day-nav a
+		{
+			margin: 0 10px;
+			color: #ce0f0f;
+		}
+
+
+	.settings .tools
+	{
+		justify-content: center;
+		align-items: center;
+
+		text-align: center;	
+	}
+
+		.settings .tools .hide-scores
+		{
+			margin-left: 20px;
+		}
+
+@media all and (max-width: 1200px)
+{
+	.game-summary table .team-info .team-name
+	{
+		display: none;
+	}
+}
+
+@media all and (max-width: 800px)
+{
+	.game-summary table .team-info .team-name
+	{
+		display: inline-block;
+	}
+
+	header .expand-links
+	{
+		display: block;
+	}
+
+	header.expanded
+	{
+		height: 100px;
+	}
+
+	header .links
+	{
+		display: none;
+		float: none;
+	}
+
+		header.expanded .links
+		{
+			display: block;
+		}
+
+	header .logo
+	{
+		position: relative;
+		left: 0;
+	}
+
+	
+
+	.settings
+	{
+		-ms-flex-wrap: wrap;
+		-webkit-flex-wrap: wrap;
+		flex-wrap: wrap;
+
+		text-align: center;
+	}
+
+	.settings .day-nav
+	{
+		width: 100%;
+		-ms-flex: none;
+		-webkit-flex: none;
+		flex: none;
+	}
+
+	.settings .tools
+	{
+		width: 100%;
+	}
+}
+
+@media all and (max-width: 600px)
+{	
+	.game-summary table .team-info .team-name
+	{
+		display: none;
+	}
+}
