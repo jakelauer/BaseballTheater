@@ -14,6 +14,7 @@
 
 		public initialize()
 		{
+			Theater.startTime = moment();
 			this.date = this.getDateFromPath(location.pathname);
 			this.gamePk = this.getGamePkFromPath(location.pathname);
 
@@ -47,11 +48,30 @@
 				const highlightsCollection = await this.getHighlights(currentGame);
 				if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
 				{
-					for (var highlight of highlightsCollection.highlights.media)
+					for (let highlight of highlightsCollection.highlights.media)
 					{
 						highlight.isPlaying = false;
 					}
-					App.Instance.highlightsVueData.highlights = highlightsCollection.highlights.media;
+
+					Theater.endTime = moment();
+
+					const highlights = highlightsCollection.highlights.media;
+					highlights.sort((a, b) =>
+					{
+						var sortVal = 1;
+						if (a.recap)
+						{
+							sortVal = -1;
+						}
+						if (a.condensed)
+						{
+							sortVal = 0;
+						}
+
+						return sortVal;
+					});
+
+					App.Instance.highlightsVueData.highlights = highlights;
 				}
 			} catch (e)
 			{

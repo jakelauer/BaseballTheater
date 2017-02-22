@@ -29,7 +29,7 @@
 			<option v-for="(teamName, teamCode) in teams" v-bind:value="teamCode" v-bind:selected="isFavoriteTeam(teamCode)">{{teamName}}</option>
 		</select>
 		<div class="hide-scores">
-			<input type="checkbox" name="scoreshidden" id="scoreshidden" />
+			<input type="checkbox" id="scoreshidden" v-on:change="onChangeHideScores" v-bind:checked="hideScores" />
 			<label for="scoreshidden">Hide Scores</label>
 		</div>
 	</div>

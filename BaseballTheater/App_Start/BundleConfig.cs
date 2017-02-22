@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace BaseballTheater
 {
@@ -10,9 +9,6 @@ namespace BaseballTheater
 		{
 			bundles.Add(new ScriptBundle("~/bundles/lib")
 				.IncludeDirectory("~/Shared/Scripts/libraries", "*.js", true));
-
-			bundles.Add(new StyleBundle("~/stylebundles/main")
-				.IncludeDirectory("~/Shared/Styles/", "*.css"));
 
 			bundles.Add(new ScriptBundle("~/scriptbundles/mlbdataserver")
 				.IncludeDirectory("~/Shared/Scripts/MlbDataServer", "*.js", true));

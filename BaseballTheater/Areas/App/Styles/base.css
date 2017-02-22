@@ -130,7 +130,6 @@ footer
 	pointer-events: none;
 
 	opacity: 0;
-	background: rgba(255, 255, 255, 0);
 }
 	
 	.loading-spinner img
@@ -146,7 +145,6 @@ footer
 		pointer-events: auto;
 
 		opacity: 1;
-		background: rgba(255, 255, 255, 0.5);
 	}
 
 .game-summary

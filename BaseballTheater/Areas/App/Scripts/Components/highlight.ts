@@ -10,7 +10,7 @@
 	{
 		const qkRegex = /(\d{4}K)/;
 		var links = game.url;
-		var validMp4Link: ILink = null;
+		var q1200k: ILink = null;
 
 		for (let link of links)
 		{
@@ -18,7 +18,7 @@
 			if (matches && matches.length > 0)
 			{
 				const label = matches[0] as string;
-				validMp4Link = {
+				q1200k = {
 					url: link.__text,
 					label: label
 				};
@@ -27,19 +27,19 @@
 
 		var validLinks = [];
 
-		if (validMp4Link !== null)
+		if (q1200k !== null)
 		{
 			const q1800K = {
-				url: validMp4Link.url.replace(qkRegex, "1800K"),
+				url: q1200k.url.replace(qkRegex, "1800K"),
 				label: "1800K"
 			};
 
 			const q2500K = {
-				url: validMp4Link.url.replace(qkRegex, "2500K"),
+				url: q1200k.url.replace(qkRegex, "2500K"),
 				label: "2500K"
 			};
 
-			validLinks.push(validMp4Link, q1800K, q2500K);
+			validLinks.push(q1200k, q1800K, q2500K);
 		}
 
 		return validLinks;
@@ -54,21 +54,32 @@
 			getDefaultUrl: (highlight: IHighlight) =>
 			{
 				var links = getLinks(highlight);
-				var returnLink: ILink = null;
-				if (links.length > 2)
-				{
-					returnLink = links[1];
-				}
 
-				returnLink = links[links.length - 1];
-
-				return returnLink.url;
+				return links[0].url;
 			},
 			getDefaultThumb: (highlight: IHighlight) =>
 			{
 				if (highlight.thumbnails != null && highlight.thumbnails.thumb != null && highlight.thumbnails.thumb.length > 0)
 				{
 					const thumbs = highlight.thumbnails.thumb;
+
+					if (App.clientNetSpeed !== NetSpeed.Fast)
+					{
+						let jpgSearch = "47.jpg";
+
+						if (App.clientNetSpeed === NetSpeed.Slow)
+						{
+							jpgSearch = "52.jpg";
+						}
+
+						for (let thumb of thumbs)
+						{
+							if (thumb.__text.endsWith(jpgSearch))
+							{
+								return thumb;
+							}
+						}
+					}
 
 					return thumbs[thumbs.length - 2];
 				}

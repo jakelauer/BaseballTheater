@@ -1,5 +1,15 @@
 ﻿namespace Theater
 {
+	export var startTime: moment.Moment;
+	export var endTime: moment.Moment;
+
+	export enum NetSpeed
+	{
+		Slow,
+		Medium,
+		Fast
+	}
+
 	interface IGameListVueData
 	{
 		gameSummaries: GameSummary[];
@@ -9,6 +19,7 @@
 	{
 		teams: { [filecode: string]: string };
 		showingGameList: boolean;
+		hideScores: boolean;
 		favoriteTeam: string;
 		date: moment.Moment;
 	}
@@ -19,6 +30,25 @@
 		public settingsVue: vuejs.Vue;
 		private highlightsVue: vuejs.Vue;
 
+		public static get clientNetSpeed()
+		{
+			if (endTime)
+			{
+				const diff = endTime.diff(startTime);
+				console.log(diff);
+				if (diff > 750)
+				{
+					return NetSpeed.Slow;
+				}
+				else if (diff > 400)
+				{
+					return NetSpeed.Medium;
+				}
+			}
+
+			return NetSpeed.Fast;
+		}
+
 		public gameListVueData: IGameListVueData = {
 			gameSummaries: []
 		};
@@ -27,6 +57,7 @@
 			teams: MlbDataServer.Teams.TeamList,
 			showingGameList: true,
 			favoriteTeam: Cookies.get("favoriteteam"),
+			hideScores: Cookies.get("hideScores") === "true",
 			date: moment()
 		};
 
@@ -71,6 +102,14 @@
 					isFavoriteTeam: (teamCode: string) =>
 					{
 						return teamCode === this.settingsVueData.favoriteTeam;
+					},
+					onChangeHideScores: (event: Event) =>
+					{
+						var el = event.currentTarget as HTMLInputElement;
+						var hideScores = el.checked;
+						this.settingsVueData.hideScores = hideScores;
+						Cookies.set("hideScores", hideScores, { expires: 999 });
+
 					}
 				}
 			});
@@ -83,7 +122,10 @@
 			});
 		}
 
-		public dataBind() {}
+		public dataBind()
+		{
+			
+		}
 
 		public renew(pathname: string)
 		{

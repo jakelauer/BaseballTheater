@@ -9,6 +9,10 @@
 			{
 				const dayString = game.dateObj.format("YYYYMMDD");
 				return `/game/${dayString}/${game.game_pk}`;
+			},
+			lineScoreItem: (realNumber: string) =>
+			{
+				return App.Instance.settingsVueData.hideScores ? "▨" : realNumber;
 			}
 		}
 	});

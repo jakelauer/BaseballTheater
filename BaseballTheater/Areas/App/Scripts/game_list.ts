@@ -101,7 +101,7 @@
 		private getDefaultDate()
 		{
 			const endingDay2016String = "20161102";
-			const openingDay2017String = "20170402";
+			const openingDay2017String = "20170222";
 
 			const openingDay2017 = moment(openingDay2017String, "YYYYMMDD");
 			const today = moment();

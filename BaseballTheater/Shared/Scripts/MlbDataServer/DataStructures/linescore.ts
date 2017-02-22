@@ -19,11 +19,18 @@
 
 		constructor(data: ILinescore)
 		{
-			this.inning = data.inning;
+			if (data.inning instanceof Array)
+			{
+				this.inning = data.inning;
+			} else
+			{
+				this.inning = [];
+			}
+
 			this.r = data.r;
 			this.h = data.h;
 			this.e = data.e;
-			
+
 			let inningCount = 9;
 			if (this.inning.length > inningCount)
 			{

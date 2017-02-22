@@ -267,8 +267,8 @@
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
-    <Content Include="Shared\Views\Templates\_GameDetail.cshtml" />
-    <Content Include="Shared\Views\Templates\_GameSummary.cshtml" />
+    <Content Include="Areas\App\Views\Templates\_GameDetail.cshtml" />
+    <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
     <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
     <Content Include="images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
@@ -285,8 +285,8 @@
     <Content Include="Shared\Scripts\libraries\moment.js" />
     <Content Include="Shared\Scripts\libraries\vue.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
-    <Content Include="Shared\Styles\base.css" />
-    <Content Include="Shared\Styles\teams.css" />
+    <Content Include="Areas\App\Styles\base.css" />
+    <Content Include="Areas\App\Styles\teams.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -297,6 +297,7 @@
     <Content Include="Shared\Views\web.config" />
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
+    <Content Include="Shared\Views\_favicons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
