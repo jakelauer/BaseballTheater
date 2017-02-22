@@ -1,12 +1,11 @@
-﻿using MlbDataServer.DataFetch;
+﻿using BaseballTheater.Shared.Models;
+using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
-using BaseballTheater.Shared.Models;
 
 namespace BaseballTheater.Areas.Game.Models
 {
