@@ -2,7 +2,7 @@
 {
 	export class GameSummaryCreator
 	{
-		private static readonly urlBase = "http://gd2.mlb.com";
+		private static readonly urlBase = `http://gd2.mlb.com`;
 
 		private static buildUrl(date: moment.Moment)
 		{

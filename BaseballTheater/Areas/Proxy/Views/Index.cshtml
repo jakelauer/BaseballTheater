@@ -1,0 +1,5 @@
+﻿@model BaseballTheater.Areas.Proxy.Models.ProxyModel
+@{
+	Layout = null;
+	Response.ContentType = "text/xml";
+}@Html.Raw(Model.XML.Trim())

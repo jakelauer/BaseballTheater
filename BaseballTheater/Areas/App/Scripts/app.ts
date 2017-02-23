@@ -35,12 +35,12 @@
 			if (endTime)
 			{
 				const diff = endTime.diff(startTime);
-				console.log(diff);
-				if (diff > 750)
+				//console.log(diff);
+				if (diff > 2000)
 				{
 					return NetSpeed.Slow;
 				}
-				else if (diff > 400)
+				else if (diff > 1000)
 				{
 					return NetSpeed.Medium;
 				}
@@ -69,7 +69,13 @@
 		{
 			this.gameListVue = new Vue({
 				el: ".game-list",
-				data: this.gameListVueData
+				data: this.gameListVueData,
+				methods: {
+					showNoGames: () =>
+					{
+						return Site.currentPage.page === GameList.Instance;
+					}
+				}
 			});
 
 			this.settingsVue = new Vue({
@@ -118,6 +124,10 @@
 				el: ".highlights",
 				data: this.highlightsVueData,
 				methods: {
+					showNoHighlights: () =>
+					{
+						return Site.currentPage.page === Game.Instance;
+					}
 				}
 			});
 		}

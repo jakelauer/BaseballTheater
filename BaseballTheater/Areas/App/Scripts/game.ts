@@ -72,6 +72,9 @@
 					});
 
 					App.Instance.highlightsVueData.highlights = highlights;
+				} else
+				{
+					App.Instance.highlightsVueData.highlights = [];
 				}
 			} catch (e)
 			{

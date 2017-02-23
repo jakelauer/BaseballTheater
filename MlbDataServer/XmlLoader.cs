@@ -44,5 +44,41 @@ namespace MlbDataServer
 
 			return deserializedData;
 		}
+
+		public string GetXmlString(string url)
+		{
+			var stringData = "";
+
+			try
+			{
+				var request = (HttpWebRequest)WebRequest.Create(url);
+				request.KeepAlive = true;
+				request.Timeout = 30 * 60 * 1000;
+				request.UseDefaultCredentials = true;
+				request.Proxy.Credentials = request.Credentials;
+				var response = request.GetResponse();
+
+				using (var stream = response.GetResponseStream())
+				{
+					if (stream == null) return stringData;
+
+					try
+					{
+						var reader = new StreamReader(stream);
+						stringData = reader.ReadToEnd();
+
+						reader.Close();
+					}
+					catch (Exception e)
+					{
+					}
+				}
+			}
+			catch (Exception e)
+			{
+			}
+
+			return stringData;
+		}
 	}
 }

@@ -19,7 +19,7 @@
 			{
 				const label = matches[0] as string;
 				q1200k = {
-					url: link.__text,
+					url: link.__text.replace("http:", location.protocol),
 					label: label
 				};
 			}
@@ -30,12 +30,12 @@
 		if (q1200k !== null)
 		{
 			const q1800K = {
-				url: q1200k.url.replace(qkRegex, "1800K"),
+				url: q1200k.url.replace(qkRegex, "1800K").replace("http:", location.protocol),
 				label: "1800K"
 			};
 
 			const q2500K = {
-				url: q1200k.url.replace(qkRegex, "2500K"),
+				url: q1200k.url.replace(qkRegex, "2500K").replace("http:", location.protocol),
 				label: "2500K"
 			};
 
@@ -59,6 +59,7 @@
 			},
 			getDefaultThumb: (highlight: IHighlight) =>
 			{
+				let thumbFinal: string = highlight.thumb;
 				if (highlight.thumbnails != null && highlight.thumbnails.thumb != null && highlight.thumbnails.thumb.length > 0)
 				{
 					const thumbs = highlight.thumbnails.thumb;
@@ -76,15 +77,15 @@
 						{
 							if (thumb.__text.endsWith(jpgSearch))
 							{
-								return thumb;
+								thumbFinal = thumb.__text;
 							}
 						}
 					}
 
-					return thumbs[thumbs.length - 2];
+					thumbFinal = thumbs[thumbs.length - 2].__text;
 				}
 
-				return highlight.thumb;
+				return thumbFinal.replace("http:", location.protocol);
 			},
 			playVideo: (event: Event) =>
 			{
