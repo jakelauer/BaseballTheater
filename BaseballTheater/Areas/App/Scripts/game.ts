@@ -72,11 +72,13 @@
 					});
 
 					App.Instance.highlightsVueData.highlights = highlights;
-				} else
+				}
+				else
 				{
 					App.Instance.highlightsVueData.highlights = [];
 				}
-			} catch (e)
+			}
+			catch (e)
 			{
 				console.log(e);
 			}

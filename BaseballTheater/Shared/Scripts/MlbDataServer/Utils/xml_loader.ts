@@ -2,13 +2,28 @@
 {
 	export class XmlLoader
 	{
-		public static async load<T>(url: string): Promise<T>
+		private static requests: { [key: string]: JQueryXHR} = {};
+
+		public static async load<T>(url: string, uniqueRequestType: string = ""): Promise<T>
 		{
+			console.debug(`Request for ${url}`);
+
 			const proxyUrl = this.transformUrl(url);
 
-			return new Promise((resolve: (value: T) => void, reject: (error: JQueryXHR) => void) =>
+			if (uniqueRequestType && uniqueRequestType in this.requests)
 			{
-				$.ajax({
+				console.warn(`Aborting existing request of type ${uniqueRequestType}`);
+
+				const existingRequest = this.requests[uniqueRequestType];
+				existingRequest.abort();
+
+				delete this.requests[uniqueRequestType];
+			}
+
+			let ajaxRequest: JQueryXHR;
+			const promise = new Promise((resolve: (value: T) => void, reject: (error: JQueryXHR) => void) =>
+			{
+				ajaxRequest = $.ajax({
 					url: proxyUrl,
 					type: "GET",
 					dataType: "html",
@@ -18,10 +33,28 @@
 					},
 					error: (error) =>
 					{
+						if (error.statusText === "abort")
+						{
+							return;
+						}
+
 						reject(error);
 					}
 				});
 			});
+
+			if (uniqueRequestType)
+			{
+				console.debug(`Setting unique request of type ${uniqueRequestType}`);
+				this.requests[uniqueRequestType] = ajaxRequest;
+
+				promise.then(() =>
+				{
+					delete this.requests[uniqueRequestType];
+				});
+			}
+
+			return promise;
 		}
 
 		private static xmlToJson(xmlString: string)
