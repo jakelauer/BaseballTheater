@@ -35,6 +35,7 @@
 	</div>
 </div>
 
+
 <div class="game-list">
 	<template v-if="gameSummaries && gameSummaries.length > 0">
 		<game-summary v-for="game in gameSummaries" v-bind:game="game">
@@ -42,18 +43,29 @@
 		</game-summary>
 	</template>
 	<template v-else-if="showNoGames()">
-		No games found for this day
+		<div class="empty">
+			No games found for this day
+		</div>
 	</template>
 </div>
 
 
 <div class="highlights">
+	<div class="highlight-game-summary">
+		<game-summary v-if="gameSummary" v-bind:game="gameSummary">
+
+		</game-summary>
+	</div>
+
 	<template v-if="highlights && highlights.length > 0">
 		<highlight v-for="highlight in highlights" v-bind:highlight="highlight">
 
 		</highlight>
 	</template>
+
 	<template v-else-if="showNoHighlights()">
-		No highlights found for this game. Highlights for some games may not be published until the game is complete.
+		<div class="empty">
+			No highlights found for this game. Highlights for some games may not be published until the game is complete.
+		</div>
 	</template>
 </div>

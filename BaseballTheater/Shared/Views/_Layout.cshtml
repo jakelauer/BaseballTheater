@@ -20,7 +20,6 @@
 		<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/css/pikaday.min.css"/>
 
 		@Styles.Render("~/stylebundles/app")
 
@@ -37,20 +36,9 @@
 <body class="@ViewBag.BodyClass">
 
 
-
-
 <header>
 	<div class="header-content">
 		<a class="logo" href="/">Baseball <i class="fa fa-film" aria-hidden="true"></i> Theater</a>
-
-		<div class="expand-links">
-			<i class="fa fa-angle-down" aria-hidden="true"></i>
-		</div>
-		<div class="links">
-			<a href="mailto:baseballtheater@gmail.com" title="Send me your ideas!" target="_blank">
-				Feedback
-			</a>
-		</div>
 	</div>
 </header>
 <div id="body-wrapper">
@@ -64,6 +52,12 @@
 
 <footer>
 	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
+	<br /><br />
+	<div class="links">
+		<a href="mailto:baseballtheater@gmail.com" title="Send me your ideas!" target="_blank">
+			Send me your feedback!
+		</a>
+	</div>
 
 	<div style="margin-top:20px;">
 		<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
@@ -76,8 +70,6 @@
 	@Scripts.Render("~/scriptbundles/site")
 	
 	@Scripts.Render("~/scriptbundles/app")
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js"></script>
 
 @RenderSection("Scripts", false)
 
@@ -103,13 +95,14 @@
 	
 	
 <script>
-	if (location.hostname === "baseball.theater")
+	var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+	if (location.hostname === "baseball.theater" && isChrome)
 	{
 		window.addEventListener('load',
 			function() {
 				var outputElement = document.getElementById('output');
 
-				navigator.serviceWorker.register('/Shared/Scripts/sw.js', { scope: './Shared/Scripts/' })
+				navigator.serviceWorker.register('/Shared/Scripts/sw.js', { scope: '/Shared/Scripts/' })
 					.then(function(r) {
 						console.log('registered service worker');
 					})
@@ -125,8 +118,6 @@
 			});
 	}
 </script>
-
-
 
 
 </body>

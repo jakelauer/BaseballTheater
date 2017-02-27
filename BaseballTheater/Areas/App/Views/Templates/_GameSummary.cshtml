@@ -8,8 +8,8 @@
 				<td class="status">
 					<small v-if="game">
 						{{game.status.status}}
-						<span v-bind:data-time="game.date" v-if="game.linescore">
-								
+						<span v-bind:data-time="game.date" v-if="!game.linescore">
+							({{getStatusTime(game)}})
 						</span>
 					</small>
 				</td>

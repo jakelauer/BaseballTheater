@@ -13,6 +13,15 @@
 			lineScoreItem: (realNumber: string) =>
 			{
 				return App.Instance.settingsVueData.hideScores ? "▨" : realNumber;
+			},
+			getStatusTime: (game: GameSummary) =>
+			{
+				//var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
+				var eventTime = game.time;
+				var ampm = game.ampm;
+				var timezone = game.time_zone;
+
+				return `${eventTime}${ampm} ${timezone}`;
 			}
 		}
 	});

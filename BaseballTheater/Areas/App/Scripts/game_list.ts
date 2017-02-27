@@ -45,20 +45,44 @@
 
 		private sortGames(games: GameSummary[], favoriteTeam: string)
 		{
-			games.sort((a, b) => {
-				var aIsFavorite = a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam;
+			games.sort((a, b) =>
+			{
+				var aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
+				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
+				var favoriteReturn = aIsFavorite - bIsFavorite;
 
-				return aIsFavorite ? -1 : 1;
+				var aInningCount = this.getInningCount(a.linescore);
+				var bInningCount = this.getInningCount(b.linescore);
+				var aProgress = a.linescore ? Math.max(aInningCount, 1) : 0;
+				var bProgress = b.linescore ? Math.max(bInningCount, 1) : 0;
+				var progressReturn = (aProgress < bProgress ? 1 : -1);
+
+				var aIsFinished = a.status.status === "Final" ? 1 : 0;
+				var bIsFinished = b.status.status === "Final" ? 1 : 0;
+				var finishedReturn = aIsFinished - bIsFinished;
+
+				return favoriteReturn || finishedReturn || progressReturn;
 			});
+		}
+
+		private getInningCount(linescore: Linescore)
+		{
+			if (linescore && linescore.inning)
+			{
+				return linescore.inning.length;
+			}
+
+			return 0;
 		}
 
 		public dataBind()
 		{
-			App.Instance.settingsVue.$on("favoriteTeamSet", (favoriteTeam: string) =>
-			{
-				var games = App.Instance.gameListVueData.gameSummaries;
-				this.sortGames(games, favoriteTeam);
-			});
+			App.Instance.settingsVue.$on("favoriteTeamSet",
+				(favoriteTeam: string) =>
+				{
+					var games = App.Instance.gameListVueData.gameSummaries;
+					this.sortGames(games, favoriteTeam);
+				});
 		}
 
 		public renew(pathname: string)
@@ -120,7 +144,8 @@
 			{
 				const pathnameNumbers = pathname.replace(/[^0-9]/, "");
 				dateString = pathnameNumbers;
-			} else
+			}
+			else
 			{
 				dateString = this.getDefaultDate().format("YYYYMMDD");
 			}

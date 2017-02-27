@@ -62,7 +62,8 @@
 		};
 
 		public highlightsVueData: IHighlightsVueData = {
-			highlights: []
+			highlights: [],
+			gameSummary: null
 		}
 
 		public initialize()
@@ -126,7 +127,7 @@
 				methods: {
 					showNoHighlights: () =>
 					{
-						return Site.currentPage.page === Game.Instance;
+						return Site.currentPage.page === GameDetail.Instance;
 					}
 				}
 			});

@@ -59,7 +59,8 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind />
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
@@ -229,6 +230,7 @@
   <ItemGroup>
     <Content Include="Areas\App\Styles\game.css" />
     <Content Include="Areas\App\Styles\game-list.css" />
+    <Content Include="Areas\App\Styles\pikaday.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
@@ -274,8 +276,6 @@
     <Content Include="Areas\App\Views\Templates\_GameDetail.cshtml" />
     <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
     <Content Include="Areas\Proxy\Views\web.config" />
-    <Content Include="Areas\Proxy\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Proxy\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Proxy\Views\Index.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -294,6 +294,7 @@
     <Content Include="Shared\Scripts\libraries\cookies.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\libraries\moment.js" />
+    <Content Include="Shared\Scripts\libraries\pikaday.js" />
     <Content Include="Shared\Scripts\libraries\vue.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
     <Content Include="Areas\App\Styles\base.css" />
@@ -331,7 +332,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\game.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />

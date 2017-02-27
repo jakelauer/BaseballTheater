@@ -9,6 +9,16 @@
 	flex-wrap: wrap;
 }
 
+.highlight-game-summary
+{
+	width: 100%;
+}
+	
+	.highlight-game-summary .game-link
+	{
+		display: none;
+	}
+
 .highlight
 {
 	position: relative;

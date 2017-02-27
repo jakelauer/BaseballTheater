@@ -3,11 +3,12 @@
 	export interface IHighlightsVueData
 	{
 		highlights: IHighlight[];
+		gameSummary: GameSummary;
 	}
 
-	export class Game extends Site.Page
+	export class GameDetail extends Site.Page
 	{
-		public static Instance = new Game();
+		public static Instance = new GameDetail();
 
 		private date: moment.Moment = null;
 		private gamePk: string;
@@ -24,6 +25,8 @@
 			{
 				Site.stopLoading();
 			});
+
+			App.Instance.settingsVueData.showingGameList = false;
 		}
 
 		public dataBind()
@@ -38,6 +41,7 @@
 		public destroy()
 		{
 			App.Instance.highlightsVueData.highlights = [];
+			App.Instance.highlightsVueData.gameSummary = null;
 		}
 
 		private async getData()
@@ -45,6 +49,9 @@
 			try
 			{
 				const currentGame = await this.getCurrentGame();
+
+				App.Instance.highlightsVueData.gameSummary = currentGame;
+
 				const highlightsCollection = await this.getHighlights(currentGame);
 				if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
 				{
@@ -137,7 +144,7 @@
 	}
 
 	Site.addPage({
-		page: Game.Instance,
+		page: GameDetail.Instance,
 		matchingUrl: /^\/game\/(.*)/
 	});
 }

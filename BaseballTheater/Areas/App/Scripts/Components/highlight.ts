@@ -12,7 +12,10 @@
 		var links = game.url;
 		var q1200k: ILink = null;
 
-		for (let link of links)
+		// For some reason, Safari doesn't like this particular 
+		// variable when it's a 'let' when it's minified. 
+		// ReSharper disable once VariableCanBeMadeLet
+		for (var link of links)
 		{
 			const matches = link.__text.match(qkRegex);
 			if (matches && matches.length > 0)
