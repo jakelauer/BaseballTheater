@@ -262,6 +262,7 @@
     <Content Include="images\ms-icon-150x150.png" />
     <Content Include="images\ms-icon-310x310.png" />
     <Content Include="images\ms-icon-70x70.png" />
+    <Content Include="images\patreon.png" />
     <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
     <Content Include="images\manifest.json" />
