@@ -60,6 +60,12 @@
 
 				return links[0].url;
 			},
+			getTitle: (highlight: IHighlight) =>
+			{
+				return highlight.recap
+					? "Recap (score hidden)"
+					: highlight.headline;
+			},
 			getDefaultThumb: (highlight: IHighlight) =>
 			{
 				let thumbFinal: string = highlight.thumb;

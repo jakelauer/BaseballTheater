@@ -26,6 +26,8 @@
 
 	export class App extends Site.Page
 	{
+		public static Instance = new App();
+
 		public gameListVue: vuejs.Vue;
 		public settingsVue: vuejs.Vue;
 		private highlightsVue: vuejs.Vue;
@@ -35,7 +37,7 @@
 			if (endTime)
 			{
 				const diff = endTime.diff(startTime);
-				//console.log(diff);
+
 				if (diff > 2000)
 				{
 					return NetSpeed.Slow;
@@ -118,6 +120,12 @@
 						Cookies.set("hideScores", hideScores, { expires: 999 });
 
 					}
+				},
+				watch: {
+					date: (moment: moment.Moment) =>
+					{
+						document.title = App.getTitle(`Game Highlights for ${moment.format("MMMM Do YYYY")}`);
+					}
 				}
 			});
 
@@ -128,6 +136,20 @@
 					showNoHighlights: () =>
 					{
 						return Site.currentPage.page === GameDetail.Instance;
+					}
+				},
+				watch: {
+					gameSummary: (gameSummary: GameSummary) =>
+					{
+						if (!gameSummary)
+						{
+							return;
+						}
+
+						var awayTeam = gameSummary.away_team_name;
+						var homeTeam = gameSummary.home_team_name;
+						var time = gameSummary.dateObj.format("MMMM Do YYYY");
+						document.title = App.getTitle(`${awayTeam} @ ${homeTeam} - ${time}`);
 					}
 				}
 			});
@@ -142,9 +164,13 @@
 		{
 		}
 
+		public static getTitle(title: string)
+		{
+			return `${title} - Baseball Theater`;
+		}
+
 		public destroy() {}
 
-		public static Instance = new App();
 	}
 
 	Site.addPage({

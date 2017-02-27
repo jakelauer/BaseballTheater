@@ -65,17 +65,12 @@
 					const highlights = highlightsCollection.highlights.media;
 					highlights.sort((a, b) =>
 					{
-						var sortVal = 1;
-						if (a.recap)
-						{
-							sortVal = -1;
-						}
-						if (a.condensed)
-						{
-							sortVal = 0;
-						}
+						var aIsRecap = a.recap ? -1 : 0;
+						var bIsRecap = b.recap ? -1 : 0;
+						var aIsCondensed = a.condensed ? -1 : 0;
+						var bIsCondensed = b.condensed ? -1 : 0;
 
-						return sortVal;
+						return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed);
 					});
 
 					App.Instance.highlightsVueData.highlights = highlights;
