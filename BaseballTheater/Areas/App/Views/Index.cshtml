@@ -71,9 +71,7 @@
 	</template>
 </div>
 
-<div class="backers">
+<div class="backers" v-if="backers && backers.length > 0">
 	<h1>Backers</h1>
-	<template v-if="backers && backers.length > 0">
-		<backer v-for="backer in backers" v-bind:backer="backer"></backer>
-	</template>
+	<backer v-for="backer in backers" v-bind:backer="backer"></backer>
 </div>

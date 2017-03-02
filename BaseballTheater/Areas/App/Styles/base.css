@@ -353,33 +353,6 @@ footer
 		display: inline-block;
 	}
 
-	header .expand-links
-	{
-		display: block;
-	}
-
-	header.expanded
-	{
-		height: 100px;
-	}
-
-	header .links
-	{
-		display: none;
-		float: none;
-	}
-
-		header.expanded .links
-		{
-			display: block;
-		}
-
-	header .logo
-	{
-		position: relative;
-		left: 0;
-	}
-
 	
 
 	.settings
