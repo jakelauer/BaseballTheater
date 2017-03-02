@@ -270,6 +270,7 @@
     <Content Include="Areas\App\Views\web.config" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -332,6 +333,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\backers.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\backer.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />

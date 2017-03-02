@@ -28,6 +28,10 @@ body #body-wrapper
 	min-height: 800px;
 }
 
+.backers .backer {
+	font-size: 17px;
+}
+
 header
 {
 	overflow: hidden;
@@ -49,6 +53,67 @@ header
 	{
 		display: none;
 	}
+
+	header .menu-trigger {
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 60px;
+		line-height: 50px;
+		font-size: 25px;
+		text-align: center;
+		border-right: 1px solid white;
+	}
+
+		header .menu-trigger:hover {
+			background: rgba(255, 255, 255, 0.15);
+		}
+
+.side-menu {
+	position: fixed;
+	z-index: 99999;
+	top: 50px;
+	left: 0;
+	height: calc(100vh - 50px);
+	width: 80vw;
+	max-width: 400px;
+
+	background: rgba(255,255,255,0.95);
+	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+
+	transform: translateX(-125%);
+
+	transition: 0.25s;
+	
+}
+
+	html.side-menu-open .side-menu {
+		transform: translateX(0);
+	}
+
+	.side-menu a {
+		position: relative;
+		display: block;
+		width: 100%;
+		padding: 20px;
+		color: black;
+		font-size: 1.5rem;
+		text-decoration: none;
+		border-bottom: 1px solid black;
+	}
+
+	.side-menu a i {
+		margin-right: 16px;
+	}
+
+	.side-menu a:hover {
+		background: rgba(0, 0, 0, 0.1);
+	}
+
+html.side-menu-open #body-wrapper {
+	pointer-events: none;
+}
 
 header .header-content
 {
@@ -354,5 +419,12 @@ footer
 	.game-summary table .team-info .team-name
 	{
 		display: none;
+	}
+
+	header .logo {
+		font-size: 20px;
+		left: auto;
+		right: 20px;
+		transform: none;
 	}
 }
