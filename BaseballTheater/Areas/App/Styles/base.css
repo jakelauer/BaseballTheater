@@ -1,4 +1,5 @@
-﻿html, body
+﻿html,
+body
 {
 	font-size: 14px;
 }
@@ -8,14 +9,27 @@ html
 	overflow-y: scroll;
 }
 
+a
+{
+	text-decoration: none;
+
+	color: blue;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+
 body
 {
 	box-sizing: border-box;
-	font-family: 'PT Serif', serif;
-	margin: 0 auto;
-	max-width: 1400px;
-	padding: 60px 10px 0;
 	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 60px 10px 0;
+
+	font-family: 'PT Serif', serif;
 }
 
 body *
@@ -28,106 +42,191 @@ body #body-wrapper
 	min-height: 800px;
 }
 
-.backers .backer {
-	font-size: 17px;
+.backer
+{
+	font-size: 1.25rem;
+}
+
+.backers-wrapper
+{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.backers-wrapper > div
+{
+	width: 100%;
+	min-height: 50vh;
+}
+
+.backers-wrapper h1
+{
+	display: flex;
+
+	margin-bottom: 2rem;
+}
+
+.backers-wrapper h1 span
+{
+	display: block;
+	flex: 1 0;
+}
+
+.backers-wrapper a.become
+{
+	display: block;
+
+	text-align: left;
+
+	font-size: 1.5rem;
+	font-weight: normal;
+}
+
+.backers-wrapper > .team-sponsors
+{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.backers-wrapper > .team-sponsors > .team-sponsor-team
+{
+	width: 25%;
+	margin-bottom: 1rem;
+	padding: 1rem;
+
+	text-align: center;
+}
+
+.backers-wrapper > .team-sponsors > .team-sponsor-team a
+{
+	display: inline-block;
+}
+
+.backers-wrapper > .team-sponsors > .team-sponsor-team .team-logo-large
+{
+	margin-bottom: 1rem;
+}
+
+.backers-wrapper > .team-sponsors h1
+{
+	width: 100%;
 }
 
 header
 {
+	position: fixed;
+	z-index: 100;
 	overflow: hidden;
-	background: #EEE;
+
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+
+	transition: 0.25s;
+
+	color: #fff;
+	background: #eee;
 	background: #ce0f0f;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	color: #FFF;
-	height: 50px;
-	left: 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 100;
-
-	transition: 0.25s;
 }
 
-	header .expand-links
-	{
-		display: none;
-	}
+header .expand-links
+{
+	display: none;
+}
 
-	header .menu-trigger {
-		position: absolute;
-		left: 0;
-		top: 0;
-		height: 100%;
-		width: 60px;
-		line-height: 50px;
-		font-size: 25px;
-		text-align: center;
-		border-right: 1px solid white;
-	}
+header .menu-trigger
+{
+	position: absolute;
 
-		header .menu-trigger:hover {
-			background: rgba(255, 255, 255, 0.15);
-		}
+	top: 0;
+	left: 0;
+	width: 60px;
+	height: 100%;
 
-.side-menu {
+	text-align: center;
+
+	border-right: 1px solid white;
+
+	font-size: 25px;
+	line-height: 50px;
+}
+
+header .menu-trigger:hover
+{
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.side-menu
+{
 	position: fixed;
 	z-index: 99999;
+
 	top: 50px;
 	left: 0;
-	height: calc(100vh - 50px);
 	width: 80vw;
 	max-width: 400px;
-
-	background: rgba(255,255,255,0.95);
-	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-
-	transform: translateX(-125%);
+	height: calc(100vh - 50px);
 
 	transition: 0.25s;
-	
+	transform: translateX(-125%);
+
+	background: rgba(255, 255, 255, 0.95);
+	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
-	html.side-menu-open .side-menu {
-		transform: translateX(0);
-	}
+html.side-menu-open .side-menu
+{
+	transform: translateX(0);
+}
 
-	.side-menu a {
-		position: relative;
-		display: block;
-		width: 100%;
-		padding: 20px;
-		color: black;
-		font-size: 1.5rem;
-		text-decoration: none;
-		border-bottom: 1px solid black;
-	}
+.side-menu a
+{
+	position: relative;
+	display: block;
 
-	.side-menu a i {
-		margin-right: 16px;
-	}
+	width: 100%;
+	padding: 20px;
 
-	.side-menu a:hover {
-		background: rgba(0, 0, 0, 0.1);
-	}
+	text-decoration: none;
 
-html.side-menu-open #body-wrapper {
+	color: black;
+	border-bottom: 1px solid black;
+
+	font-size: 1.5rem;
+}
+
+.side-menu a i
+{
+	margin-right: 16px;
+}
+
+.side-menu a:hover
+{
+	background: rgba(0, 0, 0, 0.1);
+}
+
+html.side-menu-open #body-wrapper
+{
 	pointer-events: none;
 }
 
 header .header-content
 {
-	text-align: center;
 	width: 100%;
 	padding: 0 20px;
+
+	text-align: center;
 }
 
 select
 {
-	border: 1px solid rgba(0,0,0,0.25);
-	color: white;
-	background: #ce0f0f;
 	height: 20px;
+
+	color: white;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	background: #ce0f0f;
 }
 
 select option
@@ -138,17 +237,18 @@ select option
 header .logo
 {
 	position: absolute;
-	left: 50%;
 
-	font-family: "Alfa Slab One", cursive;
-	font-size: 26px;
-	line-height: 50px;
+	left: 50%;
 
 	transform: translateX(-50%);
 	text-align: center;
 	text-decoration: none;
 
-	color: #EEE;
+	color: #eee;
+
+	font-family: "Alfa Slab One", cursive;
+	font-size: 26px;
+	line-height: 50px;
 }
 
 header .links,
@@ -158,27 +258,30 @@ header .expand-links
 	float: right;
 }
 
-	header .links a,
-	header .expand-links i
-	{
-		line-height: 50px;
-		height: 50px;
-		margin-left: 20px;
-		
-		color: white;
-		text-decoration: none;
-	}
+header .links a,
+header .expand-links i
+{
+	height: 50px;
+	margin-left: 20px;
 
-	
-	header .expand-links i
-	{
-		font-size: 26px;
-		cursor: pointer;
-	}
+	text-decoration: none;
+
+	color: white;
+
+	line-height: 50px;
+}
+
+header .expand-links i
+{
+	cursor: pointer;
+
+	font-size: 26px;
+}
 
 footer
 {
 	padding: 20px 0;
+
 	text-align: center;
 }
 
@@ -186,6 +289,7 @@ footer
 {
 	position: fixed;
 	z-index: 999;
+
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -196,42 +300,48 @@ footer
 
 	opacity: 0;
 }
-	
-	.loading-spinner img
-	{
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translateX(-50%) translateY(-50%);
-	}
 
-	.loading .loading-spinner
-	{
-		pointer-events: auto;
+.loading-spinner img
+{
+	position: absolute;
 
-		opacity: 1;
-	}
+	top: 50%;
+	left: 50%;
+
+	transform: translateX(-50%) translateY(-50%);
+}
+
+.loading .loading-spinner
+{
+	pointer-events: auto;
+
+	opacity: 1;
+}
 
 .game-summary
 {
-	background: #FFF;
-	color: black;
-	display: block;
-	margin: 0 auto;
-	max-width: 800px;
-	padding-bottom: 30px;
 	position: relative;
-	text-decoration: none;
+	display: block;
+
+	max-width: 800px;
+	margin: 0 auto;
+	padding-bottom: 30px;
+
 	transition: 0.15s;
+	text-decoration: none;
+
+	color: black;
+	background: #fff;
 }
 
 .game-summary .game-link
 {
+	position: absolute;
+
+	top: 10px;
+	right: 10px;
 	bottom: 10px;
 	left: 10px;
-	position: absolute;
-	right: 10px;
-	top: 10px;
 }
 
 .game-summary .game-link:hover
@@ -241,33 +351,40 @@ footer
 
 .game-summary table
 {
-	border-collapse: collapse;
-	border-spacing: 0;
 	width: 100%;
+
+	border-spacing: 0;
+
+	border-collapse: collapse;
 }
 
 .game-summary table th,
 .game-summary table td
 {
-	border: 1px solid #DDD;
 	padding: 6px 0;
+
 	text-align: center;
+
+	border: 1px solid #ddd;
 }
 
 .game-summary table tr:first-child td
 {
-	background-color: #F5F5F5;
+	background-color: #f5f5f5;
 }
 
 .game-summary table .team-info,
 .game-summary table .status
 {
-	border-right: 3px solid #DDD;
+	padding-right: 7px;
+	padding-left: 5px;
+
+	text-align: left;
+
+	border-right: 3px solid #ddd;
+
 	font-weight: bold;
 	line-height: 29px;
-	padding-left: 5px;
-	padding-right: 7px;
-	text-align: left;
 }
 
 .game-summary table .team-info .team-name
@@ -279,13 +396,14 @@ footer
 .game-summary table .hits,
 .game-summary table .errors
 {
-	font-weight: bold;
 	width: 40px;
+
+	font-weight: bold;
 }
 
 .game-summary table .runs
 {
-	border-left: 3px solid #DDD;
+	border-left: 3px solid #ddd;
 }
 
 .game-summary table .inning
@@ -295,48 +413,45 @@ footer
 
 .error
 {
-	font-size: 1.5em;
 	text-align: center;
+
+	font-size: 1.5em;
 }
-
-
 
 .settings
 {
 	margin: 1rem 0;
 }
 
-	.settings .day-nav
-	{
-		-ms-flex: 1 0;
-		-webkit-flex: 1 0;
-		flex: 1 0;
-		
-		font-size: 1.5rem;
+.settings .day-nav
+{
+	justify-content: flex-start;
 
-		justify-content: flex-start;
-	}
+	font-size: 1.5rem;
+	-ms-flex: 1 0;
+	-webkit-flex: 1 0;
+	flex: 1 0;
+}
 
-	
-		.settings .day-nav a
-		{
-			margin: 0 10px;
-			color: #ce0f0f;
-		}
+.settings .day-nav a
+{
+	margin: 0 10px;
 
+	color: #ce0f0f;
+}
 
-	.settings .tools
-	{
-		justify-content: center;
-		align-items: center;
+.settings .tools
+{
+	align-items: center;
+	justify-content: center;
 
-		text-align: center;	
-	}
+	text-align: center;
+}
 
-		.settings .tools .hide-scores
-		{
-			margin-left: 20px;
-		}
+.settings .tools .hide-scores
+{
+	margin-left: 20px;
+}
 
 @media all and (max-width: 1200px)
 {
@@ -353,15 +468,12 @@ footer
 		display: inline-block;
 	}
 
-	
-
 	.settings
 	{
+		text-align: center;
 		-ms-flex-wrap: wrap;
 		-webkit-flex-wrap: wrap;
 		flex-wrap: wrap;
-
-		text-align: center;
 	}
 
 	.settings .day-nav
@@ -376,28 +488,44 @@ footer
 	{
 		width: 100%;
 	}
+
+	.backers-wrapper h1
+	{
+		flex-wrap: wrap;
+	}
+
+	.backers-wrapper a
+	{
+		width: 100%;
+	}
 }
 
-.empty {
+.empty
+{
 	position: relative;
+
+	padding: 50px 0;
+
+	text-align: center;
 	-webkit-flex: 1 0;
 	-ms-flex: 1 0;
 	flex: 1 0;
-	padding: 50px 0;
-	text-align: center;
 }
 
 @media all and (max-width: 600px)
-{	
+{
 	.game-summary table .team-info .team-name
 	{
 		display: none;
 	}
 
-	header .logo {
-		font-size: 20px;
-		left: auto;
+	header .logo
+	{
 		right: 20px;
+		left: auto;
+
 		transform: none;
+
+		font-size: 20px;
 	}
 }

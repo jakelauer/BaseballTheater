@@ -52,10 +52,24 @@
 
 
 <div class="highlights">
-	<div class="highlight-game-summary">
-		<game-summary v-if="gameSummary" v-bind:game="gameSummary">
+	<div class="highlight-game-summary" v-if="gameSummary">
 
-		</game-summary>
+		<div class="team home">
+			<a class="team-logo-large away-logo" v-if="gameSummary" v-bind:class="gameSummary.home_file_code" href="/backers"></a>
+			<a class="backers" href="/backers">
+				{{getTeamSponsors(gameSummary.home_file_code)}} team sponsors
+			</a>
+		</div>
+
+		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
+		
+		<div class="team away">
+			<a class="team-logo-large home-logo" v-if="gameSummary" v-bind:class="gameSummary.away_file_code" href="/backers"></a>
+			<a class="backers" href="/backers">
+				{{getTeamSponsors(gameSummary.away_file_code)}} team sponsors
+			</a>
+		</div>
+
 	</div>
 
 	<template v-if="highlights && highlights.length > 0">
@@ -71,7 +85,62 @@
 	</template>
 </div>
 
-<div class="backers" v-if="backers && backers.length > 0">
-	<h1>Backers</h1>
-	<backer v-for="backer in backers" v-bind:backer="backer"></backer>
+<div class="backers-wrapper">
+	<template v-if="showBackers">
+		<div class="premium-sponsors">
+			<h1>
+				<span>Premium Sponsors</span>
+
+				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
+					Become a premium sponsor
+				</a>
+			</h1>
+			<premium-sponsor v-for="premiumSponsor in premiumSponsors" v-bind:premium-sponsor-team="premiumSponsor"></premium-sponsor>
+			<span v-if="premiumSponsors.length === 0">
+				No backers yet.
+			</span>
+		</div>
+		<div class="team-sponsors">
+			<h1>
+				<span>Team Sponsors</span>
+				
+				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
+					Become a team sponsor
+				</a>
+			</h1>
+			<table>
+				<team-sponsor v-for="teamSponsor in teamSponsors" v-bind:team-sponsor-team="teamSponsor"></team-sponsor>
+			</table>
+
+			<span v-if="Object.keys(teamSponsors).length === 0">
+				No premium backers yet.
+			</span>
+		</div>
+		<div class="beer-backers">
+			<h1>
+				<span>Beer Backers</span>
+
+				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
+					Become a beer backer
+				</a>
+			</h1>
+			<beer-backer v-for="beerBacker in beerBackers" v-bind:backer="beerBacker"></beer-backer>
+			<span v-if="beerBackers.length === 0">
+				No beer backers yet.
+			</span>
+		</div>
+		<div class="backers">
+			<h1>
+				<span>Backers</span>
+
+				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
+					Become a backer
+				</a>
+			</h1>
+			<backer v-for="backer in backers" v-bind:backer="backer"></backer>
+			<span v-if="backers.length === 0">
+				No backers yet.
+			</span>
+		</div>
+	</template>
 </div>

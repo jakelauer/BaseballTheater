@@ -75,6 +75,18 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="BundleTransformer.Core, Version=1.9.152.0, Culture=neutral, PublicKeyToken=973c344c93aac60d, processorArchitecture=MSIL">
+      <HintPath>..\packages\BundleTransformer.Core.1.9.152\lib\net40\BundleTransformer.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BundleTransformer.SassAndScss, Version=1.9.153.0, Culture=neutral, PublicKeyToken=973c344c93aac60d, processorArchitecture=MSIL">
+      <HintPath>..\packages\BundleTransformer.SassAndScss.1.9.153\lib\net40\BundleTransformer.SassAndScss.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LibSassHost, Version=1.0.2.0, Culture=neutral, PublicKeyToken=3e24e88796a38e46, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibSassHost.1.0.2\lib\net45\LibSassHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -231,8 +243,6 @@
     <Content Include="Areas\App\Styles\game.css" />
     <Content Include="Areas\App\Styles\game-list.css" />
     <Content Include="Areas\App\Styles\pikaday.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -258,6 +268,39 @@
     <Content Include="images\favicon-32x32.png" />
     <Content Include="images\favicon-96x96.png" />
     <Content Include="images\favicon.ico" />
+    <Content Include="images\logos\al.gif" />
+    <Content Include="images\logos\ari.png" />
+    <Content Include="images\logos\atl.png" />
+    <Content Include="images\logos\bal.png" />
+    <Content Include="images\logos\bos.png" />
+    <Content Include="images\logos\chc.png" />
+    <Content Include="images\logos\chw.png" />
+    <Content Include="images\logos\cin.png" />
+    <Content Include="images\logos\cle.png" />
+    <Content Include="images\logos\col.png" />
+    <Content Include="images\logos\det.png" />
+    <Content Include="images\logos\hou.png" />
+    <Content Include="images\logos\kc.png" />
+    <Content Include="images\logos\laa.png" />
+    <Content Include="images\logos\lad.png" />
+    <Content Include="images\logos\mia.png" />
+    <Content Include="images\logos\mil.png" />
+    <Content Include="images\logos\min.png" />
+    <Content Include="images\logos\nl.gif" />
+    <Content Include="images\logos\nym.png" />
+    <Content Include="images\logos\nyy.png" />
+    <Content Include="images\logos\oak.png" />
+    <Content Include="images\logos\phi.gif" />
+    <Content Include="images\logos\pit.png" />
+    <Content Include="images\logos\sd.png" />
+    <Content Include="images\logos\sea.png" />
+    <Content Include="images\logos\sf.png" />
+    <Content Include="images\logos\stl.gif" />
+    <Content Include="images\logos\tb.gif" />
+    <Content Include="images\logos\tex.png" />
+    <Content Include="images\logos\tor.png" />
+    <Content Include="images\logos\txt.txt" />
+    <Content Include="images\logos\was.png" />
     <Content Include="images\ms-icon-144x144.png" />
     <Content Include="images\ms-icon-150x150.png" />
     <Content Include="images\ms-icon-310x310.png" />
@@ -334,7 +377,8 @@
   <ItemGroup>
     <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\backers.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Components\backer.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Components\backer_components.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Helpers\backers_list.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />

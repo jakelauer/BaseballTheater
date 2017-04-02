@@ -16,6 +16,8 @@
 
 	initializeCurrentPage = () =>
 	{
+		$(window).scrollTop(0);
+
 		if (currentPage !== null)
 		{
 			currentPage.page.destroy();

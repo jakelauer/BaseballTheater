@@ -24,14 +24,13 @@
 		date: moment.Moment;
 	}
 
-	interface Backer
-	{
-		name: string;
-		level: number;
-	}
 	interface IBackersVueData
 	{
+		showBackers: boolean;
 		backers: Backer[];
+		beerBackers: BeerBacker[];
+		teamSponsors: TeamSponsors;
+		premiumSponsors: PremiumSponsors;
 	}
 
 	export class App extends Site.Page
@@ -80,26 +79,32 @@
 		}
 
 		public backersVueData: IBackersVueData = {
-			backers: []
+			backers: [],
+			beerBackers: [],
+			teamSponsors: [],
+			premiumSponsors: [],
+			showBackers: false
 		};
 
 		public initialize()
 		{
 			App.Instance.settingsVueData.showingGameList = false;
 
-			$(".menu-trigger, .side-menu a").on("click", () =>
-			{
-				$("html").toggleClass("side-menu-open");
-			});
-
-			$(document).on("click", (e) =>
-			{
-				var $el = $(e.target);
-				if ($el.closest(".side-menu").length === 0 && $el.closest(".menu-trigger").length === 0 && $("html").hasClass("side-menu-open"))
+			$(".menu-trigger, .side-menu a").on("click",
+				() =>
 				{
-					$("html").removeClass("side-menu-open");
-				}
-			});
+					$("html").toggleClass("side-menu-open");
+				});
+
+			$(document).on("click",
+				(e) =>
+				{
+					var $el = $(e.target);
+					if ($el.closest(".side-menu").length === 0 && $el.closest(".menu-trigger").length === 0 && $("html").hasClass("side-menu-open"))
+					{
+						$("html").removeClass("side-menu-open");
+					}
+				});
 
 			this.gameListVue = new Vue({
 				el: ".game-list",
@@ -149,7 +154,6 @@
 						var hideScores = el.checked;
 						this.settingsVueData.hideScores = hideScores;
 						Cookies.set("hideScores", hideScores, { expires: 999 });
-
 					}
 				},
 				watch: {
@@ -167,6 +171,17 @@
 					showNoHighlights: () =>
 					{
 						return Site.currentPage.page === GameDetail.Instance;
+					},
+					getTeamSponsors: (teamCode: string) => {
+						var sponsors = 0;
+
+						for (let team of BackersList.TeamSponsors) {
+							if (team.team === Teams[teamCode]) {
+								sponsors = team.backers.length;
+								break;
+							}
+						}
+						return sponsors;
 					}
 				},
 				watch: {
@@ -186,14 +201,13 @@
 			});
 
 			this.backersVue = new Vue({
-				el: ".backers",
+				el: ".backers-wrapper",
 				data: this.backersVueData
 			});
 		}
 
 		public dataBind()
 		{
-			
 		}
 
 		public renew(pathname: string)
@@ -206,7 +220,6 @@
 		}
 
 		public destroy() {}
-
 	}
 
 	Site.addPage({
