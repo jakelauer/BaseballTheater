@@ -46,6 +46,8 @@
 	<a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
 	<a href="/backers"><i class="fa fa-smile-o" aria-hidden="true"></i> Backers</a>
 	<a href="https://github.com/BaseballTheater" target="_blank"><i class="fa fa-github" aria-hidden="true"></i> View on GitHub</a>
+
+	@Html.Partial("_patreon")
 </div>
 <div id="body-wrapper">
 	<div class="loading-spinner">
@@ -58,14 +60,7 @@
 
 <footer>
 
-	<div style="margin-top:20px;">
-		@*<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
-		<script type='text/javascript'>kofiwidget2.init('Buy Me a Beer', '#ee4f4f', 'A76217J'); kofiwidget2.draw();</script>*@
-		
-		<a href="https://www.patreon.com/jakelauer" target="_blank">
-			<img src="~/images/patreon.png" width="200"/>
-		</a>
-	</div>
+	@Html.Partial("_patreon")
 	<br /><br />
 	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
 	<br /><br />

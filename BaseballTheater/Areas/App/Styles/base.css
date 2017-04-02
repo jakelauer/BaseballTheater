@@ -39,7 +39,7 @@ body *
 
 body #body-wrapper
 {
-	min-height: 800px;
+	min-height: 600px;
 }
 
 .backer
@@ -195,6 +195,27 @@ html.side-menu-open .side-menu
 	border-bottom: 1px solid black;
 
 	font-size: 1.5rem;
+}
+
+.side-menu .patreon-goals
+{
+	position: absolute;
+	display: none;
+
+	bottom: 0;
+	width: 100%;
+}
+
+.side-menu .patreon-goals a
+{
+	border: 0;
+
+	font-size: 1rem;
+}
+
+.side-menu .patreon-goals a:hover
+{
+	background: transparent;
 }
 
 .side-menu a i
@@ -453,11 +474,76 @@ footer
 	margin-left: 20px;
 }
 
+.patreon-goals
+{
+	width: 300px;
+	margin: 20px auto 0;
+}
+
+.patreon-goals img
+{
+	max-width: 100%;
+	height: auto;
+}
+
+.patreon-goals a
+{
+	color: black;
+}
+
+.patreon-goals a:hover
+{
+	text-decoration: none;
+}
+
+.patreon-goals p
+{
+	position: absolute;
+
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+
+	text-align: center;
+	white-space: nowrap;
+
+	font-weight: bold;
+	line-height: 30px;
+}
+
+.patreon-goals .bar
+{
+	position: relative;
+	overflow: hidden;
+
+	height: 30px;
+	margin: 10px 0;
+
+	border-radius: 15px;
+	background: #eee;
+}
+
+.patreon-goals .bar .width
+{
+	height: 100%;
+
+	background: #e6461a;
+}
+
 @media all and (max-width: 1200px)
 {
 	.game-summary table .team-info .team-name
 	{
 		display: none;
+	}
+}
+
+@media all and (max-height: 800px)
+{
+	.side-menu .patreon-goals
+	{
+		display: block;
 	}
 }
 
@@ -529,3 +615,4 @@ footer
 		font-size: 20px;
 	}
 }
+
