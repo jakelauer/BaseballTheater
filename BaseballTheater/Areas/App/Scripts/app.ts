@@ -172,16 +172,13 @@
 					{
 						return Site.currentPage.page === GameDetail.Instance;
 					},
-					getTeamSponsors: (teamCode: string) => {
-						var sponsors = 0;
-
-						for (let team of BackersList.TeamSponsors) {
-							if (team.team === Teams[teamCode]) {
-								sponsors = team.backers.length;
-								break;
-							}
-						}
-						return sponsors;
+					getTeamSponsorsCount: (teamCode: string | number) =>
+					{
+						return BackersList.getTeamSponsorsCount(teamCode);
+					},
+					getTeamSponsors: (teamCode: string | number) =>
+					{
+						return BackersList.getTeamSponsors(teamCode);
 					}
 				},
 				watch: {

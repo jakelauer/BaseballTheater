@@ -26,7 +26,15 @@
 		template: $("template#team-sponsor").html(),
 		props: ["teamSponsorTeam"],
 		methods: {
-			getTeamCode
+			getTeamCode,
+			getTeamSponsorsCount: (teamCode: string | number) =>
+			{
+				return BackersList.getTeamSponsorsCount(teamCode);
+			},
+			getTeamSponsors: (teamCode: string | number) =>
+			{
+				return BackersList.getTeamSponsors(teamCode);
+			}
 		}
 	});
 

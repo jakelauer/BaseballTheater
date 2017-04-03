@@ -57,7 +57,7 @@
 		<div class="team home">
 			<a class="team-logo-large away-logo" v-if="gameSummary" v-bind:class="gameSummary.home_file_code" href="/backers"></a>
 			<a class="backers" href="/backers">
-				{{getTeamSponsors(gameSummary.home_file_code)}} team sponsors
+				{{getTeamSponsors(gameSummary.home_file_code)}}
 			</a>
 		</div>
 
@@ -66,7 +66,7 @@
 		<div class="team away">
 			<a class="team-logo-large home-logo" v-if="gameSummary" v-bind:class="gameSummary.away_file_code" href="/backers"></a>
 			<a class="backers" href="/backers">
-				{{getTeamSponsors(gameSummary.away_file_code)}} team sponsors
+				{{getTeamSponsors(gameSummary.away_file_code)}}
 			</a>
 		</div>
 
@@ -102,10 +102,10 @@
 		</div>
 		<div class="team-sponsors">
 			<h1>
-				<span>Team Sponsors</span>
+				<span>Fans</span>
 				
 				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-					Become a team sponsor
+					Become a fan backer
 				</a>
 			</h1>
 			<table>

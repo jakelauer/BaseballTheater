@@ -90,16 +90,38 @@ body #body-wrapper
 
 .backers-wrapper > .team-sponsors > .team-sponsor-team
 {
+	display: flex;
+	flex-direction: column;
+
 	width: 25%;
 	margin-bottom: 1rem;
 	padding: 1rem;
 
 	text-align: center;
+
+	opacity: 0.25;
+}
+
+.backers-wrapper > .team-sponsors > .team-sponsor-team.has-fans
+{
+	opacity: 1;
 }
 
 .backers-wrapper > .team-sponsors > .team-sponsor-team a
 {
-	display: inline-block;
+	display: block;
+
+	width: 100%;
+	max-width: 100px;
+	height: 80px;
+	margin: 0 auto;
+	align-self: flex-end;
+}
+
+.backers-wrapper > .team-sponsors > .team-sponsor-team > div
+{
+	margin-bottom: 2rem;
+	flex: 1 0;
 }
 
 .backers-wrapper > .team-sponsors > .team-sponsor-team .team-logo-large

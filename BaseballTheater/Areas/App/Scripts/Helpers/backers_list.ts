@@ -33,7 +33,7 @@ namespace Theater
 
 		public static get TeamSponsors(): TeamSponsors
 		{
-			const teams = [
+			var teams = [
 				{
 					team: Teams.ari,
 					backers: [
@@ -121,7 +121,9 @@ namespace Theater
 				},
 				{
 					team: Teams.stl,
-					backers: []
+					backers: [
+						"Kuhan"
+					]
 				},
 				{
 					team: Teams.sd,
@@ -153,11 +155,9 @@ namespace Theater
 				}
 			];
 
-			teams.sort((a, b) =>
+			teams = teams.sort((a, b) =>
 			{
-				var fanCount = a.backers.length > b.backers.length ? -1 : 0;
-				var alphabetical = Teams[a.team] < Teams[b.team] ? -1 : 0;
-				return fanCount || alphabetical;
+				return b.backers.length - a.backers.length || a.team - b.team;
 			});
 
 			return teams;
@@ -166,6 +166,33 @@ namespace Theater
 		public static get PremiumSponsors(): PremiumSponsors
 		{
 			return [];
+		}
+
+
+		public static getTeamSponsorsCount(teamCode: string | number)
+		{
+			var sponsors = 0;
+
+			for (var team of BackersList.TeamSponsors)
+			{
+				var matchThis = typeof teamCode === "string" ? Teams[teamCode] : teamCode;
+
+				if (team.team === matchThis)
+				{
+					sponsors = team.backers.length;
+					break;
+				}
+			}
+
+			return sponsors;
+		};
+
+		public static getTeamSponsors(teamCode: string | number)
+		{
+			var sponsors = this.getTeamSponsorsCount(teamCode);
+
+			var fanLingo = sponsors === 1 ? "fan" : "fans";
+			return `${sponsors} ${fanLingo}`;
 		}
 	}
 

@@ -11,17 +11,20 @@
 </template>
 
 <template id="team-sponsor">
-	<div class="team-sponsor-team">
-		<a class="team-logo-large" v-bind:class="getTeamCode(teamSponsorTeam.team)" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-		</a>
+	<div class="team-sponsor-team" v-bind:class="{ 'has-fans' : getTeamSponsorsCount(teamSponsorTeam.team) > 0}">
 		<div v-if="teamSponsorTeam.backers.length === 0">
-			No backers
+			No fans
 		</div>
 		<div v-else>
+			<h3>				
+				{{getTeamSponsors(teamSponsorTeam.team)}}
+			</h3>
 			<template v-for="teamSponsorBacker in teamSponsorTeam.backers">
-				{{teamSponsorBacker}}
+				<span>{{teamSponsorBacker}}</span>
 			</template>
 		</div>
+		<a class="team-logo-large" v-bind:class="getTeamCode(teamSponsorTeam.team)" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
+		</a>
 	</div>
 </template>
 

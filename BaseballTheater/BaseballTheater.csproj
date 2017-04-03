@@ -311,8 +311,6 @@
     <Content Include="images\manifest.json" />
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
