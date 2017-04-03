@@ -48,6 +48,13 @@ namespace Theater
 
 		constructor(data: IGameSummary)
 		{
+			const timezoneOffset = GameSummary.dst(new Date()) ? "-04:00" : "-05:00";
+
+			const localParsedDate = moment(data.time_date, "YYYY/MM/DD hh:mm").add(12, "hours").format();
+			const timeRegex = /([0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})(\-[0-9]{2}:[0-9]{2})/g;
+			const noZone = timeRegex.exec(localParsedDate)[1];
+			const withZone = noZone + timezoneOffset;
+
 			this.id = data.id;
 			this.game_pk = data.game_pk;
 			this.time_date = data.time_date;
@@ -55,7 +62,7 @@ namespace Theater
 			this.time = data.time;
 			this.ampm = data.ampm;
 			this.time_zone = data.time_zone;
-			this.dateObj = moment(data.time_date, "YYYY/MM/DD hh:mm");
+			this.dateObj = moment.parseZone(withZone);
 			this.status = data.status;
 			this.league = data.league;
 			this.inning = data.inning;
@@ -71,6 +78,18 @@ namespace Theater
 			{
 				this.linescore = new Linescore(data.linescore);
 			}
+		}
+
+		private static stdTimezoneOffset(date: Date)
+		{
+			const jan = new Date(date.getFullYear(), 0, 1);
+			const jul = new Date(date.getFullYear(), 6, 1);
+			return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+		}
+
+		private static dst(date: Date)
+		{
+			return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
 		}
 	}
 }

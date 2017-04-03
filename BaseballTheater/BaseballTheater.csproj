@@ -312,9 +312,6 @@
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
     <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
     <Content Include="Areas\App\Views\Templates\_GameDetail.cshtml" />
     <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
@@ -336,7 +333,8 @@
     <Content Include="Shared\Scripts\base.js" />
     <Content Include="Shared\Scripts\libraries\cookies.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
-    <Content Include="Shared\Scripts\libraries\moment.js" />
+    <Content Include="Shared\Scripts\libraries\moment-timezone.js" />
+    <Content Include="Shared\Scripts\libraries\moment-lib.js" />
     <Content Include="Shared\Scripts\libraries\pikaday.js" />
     <Content Include="Shared\Scripts\libraries\vue.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
@@ -355,7 +353,6 @@
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
     <Content Include="Shared\Views\_favicons.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -380,6 +377,7 @@
     <TypeScriptCompile Include="Areas\App\Scripts\Helpers\backers_list.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
+    <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />

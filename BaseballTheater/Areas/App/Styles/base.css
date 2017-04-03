@@ -620,6 +620,11 @@ footer
 	flex: 1 0;
 }
 
+.loading .empty
+{
+	display: none;
+}
+
 @media all and (max-width: 600px)
 {
 	.game-summary table .team-info .team-name

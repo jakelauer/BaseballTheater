@@ -5,6 +5,7 @@
 	export var initializeCurrentPage: () => void;
 	var initializeSite: () => void;
 	var siteLoadingTimeout = 0;
+	export var isLoading = false;
 
 	export var currentPage: IPageParams = null;
 
@@ -55,12 +56,14 @@
 		{
 			$("#body-wrapper").addClass("loading");
 		}, 250);
+		isLoading = true;
 	};
 
 	export var stopLoading = () =>
 	{
 		clearTimeout(siteLoadingTimeout);
 		$("#body-wrapper").removeClass("loading");
+		isLoading = false;
 	};
 
 	$(document).ready(() =>

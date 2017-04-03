@@ -18,12 +18,10 @@
 			linescoreItem,
 			getStatusTime: (game: GameSummary) =>
 			{
-				//var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
-				var eventTime = game.time;
-				var ampm = game.ampm;
-				var timezone = game.time_zone;
+				var time = game.dateObj.local().format("h:mm a");
+				var timeZone = moment.tz(0, moment.tz.guess()).zoneAbbr();
 
-				return `${eventTime}${ampm} ${timezone}`;
+				return `${time} ${timeZone}`;
 			},
 			getInningCount: (game: GameSummary) =>
 			{
