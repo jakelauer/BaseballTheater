@@ -13,14 +13,6 @@
 		}
 	});
 
-	Vue.component("beer-backer",
-	{
-		template: $("template#beer-backer").html(),
-		props: ["backer"],
-		methods: {
-		}
-	});
-
 	Vue.component("team-sponsor",
 	{
 		template: $("template#team-sponsor").html(),

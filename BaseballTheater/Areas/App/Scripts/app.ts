@@ -27,7 +27,7 @@
 	interface IBackersVueData
 	{
 		showBackers: boolean;
-		backers: Backer[];
+		backers: IBacker[];
 		beerBackers: BeerBacker[];
 		teamSponsors: TeamSponsors;
 		premiumSponsors: PremiumSponsors;

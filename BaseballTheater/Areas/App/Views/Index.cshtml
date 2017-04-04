@@ -108,25 +108,11 @@
 					Become a fan backer
 				</a>
 			</h1>
-			<table>
-				<team-sponsor v-for="teamSponsor in teamSponsors" v-bind:team-sponsor-team="teamSponsor"></team-sponsor>
-			</table>
+			
+			<team-sponsor v-for="teamSponsor in teamSponsors" v-bind:team-sponsor-team="teamSponsor"></team-sponsor>
 
 			<span v-if="Object.keys(teamSponsors).length === 0">
 				No premium backers yet.
-			</span>
-		</div>
-		<div class="beer-backers">
-			<h1>
-				<span>Beer Backers</span>
-
-				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-					Become a beer backer
-				</a>
-			</h1>
-			<beer-backer v-for="beerBacker in beerBackers" v-bind:backer="beerBacker"></beer-backer>
-			<span v-if="beerBackers.length === 0">
-				No beer backers yet.
 			</span>
 		</div>
 		<div class="backers">

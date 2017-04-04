@@ -1,7 +1,11 @@
 ﻿// ReSharper disable InconsistentNaming
 namespace Theater
 {
-	export type Backer = string;
+	export interface IBacker
+	{
+		backerName: string;
+		isBeerBacker: boolean;
+	}
 
 	export type BeerBacker = string;
 
@@ -12,7 +16,7 @@ namespace Theater
 	interface ITeamSponsorTeam
 	{
 		team: Teams;
-		backers: Backer[];
+		backers: string[];
 	}
 
 	interface IPremiumSponsor
@@ -24,11 +28,18 @@ namespace Theater
 
 	export class BackersList
 	{
-		public static Backers: Backer[] = [
+		public static Backers: IBacker[] = [
+			{
+				backerName: "Brian Stoops",
+				isBeerBacker: true
+			},
+			{
+				backerName: "Vadakpat C Tirumalai",
+				isBeerBacker: false
+			}
 		];
 
 		public static BeerBackers: BeerBacker[] = [
-			"Brian Stoops"
 		];
 
 		public static get TeamSponsors(): TeamSponsors
@@ -53,6 +64,10 @@ namespace Theater
 				},
 				{
 					team: Teams.chc,
+					backers: []
+				},
+				{
+					team: Teams.cin,
 					backers: []
 				},
 				{
@@ -204,6 +219,7 @@ namespace Theater
 		bal,
 		bos,
 		chc,
+		cin,
 		chw,
 		cle,
 		col,

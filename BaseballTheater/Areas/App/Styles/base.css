@@ -29,7 +29,7 @@ body
 	margin: 0 auto;
 	padding: 60px 10px 0;
 
-	font-family: 'PT Serif', serif;
+	font-family: 'Roboto', sans-serif;
 }
 
 body *
@@ -45,6 +45,7 @@ body #body-wrapper
 .backer
 {
 	font-size: 1.25rem;
+	line-height: 2.25rem;
 }
 
 .backers-wrapper
@@ -91,7 +92,6 @@ body #body-wrapper
 .backers-wrapper > .team-sponsors > .team-sponsor-team
 {
 	display: flex;
-	flex-direction: column;
 
 	width: 25%;
 	margin-bottom: 1rem;
@@ -100,6 +100,7 @@ body #body-wrapper
 	text-align: center;
 
 	opacity: 0.25;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .backers-wrapper > .team-sponsors > .team-sponsor-team.has-fans
@@ -640,6 +641,11 @@ footer
 		transform: none;
 
 		font-size: 20px;
+	}
+
+	.backers-wrapper > .team-sponsors > .team-sponsor-team
+	{
+		width: 33%;
 	}
 }
 

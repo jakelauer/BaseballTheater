@@ -1,31 +1,35 @@
 ﻿<template id="backer">
 	<div class="backer">
-		{{backer}}
-	</div>
-</template>
-
-<template id="beer-backer">
-	<div class="backer">
-		<i class="fa fa-beer" aria-hidden="true"></i> {{backer}}
+		<div class="backer">
+			<i class="fa fa-beer" aria-hidden="true" v-if="backer.isBeerBacker"></i> {{backer.backerName}}
+		</div>
 	</div>
 </template>
 
 <template id="team-sponsor">
-	<div class="team-sponsor-team" v-bind:class="{ 'has-fans' : getTeamSponsorsCount(teamSponsorTeam.team) > 0}">
-		<div v-if="teamSponsorTeam.backers.length === 0">
-			No fans
+	<a class="team-sponsor-team"
+	   v-bind:class="{ 'has-fans' : getTeamSponsorsCount(teamSponsorTeam.team) > 0 }"
+	   v-bind:data-team-code="teamSponsorTeam.team"
+	   href="https://www.patreon.com/bePatron?u=5206592"
+	   target="_blank">
+		
+		<div class="team-logo dark" v-bind:class="getTeamCode(teamSponsorTeam.team)">
 		</div>
-		<div v-else>
-			<h3>				
-				{{getTeamSponsors(teamSponsorTeam.team)}}
-			</h3>
-			<template v-for="teamSponsorBacker in teamSponsorTeam.backers">
-				<span>{{teamSponsorBacker}}</span>
-			</template>
+		<div class="fan-column">
+			<div v-if="teamSponsorTeam.backers.length === 0">
+				No fans
+			</div>
+			<div v-else>
+				<h3>
+					{{getTeamSponsors(teamSponsorTeam.team)}}
+				</h3>
+				<template v-for="teamSponsorBacker in teamSponsorTeam.backers">
+					<span>{{teamSponsorBacker}}</span>
+				</template>
+			</div>
 		</div>
-		<a class="team-logo-large" v-bind:class="getTeamCode(teamSponsorTeam.team)" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-		</a>
-	</div>
+
+	</a>
 </template>
 
 <template id="premium-sponsor">
