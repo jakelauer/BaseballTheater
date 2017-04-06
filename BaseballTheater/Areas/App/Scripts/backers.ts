@@ -8,7 +8,6 @@
 		{
 			App.Instance.backersVueData.showBackers = true;
 			App.Instance.backersVueData.backers = BackersList.Backers;
-			App.Instance.backersVueData.beerBackers = BackersList.BeerBackers;
 			App.Instance.backersVueData.teamSponsors = BackersList.TeamSponsors;
 			App.Instance.backersVueData.premiumSponsors = BackersList.PremiumSponsors;
 		}
@@ -25,7 +24,6 @@
 		public destroy()
 		{
 			App.Instance.backersVueData.backers = [];
-			App.Instance.backersVueData.beerBackers = [];
 			App.Instance.backersVueData.teamSponsors = [];
 			App.Instance.backersVueData.premiumSponsors = [];
 			App.Instance.backersVueData.showBackers = false;

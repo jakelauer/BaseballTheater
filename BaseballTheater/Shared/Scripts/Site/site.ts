@@ -26,7 +26,7 @@
 
 		for (let page of pages)
 		{
-			if(page.matchingUrl.test(location.pathname))
+			if (page.matchingUrl.test(location.pathname))
 			{
 				currentPage = page;
 				if (initializedPages.indexOf(page) > -1)
@@ -53,9 +53,10 @@
 	{
 		clearTimeout(siteLoadingTimeout);
 		siteLoadingTimeout = setTimeout(() =>
-		{
-			$("#body-wrapper").addClass("loading");
-		}, 250);
+			{
+				$("#body-wrapper").addClass("loading");
+			},
+			250);
 		isLoading = true;
 	};
 
@@ -65,6 +66,57 @@
 		$("#body-wrapper").removeClass("loading");
 		isLoading = false;
 	};
+
+	export var trackEvent = (category: string, action: string, label?: string, value?: any, metricObject?: any) =>
+	{
+		var data: any = {};
+
+		if (label !== undefined)
+		{
+			data.eventLabel = label;
+		}
+
+		if (value !== undefined)
+		{
+			data.eventValue = value;
+		}
+
+		metricObject = metricObject || {};
+		$.extend(data, metricObject);
+
+		if (!location.href.match(".local"))
+		{
+			window.ga("send", "event", category, action, data);
+		}
+	}
+
+	window.onerror = (error, filename, line, column, stackTrace) =>
+	{
+		try
+		{
+			if (typeof stackTrace != "undefined" && stackTrace != null)
+			{
+				var pathname = window.location.pathname;
+				var errorInfo = stackTrace.stack;
+
+				trackEvent("Errors", pathname, errorInfo);
+			}
+		}
+		catch (e)
+		{
+		}
+	}
+
+	window.addEventListener("unhandledrejection",
+		(event: any) =>
+		{
+			var info = `Unhandled rejection (reason: ${event.reason}).`;
+			try {
+				trackEvent("Errors", window.location.pathname, info, event.reason.stack);
+			}
+			catch (e) {
+			}
+		});
 
 	$(document).ready(() =>
 	{

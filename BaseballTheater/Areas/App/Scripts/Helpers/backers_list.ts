@@ -28,18 +28,27 @@ namespace Theater
 
 	export class BackersList
 	{
+		public static async getBackersList()
+		{
+			return new Promise((resolve, reject) =>
+			{
+				$.ajax({
+					url: "/Data/Patreon",
+					dataType: "json",
+					success: (response) => resolve(response)
+				});
+			});
+		}
+
 		public static Backers: IBacker[] = [
 			{
 				backerName: "Brian Stoops",
 				isBeerBacker: true
-			},
-			{
-				backerName: "Vadakpat C Tirumalai",
-				isBeerBacker: false
 			}
-		];
-
-		public static BeerBackers: BeerBacker[] = [
+			//{
+			//	backerName: "Vadakpat C Tirumalai",
+			//	isBeerBacker: false
+			//}
 		];
 
 		public static get TeamSponsors(): TeamSponsors
@@ -128,7 +137,9 @@ namespace Theater
 				},
 				{
 					team: Teams.phi,
-					backers: []
+					backers: [
+						"Curtis Gale"
+					]
 				},
 				{
 					team: Teams.pit,

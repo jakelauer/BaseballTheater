@@ -1,0 +1,6 @@
+﻿@using BaseballTheater.Areas.Data.Models.Patreon
+@{
+	Layout = "_DataLayout.cshtml";
+}
+
+@Html.Raw(Json.Encode(BackersList.Instance))

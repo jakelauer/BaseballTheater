@@ -55,7 +55,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES6</TypeScriptTarget>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
@@ -66,7 +66,7 @@
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
@@ -228,6 +228,11 @@
     <Compile Include="Areas\App\BundleConfig.cs" />
     <Compile Include="Areas\App\AppAreaRegistration.cs" />
     <Compile Include="Areas\App\AppController.cs" />
+    <Compile Include="Areas\Data\DataController.cs" />
+    <Compile Include="Areas\Data\DataAreaRegistration.cs" />
+    <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
+    <Compile Include="Areas\Data\Models\Patreon\Teams.cs" />
+    <Compile Include="Areas\Data\Models\Patreon\BackerTypes.cs" />
     <Compile Include="Areas\Proxy\Controllers\ProxyController.cs" />
     <Compile Include="Areas\Proxy\Models\ProxyModel.cs" />
     <Compile Include="Areas\Proxy\ProxyAreaRegistration.cs" />
@@ -243,6 +248,8 @@
     <Content Include="Areas\App\Styles\game.css" />
     <Content Include="Areas\App\Styles\game-list.css" />
     <Content Include="Areas\App\Styles\pikaday.css" />
+    <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
+    <None Include="Areas\Data\Views\patreon.cshtml" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -320,6 +327,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Areas\Data\Views\web.config" />
     <None Include="Properties\PublishProfiles\amazon.pubxml" />
     <Content Include="images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
     <Content Include="images\ui-bg_dots-small_65_a6a6a6_2x2.png" />
@@ -377,6 +385,7 @@
     <TypeScriptCompile Include="Areas\App\Scripts\Helpers\backers_list.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
+    <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
