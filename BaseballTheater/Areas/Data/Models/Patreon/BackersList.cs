@@ -5,12 +5,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	public class BackersList
 	{
 		public static BackersList Instance = new BackersList();
-
-		public PremiumSponsor[] PremiumSponsors =
-		{
-
-		};
-
+		
 		public Backer[] Backers =
 		{
 			new Backer

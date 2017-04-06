@@ -172,11 +172,11 @@
 					},
 					getTeamSponsorsCount: (teamCode: string | number) =>
 					{
-						return BackersList.getTeamSponsorsCount(teamCode);
+						return BackersList.Instance.getTeamSponsorsCount(teamCode);
 					},
 					getTeamSponsors: (teamCode: string | number) =>
 					{
-						return BackersList.getTeamSponsors(teamCode);
+						return BackersList.Instance.getTeamSponsors(teamCode);
 					}
 				},
 				watch: {
@@ -221,16 +221,4 @@
 		matchingUrl: /.*/,
 		page: App.Instance
 	});
-}
-
-if (!String.prototype.endsWith) {
-	String.prototype.endsWith = function (searchString, position) {
-		var subjectString = this.toString();
-		if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
-			position = subjectString.length;
-		}
-		position -= searchString.length;
-		var lastIndex = subjectString.lastIndexOf(searchString, position);
-		return lastIndex !== -1 && lastIndex === position;
-	};
 }

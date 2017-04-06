@@ -84,7 +84,7 @@
 
 						for (let thumb of thumbs)
 						{
-							if (thumb.__text.endsWith(jpgSearch))
+							if (Utility.endsWith(thumb.__text, jpgSearch))
 							{
 								thumbFinal = thumb.__text;
 							}

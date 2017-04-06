@@ -59,14 +59,13 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>
-    </TypeScriptModuleKind>
+    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>False</TypeScriptSourceMap>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
@@ -407,6 +406,7 @@
     <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\utility.ts" />
     <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
   </ItemGroup>
   <PropertyGroup>

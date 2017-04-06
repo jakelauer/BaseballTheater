@@ -1,15 +1,18 @@
 ﻿namespace Theater
 {
-	export class Backers extends Site.Page
+	export class BackersPage extends Site.Page
 	{
-		public static Instance = new Backers();
+		public static Instance = new BackersPage();
 
-		public initialize()
+		public async initialize()
 		{
 			App.Instance.backersVueData.showBackers = true;
-			App.Instance.backersVueData.backers = BackersList.Backers;
-			App.Instance.backersVueData.teamSponsors = BackersList.TeamSponsors;
-			App.Instance.backersVueData.premiumSponsors = BackersList.PremiumSponsors;
+
+			var backers = await BackersList.Instance.getBackers();
+
+			App.Instance.backersVueData.backers = backers.Backers || [];
+			App.Instance.backersVueData.teamSponsors = backers.TeamSponsors || [];
+			App.Instance.backersVueData.premiumSponsors = backers.PremiumSponsors || [];
 		}
 
 		public dataBind()
@@ -32,6 +35,6 @@
 
 	Site.addPage({
 		matchingUrl: /^\/backers(.*)/,
-		page: Backers.Instance
+		page: BackersPage.Instance
 	});
 }

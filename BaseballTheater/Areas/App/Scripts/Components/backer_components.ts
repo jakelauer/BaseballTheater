@@ -21,11 +21,11 @@
 			getTeamCode,
 			getTeamSponsorsCount: (teamCode: string | number) =>
 			{
-				return BackersList.getTeamSponsorsCount(teamCode);
+				return BackersList.Instance.getTeamSponsorsCount(teamCode);
 			},
 			getTeamSponsors: (teamCode: string | number) =>
 			{
-				return BackersList.getTeamSponsors(teamCode);
+				return BackersList.Instance.getTeamSponsors(teamCode);
 			}
 		}
 	});
