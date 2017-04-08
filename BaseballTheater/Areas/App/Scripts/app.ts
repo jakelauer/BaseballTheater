@@ -1,4 +1,6 @@
-﻿namespace Theater
+﻿"use strict";
+
+namespace Theater
 {
 	export var startTime: moment.Moment;
 	export var endTime: moment.Moment;
@@ -28,8 +30,8 @@
 	{
 		showBackers: boolean;
 		backers: IBacker[];
-		teamSponsors: TeamSponsors;
-		premiumSponsors: PremiumSponsors;
+		teamSponsors: ITeamSponsorTeam[];
+		premiumSponsors: IPremiumSponsor[];
 	}
 
 	export class App extends Site.Page
@@ -86,6 +88,8 @@
 
 		public initialize()
 		{
+			BackersList.Instance.getBackers();
+
 			App.Instance.settingsVueData.showingGameList = false;
 
 			$(".menu-trigger, .side-menu a").on("click",
@@ -199,6 +203,8 @@
 				el: ".backers-wrapper",
 				data: this.backersVueData
 			});
+
+			$("html").addClass("ready");
 		}
 
 		public dataBind()

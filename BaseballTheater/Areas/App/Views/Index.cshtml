@@ -95,7 +95,9 @@
 					Become a premium sponsor
 				</a>
 			</h1>
-			<premium-sponsor v-for="premiumSponsor in premiumSponsors" v-bind:premium-sponsor-team="premiumSponsor"></premium-sponsor>
+			<div class="backers">
+				<premium-sponsor v-for="premiumSponsor in premiumSponsors" v-bind:premium-sponsor="premiumSponsor"></premium-sponsor>
+			</div>
 			<span v-if="premiumSponsors.length === 0">
 				No backers yet.
 			</span>

@@ -33,7 +33,7 @@
 	Vue.component("premium-sponsor",
 	{
 		template: $("template#premium-sponsor").html(),
-		props: ["premiumSponsorTeam"],
+		props: ["premiumSponsor"],
 		methods: {
 			getTeamCode
 		}

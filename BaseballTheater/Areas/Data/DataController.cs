@@ -4,7 +4,7 @@ namespace BaseballTheater.Areas.Data
 {
 	public class DataController : Controller
 	{
-		[OutputCache(Duration = 60)]
+		[OutputCache(Duration = 300)]
 		public ActionResult Patreon()
 		{
 			return View();

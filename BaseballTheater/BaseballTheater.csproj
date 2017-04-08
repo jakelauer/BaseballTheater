@@ -59,8 +59,9 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
@@ -230,6 +231,7 @@
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
+    <Compile Include="Areas\Data\Models\Patreon\PatreonModel.cs" />
     <Compile Include="Areas\Data\Models\Patreon\Teams.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackerTypes.cs" />
     <Compile Include="Areas\Proxy\Controllers\ProxyController.cs" />
@@ -248,7 +250,7 @@
     <Content Include="Areas\App\Styles\game-list.css" />
     <Content Include="Areas\App\Styles\pikaday.css" />
     <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
-    <None Include="Areas\Data\Views\patreon.cshtml" />
+    <Content Include="Areas\Data\Views\patreon.cshtml" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -270,6 +272,7 @@
     <Content Include="images\apple-icon-76x76.png" />
     <Content Include="images\apple-icon-precomposed.png" />
     <Content Include="images\apple-icon.png" />
+    <Content Include="images\backers\storeporter.png" />
     <Content Include="images\favicon-16x16.png" />
     <Content Include="images\favicon-32x32.png" />
     <Content Include="images\favicon-96x96.png" />
@@ -311,6 +314,7 @@
     <Content Include="images\ms-icon-150x150.png" />
     <Content Include="images\ms-icon-310x310.png" />
     <Content Include="images\ms-icon-70x70.png" />
+    <Content Include="images\patreon-button-large.png" />
     <Content Include="images\patreon2.png" />
     <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
@@ -318,6 +322,8 @@
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
     <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
+    <Content Include="Shared\Scripts\libraries\bluebird.js" />
+    <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
     <Content Include="Areas\App\Views\Templates\_GameDetail.cshtml" />
     <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
@@ -343,7 +349,8 @@
     <Content Include="Shared\Scripts\libraries\moment-timezone.js" />
     <Content Include="Shared\Scripts\libraries\moment-lib.js" />
     <Content Include="Shared\Scripts\libraries\pikaday.js" />
-    <Content Include="Shared\Scripts\libraries\vue.js" />
+    <Content Include="Shared\Scripts\libraries\vue.dev.js" />
+    <Content Include="Shared\Scripts\libraries\vue.prod.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
     <Content Include="Areas\App\Styles\base.css" />
     <Content Include="Areas\App\Styles\teams.css" />

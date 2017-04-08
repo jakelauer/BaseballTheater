@@ -11,10 +11,6 @@ interface IBacker {
 	isBeerBacker: boolean;
 }
 
-type TeamSponsors = ITeamSponsorTeam[]
-
-type PremiumSponsors = IPremiumSponsor[];
-
 interface ITeamSponsorTeam {
 	team: number;
 	backers: string[];
@@ -24,11 +20,18 @@ interface IPremiumSponsor {
 	backerName: string;
 	team: number;
 	url?: string;
+	logo?: string;
 }
 
 interface Backers
 {
-	PremiumSponsors: PremiumSponsors;
-	TeamSponsors: TeamSponsors;
+	PremiumSponsors: IPremiumSponsor[];
+	TeamSponsors: ITeamSponsorTeam[];
 	Backers: IBacker[];
+}
+
+interface PatreonData
+{
+	Backers: Backers;
+	GoalPercentage: number;
 }

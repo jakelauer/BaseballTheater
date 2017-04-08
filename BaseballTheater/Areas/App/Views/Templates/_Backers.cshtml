@@ -34,8 +34,10 @@
 
 <template id="premium-sponsor">
 	<div class="backer">
-		<template v-for="premiumSponsorBacker in premiumSponsorTeam.backers">
-			{{premiumSponsorBacker.backerName}}
-		</template>
+		<a v-bind:href="premiumSponsor.url" v-if="premiumSponsor.url" target="_blank">
+			<img v-if="premiumSponsor.logo" v-bind:src="premiumSponsor.logo"/>
+			<span v-else>{{premiumSponsor.backerName}}</span>
+		</a>
+		<span v-else>{{premiumSponsor.backerName}}</span>
 	</div>
 </template>

@@ -40,6 +40,13 @@ body *
 body #body-wrapper
 {
 	min-height: 600px;
+
+	opacity: 0;
+}
+
+html.ready body #body-wrapper
+{
+	opacity: 1;
 }
 
 .backer
@@ -133,6 +140,35 @@ body #body-wrapper
 .backers-wrapper > .team-sponsors h1
 {
 	width: 100%;
+}
+
+.premium-sponsors .backers
+{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.premium-sponsors .backer
+{
+	width: 25%;
+}
+
+.premium-sponsors .backer img
+{
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	max-height: 100%;
+}
+
+.premium-sponsors .backer a
+{
+	opacity: 0.5;
+}
+
+.premium-sponsors .backer a:hover
+{
+	opacity: 1;
 }
 
 header

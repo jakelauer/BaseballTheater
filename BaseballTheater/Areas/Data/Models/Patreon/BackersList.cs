@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BaseballTheater.Areas.Data.Models.Patreon
 {
@@ -6,7 +7,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	{
 		public static BackersList Instance = new BackersList();
 		
-		public Backer[] Backers =
+		public List<Backer> Backers = new List<Backer>
 		{
 			new Backer
 			{
@@ -15,130 +16,138 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			}
 		};
 
-		public TeamSponsorTeam[] TeamSponsors
+		public List<TeamSponsorTeam> TeamSponsors
 		{
 			get
 			{
 				var sorted = _teamSponsors
-					.OrderByDescending(a => a.backers.Length)
+					.OrderByDescending(a => a.backers.Count)
 					.ThenByDescending(a => a.team);
 
-				return sorted.ToArray();
+				return sorted.ToList();
 			}
 		}
 
-		private readonly TeamSponsorTeam[] _teamSponsors =
+		public List<PremiumSponsor> PremiumSponsors = new List<PremiumSponsor>
+		{
+			new PremiumSponsor
+			{
+				backerName = "StorePorter",
+				logo = "/images/backers/storeporter.png",
+				team = Teams.chc,
+				url = "http://storeporter.com"
+			}
+		};
+
+		private readonly List<TeamSponsorTeam> _teamSponsors = new List<TeamSponsorTeam>
 		{
 			new TeamSponsorTeam
 			{
 				team = Teams.ari,
-				backers = new string[]
-				{
-
-				}
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.atl,
-				backers = new string[]
-				{
-
-				}
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.bal,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.bos,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.chc,
-				backers = new string[] { }
+				backers = new List<string>()
+				{
+					"StorePorter"
+				}
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.cin,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.chw,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.cle,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.col,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.det,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.hou,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.kc,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.ana,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.la,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.mia,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.mil,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.min,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.nym,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.nyy,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.oak,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.phi,
-				backers = new[]
+				backers = new List<string>
 				{
 					"Curtis Gale"
 				}
@@ -146,12 +155,12 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsorTeam
 			{
 				team = Teams.pit,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.stl,
-				backers = new[]
+				backers = new List<string>
 				{
 					"Kuhan"
 				}
@@ -159,37 +168,37 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsorTeam
 			{
 				team = Teams.sd,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.sf,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.sea,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.tb,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.tex,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.tor,
-				backers = new string[] { }
+				backers = new List<string>()
 			},
 			new TeamSponsorTeam
 			{
 				team = Teams.was,
-				backers = new string[] { }
+				backers = new List<string>()
 			}
 		};
 	}

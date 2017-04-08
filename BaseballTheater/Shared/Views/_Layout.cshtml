@@ -15,27 +15,27 @@
 <!DOCTYPE html>
 
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<title>@ViewBag.Title</title>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<title>@ViewBag.Title</title>
 
-		<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
-		<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-		@Styles.Render("~/stylebundles/app")
+	@Styles.Render("~/stylebundles/app")
 
-		@Html.Partial("_favicons")
+	@Html.Partial("_favicons")
 
-		<meta name="msapplication-TileColor" content="#ffffff">
-		<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
-		<meta name="theme-color" content="#9e1414">
-		<meta name="Description" content="@description" />
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
+	<meta name="theme-color" content="#9e1414">
+	<meta name="Description" content="@description" />
 		
-		@RenderSection("ExtraHead", false)
+	@RenderSection("ExtraHead", false)
 
-		<title>@ViewBag.Title</title>
-	</head>
+	<title>@ViewBag.Title</title>
+</head>
 <body class="@ViewBag.BodyClass">
 
 
@@ -46,9 +46,26 @@
 	</div>
 </header>
 <div class="side-menu">
-	<a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
-	<a href="/backers"><i class="fa fa-smile-o" aria-hidden="true"></i> Backers</a>
-	<a href="https://github.com/BaseballTheater" target="_blank"><i class="fa fa-github" aria-hidden="true"></i> View on GitHub</a>
+	<a href="/">
+		<i class="fa fa-home" aria-hidden="true"></i> 
+		Games
+	</a>
+	<a href="/backers">
+		<i class="fa fa-handshake-o" aria-hidden="true"></i>
+		Backers
+	</a>
+	<a href="https://www.reddit.com/r/BaseballTheater/" target="_blank">
+		<i class="fa fa-reddit" aria-hidden="true"></i> 
+		Updates
+	</a>
+	<a href="https://www.reddit.com/r/BaseballTheater/submit" target="_blank">
+		<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+		Report a Problem
+	</a>
+	<a href="https://github.com/BaseballTheater" target="_blank">
+		<i class="fa fa-github" aria-hidden="true"></i>
+		Contribute on GitHub
+	</a>
 
 	@Html.Partial("_patreon")
 </div>
@@ -68,7 +85,7 @@
 	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
 	<br /><br />
 	<div class="links">
-		<a href="mailto:baseballtheater@gmail.com" title="Send me your ideas!" target="_blank">
+		<a href="https://www.reddit.com/r/BaseballTheater/submit" title="Send me your ideas!" target="_blank">
 			Send me your feedback!
 		</a>
 	</div>
@@ -85,12 +102,13 @@
 	ga('send', 'pageview');
 
 </script>
-
-	@Scripts.Render("~/bundles/lib")
-	@Scripts.Render("~/scriptbundles/mlbdataserver")
-	@Scripts.Render("~/scriptbundles/site")
 	
-	@Scripts.Render("~/scriptbundles/app")
+<script type="text/javascript" src="~/Shared/Scripts/libraries/bluebird.min.js"></script>
+@Scripts.Render("~/scriptbundles/lib")
+@Scripts.Render("~/scriptbundles/mlbdataserver")
+@Scripts.Render("~/scriptbundles/site")
+	
+@Scripts.Render("~/scriptbundles/app")
 
 @RenderSection("Scripts", false)
 	

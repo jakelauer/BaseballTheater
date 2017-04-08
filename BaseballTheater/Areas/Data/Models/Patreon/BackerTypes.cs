@@ -1,4 +1,6 @@
-﻿namespace BaseballTheater.Areas.Data.Models.Patreon
+﻿using System.Collections.Generic;
+
+namespace BaseballTheater.Areas.Data.Models.Patreon
 {
 	public class Backer
 	{
@@ -11,11 +13,12 @@
 		public string backerName { get; set; }
 		public Teams team { get; set; }
 		public string url { get; set; }
+		public string logo { get; set; }
 	}
 
 	public class TeamSponsorTeam
 	{
 		public Teams team { get; set; }
-		public string[] backers { get; set; }
+		public List<string> backers { get; set; }
 	}
 }
