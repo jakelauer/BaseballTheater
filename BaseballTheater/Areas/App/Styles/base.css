@@ -221,6 +221,7 @@ header .menu-trigger:hover
 {
 	position: fixed;
 	z-index: 99999;
+	overflow: auto;
 
 	top: 50px;
 	left: 0;
@@ -233,6 +234,11 @@ header .menu-trigger:hover
 
 	background: rgba(255, 255, 255, 0.95);
 	box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+html.side-menu-open
+{
+	overflow: hidden;
 }
 
 html.side-menu-open .side-menu
