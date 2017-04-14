@@ -1,0 +1,138 @@
+﻿.backer
+{
+	font-size: 1.25rem;
+	line-height: 2.25rem;
+}
+
+.backers-wrapper
+{
+	display: flex;
+	flex-wrap: wrap;
+
+	a:hover
+	{
+		text-decoration: none;
+	}
+
+	h3
+	{
+		margin-top: 0;
+	}
+
+	> div
+	{
+		width: 100%;
+		min-height: 50vh;
+	}
+
+	h1
+	{
+		display: flex;
+
+		margin-bottom: 2rem;
+
+		span
+		{
+			display: block;
+			flex: 1 0;
+		}
+	}
+
+	a.become
+	{
+		display: block;
+
+		text-align: left;
+
+		font-size: 1.5rem;
+		font-weight: normal;
+	}
+
+	> .team-sponsors
+	{
+		display: flex;
+		flex-wrap: wrap;
+
+		h1
+		{
+			width: 100%;
+		}
+	}
+
+	.team-sponsor-team
+	{
+		display: flex;
+
+		width: 25%;
+		padding: 2rem 1rem 1rem;
+
+		text-align: center;
+
+		opacity: 0.25;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+		&.has-fans
+		{
+			opacity: 1;
+		}
+
+		&:hover
+		{
+			background: rgba(0, 0, 0, 0.1);
+		}
+
+		a
+		{
+			display: block;
+
+			width: 100%;
+			max-width: 100px;
+			height: 80px;
+			margin: 0 auto;
+			align-self: flex-end;
+		}
+
+		> div
+		{
+			margin-bottom: 2rem;
+			flex: 1 0;
+		}
+
+		.team-logo-large
+		{
+			margin-bottom: 1rem;
+		}
+	}
+}
+
+.premium-sponsors
+{
+	.backers
+	{
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.backer
+	{
+		width: 25%;
+
+		img
+		{
+			width: auto;
+			max-width: 100%;
+			height: auto;
+			max-height: 100%;
+		}
+
+		a
+		{
+			opacity: 0.5;
+
+			&:hover
+			{
+				opacity: 1;
+			}
+		}
+	}
+}

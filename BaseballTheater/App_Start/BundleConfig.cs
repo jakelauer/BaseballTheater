@@ -1,4 +1,8 @@
-﻿using System.Web.Optimization;
+﻿using BundleTransformer.Core.Builders;
+using BundleTransformer.Core.Orderers;
+using BundleTransformer.Core.Resolvers;
+using BundleTransformer.Core.Transformers;
+using System.Web.Optimization;
 
 namespace BaseballTheater
 {
@@ -7,7 +11,7 @@ namespace BaseballTheater
 		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-
+			BundleResolver.Current = new CustomBundleResolver();
 
 			var libraries = new ScriptBundle("~/scriptbundles/lib")
 				.Include("~/Shared/Scripts/libraries/cookies.js")
@@ -31,6 +35,16 @@ namespace BaseballTheater
 
 			bundles.Add(new ScriptBundle("~/scriptbundles/site")
 				.IncludeDirectory("~/Shared/Scripts/Site", "*.js", true));
+
+			var scssBundle = new Bundle("~/stylebundles/scss")
+			{
+				Builder = new NullBuilder(),
+				Orderer = new NullOrderer()
+			};
+			scssBundle.Transforms.Add(new StyleTransformer());
+			scssBundle.IncludeDirectory("~/", "*.scss", true);
+			scssBundle.IncludeDirectory("~/", "*.css", true);
+			bundles.Add(scssBundle);
 		}
 	}
 }

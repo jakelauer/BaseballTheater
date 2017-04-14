@@ -76,6 +76,7 @@ namespace Theater
 
 		public highlightsVueData: IHighlightsVueData = {
 			highlights: [],
+			boxScore: null,
 			gameSummary: null
 		}
 

@@ -20,5 +20,23 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	{
 		public Teams team { get; set; }
 		public List<string> backers { get; set; }
+
+		public TeamSponsorTeam(Teams team)
+		{
+			this.team = team;
+			this.backers = new List<string>();
+		}
+	}
+
+	public class TeamSponsor
+	{
+		public Teams team { get; set; }
+		public string backerName { get; set; }
+
+		public TeamSponsor(Teams team, string backerName)
+		{
+			this.team = team;
+			this.backerName = backerName;
+		}
 	}
 }

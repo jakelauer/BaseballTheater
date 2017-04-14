@@ -4,10 +4,11 @@
 	{
 		private static readonly urlBase = "http://gd2.mlb.com";
 
-		private directoryUrl: string;
-		private highlightsUrl: string;
-		private gameCenterUrl: string;
-		private gameSummaryUrl: string;
+		private readonly directoryUrl: string;
+		private readonly highlightsUrl: string;
+		private readonly gameCenterUrl: string;
+		private readonly boxScoreUrl: string;
+		private readonly gameSummaryUrl: string;
 
 		public constructor(directory: string, directoryIsFullyQualified = false)
 		{
@@ -18,6 +19,7 @@
 			this.highlightsUrl = this.directoryUrl + "/media/mobile.xml";
 			this.gameCenterUrl = this.directoryUrl + "/gamecenter.xml";
 			this.gameSummaryUrl = this.directoryUrl + "/linescore.xml";
+			this.boxScoreUrl = this.directoryUrl + "/boxscore.xml";
 		}
 
 		public async getHighlights()
@@ -27,21 +29,26 @@
 			return highlightsCollection;
 		}
 
-		public async getGameCenter(): Promise<IGameCenter>
+		public async getGameCenter()
 		{
 			const gameCenterObj = await Utils.XmlLoader.load<IGameCenter>(this.gameCenterUrl, "gameCenter");
 
 			return gameCenterObj;
 		}
 
-		public async getGameSUmmary()
-		{
+		public async getGameSummary() {
 			const gameSummaryObj = await Utils.XmlLoader.load<IGameSummary>(this.gameSummaryUrl, "gameSummary");
 
 			return gameSummaryObj;
 		}
 
-		private async get<T>(url: string): Promise<T>
+		public async getBoxscore() {
+			const boxScoreObj = await Utils.XmlLoader.load<IBoxScoreContainer>(this.boxScoreUrl, "boxScore");
+
+			return new BoxScore(boxScoreObj);
+		}
+
+		private async get<T>(url: string)
 		{
 			try
 			{

@@ -1,0 +1,63 @@
+﻿.calendar
+{
+	cursor: pointer;
+}
+
+#calendarpicker
+{
+	text-align: center;
+
+	border: 0;
+
+	font-size: 1.5rem;
+}
+
+#datepicker-wrapper
+{
+	position: relative;
+	display: none;
+}
+
+#datepicker
+{
+	position: absolute;
+}
+
+.game-list
+{
+	display: flex;
+	flex-wrap: wrap;
+
+	.game-summary
+	{
+		width: 50%;
+		padding: 10px;
+	}
+}
+
+.flex
+{
+	display: flex;
+}
+
+@media all and (max-width: 800px)
+{
+	.game-list
+	{
+		> div
+		{
+			width: 100%;
+			flex: none;
+		}
+
+		.game-summary
+		{
+			width: 100%;
+		}
+	}
+
+	.settings .tools
+	{
+		margin-top: 1rem;
+	}
+}

@@ -7,8 +7,9 @@
 
 @{ 
 	Html.RenderPartial("Templates/_GameSummary");
-	Html.RenderPartial("Templates/_GameDetail");
+	Html.RenderPartial("Templates/_Highlight");
 	Html.RenderPartial("Templates/_Backers");
+	Html.RenderPartial("Templates/_BoxScore");
 }
 
 <div class="settings flex" v-if="showingGameList">
@@ -54,15 +55,6 @@
 <div class="highlights">
 	<div class="highlight-game-summary" v-if="gameSummary">
 
-		<div class="team home">
-			<a class="team-logo-large away-logo" v-if="gameSummary" v-bind:class="gameSummary.home_file_code" href="/backers"></a>
-			<a class="backers" href="/backers">
-				{{getTeamSponsors(gameSummary.home_file_code)}}
-			</a>
-		</div>
-
-		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
-		
 		<div class="team away">
 			<a class="team-logo-large home-logo" v-if="gameSummary" v-bind:class="gameSummary.away_file_code" href="/backers"></a>
 			<a class="backers" href="/backers">
@@ -70,7 +62,20 @@
 			</a>
 		</div>
 
+		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
+
+		<div class="team home">
+			<a class="team-logo-large away-logo" v-if="gameSummary" v-bind:class="gameSummary.home_file_code" href="/backers"></a>
+			<a class="backers" href="/backers">
+				{{getTeamSponsors(gameSummary.home_file_code)}}
+			</a>
+		</div>
+
 	</div>
+	
+	<template v-if="boxScore">
+		<boxscore v-bind:box-score="boxScore"></boxscore>
+	</template>
 
 	<template v-if="highlights && highlights.length > 0">
 		<highlight v-for="highlight in highlights" v-bind:highlight="highlight">

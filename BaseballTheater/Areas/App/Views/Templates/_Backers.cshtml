@@ -24,7 +24,7 @@
 					{{getTeamSponsors(teamSponsorTeam.team)}}
 				</h3>
 				<template v-for="teamSponsorBacker in teamSponsorTeam.backers">
-					<span>{{teamSponsorBacker}}</span>
+					<div>{{teamSponsorBacker}}</div>
 				</template>
 			</div>
 		</div>
@@ -38,6 +38,6 @@
 			<img v-if="premiumSponsor.logo" v-bind:src="premiumSponsor.logo"/>
 			<span v-else>{{premiumSponsor.backerName}}</span>
 		</a>
-		<span v-else>{{premiumSponsor.backerName}}</span>
+		<div v-else>{{premiumSponsor.backerName}}</div>
 	</div>
 </template>

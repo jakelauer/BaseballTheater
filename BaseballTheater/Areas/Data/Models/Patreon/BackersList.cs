@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BaseballTheater.Areas.Data.Models.Patreon
@@ -20,7 +21,30 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 		{
 			get
 			{
-				var sorted = _teamSponsors
+				var teamSponsorsTeams = new List<TeamSponsorTeam>();
+
+				foreach (var sponsor in _teamSponsors)
+				{
+					var existing = teamSponsorsTeams.FirstOrDefault(a => a.team == sponsor.team);
+					if (existing == null)
+					{
+						existing = new TeamSponsorTeam(sponsor.team);
+
+						teamSponsorsTeams.Add(existing);
+					}
+
+					existing.backers.Add(sponsor.backerName);
+				}
+
+				foreach (Teams team in Enum.GetValues(typeof(Teams)))
+				{
+					if (teamSponsorsTeams.All(a => a.team != team))
+					{
+						teamSponsorsTeams.Add(new TeamSponsorTeam(team));
+					}
+				}
+
+				var sorted = teamSponsorsTeams
 					.OrderByDescending(a => a.backers.Count)
 					.ThenByDescending(a => a.team);
 
@@ -39,167 +63,13 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			}
 		};
 
-		private readonly List<TeamSponsorTeam> _teamSponsors = new List<TeamSponsorTeam>
+		private readonly List<TeamSponsor> _teamSponsors = new List<TeamSponsor>
 		{
-			new TeamSponsorTeam
-			{
-				team = Teams.ari,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.atl,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.bal,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.bos,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.chc,
-				backers = new List<string>()
-				{
-					"StorePorter"
-				}
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.cin,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.chw,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.cle,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.col,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.det,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.hou,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.kc,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.ana,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.la,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.mia,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.mil,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.min,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.nym,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.nyy,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.oak,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.phi,
-				backers = new List<string>
-				{
-					"Curtis Gale"
-				}
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.pit,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.stl,
-				backers = new List<string>
-				{
-					"Kuhan"
-				}
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.sd,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.sf,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.sea,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.tb,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.tex,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.tor,
-				backers = new List<string>()
-			},
-			new TeamSponsorTeam
-			{
-				team = Teams.was,
-				backers = new List<string>()
-			}
+			new TeamSponsor(Teams.chc, "StorePorter"),
+			new TeamSponsor(Teams.chc, "Brad Koons"),
+			new TeamSponsor(Teams.phi, "Curtis Gale"),
+			new TeamSponsor(Teams.stl, "Kuhan")
 		};
+
 	}
 }

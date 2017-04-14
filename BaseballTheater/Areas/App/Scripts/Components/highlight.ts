@@ -62,7 +62,7 @@
 			},
 			getTitle: (highlight: IHighlight) =>
 			{
-				return highlight.recap
+				return highlight.recap && App.Instance.settingsVueData.hideScores
 					? "Recap (score hidden)"
 					: highlight.headline;
 			},

@@ -4,6 +4,7 @@
 	{
 		highlights: IHighlight[];
 		gameSummary: GameSummary;
+		boxScore: BoxScore;
 	}
 
 	export class GameDetail extends Site.Page
@@ -42,6 +43,7 @@
 		{
 			App.Instance.highlightsVueData.highlights = [];
 			App.Instance.highlightsVueData.gameSummary = null;
+			App.Instance.highlightsVueData.boxScore = null;
 		}
 
 		private async getData()
@@ -78,6 +80,15 @@
 				else
 				{
 					App.Instance.highlightsVueData.highlights = [];
+				}
+
+				if (Config.BoxScoresEnabled)
+				{
+					const boxScore = await this.getBoxScore(currentGame);
+					if (boxScore !== null)
+					{
+						App.Instance.highlightsVueData.boxScore = boxScore;
+					}
 				}
 			}
 			catch (e)
@@ -119,6 +130,18 @@
 				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
 				const highlights = await gameDetailCreator.getHighlights();
 				return highlights;
+			}
+
+			return null;
+		}
+
+		private async getBoxScore(currentGame: GameSummary)
+		{
+			if (currentGame !== null)
+			{
+				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+				const boxScore = await gameDetailCreator.getBoxscore();
+				return boxScore;
 			}
 
 			return null;

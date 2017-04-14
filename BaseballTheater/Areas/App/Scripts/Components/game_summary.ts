@@ -12,7 +12,7 @@
 		methods: {
 			getGameLink: (game: GameSummary) =>
 			{
-				const dayString = game.dateObj.local().format("YYYYMMDD");
+				const dayString = game.dateObjLocal.format("YYYYMMDD");
 				return `/game/${dayString}/${game.game_pk}`;
 			},
 			linescoreItem,

@@ -45,6 +45,7 @@ namespace Theater
 		private _linescore: ILinescore;
 		public linescore: Linescore;
 		public dateObj: moment.Moment;
+		public dateObjLocal: moment.Moment;
 
 		constructor(data: IGameSummary)
 		{
@@ -63,6 +64,7 @@ namespace Theater
 			this.ampm = data.ampm;
 			this.time_zone = data.time_zone;
 			this.dateObj = moment.parseZone(withZone);
+			this.dateObjLocal = moment(noZone);
 			this.status = data.status;
 			this.league = data.league;
 			this.inning = data.inning;
