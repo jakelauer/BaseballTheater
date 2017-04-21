@@ -6,6 +6,12 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	{
 		public string backerName { get; set; }
 		public bool isBeerBacker { get; set; }
+
+		public Backer(string backerName, bool isBeerBacker = false)
+		{
+			this.backerName = backerName;
+			this.isBeerBacker = isBeerBacker;
+		}
 	}
 
 	public class PremiumSponsor

@@ -30,9 +30,8 @@
 
 			const favoriteTeam = Cookies.get("favoriteteam");;
 
-			summaries.then((result) =>
+			summaries.then((gameSummaryCollection) =>
 			{
-				var gameSummaryCollection = new GameSummaryCollection(result);
 				var games = gameSummaryCollection.games.games;
 				this.sortGames(games, favoriteTeam);
 				App.Instance.gameListVueData.gameSummaries = gameSummaryCollection.games.games;

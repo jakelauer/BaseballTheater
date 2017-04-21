@@ -17,7 +17,9 @@
 		{
 			const url = this.buildUrl(date);
 
-			const gameSummaryCollection = await Utils.XmlLoader.load<IGameSummaryCollection>(url, "gameSummaryCollection");
+			const gameSummaryCollectionData = await Utils.XmlLoader.load<GameSummaryCollection>(url, "gameSummaryCollection");
+
+			const gameSummaryCollection = new GameSummaryCollection(gameSummaryCollectionData);
 
 			return gameSummaryCollection;
 		}

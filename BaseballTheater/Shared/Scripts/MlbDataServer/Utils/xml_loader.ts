@@ -60,7 +60,7 @@
 		private static xmlToJson(xmlString: string)
 		{
 			const x2js = new X2JS({
-			    attributePrefix: ""
+				attributePrefix: ""
 			});
 			const json = x2js.xml_str2json(xmlString);
 			return json;

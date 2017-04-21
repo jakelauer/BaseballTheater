@@ -1,9 +1,11 @@
-﻿"use strict";
-
-namespace Theater
+﻿namespace Theater
 {
 	export var startTime: moment.Moment;
 	export var endTime: moment.Moment;
+	export enum DetailModes {
+		Highlights,
+		BoxScore
+	}
 
 	export enum NetSpeed
 	{
@@ -77,7 +79,8 @@ namespace Theater
 		public highlightsVueData: IHighlightsVueData = {
 			highlights: [],
 			boxScore: null,
-			gameSummary: null
+			gameSummary: null,
+			detailMode: Number(localStorage.getItem("detail-mode") || DetailModes.Highlights)
 		}
 
 		public backersVueData: IBackersVueData = {
@@ -196,6 +199,10 @@ namespace Theater
 						var homeTeam = gameSummary.home_team_name;
 						var time = gameSummary.dateObj.format("MMMM Do YYYY");
 						document.title = App.getTitle(`${awayTeam} @ ${homeTeam} - ${time}`);
+					},
+					detailMode: (detailMode: DetailModes) =>
+					{
+						localStorage.setItem("detail-mode", String(detailMode));
 					}
 				}
 			});

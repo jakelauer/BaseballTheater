@@ -1,10 +1,12 @@
 ﻿namespace Theater
 {
+
 	export interface IHighlightsVueData
 	{
 		highlights: IHighlight[];
 		gameSummary: GameSummary;
 		boxScore: BoxScore;
+		detailMode: DetailModes
 	}
 
 	export class GameDetail extends Site.Page
@@ -103,9 +105,8 @@
 			{
 				const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.date);
 
-				summaries.then((result) =>
+				summaries.then((gameSummaryCollection) =>
 				{
-					const gameSummaryCollection = new GameSummaryCollection(result);
 					if (gameSummaryCollection.games && gameSummaryCollection.games.games)
 					{
 						const gameList = gameSummaryCollection.games.games;

@@ -73,17 +73,28 @@
 
 	</div>
 	
-	<template v-if="boxScore">
+	<div v-if="boxScore && highlights" class="mode-switch-container">
+		<div class="mode-switch">
+			<div class="switch-item" v-on:click="detailMode = 0" v-bind:class="{ on: detailMode === 0}">
+				Highlights
+			</div>
+			<div class="switch-item" v-on:click="detailMode = 1" v-bind:class="{ on: detailMode === 1}">
+				Box Score
+			</div>
+		</div>
+	</div>
+	
+	<template v-if="boxScore && detailMode === 1">
 		<boxscore v-bind:box-score="boxScore"></boxscore>
 	</template>
 
-	<template v-if="highlights && highlights.length > 0">
+	<template v-if="highlights && highlights.length > 0 && detailMode === 0">
 		<highlight v-for="highlight in highlights" v-bind:highlight="highlight">
 
 		</highlight>
 	</template>
 
-	<template v-else-if="showNoHighlights()">
+	<template v-else-if="showNoHighlights() && detailMode === 0">
 		<div class="empty">
 			No highlights found for this game. Highlights for some games may not be published until the game is complete.
 		</div>

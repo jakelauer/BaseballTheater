@@ -123,6 +123,51 @@
 	}
 }
 
+.mode-switch-container
+{
+	display: flex;
+
+	width: 100%;
+	margin-top: 1rem;
+	align-content: center;
+
+
+
+	.mode-switch
+	{
+		display: inline-flex;
+
+		width: auto;
+		margin: 0 auto;
+
+		border: 1px solid #ce0f0f;
+		border-radius: 5px;
+
+		.switch-item
+		{
+			padding: 1rem;
+
+			cursor: default;
+
+			&.on
+			{
+				color: white;
+				background: #ce0f0f;
+			}
+
+			&:not(.on):hover
+			{
+				background: rgba(#ce0f0f, 0.25);
+			}
+
+			+ .switch-item
+			{
+				border-left: 1px solid #ce0f0f;
+			}
+		}
+	}
+}
+
 @media all and (max-width: 1200px)
 {
 	.highlight

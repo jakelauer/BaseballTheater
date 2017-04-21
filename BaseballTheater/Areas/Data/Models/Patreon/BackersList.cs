@@ -10,11 +10,8 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 		
 		public List<Backer> Backers = new List<Backer>
 		{
-			new Backer
-			{
-				backerName = "Brian Stoops",
-				isBeerBacker = true
-			}
+			new Backer("Brian Stoops", true),
+			new Backer("Richard Eriksson")
 		};
 
 		public List<TeamSponsorTeam> TeamSponsors
@@ -68,7 +65,8 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.chc, "StorePorter"),
 			new TeamSponsor(Teams.chc, "Brad Koons"),
 			new TeamSponsor(Teams.phi, "Curtis Gale"),
-			new TeamSponsor(Teams.stl, "Kuhan")
+			new TeamSponsor(Teams.stl, "Kuhan"),
+			new TeamSponsor(Teams.bos, "Mike Kearsley")
 		};
 
 	}

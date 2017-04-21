@@ -2,6 +2,6 @@
 {
 	export class Config
 	{
-		public static BoxScoresEnabled = false;
+		public static BoxScoresEnabled = true;
 	}
 }

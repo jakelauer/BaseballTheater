@@ -14,8 +14,14 @@
 		constructor(data: IGameSummaryCollection)
 		{
 			this.time_date = data.time_date;
-			if (data.games !== undefined)
+			if (data.games)
 			{
+				//const gamesArray = data.games.game instanceof Array
+				//	? data.games.game
+				//	: [(data.games.game as any)] as IGameSummary[];
+
+				//data.games.game = gamesArray;
+
 				this.games = new GameDay(data.games);
 			}
 		}
@@ -23,12 +29,11 @@
 
 	export interface IGameDay
 	{
-		game: IGameSummary[];
+		game?: IGameSummary[];
 	}
 
 	export class GameDay implements IGameDay
 	{
-		public game: IGameSummary[];
 		public games: GameSummary[] = [];
 
 		constructor(data: IGameDay)
@@ -41,11 +46,13 @@
 					this.games.push(gameSummary);
 				});
 			}
-			else if(data.game instanceof Object) {
-			    // have to do this nefarious stuff because the xml2js library can output an object if there is just one game
-			    const gameSummary = new GameSummary((data.game as any) as IGameSummary);
-			    this.games.push(gameSummary);
-			} else if (data.game === undefined)
+			else if (data.game instanceof Object)
+			{
+				// have to do this nefarious stuff because the xml2js library can output an object if there is just one game
+				const gameSummary = new GameSummary((data.game as any) as IGameSummary);
+				this.games.push(gameSummary);
+			}
+			else if (data.game === undefined)
 			{
 				console.debug("No games found for date");
 			}

@@ -13,7 +13,7 @@ namespace Theater
 		{
 			if (!this.backers)
 			{
-				await this.populateBackersList();
+				var x = await this.populateBackersList();
 			}
 
 			return this.backers;

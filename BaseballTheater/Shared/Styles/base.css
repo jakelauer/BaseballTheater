@@ -565,7 +565,13 @@ footer
 
 	.backers-wrapper > .team-sponsors > .team-sponsor-team
 	{
-		width: 33%;
+		width: 50%;
+	}
+
+	html,
+	body
+	{
+		font-size: 12px;
 	}
 }
 

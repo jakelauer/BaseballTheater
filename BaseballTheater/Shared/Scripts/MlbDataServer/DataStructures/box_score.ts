@@ -83,6 +83,11 @@ namespace Theater
 
 			for (var batting of data.boxscore.batting)
 			{
+				if (!(batting.batter instanceof Array))
+				{
+					batting.batter = [(batting.batter as any)];
+				}
+
 				batting.team_flag === "home"
 					? this.batting_home = batting
 					: this.batting_away = batting;
@@ -90,10 +95,15 @@ namespace Theater
 
 			for (var pitching of data.boxscore.pitching)
 			{
+				if (!(pitching.pitcher instanceof Array)) {
+					pitching.pitcher = [(pitching.pitcher as any)];
+				}
+
 				pitching.team_flag === "home"
 					? this.pitching_home = pitching
 					: this.pitching_away = pitching;
 			}
+
 
 			if (data.boxscore.linescore !== undefined && data.boxscore.linescore != null)
 			{
