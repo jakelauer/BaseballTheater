@@ -422,6 +422,7 @@
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\batting.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\pitching.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\player.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\probably_pitcher.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\teams.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />

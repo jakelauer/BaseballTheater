@@ -344,6 +344,7 @@ footer
 	padding-left: 5px;
 
 	text-align: left;
+	white-space: nowrap;
 
 	border-right: 3px solid #ddd;
 
@@ -353,7 +354,19 @@ footer
 
 .game-summary table .team-info .team-name
 {
-	display: inline-block;
+	display: inline-flex;
+
+	width: calc(100% - 50px);
+}
+
+.game-summary table .team-info .team-name .team-name-wrap
+{
+	flex: 1 0;
+}
+
+.game-summary table .team-info .team-name .probable-pitcher
+{
+	font-weight: normal;
 }
 
 .game-summary table .runs,
@@ -474,14 +487,6 @@ footer
 	background: #e6461a;
 }
 
-@media all and (max-width: 1200px)
-{
-	.game-summary table .team-info .team-name
-	{
-		display: none;
-	}
-}
-
 @media all and (max-height: 800px)
 {
 	.side-menu .patreon-goals
@@ -492,11 +497,6 @@ footer
 
 @media all and (max-width: 800px)
 {
-	.game-summary table .team-info .team-name
-	{
-		display: inline-block;
-	}
-
 	.settings
 	{
 		text-align: center;
@@ -548,11 +548,6 @@ footer
 
 @media all and (max-width: 600px)
 {
-	.game-summary table .team-info .team-name
-	{
-		display: none;
-	}
-
 	header .logo
 	{
 		right: 20px;

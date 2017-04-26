@@ -21,6 +21,14 @@ namespace Theater
 		home_file_code: string;
 		game_data_directory: string;
 		linescore: ILinescore;
+		home_win: string;
+		home_loss: string;
+		away_win: string;
+		away_loss: string;
+		home_record: string;
+		away_record: string;
+		home_probable_pitcher: IProbablePitcher;
+		away_probable_pitcher: IProbablePitcher;
 	}
 
 	export class GameSummary implements IGameSummary
@@ -41,11 +49,27 @@ namespace Theater
 		public home_name_abbrev: string;
 		public home_team_name: string;
 		public home_file_code: string;
+		public home_win: string;
+		public home_loss: string;
+		public away_win: string;
+		public away_loss: string;
 		public game_data_directory: string;
 		private _linescore: ILinescore;
 		public linescore: Linescore;
 		public dateObj: moment.Moment;
 		public dateObjLocal: moment.Moment;
+		public home_probable_pitcher: IProbablePitcher;
+		public away_probable_pitcher: IProbablePitcher;
+
+		public get away_record()
+		{
+			return `${this.home_win}-${this.home_loss}`;
+		}
+
+		public get home_record()
+		{
+			return `${this.away_win}-${this.away_loss}`;
+		}
 
 		constructor(data: IGameSummary)
 		{
@@ -75,6 +99,12 @@ namespace Theater
 			this.home_team_name = data.home_team_name;
 			this.home_file_code = data.home_file_code;
 			this.game_data_directory = data.game_data_directory;
+			this.home_win = data.home_win;
+			this.home_loss = data.home_loss;
+			this.away_win = data.away_win;
+			this.away_loss = data.away_loss;
+			this.home_probable_pitcher = data.home_probable_pitcher;
+			this.away_probable_pitcher = data.away_probable_pitcher;
 
 			if (data.linescore !== undefined && data.linescore != null)
 			{

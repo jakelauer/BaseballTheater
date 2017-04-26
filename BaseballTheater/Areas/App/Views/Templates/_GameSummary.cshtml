@@ -25,7 +25,17 @@
 			<tr class="team away">
 				<td class="team-info">
 					<span class="team-logo dark" v-bind:class="game.away_file_code"></span>
-					<span class="team-name">{{game.away_team_name}}</span>
+					<span class="team-name">
+						<span class="team-name-wrap">
+							{{game.away_team_name}}
+							<template v-if="!game.linescore">
+								({{game.away_record}})
+							</template>
+						</span>
+						<template v-if="!game.linescore && game.away_probable_pitcher">
+							<span class="probable-pitcher">{{game.away_probable_pitcher.last_name}}  ({{game.away_probable_pitcher.wins}}-{{game.away_probable_pitcher.losses}}, {{game.away_probable_pitcher.era}})</span>
+						</template>
+					</span>
 				</td>
 				<template v-if="game.linescore">
 					<td class="inning score-box" v-for="n in 9">
@@ -40,7 +50,19 @@
 			<tr class="team home">
 				<td class="team-info">
 					<span class="team-logo dark" v-bind:class="game.home_file_code"></span>
-					<span class="team-name">{{game.home_team_name}}</span>
+					<span class="team-name">
+						<span class="team-name-wrap">
+							{{game.home_team_name}}
+
+							<template v-if="!game.linescore">
+								({{game.home_record}})
+							</template>
+						</span>
+
+						<template v-if="!game.linescore && game.home_probable_pitcher">
+							<span class="probable-pitcher">{{game.home_probable_pitcher.last_name}}  ({{game.home_probable_pitcher.wins}}-{{game.home_probable_pitcher.losses}}, {{game.home_probable_pitcher.era}})</span>
+						</template>
+					</span>
 				</td>
 				<template v-if="game.linescore">
 					<td class="inning score-box" v-for="n in 9">

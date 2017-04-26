@@ -50,6 +50,8 @@
 				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
 				var favoriteReturn = aIsFavorite - bIsFavorite;
 
+				var startTimeReturn = a.dateObj.isBefore(b.dateObj) ? -1 : 0;
+
 				var aInningCount = this.getInningCount(a.linescore);
 				var bInningCount = this.getInningCount(b.linescore);
 				var aProgress = a.linescore ? Math.max(aInningCount, 1) : 0;
@@ -60,7 +62,7 @@
 				var bIsFinished = b.status.status === "Final" ? 1 : 0;
 				var finishedReturn = aIsFinished - bIsFinished;
 
-				return favoriteReturn || finishedReturn || progressReturn;
+				return favoriteReturn || startTimeReturn || finishedReturn || progressReturn;
 			});
 		}
 
