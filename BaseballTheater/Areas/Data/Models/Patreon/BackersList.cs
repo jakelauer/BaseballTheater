@@ -11,7 +11,9 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 		public List<Backer> Backers = new List<Backer>
 		{
 			new Backer("Brian Stoops", true),
-			new Backer("Richard Eriksson")
+			new Backer("Richard Eriksson"),
+			new Backer("Jack House"),
+			new Backer("Connor Reynolds")
 		};
 
 		public List<TeamSponsorTeam> TeamSponsors
@@ -66,7 +68,9 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.chc, "Brad Koons"),
 			new TeamSponsor(Teams.phi, "Curtis Gale"),
 			new TeamSponsor(Teams.stl, "Kuhan"),
-			new TeamSponsor(Teams.bos, "Mike Kearsley")
+			new TeamSponsor(Teams.bos, "Mike Kearsley"),
+			new TeamSponsor(Teams.nyy, "Jan Larson"),
+			new TeamSponsor(Teams.det, "Joe Pas")
 		};
 
 	}

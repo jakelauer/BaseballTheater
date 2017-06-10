@@ -61,12 +61,12 @@ namespace Theater
 		public home_probable_pitcher: IProbablePitcher;
 		public away_probable_pitcher: IProbablePitcher;
 
-		public get away_record()
+		public get home_record()
 		{
 			return `${this.home_win}-${this.home_loss}`;
 		}
 
-		public get home_record()
+		public get away_record()
 		{
 			return `${this.away_win}-${this.away_loss}`;
 		}

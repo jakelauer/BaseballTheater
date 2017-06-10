@@ -73,8 +73,9 @@
 						var bIsRecap = b.recap ? -1 : 0;
 						var aIsCondensed = a.condensed ? -1 : 0;
 						var bIsCondensed = b.condensed ? -1 : 0;
+						var idOrder = a.id - b.id;
 
-						return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed);
+						return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed) || idOrder;
 					});
 
 					App.Instance.highlightsVueData.highlights = highlights;
