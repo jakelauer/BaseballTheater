@@ -25,12 +25,12 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	public class TeamSponsorTeam
 	{
 		public Teams team { get; set; }
-		public List<string> backers { get; set; }
+		public List<TeamSponsor> backers { get; set; }
 
 		public TeamSponsorTeam(Teams team)
 		{
 			this.team = team;
-			this.backers = new List<string>();
+			this.backers = new List<TeamSponsor>();
 		}
 	}
 
@@ -38,11 +38,15 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	{
 		public Teams team { get; set; }
 		public string backerName { get; set; }
+		public bool isBeerBacker { get; set; }
+		public bool isStarBacker { get; set; }
 
-		public TeamSponsor(Teams team, string backerName)
+		public TeamSponsor(Teams team, string backerName, bool isBeerBacker = false, bool isStarBacker = false)
 		{
 			this.team = team;
 			this.backerName = backerName;
+			this.isBeerBacker = isBeerBacker;
+			this.isStarBacker = isStarBacker;
 		}
 	}
 }

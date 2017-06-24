@@ -9,11 +9,12 @@ interface Window
 interface IBacker {
 	backerName: string;
 	isBeerBacker: boolean;
+	isStarBacker: boolean;
 }
 
 interface ITeamSponsorTeam {
 	team: number;
-	backers: string[];
+	backers: IBacker[];
 }
 
 interface IPremiumSponsor {
@@ -27,7 +28,6 @@ interface Backers
 {
 	PremiumSponsors: IPremiumSponsor[];
 	TeamSponsors: ITeamSponsorTeam[];
-	Backers: IBacker[];
 }
 
 interface PatreonData

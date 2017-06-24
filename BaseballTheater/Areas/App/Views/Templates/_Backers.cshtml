@@ -1,12 +1,4 @@
-﻿<template id="backer">
-	<div class="backer">
-		<div class="backer">
-			<i class="fa fa-beer" aria-hidden="true" v-if="backer.isBeerBacker"></i> {{backer.backerName}}
-		</div>
-	</div>
-</template>
-
-<template id="team-sponsor">
+﻿<template id="team-sponsor">
 	<a class="team-sponsor-team"
 	   v-bind:class="{ 'has-fans' : getTeamSponsorsCount(teamSponsorTeam.team) > 0 }"
 	   v-bind:data-team-code="teamSponsorTeam.team"
@@ -23,8 +15,12 @@
 				<h3>
 					{{getTeamSponsors(teamSponsorTeam.team)}}
 				</h3>
-				<template v-for="teamSponsorBacker in teamSponsorTeam.backers">
-					<div>{{teamSponsorBacker}}</div>
+				<template v-for="backer in teamSponsorTeam.backers">
+					<div>
+						<i class="fa fa-star" aria-hidden="true" v-if="backer.isStarBacker"></i> 
+						<i class="fa fa-beer" aria-hidden="true" v-if="backer.isBeerBacker"></i>
+						{{backer.backerName}}
+					</div>
 				</template>
 			</div>
 		</div>

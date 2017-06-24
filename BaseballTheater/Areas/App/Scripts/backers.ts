@@ -10,7 +10,6 @@
 
 			var backers = await BackersList.Instance.getBackers();
 
-			App.Instance.backersVueData.backers = backers.Backers || [];
 			App.Instance.backersVueData.teamSponsors = backers.TeamSponsors || [];
 			App.Instance.backersVueData.premiumSponsors = backers.PremiumSponsors || [];
 		}
@@ -26,7 +25,6 @@
 
 		public destroy()
 		{
-			App.Instance.backersVueData.backers = [];
 			App.Instance.backersVueData.teamSponsors = [];
 			App.Instance.backersVueData.premiumSponsors = [];
 			App.Instance.backersVueData.showBackers = false;

@@ -31,7 +31,6 @@
 	interface IBackersVueData
 	{
 		showBackers: boolean;
-		backers: IBacker[];
 		teamSponsors: ITeamSponsorTeam[];
 		premiumSponsors: IPremiumSponsor[];
 	}
@@ -84,7 +83,6 @@
 		}
 
 		public backersVueData: IBackersVueData = {
-			backers: [],
 			teamSponsors: [],
 			premiumSponsors: [],
 			showBackers: false

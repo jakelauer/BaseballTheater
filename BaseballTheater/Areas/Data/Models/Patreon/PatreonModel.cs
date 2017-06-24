@@ -5,6 +5,6 @@
 		public static PatreonModel Instance = new PatreonModel();
 
 		public BackersList Backers = BackersList.Instance;
-		public double GoalPercentage = (double)  42 / 100;
+		public double GoalPercentage = (double)  44 / 100;
 	}
 }
