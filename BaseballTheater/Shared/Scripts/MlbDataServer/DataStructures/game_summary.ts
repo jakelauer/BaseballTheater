@@ -1,8 +1,10 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Theater
-{
-	export interface IGameSummary
-	{
+namespace Theater {
+	interface HighlightContainer {
+		media: IHighlight[];
+	}
+
+	export interface IGameSummary {
 		id: string;
 		game_pk: string;
 		time_date: string;
@@ -15,8 +17,10 @@ namespace Theater
 		inning: string;
 		away_name_abbrev: string;
 		away_team_name: string;
+		away_team_city: string;
 		away_file_code: string;
 		home_name_abbrev: string;
+		home_team_city: string;
 		home_team_name: string;
 		home_file_code: string;
 		game_data_directory: string;
@@ -29,10 +33,10 @@ namespace Theater
 		away_record: string;
 		home_probable_pitcher: IProbablePitcher;
 		away_probable_pitcher: IProbablePitcher;
+		highlights: HighlightContainer;
 	}
 
-	export class GameSummary implements IGameSummary
-	{
+	export class GameSummary implements IGameSummary {
 		public id: string;
 		public game_pk: string;
 		public time_date: string;
@@ -44,10 +48,12 @@ namespace Theater
 		public league: string;
 		public inning: string;
 		public away_name_abbrev: string;
+		public away_team_city: string;
 		public away_team_name: string;
 		public away_file_code: string;
 		public home_name_abbrev: string;
 		public home_team_name: string;
+		public home_team_city: string;
 		public home_file_code: string;
 		public home_win: string;
 		public home_loss: string;
@@ -60,19 +66,18 @@ namespace Theater
 		public dateObjLocal: moment.Moment;
 		public home_probable_pitcher: IProbablePitcher;
 		public away_probable_pitcher: IProbablePitcher;
+		public topPlayHighlights: IHighlight[];
+		public highlights: HighlightContainer;
 
-		public get home_record()
-		{
+		public get home_record() {
 			return `${this.home_win}-${this.home_loss}`;
 		}
 
-		public get away_record()
-		{
+		public get away_record() {
 			return `${this.away_win}-${this.away_loss}`;
 		}
 
-		constructor(data: IGameSummary)
-		{
+		constructor(data: IGameSummary) {
 			const timezoneOffset = GameSummary.dst(new Date()) ? "-04:00" : "-05:00";
 
 			const localParsedDate = moment(data.time_date, "YYYY/MM/DD hh:mm").add(12, "hours").format();
@@ -94,9 +99,11 @@ namespace Theater
 			this.inning = data.inning;
 			this.away_name_abbrev = data.away_name_abbrev;
 			this.away_team_name = data.away_team_name;
+			this.away_team_city = data.away_team_city;
 			this.away_file_code = data.away_file_code;
 			this.home_name_abbrev = data.home_name_abbrev;
 			this.home_team_name = data.home_team_name;
+			this.home_team_city = data.home_team_city;
 			this.home_file_code = data.home_file_code;
 			this.game_data_directory = data.game_data_directory;
 			this.home_win = data.home_win;
@@ -105,22 +112,21 @@ namespace Theater
 			this.away_loss = data.away_loss;
 			this.home_probable_pitcher = data.home_probable_pitcher;
 			this.away_probable_pitcher = data.away_probable_pitcher;
-
-			if (data.linescore !== undefined && data.linescore != null)
-			{
+			if (data.highlights) {
+				this.topPlayHighlights = data.highlights.media;
+			}
+			if (data.linescore !== undefined && data.linescore != null) {
 				this.linescore = new Linescore(data.linescore);
 			}
 		}
 
-		private static stdTimezoneOffset(date: Date)
-		{
+		private static stdTimezoneOffset(date: Date) {
 			const jan = new Date(date.getFullYear(), 0, 1);
 			const jul = new Date(date.getFullYear(), 6, 1);
 			return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 		}
 
-		private static dst(date: Date)
-		{
+		private static dst(date: Date) {
 			return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
 		}
 	}

@@ -77,6 +77,33 @@
 	</div>
 </template>
 
+
+<template id="game-summary-simple">
+	<div class="game-summary-simple" v-bind:data-homecode="game.homeFileCode" v-bind:data-awaycode="game.away_file_code">
+		<a v-bind:href="getGameLink(game)" class="game-link"></a>
+		<div class="team-row away-team">
+			<div class="team-info">
+				<div class="team-city team-color" v-bind:class="[game.away_file_code]">{{game.away_team_city}}</div>
+				<div class="team-name team-color" v-bind:class="[game.away_file_code]">{{game.away_team_name}}</div>
+			</div>
+			<div class="score" v-if="game.linescore">{{game.linescore.r.away}}</div>
+		</div>
+		<div class="inning-status">
+			<span>{{getCurrentInning(game)}}</span>
+		</div>
+		<div class="team-row home-team">
+			<div class="team-info">
+				<div class="team-city team-color" v-bind:class="[game.home_file_code]">{{game.home_team_city}}</div>
+				<div class="team-name team-color" v-bind:class="[game.home_file_code]">{{game.home_team_name}}</div>
+			</div>
+			<div class="score" v-if="game.linescore">{{game.linescore.r.home}}</div>
+		</div>
+		<div class="footer">
+			<!--<span>{{getTopPlaysCount(game)}} top plays</span>-->
+		</div>
+	</div>
+</template>
+
 @*
 
 

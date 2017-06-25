@@ -340,6 +340,17 @@
     <Content Include="Areas\App\Views\Templates\_BoxScore.cshtml" />
     <Content Include="Areas\App\Styles\backers.scss" />
     <Content Include="Areas\App\Styles\boxscore.scss" />
+    <Content Include="Areas\App\Styles\base.scss" />
+    <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff" />
+    <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff2" />
+    <Content Include="Shared\Styles\fonts\bebasneue_book-webfont.woff" />
+    <Content Include="Shared\Styles\fonts\bebasneue_book-webfont.woff2" />
+    <Content Include="Shared\Styles\fonts\bebasneue_light-webfont.woff" />
+    <Content Include="Shared\Styles\fonts\bebasneue_light-webfont.woff2" />
+    <Content Include="Shared\Styles\fonts\bebasneue_regular-webfont.woff" />
+    <Content Include="Shared\Styles\fonts\bebasneue_regular-webfont.woff2" />
+    <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff" />
+    <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff2" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>

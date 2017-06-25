@@ -14,6 +14,7 @@
 		keywords: Keyword[];
 		condensed: boolean;
 		recap: boolean;
+		"top-play": string;
 
 		isPlaying: boolean;
 	}
