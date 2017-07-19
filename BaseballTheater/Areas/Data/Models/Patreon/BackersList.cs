@@ -7,7 +7,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 	public class BackersList
 	{
 		public static BackersList Instance = new BackersList();
-		
+
 		public List<TeamSponsorTeam> TeamSponsors
 		{
 			get
@@ -57,17 +57,25 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 		private readonly List<TeamSponsor> _teamSponsors = new List<TeamSponsor>
 		{
 			new TeamSponsor(Teams.chc, "StorePorter", isStarBacker: true),
+
 			new TeamSponsor(Teams.chc, "Brad Koons", isStarBacker: true),
 			new TeamSponsor(Teams.phi, "Curtis Gale", isStarBacker: true),
 			new TeamSponsor(Teams.stl, "Kuhan", isStarBacker: true),
 			new TeamSponsor(Teams.bos, "Mike Kearsley", isStarBacker: true),
 			new TeamSponsor(Teams.nyy, "Jan Larson", isStarBacker: true),
 			new TeamSponsor(Teams.det, "Joe Pas", isStarBacker: true),
+
 			new TeamSponsor(Teams.none, "Brian Stoops", isBeerBacker: true),
-			new TeamSponsor(Teams.none,"Richard Eriksson"),
-			new TeamSponsor(Teams.none,"Jack House"),
+
+			new TeamSponsor(Teams.chc, "indianbadger"),
+			new TeamSponsor(Teams.none, "Jaymoon"),
+			new TeamSponsor(Teams.la, "Mike Branom"),
+			new TeamSponsor(Teams.tor,"Richard Eriksson"),
+			new TeamSponsor(Teams.none, "Daniel Tovatt"),
+			new TeamSponsor(Teams.none,"Leon Ho"),
 			new TeamSponsor(Teams.none,"Connor Reynolds"),
-			new TeamSponsor(Teams.none,"Leon Ho")
+			new TeamSponsor(Teams.none,"Jack House"),
+
 		};
 
 	}
