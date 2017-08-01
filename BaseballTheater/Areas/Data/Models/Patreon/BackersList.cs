@@ -58,16 +58,21 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 		{
 			new TeamSponsor(Teams.chc, "StorePorter", isStarBacker: true),
 
+			new TeamSponsor(Teams.nyy, "Sam Normington", isStarBacker: true),
+			new TeamSponsor(Teams.bal, "Eric Hall", isStarBacker: true),
+			new TeamSponsor(Teams.det, "Joe Pas", isStarBacker: true),
+			new TeamSponsor(Teams.nyy, "Jan Larson", isStarBacker: true),
+			new TeamSponsor(Teams.bos, "Mike Kearsley", isStarBacker: true),
 			new TeamSponsor(Teams.chc, "Brad Koons", isStarBacker: true),
 			new TeamSponsor(Teams.phi, "Curtis Gale", isStarBacker: true),
 			new TeamSponsor(Teams.stl, "Kuhan", isStarBacker: true),
-			new TeamSponsor(Teams.bos, "Mike Kearsley", isStarBacker: true),
-			new TeamSponsor(Teams.nyy, "Jan Larson", isStarBacker: true),
-			new TeamSponsor(Teams.det, "Joe Pas", isStarBacker: true),
 
+			new TeamSponsor(Teams.tor, "Larry D", isBeerBacker: true),
 			new TeamSponsor(Teams.none, "Brian Stoops", isBeerBacker: true),
 
 			new TeamSponsor(Teams.chc, "indianbadger"),
+			new TeamSponsor(Teams.none, "Jake Macauley"),
+			new TeamSponsor(Teams.ari, "Ryan b"),
 			new TeamSponsor(Teams.none, "Jaymoon"),
 			new TeamSponsor(Teams.la, "Mike Branom"),
 			new TeamSponsor(Teams.tor,"Richard Eriksson"),
