@@ -62,84 +62,91 @@
 	}
 }
 
-.game-summary-simple
-{
-	position: relative;
-	display: block;
+.game-summary-simple {
+    position: relative;
+    display: block;
+    width: 50%;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    padding: 10px;
+    transition: 0.15s;
+    text-decoration: none;
+    color: black;
+    background: #fff;
 
-	width: 50%;
-	max-width: 400px;
-	margin: 0 auto;
-	margin-bottom: 3rem;
-	padding: 10px;
+    &:hover {
+        transition: 0s;
+        outline: 4px solid #eee;
+    }
 
-	transition: 0.15s;
-	text-decoration: none;
+    .game-link {
+        position: absolute;
+        z-index: 10;
+        top: 10px;
+        right: 10px;
+        bottom: 10px;
+        left: 10px;
+    }
 
-	color: black;
-	background: #fff;
+    .team-row {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0;
+        font-size: 1.5rem;
+        font-weight: bold;
 
-	&:hover
-	{
-		transition: 0s;
+        &.away-team {
+            border-bottom: 4px solid #333;
+        }
 
-		outline: 4px solid #eee;
-	}
+        &.home-team {
+            margin-top: -1rem;
+        }
+    }
 
-	.game-link
-	{
-		position: absolute;
-		z-index: 10;
+    &.final .team-row:not(.winner) {
+        opacity: 0.5;
+    }
 
-		top: 10px;
-		right: 10px;
-		bottom: 10px;
-		left: 10px;
-	}
+    &.final .team-row .score:after {
+        content: "\f0d9";
+        font-family: "FontAwesome";
+        font-size: 0.9rem;
+        vertical-align: 2px;
+        opacity: 0;
+    }
 
-	.team-row
-	{
-		display: flex;
-		align-items: center;
+    &.final .team-row.winner .score:after {
+        opacity: 1;
+    }
 
-		padding: 0.5rem 0;
+    .team-info {
+        position: relative;
+        flex: 1 0;
+        padding-left: 50px;
 
-		border-bottom: 4px solid #333;
+        .team-name {
+            opacity: 0.6;
+        }
 
-		font-size: 1.5rem;
-		font-weight: bold;
+        .team-logo {
+            position: absolute;
+            top: 8px;
+            left: 0;
+        }
+    }
 
-		&.away-team
-		{
-			border-top: 4px solid #333;
-		}
-	}
+    .footer,
+    .inning-status {
+        margin-top: -2px;
+        transform: translateY(-50%);
+        text-align: center;
 
-	.team-info
-	{
-		flex: 1 0;
-
-		.team-name
-		{
-			opacity: 0.6;
-		}
-	}
-
-	.footer,
-	.inning-status
-	{
-		margin-top: -2px;
-
-		transform: translateY(-50%);
-		text-align: center;
-
-		span
-		{
-			display: inline-block;
-
-			padding: 0 1rem;
-
-			background: white;
-		}
-	}
+        span {
+            display: inline-block;
+            padding: 0 1rem;
+            background: white;
+        }
+    }
 }

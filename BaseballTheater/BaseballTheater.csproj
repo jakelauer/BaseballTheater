@@ -28,7 +28,7 @@
     <ApplicationInsightsResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsAnnotationResourceId>
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>

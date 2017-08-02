@@ -191,3 +191,5 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /BaseballTheaterBot/Config/AuthConfig.cs
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
