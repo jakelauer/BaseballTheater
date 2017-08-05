@@ -1,4 +1,6 @@
-﻿.highlights
+﻿@import "_vars";
+
+.highlights
 {
 	display: flex;
 	flex-wrap: wrap;
@@ -132,8 +134,6 @@
 	margin-top: 1rem;
 	align-content: center;
 
-
-
 	.mode-switch
 	{
 		display: inline-flex;
@@ -141,7 +141,7 @@
 		width: auto;
 		margin: 0 auto;
 
-		border: 1px solid #ce0f0f;
+		border: 1px solid $color-accent;
 		border-radius: 5px;
 
 		.switch-item
@@ -153,17 +153,17 @@
 			&.on
 			{
 				color: white;
-				background: #ce0f0f;
+				background: $color-accent;
 			}
 
 			&:not(.on):hover
 			{
-				background: rgba(#ce0f0f, 0.25);
+				background: rgba($color-accent, 0.25);
 			}
 
 			+ .switch-item
 			{
-				border-left: 1px solid #ce0f0f;
+				border-left: 1px solid $color-accent;
 			}
 		}
 	}

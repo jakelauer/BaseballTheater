@@ -50,7 +50,7 @@
 				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
 				var favoriteReturn = aIsFavorite - bIsFavorite;
 
-				var startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? 1 : -1;
+				var startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
 
 				return favoriteReturn || startTimeReturn;
 			});

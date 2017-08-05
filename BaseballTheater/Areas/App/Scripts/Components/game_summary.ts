@@ -5,6 +5,14 @@
 		return App.Instance.settingsVueData.hideScores ? "▨" : realNumber;
 	};
 
+	var getStatusTime = (game: GameSummary) =>
+	{
+		var time = game.dateObj.local().format("h:mm a");
+		var timeZone = moment.tz(0, moment.tz.guess()).zoneAbbr();
+
+		return `${time} ${timeZone}`;
+	};
+
 	Vue.component("game-summary", {
 		template: $("template#game-summary").html(),
 		props: ["game"],
@@ -86,8 +94,9 @@
 				{
 					return game.status.inning_state
 						? `${game.status.inning_state} ${game.status.inning}`
-						: game.status.status;
-				}
+						: getStatusTime(game);
+				},
+				getStatusTime: (game: GameSummary) => { return getStatusTime(game) },
 			}
 		});
 }

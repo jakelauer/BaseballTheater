@@ -28,7 +28,7 @@
     <ApplicationInsightsResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsAnnotationResourceId>
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -255,7 +255,7 @@
   <ItemGroup>
     <Content Include="Areas\App\Styles\game.scss" />
     <Content Include="Areas\App\Styles\game-list.scss" />
-    <Content Include="Shared\Styles\pikaday.scss" />
+    <Content Include="Areas\App\Styles\pikaday.scss" />
     <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
     <Content Include="Areas\Data\Views\patreon.cshtml" />
     <Content Include="Content\Site.css" />
@@ -339,7 +339,7 @@
     <Content Include="Areas\App\Views\Templates\_BoxScore.cshtml" />
     <Content Include="Areas\App\Styles\backers.scss" />
     <Content Include="Areas\App\Styles\boxscore.scss" />
-    <Content Include="Areas\App\Styles\base.scss" />
+    <Content Include="Areas\App\Styles\team-colors.scss" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff2" />
     <Content Include="Shared\Styles\fonts\bebasneue_book-webfont.woff" />
@@ -350,6 +350,7 @@
     <Content Include="Shared\Styles\fonts\bebasneue_regular-webfont.woff2" />
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff2" />
+    <Content Include="Areas\App\Styles\_vars.scss" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -372,7 +373,7 @@
     <Content Include="Shared\Scripts\libraries\vue.dev.js" />
     <Content Include="Shared\Scripts\libraries\vue.prod.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
-    <Content Include="Shared\Styles\base.scss" />
+    <Content Include="Areas\App\Styles\base.scss" />
     <Content Include="Areas\App\Styles\teams.scss" />
     <Content Include="Shared\Scripts\sw.js" />
     <Content Include="Shared\Views\_patreon.cshtml" />
@@ -390,7 +391,7 @@
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
     <Content Include="Shared\Views\_favicons.cshtml" />
-    <Content Include="Shared\Styles\resets.scss" />
+    <Content Include="Areas\App\Styles\resets.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
