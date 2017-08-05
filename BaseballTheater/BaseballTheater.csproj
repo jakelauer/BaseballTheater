@@ -328,7 +328,6 @@
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
     <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
@@ -373,7 +372,7 @@
     <Content Include="Shared\Scripts\libraries\vue.dev.js" />
     <Content Include="Shared\Scripts\libraries\vue.prod.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
-    <Content Include="Shared\Styles\base.css" />
+    <Content Include="Shared\Styles\base.scss" />
     <Content Include="Areas\App\Styles\teams.scss" />
     <Content Include="Shared\Scripts\sw.js" />
     <Content Include="Shared\Views\_patreon.cshtml" />
@@ -391,12 +390,15 @@
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
     <Content Include="Shared\Views\_favicons.cshtml" />
+    <Content Include="Shared\Styles\resets.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseballTheaterBot\RedditBot.csproj">

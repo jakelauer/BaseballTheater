@@ -1,65 +1,51 @@
-﻿.calendar
-{
-	cursor: pointer;
+﻿.calendar {
+    cursor: pointer;
 }
 
-#calendarpicker
-{
-	text-align: center;
-
-	border: 0;
-
-	font-size: 1.5rem;
+#calendarpicker {
+    text-align: center;
+    border: 0;
+    font-size: 1.5rem;
 }
 
-#datepicker-wrapper
-{
-	position: relative;
-	display: none;
+#datepicker-wrapper {
+    position: relative;
+    display: none;
 }
 
-#datepicker
-{
-	position: absolute;
+#datepicker {
+    position: absolute;
 }
 
-.game-list
-{
-	display: flex;
-	flex-wrap: wrap;
+.game-list {
+    display: flex;
+    flex-wrap: wrap;
 
-	.game-summary
-	{
-		width: 50%;
-		padding: 10px;
-	}
+    .game-summary {
+        width: 50%;
+        padding: 10px;
+    }
 }
 
-.flex
-{
-	display: flex;
+.flex {
+    display: flex;
 }
 
-@media all and (max-width: 1000px)
-{
-	.game-list
-	{
-		> div
-		{
-			width: 100%;
-			flex: none;
-		}
+@media all and (max-width: 1000px) {
+    .game-list {
+        > div {
+            width: 100%;
+            flex: none;
+        }
 
-		.game-summary
-		{
-			width: 100%;
-		}
-	}
+        .game-summary {
+            width: 100%;
+        }
+    }
 
-	.settings .tools
-	{
-		margin-top: 1rem;
-	}
+    .settings .tools {
+        margin-top: 1rem;
+    }
 }
 
 .game-summary-simple {
@@ -68,7 +54,7 @@
     width: 50%;
     max-width: 400px;
     margin: 0 auto;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
     padding: 10px;
     transition: 0.15s;
     text-decoration: none;
@@ -106,7 +92,7 @@
     }
 
     &.final .team-row:not(.winner) {
-        opacity: 0.5;
+        opacity: 0.35;
     }
 
     &.final .team-row .score:after {

@@ -94,22 +94,6 @@
 
 			App.Instance.settingsVueData.showingGameList = false;
 
-			$(".menu-trigger, .side-menu a").on("click",
-				() =>
-				{
-					$("html").toggleClass("side-menu-open");
-				});
-
-			$(document).on("click",
-				(e) =>
-				{
-					var $el = $(e.target);
-					if ($el.closest(".side-menu").length === 0 && $el.closest(".menu-trigger").length === 0 && $("html").hasClass("side-menu-open"))
-					{
-						$("html").removeClass("side-menu-open");
-					}
-				});
-
 			this.gameListVue = new Vue({
 				el: ".game-list",
 				data: this.gameListVueData,

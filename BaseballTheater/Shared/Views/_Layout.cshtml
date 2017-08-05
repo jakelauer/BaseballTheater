@@ -40,35 +40,27 @@
 
 
 <header>
-	<div class="menu-trigger"><i class="fa fa-bars" aria-hidden="true"></i></div>
 	<div class="header-content">
-		<a class="logo" href="/">Baseball <i class="fa fa-film" aria-hidden="true"></i> Theater</a>
+		<a class="logo" href="/"><i class="fa fa-film" aria-hidden="true"></i> Baseball Theater</a>
+		<div class="links">
+			<a href="/">
+				Games
+			</a>
+			<a href="/backers">
+				Backers
+			</a>
+			<a href="https://www.reddit.com/r/BaseballTheater/" target="_blank">
+				Updates
+			</a>
+			<a href="https://www.reddit.com/r/BaseballTheater/submit" target="_blank">
+				Report a Problem
+			</a>
+			<a href="https://github.com/BaseballTheater" target="_blank">
+				Contribute on GitHub
+			</a>
+		</div>
 	</div>
 </header>
-<div class="side-menu">
-	<a href="/">
-		<i class="fa fa-home" aria-hidden="true"></i> 
-		Games
-	</a>
-	<a href="/backers">
-		<i class="fa fa-handshake-o" aria-hidden="true"></i>
-		Backers
-	</a>
-	<a href="https://www.reddit.com/r/BaseballTheater/" target="_blank">
-		<i class="fa fa-reddit" aria-hidden="true"></i> 
-		Updates
-	</a>
-	<a href="https://www.reddit.com/r/BaseballTheater/submit" target="_blank">
-		<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-		Report a Problem
-	</a>
-	<a href="https://github.com/BaseballTheater" target="_blank">
-		<i class="fa fa-github" aria-hidden="true"></i>
-		Contribute on GitHub
-	</a>
-
-	@Html.Partial("_patreon")
-</div>
 <div id="body-wrapper">
 	<div class="loading-spinner">
 		<img src="~/images/ring.svg" />
