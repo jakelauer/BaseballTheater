@@ -78,12 +78,15 @@ namespace Theater {
 		}
 
 		constructor(data: IGameSummary) {
-			const timezoneOffset = GameSummary.dst(new Date()) ? "-04:00" : "-05:00";
+			const gameTimezoneOffset = GameSummary.dst(new Date()) ? "-04:00" : "-05:00";
 
-			const localParsedDate = moment(data.time_date, "YYYY/MM/DD hh:mm").add(12, "hours").format();
+			const d = new Date();
+			const userTimezoneOffset = d.getTimezoneOffset();
+			const hoursToAdd = userTimezoneOffset > 0 ? 12 : -12;
+			const localParsedDate = moment(data.time_date, "YYYY/MM/DD hh:mm").add(hoursToAdd, "hours").format();
 			const timeRegex = /([0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})([\-+][0-9]{2}:[0-9]{2})/g;
 			const noZone = timeRegex.exec(localParsedDate)[1];
-			const withZone = noZone + timezoneOffset;
+			const withZone = noZone + gameTimezoneOffset;
 
 			this.id = data.id;
 			this.game_pk = data.game_pk;
