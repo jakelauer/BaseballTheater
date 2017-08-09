@@ -1,138 +1,182 @@
-﻿.calendar {
-    cursor: pointer;
+﻿.calendar
+{
+	cursor: pointer;
 }
 
-#calendarpicker {
-    text-align: center;
-    border: 0;
-    font-size: 1.5rem;
+#calendarpicker
+{
+	text-align: center;
+
+	border: 0;
+
+	font-size: 1.5rem;
 }
 
-#datepicker-wrapper {
-    position: relative;
-    display: none;
+#datepicker-wrapper
+{
+	position: relative;
+	display: none;
 }
 
-#datepicker {
-    position: absolute;
+#datepicker
+{
+	position: absolute;
 }
 
-.game-list {
-    display: flex;
-    flex-wrap: wrap;
+.game-list
+{
+	display: flex;
 
-    .game-summary {
-        width: 50%;
-        padding: 10px;
-    }
+	padding-top: 2rem;
+	flex-wrap: wrap;
+
+	.game-summary
+	{
+		width: 50%;
+		padding: 10px;
+	}
 }
 
-.flex {
-    display: flex;
+.flex
+{
+	display: flex;
 }
 
-@media all and (max-width: 1000px) {
-    .game-list {
-        > div {
-            width: 100%;
-            flex: none;
-        }
+@media all and (max-width: 1000px)
+{
+	.game-list
+	{
+		> div
+		{
+			width: 100%;
+			flex: none;
+		}
 
-        .game-summary {
-            width: 100%;
-        }
-    }
+		.game-summary
+		{
+			width: 100%;
+		}
+	}
 
-    .settings .tools {
-        margin-top: 1rem;
-    }
+	.settings .tools
+	{
+		margin-top: 1rem;
+	}
 }
 
-.game-summary-simple {
-    position: relative;
-    display: block;
-    width: 50%;
-    max-width: 400px;
-    margin: 0 auto;
-    margin-bottom: 4rem;
-    padding: 10px;
-    transition: 0.15s;
-    text-decoration: none;
-    color: black;
-    background: #fff;
+.game-summary-simple
+{
+	position: relative;
+	display: block;
 
-    &:hover {
-        transition: 0s;
-        outline: 4px solid #eee;
-    }
+	width: 50%;
+	max-width: 400px;
+	margin: 0 auto;
+	margin-bottom: 4rem;
+	padding: 10px;
 
-    .game-link {
-        position: absolute;
-        z-index: 10;
-        top: 10px;
-        right: 10px;
-        bottom: 10px;
-        left: 10px;
-    }
+	transition: 0.15s;
+	text-decoration: none;
 
-    .team-row {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem 0;
-        font-size: 1.5rem;
-        font-weight: bold;
+	color: black;
+	background: #fff;
 
-        &.away-team {
-            border-bottom: 4px solid #333;
-        }
+	&:hover
+	{
+		transition: 0s;
 
-        &.home-team {
-            margin-top: -1rem;
-        }
-    }
+		outline: 4px solid #eee;
+	}
 
-    &.final .team-row:not(.winner) {
-        opacity: 0.35;
-    }
+	.game-link
+	{
+		position: absolute;
+		z-index: 10;
 
-    &.final .team-row .score:after {
-        content: "\f0d9";
-        font-family: "FontAwesome";
-        font-size: 0.9rem;
-        vertical-align: 2px;
-        opacity: 0;
-    }
+		top: 10px;
+		right: 10px;
+		bottom: 10px;
+		left: 10px;
+	}
 
-    &.final .team-row.winner .score:after {
-        opacity: 1;
-    }
+	.team-row
+	{
+		display: flex;
+		align-items: center;
 
-    .team-info {
-        position: relative;
-        flex: 1 0;
-        padding-left: 50px;
+		padding: 0.5rem 0;
 
-        .team-name {
-            opacity: 0.6;
-        }
+		font-size: 1.5rem;
+		font-weight: bold;
 
-        .team-logo {
-            position: absolute;
-            top: 8px;
-            left: 0;
-        }
-    }
+		&.away-team
+		{
+			border-bottom: 4px solid #333;
+		}
 
-    .footer,
-    .inning-status {
-        margin-top: -2px;
-        transform: translateY(-50%);
-        text-align: center;
+		&.home-team
+		{
+			margin-top: -1rem;
+		}
+	}
 
-        span {
-            display: inline-block;
-            padding: 0 1rem;
-            background: white;
-        }
-    }
+	&.final .team-row:not(.winner)
+	{
+		opacity: 0.35;
+	}
+
+	&.final .team-row .score:after
+	{
+		content: "\f0d9";
+		vertical-align: 2px;
+
+		opacity: 0;
+
+		font-family: "FontAwesome";
+		font-size: 0.9rem;
+	}
+
+	&.final .team-row.winner .score:after
+	{
+		opacity: 1;
+	}
+
+	.team-info
+	{
+		position: relative;
+
+		padding-left: 50px;
+		flex: 1 0;
+
+		.team-name
+		{
+			opacity: 0.6;
+		}
+
+		.team-logo
+		{
+			position: absolute;
+
+			top: 8px;
+			left: 0;
+		}
+	}
+
+	.footer,
+	.inning-status
+	{
+		margin-top: -2px;
+
+		transform: translateY(-50%);
+		text-align: center;
+
+		span
+		{
+			display: inline-block;
+
+			padding: 0 1rem;
+
+			background: white;
+		}
+	}
 }
