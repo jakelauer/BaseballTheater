@@ -54,10 +54,6 @@
 		location.search = Date.now();
 	});
 
-	$("header .expand-links").on("click", function() {
-		$("header").toggleClass("expanded");
-	});
-
 	if (Cookies.get("hidescores") === "true")
 	{
 		$("#scoreshidden").attr("checked", "checked");

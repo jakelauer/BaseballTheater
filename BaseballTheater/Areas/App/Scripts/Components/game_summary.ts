@@ -36,9 +36,9 @@
 			},
 			getLinescoreItem: (game: GameSummary, inningIndex: number, homeOrAway: string) =>
 			{
-				let realInningIndex = inningIndex + game.linescore.startingInning;
+				const realInningIndex = inningIndex + game.linescore.startingInning;
 
-				let emptyInning = {
+				const emptyInning = {
 					home: "",
 					away: ""
 				};
@@ -51,7 +51,7 @@
 					inning = game.linescore.inning[realInningIndex];
 				}
 
-				let homeInningText = game.status.status === "Final"
+				const homeInningText = game.status.status === "Final"
 					? inning.home || "▨"
 					: inning.home;
 
@@ -61,18 +61,30 @@
 			},
 			getLinescoreLabel: (game: GameSummary, inningIndex: number) =>
 			{
-				let realInningIndex = inningIndex + game.linescore.startingInning;
+				const realInningIndex = inningIndex + game.linescore.startingInning;
 
 				return realInningIndex;
 			}
 		}
 	});
 
+	type WinnerOptions = "none" | "home" | "away";
 	Vue.component("game-summary-simple",
 		{
 			template: $("template#game-summary-simple").html(),
 			props: ["game"],
 			methods: {
+				linescoreItem,
+				getWinner: (game: GameSummary): WinnerOptions =>
+				{
+					let winner: WinnerOptions = "none";
+					if (game.linescore && !App.Instance.settingsVueData.hideScores)
+					{
+						const away = Number(game.linescore.r.away) > Number(game.linescore.r.home);
+						winner = away ? "away" : "home";
+					}
+					return winner;
+				},
 				getGameLink: (game: GameSummary) =>
 				{
 					const dayString = game.dateObjLocal.format("YYYYMMDD");
@@ -83,7 +95,7 @@
 					let topPlays = 0;
 					if (game.topPlayHighlights)
 					{
-						for (var media of game.topPlayHighlights)
+						for (let media of game.topPlayHighlights)
 						{
 							topPlays += media["top-play"] === "true" ? 1 : 0;
 						}
@@ -92,6 +104,16 @@
 				},
 				getCurrentInning: (game: GameSummary) =>
 				{
+					if (game.status.ind === "F")
+					{
+						return game.status.status;
+					}
+
+					if (game.status.reason)
+					{
+						return `${game.status.status} (${game.status.reason})`;
+					}
+					
 					return game.status.inning_state
 						? `${game.status.inning_state} ${game.status.inning}`
 						: getStatusTime(game);

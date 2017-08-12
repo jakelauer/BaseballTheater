@@ -81,28 +81,28 @@
 <template id="game-summary-simple">
 	<div class="game-summary-simple" v-bind:data-homecode="game.homeFileCode" v-bind:data-awaycode="game.away_file_code" v-bind:class="{ final: game.status.ind === 'F' || game.status.ind === 'O' }">
 		<a v-bind:href="getGameLink(game)" class="game-link"></a>
-		<div class="team-row away-team" v-bind:class="{ winner: game.linescore ? Number(game.linescore.r.away) > Number(game.linescore.r.home) : false}">
+		<div class="team-row away-team" v-bind:class="{ winner: getWinner(game) === 'away' }">
 			<div class="team-info">
 				<span class="team-logo dark" v-bind:class="game.away_file_code"></span>
 				<div class="team-city team-color" v-bind:class="[game.away_file_code]">{{game.away_team_city}}</div>
 				<div class="team-name team-color" v-bind:class="[game.away_file_code]">{{game.away_team_name}}</div>
 			</div>
 			<div class="score" v-if="game.linescore">
-				{{game.linescore.r.away}} 
+				{{linescoreItem(game.linescore.r.away)}} 
 				<span class="winner" v-if="game.status.ind === 'F' && game.linescore.r.away > game.linescore.r.home"></span>
 			</div>
 		</div>
 		<div class="inning-status">
 			<span>{{getCurrentInning(game)}}</span>
 		</div>
-		<div class="team-row home-team" v-bind:class="{ winner: game.linescore ? Number(game.linescore.r.home) > Number(game.linescore.r.away) : false }">
+		<div class="team-row home-team" v-bind:class="{ winner: getWinner(game) === 'home' }">
 			<div class="team-info">
 				<span class="team-logo dark" v-bind:class="game.home_file_code"></span>
 				<div class="team-city team-color" v-bind:class="[game.home_file_code]">{{game.home_team_city}}</div>
 				<div class="team-name team-color" v-bind:class="[game.home_file_code]">{{game.home_team_name}}</div>
 			</div>
 			<div class="score" v-if="game.linescore">
-				{{game.linescore.r.home}}
+				{{linescoreItem(game.linescore.r.home)}}
 			</div>
 		</div>
 		<div class="footer">

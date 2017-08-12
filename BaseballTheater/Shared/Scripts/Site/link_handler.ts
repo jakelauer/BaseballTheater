@@ -40,6 +40,8 @@
 					Site.initializeCurrentPage();
 					//this.loadNew(location.pathname);
 				}
+
+				$("header .links").removeClass("open");
 			});
 		}
 

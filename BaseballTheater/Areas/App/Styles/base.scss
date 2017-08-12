@@ -54,6 +54,7 @@ html.ready body #body-wrapper
 
 header
 {
+	$header-height: 55px;
 	position: fixed;
 	z-index: 100;
 	overflow: hidden;
@@ -61,7 +62,7 @@ header
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 55px;
+	height: $header-height;
 	padding-bottom: 5px;
 
 	transition: 0.25s;
@@ -72,11 +73,6 @@ header
 
 	font-size: 18px;
 
-	.expand-links
-	{
-		display: none;
-	}
-
 	.header-content
 	{
 		display: flex;
@@ -85,6 +81,23 @@ header
 		padding: 0 20px;
 
 		text-align: center;
+	}
+
+	.mobile-menu-trigger
+	{
+		display: none;
+
+		.r-medium &
+		{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			margin-left: -1rem;
+			padding: 0 1rem;
+
+			text-align: center;
+		}
 	}
 
 	.logo
@@ -113,6 +126,12 @@ header
 		{
 			text-decoration: none;
 		}
+
+		.r-medium &
+		{
+			text-align: right;
+			flex: 1 0 auto;
+		}
 	}
 
 	.links
@@ -121,10 +140,29 @@ header
 		display: flex;
 
 		padding-left: 2rem;
+
+		.r-medium &
+		{
+			position: fixed;
+			display: block;
+
+			top: $header-height;
+			left: -100%;
+			height: calc(100vh - #{$header-height});
+			padding-left: 0;
+
+			transition: 0.25s;
+
+			background: $color-accent;
+
+			&.open
+			{
+				left: 0;
+			}
+		}
 	}
 
-	.links a,
-	.expand-links i
+	.links a
 	{
 		position: relative;
 		display: block;
@@ -162,6 +200,16 @@ header
 			height: 5px;
 
 			opacity: 1;
+		}
+
+		.r-medium &
+		{
+			width: 100%;
+
+			&:after
+			{
+				display: none;
+			}
 		}
 	}
 
@@ -499,16 +547,6 @@ footer
 
 @media all and (max-width: 600px)
 {
-	header .logo
-	{
-		right: 20px;
-		left: auto;
-
-		transform: none;
-
-		font-size: 20px;
-	}
-
 	.backers-wrapper > .team-sponsors > .team-sponsor-team
 	{
 		width: 50%;

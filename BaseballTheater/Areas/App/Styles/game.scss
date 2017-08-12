@@ -126,6 +126,35 @@
 	}
 }
 
+.special-highlights
+{
+	width: 100%;
+	padding-top: 2rem;
+}
+
+.team-highlights
+{
+	width: 50%;
+	padding-top: 2rem;
+
+	text-align: center;
+
+	.highlight
+	{
+		width: 100%;
+	}
+
+	> h2
+	{
+		text-align: center;
+	}
+
+	.r-mobile &
+	{
+		width: 100%;
+	}
+}
+
 .mode-switch-container
 {
 	display: flex;

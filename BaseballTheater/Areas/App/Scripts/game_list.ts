@@ -28,7 +28,7 @@
 
 			const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(date);
 
-			const favoriteTeam = Cookies.get("favoriteteam");;
+			const favoriteTeam = Cookies.get("favoriteteam");
 
 			summaries.then((gameSummaryCollection) =>
 			{

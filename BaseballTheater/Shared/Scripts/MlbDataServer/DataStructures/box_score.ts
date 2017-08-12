@@ -61,6 +61,11 @@ namespace Theater
 
 		constructor(data: IBoxScoreContainer)
 		{
+			if (!data || !data.boxscore)
+			{
+				return;
+			}
+			
 			this.game_info = data.boxscore.game_info;
 			this.game_id = data.boxscore.game_id;
 			this.game_pk = data.boxscore.game_pk;

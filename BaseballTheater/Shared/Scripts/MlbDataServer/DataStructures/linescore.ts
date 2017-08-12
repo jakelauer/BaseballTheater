@@ -68,10 +68,12 @@
 
 	export interface IGameStatus
 	{
+		ind: string;
 		status: string;
 		inning: string;
 		top_inning: string;
 		inning_state: string;
+		reason: string;
 	}
 
 	export enum League

@@ -422,6 +422,7 @@
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\team_redirect.ts" />
     <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\modernizr\modernizr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
@@ -447,6 +448,7 @@
     <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\responsive.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\utility.ts" />
     <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />

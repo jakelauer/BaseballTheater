@@ -76,7 +76,9 @@
 		};
 
 		public highlightsVueData: IHighlightsVueData = {
-			highlights: [],
+			allHighlights: [],
+			homeHighlights: [],
+			awayHighlights: [],
 			boxScore: null,
 			gameSummary: null,
 			detailMode: Number(localStorage.getItem("detail-mode") || DetailModes.Highlights)

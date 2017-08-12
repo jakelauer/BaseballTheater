@@ -3,7 +3,10 @@
 
 	export interface IHighlightsVueData
 	{
-		highlights: IHighlight[];
+		allHighlights: IHighlight[];
+		homeHighlights: IHighlight[];
+		awayHighlights: IHighlight[];
+		specialHighlights: IHighlight[];
 		gameSummary: GameSummary;
 		boxScore: BoxScore;
 		detailMode: DetailModes
@@ -43,7 +46,9 @@
 
 		public destroy()
 		{
-			App.Instance.highlightsVueData.highlights = [];
+			App.Instance.highlightsVueData.homeHighlights = [];
+			App.Instance.highlightsVueData.awayHighlights = [];
+			App.Instance.highlightsVueData.specialHighlights = [];
 			App.Instance.highlightsVueData.gameSummary = null;
 			App.Instance.highlightsVueData.boxScore = null;
 		}
@@ -53,6 +58,11 @@
 			try
 			{
 				const currentGame = await this.getCurrentGame();
+				const boxScore = await this.getBoxScore(currentGame);
+				if (boxScore !== null)
+				{
+					App.Instance.highlightsVueData.boxScore = boxScore;
+				}
 
 				App.Instance.highlightsVueData.gameSummary = currentGame;
 
@@ -78,20 +88,36 @@
 						return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed) || idOrder;
 					});
 
-					App.Instance.highlightsVueData.highlights = highlights;
+					if (boxScore != null)
+					{
+						const homeHighlights = highlights.filter((highlight) =>
+						{
+							return highlight.team_id === boxScore.home_id;
+						});
+
+
+						const awayHighlights = highlights.filter((highlight) => {
+							return highlight.team_id === boxScore.away_id;
+						});
+
+						App.Instance.highlightsVueData.homeHighlights = awayHighlights;
+						App.Instance.highlightsVueData.awayHighlights = homeHighlights;
+					}
+
+					const specialHighlights = highlights.filter((highlight) =>
+					{
+						return highlight.recap || highlight.condensed;
+					});
+
+					App.Instance.highlightsVueData.awayHighlights = specialHighlights;
+
+					App.Instance.highlightsVueData.allHighlights = highlights;
 				}
 				else
 				{
-					App.Instance.highlightsVueData.highlights = [];
-				}
-
-				if (Config.BoxScoresEnabled)
-				{
-					const boxScore = await this.getBoxScore(currentGame);
-					if (boxScore !== null)
-					{
-						App.Instance.highlightsVueData.boxScore = boxScore;
-					}
+					App.Instance.highlightsVueData.awayHighlights = [];
+					App.Instance.highlightsVueData.homeHighlights = [];
+					App.Instance.highlightsVueData.allHighlights = [];
 				}
 			}
 			catch (e)
@@ -137,7 +163,7 @@
 			return null;
 		}
 
-		private async getBoxScore(currentGame: GameSummary)
+		private async getBoxScore(currentGame: GameSummary): Promise<BoxScore>
 		{
 			if (currentGame !== null)
 			{

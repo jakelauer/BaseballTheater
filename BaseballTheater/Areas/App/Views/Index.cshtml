@@ -73,7 +73,7 @@
 
 	</div>
 	
-	<div v-if="boxScore && highlights" class="mode-switch-container">
+	<div v-if="boxScore && allHighlights" class="mode-switch-container">
 		<div class="mode-switch">
 			<div class="switch-item" v-on:click="detailMode = 0" v-bind:class="{ on: detailMode === 0}">
 				Highlights
@@ -87,9 +87,43 @@
 	<template v-if="boxScore && detailMode === 1">
 		<boxscore v-bind:box-score="boxScore"></boxscore>
 	</template>
+	
+	<template if="((awayHighlights && awayHighlights.length > 0) || (homeHighlights && homeHighlights.length > 0)) && detailMode === 0">
+		<div class="special-highlights">
+			<template v-if="specialHighlights && specialHighlights.length > 0 && detailMode === 0">
+				<highlight v-for="highlight in specialHighlights" v-bind:highlight="highlight">
 
-	<template v-if="highlights && highlights.length > 0 && detailMode === 0">
-		<highlight v-for="highlight in highlights" v-bind:highlight="highlight">
+				</highlight>
+			</template>
+			<template v-else>
+				No highlights for this team yet.
+			</template>
+		</div>
+		<div class="team-highlights away">
+			<h2 class="team-color" v-if="gameSummary" v-bind:class="[gameSummary.away_file_code]">{{gameSummary.away_team_name}} highlights</h2>
+			
+			<template v-if="awayHighlights && awayHighlights.length > 0 && detailMode === 0">
+				<highlight v-for="highlight in awayHighlights" v-bind:highlight="highlight">
+
+				</highlight>
+			</template>
+			<template v-else>
+				No highlights for this team yet.
+			</template>
+		</div>
+		<div class="team-highlights home">
+			<h2 class="team-color" v-if="gameSummary" v-bind:class="[gameSummary.home_file_code]">{{gameSummary.home_team_name}} highlights</h2>
+			
+			<template v-if="homeHighlights && homeHighlights.length > 0 && detailMode === 0">
+				<highlight v-for="highlight in homeHighlights" v-bind:highlight="highlight">
+
+				</highlight>
+			</template>
+			<template v-else>No highlights for this team yet.</template>
+		</div>
+	</template>
+	<template v-else-if="highlights && allHighlights.length > 0 && detailMode === 0">
+		<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight">
 
 		</highlight>
 	</template>

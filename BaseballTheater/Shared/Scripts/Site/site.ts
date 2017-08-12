@@ -13,6 +13,13 @@
 	{
 		Site.LinkHandler.Instance.initialize();
 		initializeCurrentPage();
+
+		Responsive.Instance.initialize();
+
+		$(".mobile-menu-trigger").on("click", () =>
+		{
+			$("header .links").toggleClass("open");
+		});
 	}
 
 	initializeCurrentPage = () =>
