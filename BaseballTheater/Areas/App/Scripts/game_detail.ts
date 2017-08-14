@@ -9,7 +9,7 @@
 		specialHighlights: IHighlight[];
 		gameSummary: GameSummary;
 		boxScore: BoxScore;
-		detailMode: DetailModes
+		detailMode: DetailModes;
 	}
 
 	export class GameDetail extends Site.Page
@@ -95,13 +95,12 @@
 							return highlight.team_id === boxScore.home_id;
 						});
 
-
 						const awayHighlights = highlights.filter((highlight) => {
 							return highlight.team_id === boxScore.away_id;
 						});
 
-						App.Instance.highlightsVueData.homeHighlights = awayHighlights;
-						App.Instance.highlightsVueData.awayHighlights = homeHighlights;
+						App.Instance.highlightsVueData.homeHighlights = homeHighlights;
+						App.Instance.highlightsVueData.awayHighlights = awayHighlights;
 					}
 
 					const specialHighlights = highlights.filter((highlight) =>
@@ -109,7 +108,7 @@
 						return highlight.recap || highlight.condensed;
 					});
 
-					App.Instance.highlightsVueData.awayHighlights = specialHighlights;
+					App.Instance.highlightsVueData.specialHighlights = specialHighlights;
 
 					App.Instance.highlightsVueData.allHighlights = highlights;
 				}

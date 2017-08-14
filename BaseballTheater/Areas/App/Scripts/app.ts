@@ -79,6 +79,7 @@
 			allHighlights: [],
 			homeHighlights: [],
 			awayHighlights: [],
+			specialHighlights: [],
 			boxScore: null,
 			gameSummary: null,
 			detailMode: Number(localStorage.getItem("detail-mode") || DetailModes.Highlights)
