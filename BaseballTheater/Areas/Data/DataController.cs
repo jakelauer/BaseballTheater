@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using BaseballTheater.Areas.Data.Models.Patreon;
+using System.Web.Mvc;
 
 namespace BaseballTheater.Areas.Data
 {
@@ -8,6 +9,14 @@ namespace BaseballTheater.Areas.Data
 		public ActionResult Patreon()
 		{
 			return View();
+		}
+
+		public ActionResult News()
+		{
+			var model = new NewsModel();
+			model.PopulateModel();
+
+			return View(model);
 		}
 	}
 }

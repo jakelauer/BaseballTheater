@@ -35,6 +35,10 @@
 		premiumSponsors: IPremiumSponsor[];
 	}
 
+	interface INewsVueData {
+		rssItems: IRssItem[];
+	}
+
 	export class App extends Site.Page
 	{
 		public static Instance = new App();
@@ -43,6 +47,8 @@
 		public settingsVue: vuejs.Vue;
 		private highlightsVue: vuejs.Vue;
 		private backersVue: vuejs.Vue;
+		private newsVue: vuejs.Vue;
+		public static now = moment();
 
 		public static get clientNetSpeed()
 		{
@@ -89,6 +95,10 @@
 			teamSponsors: [],
 			premiumSponsors: [],
 			showBackers: false
+		};
+
+		public newsVueData: INewsVueData = {
+			rssItems: []
 		};
 
 		public initialize()
@@ -197,6 +207,27 @@
 				data: this.backersVueData
 			});
 
+			this.newsVue = new Vue({
+				el: ".news-wrapper",
+				data: this.newsVueData,
+				methods: {
+					getDate: (item: IRssItem) =>
+					{
+						return item.pubDateObj.fromNow();
+					},
+					getDomain: (item: IRssItem) =>
+					{
+						var url_domain = (data) =>
+						{
+							var a = document.createElement('a');
+							a.href = data;
+							return a.hostname;
+						}
+						return url_domain(item.link);
+					}
+				}
+			});
+
 			$("html").addClass("ready");
 		}
 
@@ -218,6 +249,7 @@
 
 	Site.addPage({
 		matchingUrl: /.*/,
-		page: App.Instance
+		page: App.Instance,
+		name: "All"
 	});
 }

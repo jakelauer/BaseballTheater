@@ -12,5 +12,6 @@
 	{
 		matchingUrl: RegExp;
 		page: Page;
+		name: string;
 	}
 }

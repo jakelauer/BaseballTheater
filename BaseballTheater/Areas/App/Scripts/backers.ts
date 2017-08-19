@@ -33,6 +33,7 @@
 
 	Site.addPage({
 		matchingUrl: /^\/backers(.*)/,
-		page: BackersPage.Instance
+		page: BackersPage.Instance,
+		name: "backers"
 	});
 }

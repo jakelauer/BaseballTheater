@@ -238,6 +238,7 @@
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
+    <Compile Include="Areas\Data\Models\Patreon\NewsModel.cs" />
     <Compile Include="Areas\Data\Models\Patreon\PatreonModel.cs" />
     <Compile Include="Areas\Data\Models\Patreon\Teams.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackerTypes.cs" />
@@ -283,6 +284,7 @@
     <Content Include="images\favicon-32x32.png" />
     <Content Include="images\favicon-96x96.png" />
     <Content Include="images\favicon.ico" />
+    <Content Include="images\logo-large.png" />
     <Content Include="images\logos\al.gif" />
     <Content Include="images\logos\ari.png" />
     <Content Include="images\logos\atl.png" />
@@ -351,6 +353,8 @@
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff2" />
     <Content Include="Areas\App\Styles\_vars.scss" />
+    <Content Include="Areas\Data\Views\News.cshtml" />
+    <Content Include="Areas\App\Styles\news.scss" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -420,6 +424,7 @@
     <TypeScriptCompile Include="Areas\App\Scripts\Helpers\backers_list.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\news.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\team_redirect.ts" />
     <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\modernizr\modernizr.d.ts" />
@@ -438,9 +443,11 @@
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\pitching.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\player.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\probably_pitcher.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\rss.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\teams.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\news_feed_creator.ts" />
     <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\Utils\xml_loader.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_list.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />

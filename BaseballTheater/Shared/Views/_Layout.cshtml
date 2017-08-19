@@ -19,8 +19,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<title>@ViewBag.Title</title>
 
-	<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
-	<link href='https://fonts.googleapis.com/css?family=Alfa+Slab+One' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	@Styles.Render("~/stylebundles/scss")
@@ -44,22 +43,23 @@
 		<div class="mobile-menu-trigger">
 			<i class="fa fa-bars" aria-hidden="true"></i>
 		</div>
-		<a class="logo" href="/"><i class="fa fa-film" aria-hidden="true"></i> Baseball Theater</a>
+		<a class="logo-link" href="/"> Baseball Theater
+		</a>
 		<div class="links">
-			<a href="/">
+			<a href="/" data-name="games">
 				Games
 			</a>
-			<a href="/backers">
+			<a href="/news" data-name="news">
+				News
+			</a>
+			<a href="/backers" data-name="backers">
 				Backers
 			</a>
 			<a href="https://www.reddit.com/r/BaseballTheater/" target="_blank">
 				Updates
 			</a>
-			<a href="https://www.reddit.com/r/BaseballTheater/submit" target="_blank">
-				Report a Problem
-			</a>
-			<a href="https://github.com/BaseballTheater" target="_blank">
-				Contribute on GitHub
+			<a href="https://www.reddit.com/r/BaseballTheater/submit?selftext=true" target="_blank">
+				Feedback
 			</a>
 		</div>
 	</div>
@@ -81,8 +81,8 @@
 	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
 	<br /><br />
 	<div class="links">
-		<a href="https://www.reddit.com/r/BaseballTheater/submit" title="Send me your ideas!" target="_blank">
-			Send me your feedback!
+		<a href="https://github.com/BaseballTheater" target="_blank">
+			Contribute on GitHub
 		</a>
 	</div>
 </footer>

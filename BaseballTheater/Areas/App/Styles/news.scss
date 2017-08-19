@@ -1,0 +1,42 @@
+﻿.news-wrapper
+{
+	display: flex;
+	flex-wrap: wrap;
+
+	.news-item
+	{
+		width: 50%;
+		padding-bottom: 2rem;
+
+		a
+		{
+			font-weight: bold;
+		}
+
+		.about:after
+		{
+			font-size: 0.8rem;
+		}
+
+		&[data-domain*="fangraphs"] .about:after
+		{
+			content: " via Fangraphs";
+
+			color: limegreen;
+		}
+
+		&[data-domain*="fivethirtyeight"] .about:after
+		{
+			content: " via 538";
+
+			color: black;
+		}
+
+		&[data-domain*="mlbtraderumors"] .about:after
+		{
+			content: " via MLB Trade Rumors";
+
+			color: red;
+		}
+	}
+}

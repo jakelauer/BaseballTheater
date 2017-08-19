@@ -148,6 +148,7 @@
 	Site.addPage({
 		matchingUrl:
 			/^\/?([0-9]{8})?(\?.*)?$/i, //match URLs of nothing, or just a /, or a / then 8 digits and an optional querystring
-		page: GameList.Instance
+		page: GameList.Instance,
+		name: "games"
 	});
 }

@@ -190,6 +190,7 @@
 
 	Site.addPage({
 		page: GameDetail.Instance,
-		matchingUrl: /^\/game\/(.*)/
+		matchingUrl: /^\/game\/(.*)/,
+		name: "game"
 	});
 }

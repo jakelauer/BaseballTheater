@@ -115,6 +115,7 @@
 
 	Site.addPage({
 		matchingUrl: TeamRedirect.TeamRedirectRegex,
-		page: TeamRedirect.Instance
+		page: TeamRedirect.Instance,
+		name: ""
 	});
 }

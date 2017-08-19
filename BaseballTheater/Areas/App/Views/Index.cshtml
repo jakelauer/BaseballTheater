@@ -88,15 +88,12 @@
 		<boxscore v-bind:box-score="boxScore"></boxscore>
 	</template>
 	
-	<template if="((awayHighlights && awayHighlights.length > 0) || (homeHighlights && homeHighlights.length > 0)) && detailMode === 0">
+	<template v-if="((awayHighlights && awayHighlights.length > 0) || (homeHighlights && homeHighlights.length > 0)) && detailMode === 0">
 		<div class="special-highlights">
 			<template v-if="specialHighlights && specialHighlights.length > 0 && detailMode === 0">
 				<highlight v-for="highlight in specialHighlights" v-bind:highlight="highlight">
 
 				</highlight>
-			</template>
-			<template v-else>
-				No highlights for this team yet.
 			</template>
 		</div>
 		<div class="team-highlights away">
@@ -119,10 +116,12 @@
 
 				</highlight>
 			</template>
-			<template v-else>No highlights for this team yet.</template>
+			<template v-else>
+				No highlights for this team yet.
+			</template>
 		</div>
 	</template>
-	<template v-else-if="highlights && allHighlights.length > 0 && detailMode === 0">
+	<template v-else-if="allHighlights && allHighlights.length > 0 && detailMode === 0">
 		<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight">
 
 		</highlight>
@@ -168,4 +167,14 @@
 			</span>
 		</div>
 	</template>
+</div>
+
+<div class="news-wrapper" v-if="">
+	<div class="news-item" v-for="item in rssItems" v-bind:data-domain="getDomain(item)" v-if="item.link.length > 0">
+		<div class="icon"></div>
+		<div class="text">
+			<a v-bind:href="item.link" target="blank">{{item.title}}</a>
+			<div class="about">{{getDate(item)}}</div>
+		</div>
+	</div>
 </div>

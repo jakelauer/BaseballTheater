@@ -1,0 +1,8 @@
+﻿@using BaseballTheater.Areas.Data.Models.Patreon
+@{
+	Layout = "_DataLayout.cshtml";
+}
+
+@model NewsModel
+
+@Html.Raw(Json.Encode(Model))

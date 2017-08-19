@@ -26,6 +26,8 @@
 	{
 		$(window).scrollTop(0);
 
+		$(".links a").removeClass("active");
+
 		if (currentPage !== null)
 		{
 			currentPage.page.destroy();
@@ -35,6 +37,8 @@
 		{
 			if (page.matchingUrl.test(location.pathname))
 			{
+				$(`.links a[data-name='${page.name}']`).addClass("active");
+
 				currentPage = page;
 				if (initializedPages.indexOf(page) > -1)
 				{
