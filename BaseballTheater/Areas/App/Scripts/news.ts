@@ -6,6 +6,8 @@
 	{
 		public static Instance = new News();
 
+		private articles: IRssItem[] = null;
+
 		public initialize()
 		{
 			Site.startLoading();
@@ -27,17 +29,29 @@
 		{
 			try
 			{
-				MlbDataServer.NewsFeedCreator.getFeed().then(result =>
+				if (!this.articles)
 				{
-					console.log(result);
+					MlbDataServer.NewsFeedCreator.getFeed().then(result =>
+					{
+						console.log(result);
 
-					const all = result.sort((a, b) => {
-						return a.pubDateObj.isAfter(b.pubDateObj) ? -1 : 1;
+						const all = result.sort((a, b) =>
+						{
+							return a.pubDateObj.isAfter(b.pubDateObj) ? -1 : 1;
+						});
+
+						this.articles = all;
+
+						App.Instance.newsVueData.rssItems = all;
+
+						Site.stopLoading();
 					});
-
-					App.Instance.newsVueData.rssItems = all;
+				}
+				else
+				{
+					App.Instance.newsVueData.rssItems = this.articles;
 					Site.stopLoading();
-				});
+				}
 			}
 			catch (e)
 			{

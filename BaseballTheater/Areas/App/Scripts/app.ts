@@ -222,7 +222,11 @@
 				methods: {
 					getDate: (item: IRssItem) =>
 					{
-						return item.pubDateObj.local().fromNow();
+						if (item.link.indexOf("espn.com") > -1)
+						{
+							return item.pubDateObj.clone().add(-1, "hours").fromNow();
+						}
+						return item.pubDateObj.fromNow();
 					},
 					getDomain: (item: IRssItem) =>
 					{
