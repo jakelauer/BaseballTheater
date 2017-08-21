@@ -50,6 +50,7 @@
 			App.Instance.highlightsVueData.homeHighlights = [];
 			App.Instance.highlightsVueData.awayHighlights = [];
 			App.Instance.highlightsVueData.specialHighlights = [];
+			App.Instance.highlightsVueData.allHighlights = [];
 			App.Instance.highlightsVueData.gameSummary = null;
 			App.Instance.highlightsVueData.boxScore = null;
 		}
