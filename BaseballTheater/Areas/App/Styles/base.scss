@@ -517,17 +517,3 @@ footer
 {
 	display: none;
 }
-
-@media all and (max-width: 600px)
-{
-	.backers-wrapper > .team-sponsors > .team-sponsor-team
-	{
-		width: 50%;
-	}
-
-	html,
-	body
-	{
-		font-size: 12px;
-	}
-}

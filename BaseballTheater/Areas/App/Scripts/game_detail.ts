@@ -9,6 +9,7 @@
 		specialHighlights: IHighlight[];
 		gameSummary: GameSummary;
 		boxScore: BoxScore;
+		currentTab: string;
 		detailMode: DetailModes;
 	}
 
@@ -65,6 +66,11 @@
 				}
 
 				App.Instance.highlightsVueData.gameSummary = currentGame;
+
+				if (currentGame.home_file_code === App.Instance.settingsVueData.favoriteTeam)
+				{
+					App.Instance.highlightsVueData.currentTab = "home";
+				}
 
 				const highlightsCollection = await this.getHighlights(currentGame);
 				if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)

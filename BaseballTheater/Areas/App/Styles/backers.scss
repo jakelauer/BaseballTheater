@@ -61,12 +61,10 @@
 
 	.team-sponsor-team
 	{
-		display: flex;
+		display: block;
 
-		width: 25%;
+		width: 50%;
 		padding: 2rem 1rem 1rem;
-
-		text-align: center;
 
 		opacity: 0.25;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.2);
@@ -74,11 +72,6 @@
 		&.has-fans
 		{
 			opacity: 1;
-		}
-
-		&:hover
-		{
-			background: rgba(0, 0, 0, 0.1);
 		}
 
 		a
@@ -101,6 +94,11 @@
 		.team-logo-large
 		{
 			margin-bottom: 1rem;
+		}
+
+		.r-mobile &
+		{
+			width: 100%;
 		}
 	}
 }

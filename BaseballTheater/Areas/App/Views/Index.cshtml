@@ -96,10 +96,17 @@
 				</highlight>
 			</template>
 		</div>
-		<div class="team-highlights away">
-			<h2 class="team-color" v-if="gameSummary" v-bind:class="[gameSummary.away_file_code]">{{gameSummary.away_team_name}} highlights</h2>
-			
+		
+		<div class="mode-switch-container highlights" v-if="((awayHighlights && awayHighlights.length) && (homeHighlights && homeHighlights.length)) > 0 && detailMode === 0">
+			<div class="mode-switch">
+				<div class="switch-item" v-on:click="showTab('away')" v-if="gameSummary" v-bind:class="{ on: tabEnabled('away') }">{{gameSummary.away_team_name}}</div>
+				<div class="switch-item" v-on:click="showTab('home')" v-if="gameSummary" v-bind:class="{ on: tabEnabled('home') }">{{gameSummary.home_team_name}}</div>
+			</div>
+		</div>
+
+		<div class="team-highlights away" v-bind:class="{ on: tabEnabled('away') }">
 			<template v-if="awayHighlights && awayHighlights.length > 0 && detailMode === 0">
+				<h2 class="header team-color" v-if="gameSummary" v-bind:class="[gameSummary.away_file_code]">{{gameSummary.away_team_name}}</h2>
 				<highlight v-for="highlight in awayHighlights" v-bind:highlight="highlight">
 
 				</highlight>
@@ -108,10 +115,9 @@
 				No highlights for this team yet.
 			</template>
 		</div>
-		<div class="team-highlights home">
-			<h2 class="team-color" v-if="gameSummary" v-bind:class="[gameSummary.home_file_code]">{{gameSummary.home_team_name}} highlights</h2>
-			
+		<div class="team-highlights home" v-bind:class="{ on: tabEnabled('home') }">
 			<template v-if="homeHighlights && homeHighlights.length > 0 && detailMode === 0">
+				<h2 class="header team-color" v-if="gameSummary" v-bind:class="[gameSummary.home_file_code]">{{gameSummary.home_team_name}}</h2>
 				<highlight v-for="highlight in homeHighlights" v-bind:highlight="highlight">
 
 				</highlight>

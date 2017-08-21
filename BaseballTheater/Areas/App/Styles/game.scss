@@ -45,19 +45,35 @@
 	}
 }
 
+.mode-switch-container.highlights
+{
+	display: none;
+
+	margin-top: 4rem;
+
+	text-transform: uppercase;
+
+	.r-mobile &
+	{
+		display: flex;
+	}
+}
+
 .highlight
 {
 	position: relative;
 
 	width: 50%;
-	margin: 15px auto 45px;
+	margin: 0.5rem auto 2rem;
 	padding: 0 10px;
 
 	h2
 	{
 		margin-bottom: 10px;
 
-		font-size: 1.5rem;
+		text-align: left;
+
+		font-size: 1rem;
 	}
 
 	.video
@@ -132,7 +148,8 @@
 	display: flex;
 
 	width: 100%;
-	padding-top: 2rem;
+	padding-top: 1rem;
+	flex-wrap: wrap;
 }
 
 .team-highlights
@@ -150,11 +167,26 @@
 	> h2
 	{
 		text-align: center;
+		text-transform: uppercase;
+
+		font-size: 2.5rem;
+
+		.r-mobile &
+		{
+			display: none;
+		}
 	}
 
 	.r-mobile &
 	{
+		display: none;
+
 		width: 100%;
+
+		&.on
+		{
+			display: block;
+		}
 	}
 }
 

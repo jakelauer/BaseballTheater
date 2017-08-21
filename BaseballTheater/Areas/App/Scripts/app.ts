@@ -88,6 +88,7 @@
 			specialHighlights: [],
 			boxScore: null,
 			gameSummary: null,
+			currentTab: "away",
 			detailMode: Number(localStorage.getItem("detail-mode") || DetailModes.Highlights)
 		}
 
@@ -180,6 +181,14 @@
 					getTeamSponsors: (teamCode: string | number) =>
 					{
 						return BackersList.Instance.getTeamSponsors(teamCode);
+					},
+					showTab: (which: "home" | "away") =>
+					{
+						this.highlightsVueData.currentTab = which;
+					},
+					tabEnabled: (which: "home" | "away") =>
+					{
+						return this.highlightsVueData.currentTab === which;
 					}
 				},
 				watch: {
@@ -213,7 +222,7 @@
 				methods: {
 					getDate: (item: IRssItem) =>
 					{
-						return item.pubDateObj.fromNow();
+						return item.pubDateObj.local().fromNow();
 					},
 					getDomain: (item: IRssItem) =>
 					{

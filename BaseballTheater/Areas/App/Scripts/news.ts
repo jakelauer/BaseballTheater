@@ -29,6 +29,8 @@
 			{
 				MlbDataServer.NewsFeedCreator.getFeed().then(result =>
 				{
+					console.log(result);
+
 					const all = result.sort((a, b) => {
 						return a.pubDateObj.isAfter(b.pubDateObj) ? -1 : 1;
 					});

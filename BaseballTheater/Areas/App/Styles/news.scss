@@ -5,7 +5,10 @@
 
 	.news-item
 	{
-		width: 50%;
+		display: flex;
+
+		width: 100%;
+		padding-right: 2rem;
 		padding-bottom: 2rem;
 
 		a
@@ -13,30 +16,59 @@
 			font-weight: bold;
 		}
 
-		.about:after
+		&:before
 		{
-			font-size: 0.8rem;
-		}
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-		&[data-domain*="fangraphs"] .about:after
-		{
-			content: " via Fangraphs";
+			width: 2.25rem;
+			min-width: 2.25rem;
+			margin-right: 1rem;
+			padding: 0.25rem;
 
-			color: limegreen;
-		}
-
-		&[data-domain*="fivethirtyeight"] .about:after
-		{
-			content: " via 538";
+			text-align: center;
 
 			color: black;
+			color: white;
+			border-radius: 3px;
+			text-shadow: 0 1px 1px black;
+
+			font-weight: bold;
+			line-height: 2.25rem;
 		}
 
-		&[data-domain*="mlbtraderumors"] .about:after
+		&[data-domain*="fangraphs"]:before
 		{
-			content: " via MLB Trade Rumors";
+			content: "FG";
 
-			color: red;
+			background: rgba(limegreen, 0.5);
+		}
+
+		&[data-domain*="fivethirtyeight"]:before
+		{
+			content: "538";
+
+			background: rgba(orange, 0.5);
+		}
+
+		&[data-domain*="si"]:before
+		{
+			content: "SI";
+
+			background: rgba(#0a1529, 0.5);
+		}
+
+		&[data-domain*="espn"]:before
+		{
+			content: "ES";
+
+			background: rgba(230, 0, 0, 0.5);
+		}
+
+		.r-mobile &
+		{
+			width: 100%;
 		}
 	}
 }

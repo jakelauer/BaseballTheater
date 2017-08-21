@@ -2,7 +2,7 @@
 {
 	function getTeamCode(team: Teams)
 	{
-		return Teams[team];
+		return MlbDataServer.Teams.TeamList[Teams[team]] || "None";
 	}
 
 	Vue.component("backer",
