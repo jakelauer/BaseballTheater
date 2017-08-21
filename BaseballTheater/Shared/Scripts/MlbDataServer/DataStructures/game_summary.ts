@@ -102,11 +102,11 @@ namespace Theater {
 			this.inning = data.inning;
 			this.away_name_abbrev = data.away_name_abbrev;
 			this.away_team_name = data.away_team_name;
-			this.away_team_city = data.away_team_city;
+			this.away_team_city = GameSummary.getCityName(data.away_team_city);
 			this.away_file_code = data.away_file_code;
 			this.home_name_abbrev = data.home_name_abbrev;
 			this.home_team_name = data.home_team_name;
-			this.home_team_city = data.home_team_city;
+			this.home_team_city = GameSummary.getCityName(data.home_team_city);
 			this.home_file_code = data.home_file_code;
 			this.game_data_directory = data.game_data_directory;
 			this.home_win = data.home_win;
@@ -131,6 +131,22 @@ namespace Theater {
 
 		private static dst(date: Date) {
 			return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
+		}
+
+		private static getCityName(cityName: string) {
+			if (cityName.toLowerCase().indexOf("la ") === 0) {
+				return "Los Angeles";
+			}
+
+			if (cityName.toLowerCase().indexOf("chi") === 0) {
+				return "Chicago";
+			}
+
+			if (cityName.toLowerCase().indexOf("ny") === 0) {
+				return "New York";
+			}
+
+			return cityName;
 		}
 	}
 }
