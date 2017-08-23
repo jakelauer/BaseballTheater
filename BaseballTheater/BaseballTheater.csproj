@@ -279,6 +279,7 @@
     <Content Include="images\apple-icon-76x76.png" />
     <Content Include="images\apple-icon-precomposed.png" />
     <Content Include="images\apple-icon.png" />
+    <Content Include="images\backers\career-benchwarmers.jpg" />
     <Content Include="images\backers\storeporter.png" />
     <Content Include="images\favicon-16x16.png" />
     <Content Include="images\favicon-32x32.png" />

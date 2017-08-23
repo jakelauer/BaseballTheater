@@ -51,13 +51,22 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 				logo = "/images/backers/storeporter.png",
 				team = Teams.chc,
 				url = "http://storeporter.com"
+			},
+			new PremiumSponsor
+			{
+				backerName = "Career Benchwarmers",
+				logo = "/images/backers/career-benchwarmers.jpg",
+				team = Teams.pit,
+				url = "https://www.facebook.com/CareerBenchwarmers/"
 			}
 		};
 
 		private readonly List<TeamSponsor> _teamSponsors = new List<TeamSponsor>
 		{
 			new TeamSponsor(Teams.chc, "StorePorter", isStarBacker: true),
+			new TeamSponsor(Teams.pit, "Career Benchwarmers", isStarBacker: true),
 
+			new TeamSponsor(Teams.bos, "Alexander Koch", isStarBacker: true),
 			new TeamSponsor(Teams.nyy, "Sam Normington", isStarBacker: true),
 			new TeamSponsor(Teams.bal, "Eric Hall", isStarBacker: true),
 			new TeamSponsor(Teams.det, "Joe Pas", isStarBacker: true),
@@ -67,6 +76,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.phi, "Curtis Gale", isStarBacker: true),
 			new TeamSponsor(Teams.stl, "Kuhan", isStarBacker: true),
 
+			new TeamSponsor(Teams.hou, "Brian Hoang", isBeerBacker: true),
 			new TeamSponsor(Teams.none, "Michelle Callaghan", isBeerBacker: true),
 			new TeamSponsor(Teams.tor, "Larry D", isBeerBacker: true),
 			new TeamSponsor(Teams.none, "Brian Stoops", isBeerBacker: true),
