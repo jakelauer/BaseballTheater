@@ -2,7 +2,9 @@
 {
 	export var startTime: moment.Moment;
 	export var endTime: moment.Moment;
-	export enum DetailModes {
+
+	export enum DetailModes
+	{
 		Highlights,
 		BoxScore
 	}
@@ -35,7 +37,8 @@
 		premiumSponsors: IPremiumSponsor[];
 	}
 
-	interface INewsVueData {
+	interface INewsVueData
+	{
 		rssItems: IRssItem[];
 	}
 

@@ -35,3 +35,11 @@ interface PatreonData
 	Backers: Backers;
 	GoalPercentage: number;
 }
+
+declare namespace __Modernizr
+{
+	interface FeatureDetects
+	{
+		mobile: boolean;
+	}
+}

@@ -356,6 +356,7 @@
     <Content Include="Areas\App\Styles\_vars.scss" />
     <Content Include="Areas\Data\Views\News.cshtml" />
     <Content Include="Areas\App\Styles\news.scss" />
+    <Content Include="Areas\App\Styles\video-modal.scss" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -397,6 +398,7 @@
     <Content Include="Shared\Views\_game_summary.cshtml" />
     <Content Include="Shared\Views\_favicons.cshtml" />
     <Content Include="Areas\App\Styles\resets.scss" />
+    <Content Include="Shared\Styles\modal.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -455,6 +457,7 @@
     <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
+    <TypeScriptCompile Include="Shared\Scripts\Site\modal.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\responsive.ts" />
     <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />

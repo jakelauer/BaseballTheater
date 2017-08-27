@@ -40,6 +40,11 @@
 	src: url('/Shared/Styles/fonts/bebasneue_thin-webfont.woff2') format('woff2'), url('/Shared/Styles/fonts/bebasneue_thin-webfont.woff') format('woff');
 }
 
+html
+{
+	height: 100%;
+}
+
 body #body-wrapper
 {
 	min-height: 600px;
@@ -55,6 +60,7 @@ html.ready body #body-wrapper
 header
 {
 	$header-height: 55px;
+
 	position: fixed;
 	z-index: 100;
 	overflow: hidden;
