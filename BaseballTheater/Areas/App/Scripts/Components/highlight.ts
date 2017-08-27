@@ -65,9 +65,15 @@
 			return validLinks;
 		}
 
-		export function getDefaultUrl(highlight: IHighlight)
-		{
-			var links = getLinks(highlight);
+	Vue.component("highlight",
+	{
+		template: $("template#highlight").html(),
+		props: ["highlight"],
+		methods: {
+			getLinks,
+			getDefaultUrl: (highlight: IHighlight) =>
+			{
+				var links = getLinks(highlight);
 
 			return links[0].url;
 		}
@@ -123,7 +129,27 @@
 				thumbFinal = thumbs[thumbs.length - 2].__text;
 			}
 
-			return thumbFinal.replace("http:", location.protocol);
+				return thumbFinal.replace("http:", location.protocol);
+			},
+			playVideo: (event: Event) =>
+			{
+				var $playCover = $(event.currentTarget);
+				var $video = $playCover.siblings("video");
+				($video[0] as HTMLVideoElement).play();
+			},
+			pauseVideo: (event: Event) =>
+			{
+				var video = event.currentTarget as HTMLVideoElement;
+				video.pause();
+			},
+			onPlay: (highlight: IHighlight) =>
+			{
+				highlight.isPlaying = true;
+			},
+			onPause: (highlight: IHighlight) =>
+			{
+				highlight.isPlaying = false;
+			}
 		}
-	}
+	});
 }
