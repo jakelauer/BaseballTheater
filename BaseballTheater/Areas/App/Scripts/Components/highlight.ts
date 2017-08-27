@@ -22,12 +22,18 @@
 
 	module HighlightModule
 	{
+		export function getDefaultUrl(highlight: IHighlight)
+		{
+			const links = getLinks(highlight);
+
+			return links[0].url;
+		}
+
 		export function getLinks(game: IHighlight)
 		{
-
 			const qkRegex = /(\d{4}K)/;
-			var links = game.url;
-			var q1200k: ILink = null;
+			const links = game.url;
+			let q1200k: ILink = null;
 
 			// For some reason, Safari doesn't like this particular 
 			// variable when it's a 'let' when it's minified. 
@@ -45,7 +51,7 @@
 				}
 			}
 
-			var validLinks = [];
+			const validLinks: ILink[] = [];
 
 			if (q1200k !== null)
 			{
@@ -65,18 +71,6 @@
 			return validLinks;
 		}
 
-	Vue.component("highlight",
-	{
-		template: $("template#highlight").html(),
-		props: ["highlight"],
-		methods: {
-			getLinks,
-			getDefaultUrl: (highlight: IHighlight) =>
-			{
-				var links = getLinks(highlight);
-
-			return links[0].url;
-		}
 
 		export function getTitle(highlight: IHighlight)
 		{
@@ -87,7 +81,14 @@
 
 		export function showMlbFrame(highlight: IHighlight)
 		{
-			var modal = new Modal()
+			const iframeSrc = getMlbLink(highlight);
+
+			const iframeHtml = `
+<iframe src='${iframeSrc}' width="100%" height="100%" frameborder="0" scrolling="no"/>
+			`;
+			
+			const modal = new Modal("mlb-video", iframeHtml);
+			modal.open();
 		}
 
 		export function getMlbLink(highlight: IHighlight)
@@ -129,27 +130,7 @@
 				thumbFinal = thumbs[thumbs.length - 2].__text;
 			}
 
-				return thumbFinal.replace("http:", location.protocol);
-			},
-			playVideo: (event: Event) =>
-			{
-				var $playCover = $(event.currentTarget);
-				var $video = $playCover.siblings("video");
-				($video[0] as HTMLVideoElement).play();
-			},
-			pauseVideo: (event: Event) =>
-			{
-				var video = event.currentTarget as HTMLVideoElement;
-				video.pause();
-			},
-			onPlay: (highlight: IHighlight) =>
-			{
-				highlight.isPlaying = true;
-			},
-			onPause: (highlight: IHighlight) =>
-			{
-				highlight.isPlaying = false;
-			}
+			return thumbFinal.replace("http:", location.protocol);
 		}
-	});
+	}
 }

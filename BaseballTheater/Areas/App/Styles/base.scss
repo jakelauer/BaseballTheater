@@ -60,7 +60,6 @@ html.ready body #body-wrapper
 header
 {
 	$header-height: 55px;
-
 	position: fixed;
 	z-index: 100;
 	overflow: hidden;
@@ -544,4 +543,10 @@ footer
 		top: 8px;
 		left: 0;
 	}
+}
+
+#modal-disclaimer .modal
+{
+	width: 55rem;
+	max-width: 100%;
 }

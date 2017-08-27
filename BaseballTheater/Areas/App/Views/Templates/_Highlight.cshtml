@@ -1,19 +1,21 @@
-﻿
-
-<template id="highlight">
+﻿<template id="highlight">
 	<div class="highlight">
 		<h2>{{getTitle(highlight)}}</h2>
 		<div class="video">
-			<video v-bind:src="getDefaultUrl(highlight)" controls preload="none" 
-			       v-bind:poster="getDefaultThumb(highlight)" 
-			       v-on:play="onPlay(highlight)" 
-				   v-on:pause="onPause(highlight)"></video>
-			<div class="play-cover" v-on:click="playVideo" v-if="!highlight.isPlaying"></div>
+			@*<video v-bind:src="getDefaultUrl(highlight)" controls preload="none"
+				v-bind:poster="getDefaultThumb(highlight)"
+				v-on:click="pauseVideo"
+				v-on:play="onPlay(highlight)"
+				v-on:pause="onPause(highlight)"></video>*@
+			<div class="thumb" v-bind:style="{ backgroundImage: 'url(' + getDefaultThumb(highlight) + ')' }"></div>
+			<a class="play-cover" v-bind:href="getMlbLink(highlight)" target="_blank"></a>
+		</div>
+		<div class="mlb-video">
 		</div>
 
 		<div class="links">
 			<span>Direct: </span>
-			<a v-for="link in getLinks(highlight)" v-bind:href="link.url" v-on:click.prevent="playUrl(link.url, event)">{{link.label}}</a>
+			<a v-for="link in getLinks(highlight)" v-bind:href="link.url">{{link.label}}</a>
 		</div>
 	</div>
 </template>

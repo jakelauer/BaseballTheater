@@ -24,6 +24,8 @@
 
 	initializeCurrentPage = () =>
 	{
+		showDisclaimer();
+
 		$(window).scrollTop(0);
 
 		$(".links a").removeClass("active");
@@ -98,6 +100,18 @@
 		if (!location.href.match(".local"))
 		{
 			window.ga("send", "event", category, action, data);
+		}
+	}
+
+	export var showDisclaimer = () =>
+	{
+		const hasSeen = Boolean(Number(Cookies.get("seen-mlb-disclaimer")));
+		if (!hasSeen)
+		{
+			const mlbModal = new Modal("disclaimer", $("#mlb-update").html());
+			mlbModal.open();
+
+			Cookies.set("seen-mlb-disclaimer", 1, { expires: 999 });
 		}
 	}
 

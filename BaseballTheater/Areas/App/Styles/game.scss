@@ -48,6 +48,11 @@
 			font-family: "bebas", sans-serif;
 			font-size: 3rem;
 			font-weight: bold;
+
+			.r-mobile &
+			{
+				font-size: 2rem;
+			}
 		}
 	}
 }
@@ -308,5 +313,30 @@
 	.game-link
 	{
 		display: none;
+	}
+}
+
+#modal-mlb-video
+{
+	.modal
+	{
+		top: 27px;
+		width: 100%;
+		max-width: none;
+		height: calc(100% - 55px);
+		max-height: none;
+		margin: 0;
+		padding: 0;
+
+		.modal-content
+		{
+			height: 100%;
+			max-height: none;
+		}
+
+		iframe
+		{
+			display: block;
+		}
 	}
 }

@@ -32,7 +32,7 @@
 
 				$("head").append(`
 <style id='lock-scroll-scrollbar-offset'>
-	html.lockBodyScroll body { overflow: hidden; }
+	html.lockBodyScroll body { overflow: hidden; height: 100%; }
 	html.lockBodyScroll header { padding-right: ${scrollBarWidth}; width: calc(100% - ${scrollBarWidth}); } 
 	html.lockBodyScroll #content { padding-right: ${scrollBarWidth}; box-sizing: border-box; }
 </style>`);

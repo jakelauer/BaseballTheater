@@ -72,6 +72,25 @@
 		opacity: 0;
 		background: #fff;
 		box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.5);
+
+		.close-button
+		{
+			position: absolute;
+			z-index: 5;
+
+			top: 1rem;
+			right: 1rem;
+
+			opacity: 0.5;
+			color: $color-accent;
+
+			font-size: 2rem;
+
+			&:hover
+			{
+				opacity: 1;
+			}
+		}
 	}
 
 	.r-tiny
@@ -85,45 +104,6 @@
 		z-index: 50;
 	}
 
-	.button-close
-	{
-		position: absolute;
-		z-index: 99;
-
-		top: -2.5rem;
-		right: 0;
-		width: 2rem;
-		height: 2rem;
-
-		cursor: pointer;
-
-		opacity: 0.65;
-		color: rgba(245, 245, 245, 0.5);
-
-		font-size: 2rem;
-	}
-
-	.button-close:hover
-	{
-		opacity: 1;
-	}
-
-	.r-tiny .button-close
-	{
-		font-size: 32px;
-	}
-
-	.button-close .fa
-	{
-		display: block;
-	}
-
-	.button-close:hover,
-	.button-close:active
-	{
-		color: #f5f5f5;
-	}
-
 	.modal-content
 	{
 		position: relative;
@@ -131,7 +111,7 @@
 
 		box-sizing: border-box;
 		max-height: calc(100vh - 96px);
-		padding: 2rem;
+		padding: 3rem;
 
 		color: $color-accent;
 	}

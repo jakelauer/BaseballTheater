@@ -86,7 +86,7 @@
 			const wrapper = `
 <div id="${id}" class="modal-container">
 	<div class="modal">
-		<div class="close-button"></div>
+		<div class="close-button"><i class="fa fa-times" aria-hidden="true"></i></div>
 		<div class="modal-content">
 			${this.content}
 		</div>
