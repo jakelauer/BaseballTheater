@@ -48,6 +48,20 @@
 		return validLinks;
 	};
 
+	var playUrl = (url: string) =>
+	{
+		const $video = $("<video controls />");
+		const html = $video.attr("src", url)[0].outerHTML;
+		const modal = new Modal("video-player", html);
+
+		modal.afterOpen = () =>
+		{
+			(modal.$modal.find("video")[0] as HTMLVideoElement).play();
+		}
+
+		modal.open();
+	};
+
 	Vue.component("highlight",
 	{
 		template: $("template#highlight").html(),
@@ -96,11 +110,19 @@
 
 				return thumbFinal.replace("http:", location.protocol);
 			},
-			playVideo: (event: Event) =>
-			{
+			playVideo: (highlight: IHighlight) =>
+			{/*
 				var $playCover = $(event.currentTarget);
 				var $video = $playCover.siblings("video");
-				($video[0] as HTMLVideoElement).play();
+				($video[0] as HTMLVideoElement).play();*/
+
+				var links = getLinks(highlight);
+				playUrl(links[0].url);
+			},
+			playUrl: (url: string) =>
+			{
+				playUrl(url);
+				return false;
 			},
 			pauseVideo: (event: Event) =>
 			{
