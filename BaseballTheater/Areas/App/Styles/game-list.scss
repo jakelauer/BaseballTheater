@@ -85,9 +85,9 @@
 
 	&:hover
 	{
-		transition: 0s;
+		transform: scale(1.05);
 
-		outline: 4px solid #eee;
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 	}
 
 	.game-link
@@ -141,27 +141,6 @@
 	&.final .team-row.winner .score:after
 	{
 		opacity: 1;
-	}
-
-	.team-info
-	{
-		position: relative;
-
-		padding-left: 50px;
-		flex: 1 0;
-
-		.team-name
-		{
-			opacity: 0.6;
-		}
-
-		.team-logo
-		{
-			position: absolute;
-
-			top: 8px;
-			left: 0;
-		}
 	}
 
 	.footer,

@@ -56,7 +56,14 @@
 	<div class="highlight-game-summary" v-if="gameSummary">
 
 		<div class="team away">
-			<a class="team-logo-large home-logo" v-if="gameSummary" v-bind:class="gameSummary.away_file_code" href="/backers"></a>
+			<a class="team-info" v-if="gameSummary" href="/backers">
+				<div class="team-city team-color" v-bind:class="[gameSummary.away_file_code]">
+					{{gameSummary.away_team_city}}
+				</div>
+				<div class="team-name team-color" v-bind:class="[gameSummary.away_file_code]">
+					{{gameSummary.away_team_name}}
+				</div>
+			</a>
 			<a class="backers" href="/backers">
 				{{getTeamSponsors(gameSummary.away_file_code)}}
 			</a>
@@ -65,7 +72,14 @@
 		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
 
 		<div class="team home">
-			<a class="team-logo-large away-logo" v-if="gameSummary" v-bind:class="gameSummary.home_file_code" href="/backers"></a>
+			<a class="team-info" v-if="gameSummary" href="/backers">
+				<div class="team-city team-color" v-bind:class="[gameSummary.home_file_code]">
+					{{gameSummary.home_team_city}}
+				</div>
+				<div class="team-name team-color" v-bind:class="[gameSummary.home_file_code]">
+					{{gameSummary.home_team_name}}
+				</div>
+			</a>
 			<a class="backers" href="/backers">
 				{{getTeamSponsors(gameSummary.home_file_code)}}
 			</a>

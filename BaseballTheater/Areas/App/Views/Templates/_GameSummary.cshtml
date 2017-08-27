@@ -23,8 +23,7 @@
 				</template>
 			</tr>
 			<tr class="team away">
-				<td class="team-info">
-					<span class="team-logo dark" v-bind:class="game.away_file_code"></span>
+				<td class="team-info-basic">
 					<span class="team-name">
 						<span class="team-name-wrap">
 							{{game.away_team_name}}
@@ -48,8 +47,7 @@
 			</tr>
 
 			<tr class="team home">
-				<td class="team-info">
-					<span class="team-logo dark" v-bind:class="game.home_file_code"></span>
+				<td class="team-info-basic">
 					<span class="team-name">
 						<span class="team-name-wrap">
 							{{game.home_team_name}}
@@ -83,7 +81,7 @@
 		<a v-bind:href="getGameLink(game)" class="game-link"></a>
 		<div class="team-row away-team" v-bind:class="{ winner: getWinner(game) === 'away' }">
 			<div class="team-info">
-				<span class="team-logo dark" v-bind:class="game.away_file_code"></span>
+				@*<span class="team-logo dark" v-bind:class="game.away_file_code"></span>*@
 				<div class="team-city team-color" v-bind:class="[game.away_file_code]">{{game.away_team_city}}</div>
 				<div class="team-name team-color" v-bind:class="[game.away_file_code]">{{game.away_team_name}}</div>
 			</div>
@@ -97,7 +95,7 @@
 		</div>
 		<div class="team-row home-team" v-bind:class="{ winner: getWinner(game) === 'home' }">
 			<div class="team-info">
-				<span class="team-logo dark" v-bind:class="game.home_file_code"></span>
+				@*<span class="team-logo dark" v-bind:class="game.home_file_code"></span>*@
 				<div class="team-city team-color" v-bind:class="[game.home_file_code]">{{game.home_team_city}}</div>
 				<div class="team-name team-color" v-bind:class="[game.home_file_code]">{{game.home_team_name}}</div>
 			</div>

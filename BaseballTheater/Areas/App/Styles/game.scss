@@ -42,6 +42,13 @@
 				width: 100%;
 			}
 		}
+
+		.team-info
+		{
+			font-family: "bebas", sans-serif;
+			font-size: 3rem;
+			font-weight: bold;
+		}
 	}
 }
 
@@ -83,6 +90,20 @@
 		width: 100%;
 		padding-bottom: 56.25%;
 		object-fit: cover;
+
+		.thumb
+		{
+			position: absolute;
+
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
+		}
 
 		.play-cover
 		{

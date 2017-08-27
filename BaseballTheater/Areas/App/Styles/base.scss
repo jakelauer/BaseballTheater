@@ -315,7 +315,7 @@ footer
 			background-color: #f5f5f5;
 		}
 
-		.team-info,
+		.team-info-basic,
 		.status
 		{
 			padding-right: 7px;
@@ -330,19 +330,19 @@ footer
 			line-height: 29px;
 		}
 
-		.team-info .team-name
+		.team-info-basic .team-name
 		{
 			display: inline-flex;
 
 			width: calc(100% - 50px);
 		}
 
-		.team-info .team-name .team-name-wrap
+		.team-info-basic .team-name .team-name-wrap
 		{
 			flex: 1 0;
 		}
 
-		.team-info .team-name .probable-pitcher
+		.team-info-basic .team-name .probable-pitcher
 		{
 			font-weight: normal;
 		}
@@ -516,4 +516,26 @@ footer
 .loading .empty
 {
 	display: none;
+}
+
+.team-info
+{
+	position: relative;
+
+	text-decoration: none !important;
+	//padding-left: 50px;
+	flex: 1 0;
+
+	.team-name
+	{
+		opacity: 0.6;
+	}
+
+	.team-logo
+	{
+		position: absolute;
+
+		top: 8px;
+		left: 0;
+	}
 }
