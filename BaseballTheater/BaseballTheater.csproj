@@ -330,16 +330,16 @@
     <Content Include="images\manifest.json" />
     <Content Include="Areas\App\Views\Index.cshtml" />
     <Content Include="Areas\App\Views\web.config" />
-    <Content Include="Areas\App\Views\Templates\_Backers.cshtml" />
+    <Content Include="Areas\App\Views\Components\_Backers.cshtml" />
     <Content Include="Shared\Scripts\libraries\bluebird.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
-    <Content Include="Areas\App\Views\Templates\_Highlight.cshtml" />
-    <Content Include="Areas\App\Views\Templates\_GameSummary.cshtml" />
+    <Content Include="Areas\App\Views\Components\_Highlight.cshtml" />
+    <Content Include="Areas\App\Views\Components\_GameSummary.cshtml" />
     <Content Include="Areas\Proxy\Views\web.config" />
     <Content Include="Areas\Proxy\Views\Index.cshtml" />
     <Content Include="Areas\Data\Views\web.config" />
-    <Content Include="Areas\App\Views\Templates\_BoxScore.cshtml" />
+    <Content Include="Areas\App\Views\Components\_BoxScore.cshtml" />
     <Content Include="Areas\App\Styles\backers.scss" />
     <Content Include="Areas\App\Styles\boxscore.scss" />
     <Content Include="Areas\App\Styles\team-colors.scss" />
@@ -357,6 +357,10 @@
     <Content Include="Areas\Data\Views\News.cshtml" />
     <Content Include="Areas\App\Styles\news.scss" />
     <Content Include="Areas\App\Styles\video-modal.scss" />
+    <Content Include="Areas\App\Views\_game_detail.cshtml" />
+    <Content Include="Areas\App\Views\_backers.cshtml" />
+    <Content Include="Areas\App\Views\_news.cshtml" />
+    <Content Include="Areas\App\Views\_game_list.cshtml" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>

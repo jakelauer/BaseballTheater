@@ -25,7 +25,7 @@
 		{
 			const links = getLinks(highlight);
 
-			return links[0].url;
+			return links[links.length - 1].url;
 		}
 
 		export function getLinks(game: IHighlight)
@@ -42,10 +42,9 @@
 				const matches = link.__text.match(qkRegex);
 				if (matches && matches.length > 0)
 				{
-					const label = matches[0] as string;
 					q1200k = {
 						url: link.__text.replace("http:", location.protocol),
-						label: label
+						label: "low"
 					};
 				}
 			}
@@ -56,12 +55,12 @@
 			{
 				const q1800K = {
 					url: q1200k.url.replace(qkRegex, "1800K").replace("http:", location.protocol),
-					label: "1800K"
+					label: "mid"
 				};
 
 				const q2500K = {
 					url: q1200k.url.replace(qkRegex, "2500K").replace("http:", location.protocol),
-					label: "2500K"
+					label: "high"
 				};
 
 				validLinks.push(q1200k, q1800K, q2500K);
@@ -73,9 +72,18 @@
 
 		export function getTitle(highlight: IHighlight)
 		{
-			return highlight.recap && App.Instance.settingsVueData.hideScores
-				? "Recap (score hidden)"
-				: highlight.headline;
+			if (highlight.recap)
+			{
+				return "Recap";
+			}
+
+			if (highlight.condensed)
+			{
+				return "Condensed Game";
+			}
+
+			const teamCode = MlbDataServer.Teams.TeamIdList[highlight.team_id];
+			return `<span>${teamCode.toUpperCase()}</span> ${highlight.headline}`;
 		}
 
 		export function getMlbLink(highlight: IHighlight)
@@ -91,32 +99,7 @@
 
 		export function getDefaultThumb(highlight: IHighlight)
 		{
-			let thumbFinal: string = highlight.thumb;
-			if (highlight.thumbnails != null && highlight.thumbnails.thumb != null && highlight.thumbnails.thumb.length > 0)
-			{
-				const thumbs = highlight.thumbnails.thumb;
-
-				if (App.clientNetSpeed !== NetSpeed.Fast)
-				{
-					let jpgSearch = "47.jpg";
-
-					if (App.clientNetSpeed === NetSpeed.Slow)
-					{
-						jpgSearch = "52.jpg";
-					}
-
-					for (let thumb of thumbs)
-					{
-						if (Utility.endsWith(thumb.__text, jpgSearch))
-						{
-							thumbFinal = thumb.__text;
-						}
-					}
-				}
-
-				thumbFinal = thumbs[thumbs.length - 2].__text;
-			}
-
+			const thumbFinal = highlight.thumb.__text;
 			return thumbFinal.replace("http:", location.protocol);
 		}
 	}

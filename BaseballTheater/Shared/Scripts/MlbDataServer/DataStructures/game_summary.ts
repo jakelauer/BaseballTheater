@@ -17,11 +17,13 @@ namespace Theater {
 		inning: string;
 		away_name_abbrev: string;
 		away_team_name: string;
+		away_team_id: number;
 		away_team_city: string;
 		away_file_code: string;
 		home_name_abbrev: string;
 		home_team_city: string;
 		home_team_name: string;
+		home_team_id: number;
 		home_file_code: string;
 		game_data_directory: string;
 		linescore: ILinescore;
@@ -50,9 +52,11 @@ namespace Theater {
 		public away_name_abbrev: string;
 		public away_team_city: string;
 		public away_team_name: string;
+		public away_team_id: number;
 		public away_file_code: string;
 		public home_name_abbrev: string;
 		public home_team_name: string;
+		public home_team_id: number;
 		public home_team_city: string;
 		public home_file_code: string;
 		public home_win: string;
@@ -102,10 +106,12 @@ namespace Theater {
 			this.inning = data.inning;
 			this.away_name_abbrev = data.away_name_abbrev;
 			this.away_team_name = data.away_team_name;
+			this.away_team_id = data.away_team_id;
 			this.away_team_city = GameSummary.getCityName(data.away_team_city);
 			this.away_file_code = data.away_file_code;
 			this.home_name_abbrev = data.home_name_abbrev;
 			this.home_team_name = data.home_team_name;
+			this.home_team_id = data.home_team_id;
 			this.home_team_city = GameSummary.getCityName(data.home_team_city);
 			this.home_file_code = data.home_file_code;
 			this.game_data_directory = data.game_data_directory;

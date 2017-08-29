@@ -1,0 +1,77 @@
+﻿
+<div class="game-detail-container" v-if="gameSummary">
+	<div class="highlight-game-summary">
+
+		<div class="team away">
+			<a class="team-info" v-if="gameSummary" href="/backers">
+				<div class="team-city team-color" v-bind:class="[gameSummary.away_file_code]">
+					{{gameSummary.away_team_city}}
+				</div>
+				<div class="team-name team-color" v-bind:class="[gameSummary.away_file_code]">
+					{{gameSummary.away_team_name}}
+				</div>
+			</a>
+			<a class="backers" href="/backers">
+				{{getTeamSponsors(gameSummary.away_file_code)}}
+			</a>
+		</div>
+
+		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
+
+		<div class="team home">
+			<a class="team-info" v-if="gameSummary" href="/backers">
+				<div class="team-city team-color" v-bind:class="[gameSummary.home_file_code]">
+					{{gameSummary.home_team_city}}
+				</div>
+				<div class="team-name team-color" v-bind:class="[gameSummary.home_file_code]">
+					{{gameSummary.home_team_name}}
+				</div>
+			</a>
+			<a class="backers" href="/backers">
+				{{getTeamSponsors(gameSummary.home_file_code)}}
+			</a>
+		</div>
+
+	</div>
+
+	<div v-if="boxScore && allHighlights" class="mode-switch-container">
+		<div class="mode-switch">
+			<div class="switch-item" v-on:click="detailMode = 0" v-bind:class="{ on: detailMode === 0}">
+				Highlights
+			</div>
+			<div class="switch-item" v-on:click="detailMode = 1" v-bind:class="{ on: detailMode === 1}">
+				Box Score
+			</div>
+		</div>
+	</div>
+	
+	<div class="game-detail-wrapper">
+		<div class="highlights-wrapper" v-bind:class=" { 'detail-mode-on' : detailMode === 0 }">
+			<template v-if="allHighlights && allHighlights.length > 0">
+				<h2>Highlights</h2>
+				<template v-if="specialHighlights && specialHighlights.length > 0">
+					<div class="special-highlights">
+						<highlight v-for="highlight in specialHighlights" v-bind:highlight="highlight">
+
+						</highlight>
+					</div>
+				</template>
+				<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight" v-if="!highlight.recap && !highlight.condensed">
+
+				</highlight>
+			</template>
+
+			<template v-else-if="showNoHighlights()">
+				<div class="empty">
+					No highlights found for this game. Highlights for some games may not be published until the game is complete.
+				</div>
+			</template>
+		</div>
+	
+		<div class="box-score-wrapper" v-bind:class=" { 'detail-mode-on' : detailMode === 1 }">
+			<template v-if="boxScore">
+				<boxscore v-bind:box-score="boxScore"></boxscore>
+			</template>
+		</div>
+	</div>
+</div>

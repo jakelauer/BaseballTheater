@@ -10,7 +10,7 @@
 		blurb: string;
 		duration: string;
 		url: IUrl[];
-		thumb: string;
+		thumb: IUrl;
 		thumbnails: IThumbnails;
 		keywords: Keyword[];
 		condensed: boolean;

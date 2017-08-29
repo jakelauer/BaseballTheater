@@ -5,7 +5,7 @@
 	width: 100%;
 	margin: 2rem 0;
 
-	font-size: 1rem;
+	font-size: 0.785rem;
 
 	.teams
 	{
@@ -94,20 +94,5 @@
 		{
 			font-weight: bold;
 		}
-	}
-}
-
-@media all and (max-width: 800px)
-{
-	.boxscore .teams .team
-	{
-		width: 100%;
-		padding: 0 !important;
-		flex: none;
-	}
-
-	.boxscore .teams .team + .team
-	{
-		margin-top: 2rem;
 	}
 }

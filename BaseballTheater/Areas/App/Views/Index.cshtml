@@ -6,10 +6,10 @@
 }
 
 @{ 
-	Html.RenderPartial("Templates/_GameSummary");
-	Html.RenderPartial("Templates/_Highlight");
-	Html.RenderPartial("Templates/_Backers");
-	Html.RenderPartial("Templates/_BoxScore");
+	Html.RenderPartial("Components/_GameSummary");
+	Html.RenderPartial("Components/_Highlight");
+	Html.RenderPartial("Components/_Backers");
+	Html.RenderPartial("Components/_BoxScore");
 }
 
 <div class="settings flex" v-if="showingGameList">
@@ -38,166 +38,15 @@
 </div>
 
 
-<div class="game-list">
-	<template v-if="gameSummaries && gameSummaries.length > 0">
-		<game-summary-simple v-for="game in gameSummaries" v-bind:game="game">
+@Html.Partial("_game_list")
 
-		</game-summary-simple>
-	</template>
-	<template v-else-if="showNoGames()">
-		<div class="empty">
-			No games found for this day
-		</div>
-	</template>
-</div>
+@Html.Partial("_game_detail")
+
+@Html.Partial("_backers")
+
+@Html.Partial("_news")
 
 
-<div class="highlights">
-	<div class="highlight-game-summary" v-if="gameSummary">
-
-		<div class="team away">
-			<a class="team-info" v-if="gameSummary" href="/backers">
-				<div class="team-city team-color" v-bind:class="[gameSummary.away_file_code]">
-					{{gameSummary.away_team_city}}
-				</div>
-				<div class="team-name team-color" v-bind:class="[gameSummary.away_file_code]">
-					{{gameSummary.away_team_name}}
-				</div>
-			</a>
-			<a class="backers" href="/backers">
-				{{getTeamSponsors(gameSummary.away_file_code)}}
-			</a>
-		</div>
-
-		<game-summary v-if="gameSummary" v-bind:game="gameSummary"></game-summary>
-
-		<div class="team home">
-			<a class="team-info" v-if="gameSummary" href="/backers">
-				<div class="team-city team-color" v-bind:class="[gameSummary.home_file_code]">
-					{{gameSummary.home_team_city}}
-				</div>
-				<div class="team-name team-color" v-bind:class="[gameSummary.home_file_code]">
-					{{gameSummary.home_team_name}}
-				</div>
-			</a>
-			<a class="backers" href="/backers">
-				{{getTeamSponsors(gameSummary.home_file_code)}}
-			</a>
-		</div>
-
-	</div>
-	
-	<div v-if="boxScore && allHighlights" class="mode-switch-container">
-		<div class="mode-switch">
-			<div class="switch-item" v-on:click="detailMode = 0" v-bind:class="{ on: detailMode === 0}">
-				Highlights
-			</div>
-			<div class="switch-item" v-on:click="detailMode = 1" v-bind:class="{ on: detailMode === 1}">
-				Box Score
-			</div>
-		</div>
-	</div>
-	
-	<template v-if="boxScore && detailMode === 1">
-		<boxscore v-bind:box-score="boxScore"></boxscore>
-	</template>
-	
-	<template v-if="((awayHighlights && awayHighlights.length > 0) || (homeHighlights && homeHighlights.length > 0)) && detailMode === 0">
-		<div class="special-highlights">
-			<template v-if="specialHighlights && specialHighlights.length > 0 && detailMode === 0">
-				<highlight v-for="highlight in specialHighlights" v-bind:highlight="highlight">
-
-				</highlight>
-			</template>
-		</div>
-		
-		<div class="mode-switch-container highlights" v-if="((awayHighlights && awayHighlights.length) && (homeHighlights && homeHighlights.length)) > 0 && detailMode === 0">
-			<div class="mode-switch">
-				<div class="switch-item" v-on:click="showTab('away')" v-if="gameSummary" v-bind:class="{ on: tabEnabled('away') }">{{gameSummary.away_team_name}}</div>
-				<div class="switch-item" v-on:click="showTab('home')" v-if="gameSummary" v-bind:class="{ on: tabEnabled('home') }">{{gameSummary.home_team_name}}</div>
-			</div>
-		</div>
-
-		<div class="team-highlights away" v-bind:class="{ on: tabEnabled('away') }">
-			<template v-if="awayHighlights && awayHighlights.length > 0 && detailMode === 0">
-				<h2 class="header team-color" v-if="gameSummary" v-bind:class="[gameSummary.away_file_code]">{{gameSummary.away_team_name}}</h2>
-				<highlight v-for="highlight in awayHighlights" v-bind:highlight="highlight">
-
-				</highlight>
-			</template>
-			<template v-else>
-				No highlights for this team yet.
-			</template>
-		</div>
-		<div class="team-highlights home" v-bind:class="{ on: tabEnabled('home') }">
-			<template v-if="homeHighlights && homeHighlights.length > 0 && detailMode === 0">
-				<h2 class="header team-color" v-if="gameSummary" v-bind:class="[gameSummary.home_file_code]">{{gameSummary.home_team_name}}</h2>
-				<highlight v-for="highlight in homeHighlights" v-bind:highlight="highlight">
-
-				</highlight>
-			</template>
-			<template v-else>
-				No highlights for this team yet.
-			</template>
-		</div>
-	</template>
-	<template v-else-if="allHighlights && allHighlights.length > 0 && detailMode === 0">
-		<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight">
-
-		</highlight>
-	</template>
-
-	<template v-else-if="showNoHighlights() && detailMode === 0">
-		<div class="empty">
-			No highlights found for this game. Highlights for some games may not be published until the game is complete.
-		</div>
-	</template>
-</div>
-
-<div class="backers-wrapper">
-	<template v-if="showBackers">
-		<div class="premium-sponsors">
-			<h1>
-				<span>Premium Sponsors</span>
-
-				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-					Become a premium sponsor
-				</a>
-			</h1>
-			<div class="backers">
-				<premium-sponsor v-for="premiumSponsor in premiumSponsors" v-bind:premium-sponsor="premiumSponsor"></premium-sponsor>
-			</div>
-			<span v-if="premiumSponsors.length === 0">
-				No backers yet.
-			</span>
-		</div>
-		<div class="team-sponsors">
-			<h1>
-				<span>Fans</span>
-				
-				<a class="become" href="https://www.patreon.com/bePatron?u=5206592" target="_blank">
-					Become a fan backer
-				</a>
-			</h1>
-			
-			<team-sponsor v-for="teamSponsor in teamSponsors" v-bind:team-sponsor-team="teamSponsor"></team-sponsor>
-
-			<span v-if="Object.keys(teamSponsors).length === 0">
-				No premium backers yet.
-			</span>
-		</div>
-	</template>
-</div>
-
-<div class="news-wrapper">
-	<div class="news-item" v-for="item in rssItems" v-bind:data-domain="getDomain(item)" v-if="item.link.length > 0">
-		<div class="icon"></div>
-		<div class="text">
-			<a v-bind:href="item.link" target="blank">{{item.title}}</a>
-			<div class="about">{{getDate(item)}}</div>
-		</div>
-	</div>
-</div>
 
 <template id="mlb-update">
 	<h2>Dear users -</h2>

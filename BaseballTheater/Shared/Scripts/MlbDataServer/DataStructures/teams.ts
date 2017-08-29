@@ -35,5 +35,38 @@
 			"tor": "Toronto Blue Jays",
 			"was": "Washington Nationals"
 		}
+
+		public static TeamIdList: { [teamId: number]: string } = {
+			108: "laa",
+			109: "ari",
+			110: "bal",
+			111: "bos",
+			112: "chc",
+			113: "cin",
+			114: "cle",
+			115: "col",
+			116: "det",
+			117: "hou",
+			118: "kc",
+			119: "la",
+			120: "was",
+			121: "nym",
+			133: "oak",
+			134: "pit",
+			135: "sd",
+			136: "sea",
+			137: "sf",
+			138: "stl",
+			139: "tb",
+			140: "tex",
+			141: "tor",
+			142: "min",
+			143: "phi",
+			144: "atl",
+			145: "chw",
+			146: "mia",
+			147: "nyy",
+			158: "mil",
+		}
 	}
 }

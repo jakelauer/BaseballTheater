@@ -528,6 +528,10 @@ footer
 	position: relative;
 
 	text-decoration: none !important;
+
+	font-family: "bebas", sans-serif;
+	font-size: 3rem;
+	font-weight: bold;
 	//padding-left: 50px;
 	flex: 1 0;
 
@@ -542,6 +546,11 @@ footer
 
 		top: 8px;
 		left: 0;
+	}
+
+	.r-mobile &
+	{
+		font-size: 2rem;
 	}
 }
 

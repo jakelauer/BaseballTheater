@@ -170,7 +170,7 @@
 			});
 
 			this.highlightsVue = new Vue({
-				el: ".highlights",
+				el: ".game-detail-container",
 				data: this.highlightsVueData,
 				methods: {
 					showNoHighlights: () =>

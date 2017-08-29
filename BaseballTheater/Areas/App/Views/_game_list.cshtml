@@ -1,0 +1,13 @@
+﻿
+<div class="game-list">
+	<template v-if="gameSummaries && gameSummaries.length > 0">
+		<game-summary-simple v-for="game in gameSummaries" v-bind:game="game">
+
+		</game-summary-simple>
+	</template>
+	<template v-else-if="showNoGames()">
+		<div class="empty">
+			No games found for this day
+		</div>
+	</template>
+</div>

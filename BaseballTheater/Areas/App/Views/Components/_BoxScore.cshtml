@@ -4,7 +4,7 @@
 	<div class="boxscore" v-bind:data-homecode="boxScore.home_team_code" v-bind:data-awaycode="boxScore.away_team_code">
 		<div class="teams">
 			<div class="team away">
-				<div class="team-name">{{boxScore.away_fname}}</div>
+				@*<div class="team-name team-info">{{boxScore.away_fname}}</div>*@
 				<table class="player-list batters">
 					@BatterHeaders()
 					<tr is="batter" v-for="batter in boxScore.batting_away.batter" v-bind:batter="batter"></tr>
@@ -17,7 +17,7 @@
 				<div class="note" v-html="boxScore.pitching_away.note"></div>
 			</div>
 			<div class="team home">
-				<div class="team-name">{{boxScore.home_fname}}</div>
+				@*<div class="team-name team-info">{{boxScore.home_fname}}</div>*@
 				<table class="player-list batters">
 					@BatterHeaders()
 					<tr is="batter" v-for="batter in boxScore.batting_home.batter" v-bind:batter="batter"></tr>
