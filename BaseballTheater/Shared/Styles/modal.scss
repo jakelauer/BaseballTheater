@@ -1,6 +1,6 @@
 ﻿@import "../../Areas/App/Styles/_vars.scss";
 
-.modal-container
+.modal-wrapper
 {
 	position: fixed;
 	display: flex;
@@ -38,7 +38,7 @@
 		max-height: none;
 	}
 
-	&[data-overflowtype="scrolloutsidemodal"] .modal-content
+	&[data-overflowtype="scrolloutsidemodal"] .modal-internal
 	{
 		overflow: auto;
 
@@ -62,7 +62,7 @@
 		width: auto;
 		max-width: calc(100% - 36px);
 		height: auto;
-		max-height: calc(100% - 96px);
+		max-height: calc(100% - 100px);
 		margin: 0 auto;
 
 		transition: 0.25s;
@@ -104,24 +104,24 @@
 		z-index: 50;
 	}
 
-	.modal-content
+	.modal-internal
 	{
 		position: relative;
 		overflow: auto;
 
 		box-sizing: border-box;
-		max-height: calc(100vh - 96px);
+		max-height: calc(100vh - 100px);
 		padding: 3rem;
 
 		color: $color-accent;
 	}
 
-	.r-tiny &[data-overflowtype="scrollinmodal"] .modal-content
+	.r-tiny &[data-overflowtype="scrollinmodal"] .modal-internal
 	{
 		max-height: 100vh;
 	}
 
-	.modal-content.customScroll
+	.modal-internal.customScroll
 	{
 		overflow: hidden;
 	}

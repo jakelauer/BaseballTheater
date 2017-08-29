@@ -54,7 +54,7 @@
 				},
 				this.transitionDuration);
 
-			setTimeout(() => Utility.unlockBodyScroll(), 250);
+			setTimeout(() => Utility.unpreventBodyScrolling(), 250);
 
 			$(document).off(`.modal-${this.id}`);
 			$("*").off(`.modal-${this.id}`);
@@ -84,10 +84,10 @@
 			const id = `modal-${this.id}`;
 
 			const wrapper = `
-<div id="${id}" class="modal-container">
+<div id="${id}" class="modal-wrapper">
 	<div class="modal">
 		<div class="close-button"><i class="fa fa-times" aria-hidden="true"></i></div>
-		<div class="modal-content">
+		<div class="modal-internal">
 			${this.content}
 		</div>
 	</div>
@@ -99,7 +99,7 @@
 
 		private populateContent(content: string)
 		{
-			this.$modal.find(".modal-content").html(content);
+			this.$modal.find(".modal-internal").html(content);
 		}
 
 		private determineTransitionDuration()
@@ -144,7 +144,7 @@
 				return;
 			}
 
-			Utility.lockBodyScroll();
+			Utility.preventBodyScrolling();
 		}
 
 		private onKeyDown(e: JQueryEventObject)

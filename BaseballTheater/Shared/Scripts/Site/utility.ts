@@ -18,7 +18,7 @@
 			return (lastIndex !== -1 && lastIndex === position) as boolean;
 		}
 
-		public static lockBodyScroll(allowMobile = false)
+		public static preventBodyScrolling(allowMobile = false)
 		{
 			if ((!Modernizr.mobile || allowMobile) && $("#lock-scroll-scrollbar-offset").length === 0)
 			{
@@ -28,33 +28,33 @@
 					return;
 				}
 
-				const scrollBarWidth = this.calculateScrollbarWidth();
+				const scrollBarWidth = this.getScrollbarWidth();
 
 				$("head").append(`
 <style id='lock-scroll-scrollbar-offset'>
-	html.lockBodyScroll body { overflow: hidden; height: 100%; }
-	html.lockBodyScroll header { padding-right: ${scrollBarWidth}; width: calc(100% - ${scrollBarWidth}); } 
-	html.lockBodyScroll #content { padding-right: ${scrollBarWidth}; box-sizing: border-box; }
+	html.preventBodyScrolling body { overflow: hidden; height: 100%; }
+	html.preventBodyScrolling header { padding-right: ${scrollBarWidth}; width: calc(100% - ${scrollBarWidth}); } 
+	html.preventBodyScrolling #content { padding-right: ${scrollBarWidth}; box-sizing: border-box; }
 </style>`);
 			}
-			$("html").addClass("lockBodyScroll");
+			$("html").addClass("preventBodyScrolling");
 
 			this.lockCount++;
 		}
 
-		public static unlockBodyScroll()
+		public static unpreventBodyScrolling()
 		{
 			if (this.lockCount > 0)
 			{
 				this.lockCount--;
 				if (this.lockCount === 0)
 				{
-					$("html").removeClass("lockBodyScroll");
+					$("html").removeClass("preventBodyScrolling");
 				}
 			}
 		}
 
-		private static calculateScrollbarWidth()
+		private static getScrollbarWidth()
 		{
 			const a = $("<div class='modal-measure-scrollbar'/>").prependTo($("body"));
 			const b = $("<div class='inner'/>").appendTo(a);
