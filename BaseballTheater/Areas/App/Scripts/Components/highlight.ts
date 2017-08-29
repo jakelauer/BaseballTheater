@@ -15,8 +15,7 @@
 				getDefaultUrl: (highlight: IHighlight) => HighlightModule.getDefaultUrl(highlight),
 				getTitle: (highlight: IHighlight) => HighlightModule.getTitle(highlight),
 				getDefaultThumb: (highlight: IHighlight) => HighlightModule.getDefaultThumb(highlight),
-				getMlbLink: (highlight: IHighlight) => HighlightModule.getMlbLink(highlight),
-				showMlbFrame: (highlight: IHighlight) => HighlightModule.showMlbFrame(highlight)
+				getMlbLink: (highlight: IHighlight) => HighlightModule.getMlbLink(highlight)
 			}
 		});
 
@@ -79,27 +78,15 @@
 				: highlight.headline;
 		}
 
-		export function showMlbFrame(highlight: IHighlight)
-		{
-			const iframeSrc = getMlbLink(highlight);
-
-			const iframeHtml = `
-<iframe src='${iframeSrc}' width="100%" height="100%" frameborder="0" scrolling="no"/>
-			`;
-			
-			const modal = new Modal("mlb-video", iframeHtml);
-			modal.open();
-		}
-
 		export function getMlbLink(highlight: IHighlight)
 		{
 			/*var $playCover = $(event.currentTarget);
 			var $video = $playCover.siblings("video");
 			($video[0] as HTMLVideoElement).play();*/
 
-			const cId = highlight.id;
-			const mlbLink = `https://www.mlb.com/video/c-${cId}`;
-			return mlbLink;
+			//const cId = highlight.id;
+			//const mlbLink = `https://www.mlb.com/video/c-${cId}`;
+			return getDefaultUrl(highlight);
 		}
 
 		export function getDefaultThumb(highlight: IHighlight)
