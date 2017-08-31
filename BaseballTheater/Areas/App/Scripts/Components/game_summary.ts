@@ -87,7 +87,7 @@
 				},
 				getGameLink: (game: GameSummary) =>
 				{
-					const dayString = game.dateObj.local().format("YYYYMMDD");
+					const dayString = game.dateObjEst.format("YYYYMMDD");
 					return `/game/${dayString}/${game.game_pk}`;
 				},
 				getTopPlaysCount: (game: GameSummary) =>

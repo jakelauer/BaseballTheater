@@ -68,6 +68,7 @@ namespace Theater {
 		public linescore: Linescore;
 		public dateObj: moment.Moment;
 		public dateObjLocal: moment.Moment;
+		public dateObjEst: moment.Moment;
 		public home_probable_pitcher: IProbablePitcher;
 		public away_probable_pitcher: IProbablePitcher;
 		public topPlayHighlights: IHighlight[];
@@ -82,15 +83,13 @@ namespace Theater {
 		}
 
 		constructor(data: IGameSummary) {
-			const gameTimezoneOffset = GameSummary.dst(new Date()) ? "-04:00" : "-05:00";
-
-			const d = new Date();
-			const userTimezoneOffset = d.getTimezoneOffset();
-			const hoursToAdd = userTimezoneOffset > 0 ? 12 : -12;
-			const localParsedDate = moment(data.time_date, "YYYY/MM/DD hh:mm").add(hoursToAdd, "hours").format();
-			const timeRegex = /([0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2})([\-+][0-9]{2}:[0-9]{2})/g;
-			const noZone = timeRegex.exec(localParsedDate)[1];
-			const withZone = noZone + gameTimezoneOffset;
+			const input = data.time_date;
+			const fmt = "YYYY/MM/DD hh:mm";
+			const zone = "America/New_York";
+			
+			const timeEstRaw = moment.tz(input, fmt, zone);
+			const hoursToAdd = Number(timeEstRaw.format("hh")) >= 12 ? 0 : 12;
+			const timeEst = moment.tz(input, fmt, zone).add(hoursToAdd, "hours");
 
 			this.id = data.id;
 			this.game_pk = data.game_pk;
@@ -99,8 +98,9 @@ namespace Theater {
 			this.time = data.time;
 			this.ampm = data.ampm;
 			this.time_zone = data.time_zone;
-			this.dateObj = moment.parseZone(withZone);
-			this.dateObjLocal = moment(noZone);
+			this.dateObj = timeEst.clone().utc();
+			this.dateObjEst = timeEst;
+			this.dateObjLocal = timeEst.clone().utc().local();
 			this.status = data.status;
 			this.league = data.league;
 			this.inning = data.inning;

@@ -86,6 +86,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.none, "Brian Stoops", isBeerBacker: true),
 
 			new TeamSponsor(Teams.chc, "indianbadger"),
+			new TeamSponsor(Teams.min, "G0ldenpipes"),
 			new TeamSponsor(Teams.ari, "Ryan b"),
 			new TeamSponsor(Teams.none, "Jaymoon"),
 			new TeamSponsor(Teams.la, "Mike Branom"),
