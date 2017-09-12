@@ -118,11 +118,12 @@
 	{
 		position: relative;
 
-		width: 100%;
+		width: 50%;
 		margin: 0.5rem auto 2.5rem;
 		padding: 0 10px;
 
 		font-size: 1rem;
+		flex: 1 0 auto;
 
 		.video-info
 		{
@@ -132,19 +133,22 @@
 			{
 				display: flex;
 				align-items: center;
+
+				text-decoration: none !important;
 				flex: 1 0;
+				flex-wrap: wrap;
 
 				.thumb
 				{
 					position: relative;
 
-					width: 4rem;
-					height: 2.5rem;
+					width: 100%;
+					height: 12rem;
 					margin-right: 1rem;
 
 					border-radius: 5px;
 					background-repeat: no-repeat;
-					background-position: center;
+					background-position: center 25%;
 					background-size: cover;
 				}
 
@@ -158,18 +162,25 @@
 					font-weight: 400;
 					flex: 1 0;
 
-					span
+					span.team
 					{
 						position: relative;
 						display: block;
 
 						top: 0;
 
+						text-decoration: none !important;
+
 						color: black;
 
 						font-size: 0.75em;
 						font-weight: bold;
 					}
+				}
+
+				&:hover span.title
+				{
+					text-decoration: underline;
 				}
 			}
 		}
@@ -226,20 +237,28 @@
 
 		width: 100%;
 		padding-top: 1rem;
+
+		background: rgba(0, 0, 0, 0.05);
 		flex-wrap: wrap;
 
 		.highlight
 		{
-			margin-right: 1rem;
-			padding: 1rem;
-
-			background: rgba(0, 0, 0, 0.05);
+			margin-bottom: 0;
 
 			.video-info a h2
 			{
 				font-size: 1.5rem;
 			}
 		}
+	}
+
+	.all-highlights
+	{
+		display: flex;
+
+		width: 100%;
+		padding-top: 1rem;
+		flex-wrap: wrap;
 	}
 
 	.team-highlights

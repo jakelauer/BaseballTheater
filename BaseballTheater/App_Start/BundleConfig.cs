@@ -30,12 +30,6 @@ namespace BaseballTheater
 
 			bundles.Add(libraries);
 
-			bundles.Add(new ScriptBundle("~/scriptbundles/mlbdataserver")
-				.IncludeDirectory("~/Shared/Scripts/MlbDataServer", "*.js", true));
-
-			bundles.Add(new ScriptBundle("~/scriptbundles/site")
-				.IncludeDirectory("~/Shared/Scripts/Site", "*.js", true));
-
 			var scssBundle = new Bundle("~/stylebundles/scss")
 			{
 				Builder = new NullBuilder(),

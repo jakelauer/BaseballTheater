@@ -66,6 +66,7 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.chc, "StorePorter", isStarBacker: true),
 			new TeamSponsor(Teams.pit, "Career Benchwarmers", isStarBacker: true),
 
+			new TeamSponsor(Teams.none, "Richard Hutchinson (Umpire fan)", isStarBacker: true),
 			new TeamSponsor(Teams.nyy, "James Donovan", isStarBacker: true),
 			new TeamSponsor(Teams.bos, "Alexander Koch", isStarBacker: true),
 			new TeamSponsor(Teams.nyy, "Sam Normington", isStarBacker: true),

@@ -56,9 +56,11 @@
 						</highlight>
 					</div>
 				</template>
-				<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight" v-if="!highlight.recap && !highlight.condensed">
+				<div class="all-highlights">
+					<highlight v-for="highlight in allHighlights" v-bind:highlight="highlight" v-if="!highlight.recap && !highlight.condensed">
 
-				</highlight>
+					</highlight>
+				</div>
 			</template>
 
 			<template v-else-if="showNoHighlights()">

@@ -40,11 +40,12 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
@@ -61,11 +62,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES6</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
@@ -374,7 +376,6 @@
     <Content Include="images\ui-icons_004276_256x240.png" />
     <Content Include="images\ui-icons_cc0000_256x240.png" />
     <Content Include="images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Shared\Scripts\base.js" />
     <Content Include="Shared\Scripts\libraries\cookies.js" />
     <Content Include="Shared\Scripts\libraries\modernizr-2.6.2.js" />
     <Content Include="Shared\Scripts\libraries\moment-timezone.js" />
@@ -433,39 +434,38 @@
     <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\news.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\team_redirect.ts" />
-    <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\modernizr\modernizr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_center.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\box_score.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_summary.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\game_summary_collection.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\highlights_collection.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\highlight.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\keyword.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\linescore.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\batting.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\pitching.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\player.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\probably_pitcher.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\rss.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\DataStructures\teams.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_detail_creator.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\game_summary_creator.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\news_feed_creator.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\MlbDataServer\Utils\xml_loader.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_center.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\box_score.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_summary.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_summary_collection.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\highlights_collection.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\highlight.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\keyword.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\linescore.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\batting.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\pitching.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\player.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\probably_pitcher.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\rss.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\teams.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_detail_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_summary_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\news_feed_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\Utils\xml_loader.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\game_list.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\link_handler.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\modal.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\page.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\responsive.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\site.ts" />
-    <TypeScriptCompile Include="Shared\Scripts\Site\utility.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\link_handler.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\modal.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\page.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\responsive.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\site.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\utility.ts" />
     <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
   </ItemGroup>
   <PropertyGroup>

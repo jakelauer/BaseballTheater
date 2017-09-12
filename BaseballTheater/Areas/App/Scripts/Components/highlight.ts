@@ -25,6 +25,16 @@
 		{
 			const links = getLinks(highlight);
 
+			const link1800 = links.find((value) =>
+			{
+				return !!value.url.match("1800K");
+			});
+
+			if (link1800)
+			{
+				return link1800.url;
+			}
+
 			return links[links.length - 1].url;
 		}
 
@@ -83,7 +93,7 @@
 			}
 
 			const teamCode = MlbDataServer.Teams.TeamIdList[highlight.team_id];
-			return `<span>${teamCode.toUpperCase()}</span> ${highlight.headline}`;
+			return `<span class='team'>${teamCode.toUpperCase()}</span> <span class='title'>${highlight.headline}</span>`;
 		}
 
 		export function getMlbLink(highlight: IHighlight)
@@ -99,7 +109,7 @@
 
 		export function getDefaultThumb(highlight: IHighlight)
 		{
-			const thumbFinal = highlight.thumb.__text;
+			const thumbFinal = highlight.thumbnails.thumb[1].__text;
 			return thumbFinal.replace("http:", location.protocol);
 		}
 	}
