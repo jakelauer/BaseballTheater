@@ -151,6 +151,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\RedditSharp\RedditSharp\bin\Debug\RedditSharp.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=104.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.104.0\lib\net4\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -240,7 +244,7 @@
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
-    <Compile Include="Areas\Data\Models\Patreon\NewsModel.cs" />
+    <Compile Include="Areas\Data\Models\News\NewsModel.cs" />
     <Compile Include="Areas\Data\Models\Patreon\PatreonModel.cs" />
     <Compile Include="Areas\Data\Models\Patreon\Teams.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackerTypes.cs" />
@@ -363,6 +367,7 @@
     <Content Include="Areas\App\Views\_backers.cshtml" />
     <Content Include="Areas\App\Views\_news.cshtml" />
     <Content Include="Areas\App\Views\_game_list.cshtml" />
+    <Content Include="Areas\Data\Views\_DataLayoutXml.cshtml" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>

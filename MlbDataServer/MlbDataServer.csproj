@@ -63,7 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFetch\NewsFeedCreator.cs" />
-    <Compile Include="DataStructures\Fangraphs\RssFeed.cs" />
+    <Compile Include="DataStructures\News\NewsFeeds.cs" />
+    <Compile Include="DataStructures\News\RssFeed.cs" />
     <Compile Include="DataStructures\GameCenter.cs" />
     <Compile Include="DataStructures\GameSummary.cs" />
     <Compile Include="DataStructures\Highlight.cs" />

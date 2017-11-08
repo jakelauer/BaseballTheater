@@ -1,4 +1,4 @@
-﻿using MlbDataServer.DataStructures.Fangraphs;
+﻿using MlbDataServer.DataStructures.News;
 
 namespace MlbDataServer.DataFetch
 {
@@ -11,22 +11,12 @@ namespace MlbDataServer.DataFetch
 		{
 		}
 
-		public RssFeed GetFangraphsFeed()
+		public RssFeed GetFeed(string url)
 		{
 			RssFeed feed = null;
 
 			var xmlLoader = new XmlLoader();
-			feed = xmlLoader.GetXml<RssFeed>(FangraphsUrl);
-
-			return feed;
-		}
-
-		public RssFeed GetMlbFeed()
-		{
-			RssFeed feed = null;
-
-			var xmlLoader = new XmlLoader();
-			feed = xmlLoader.GetXml<RssFeed>(MlbUrl);
+			feed = xmlLoader.GetXml<RssFeed>(url);
 
 			return feed;
 		}

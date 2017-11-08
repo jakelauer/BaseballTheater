@@ -1,8 +1,11 @@
 ﻿@using BaseballTheater.Areas.Data.Models.Patreon
+@using Newtonsoft.Json
 @{
-	Layout = "_DataLayout.cshtml";
+	Layout = "_DataLayoutXml.cshtml";
+
+	var json = Json.Encode(Model);
 }
 
-@model NewsModel
+@model BaseballTheater.Areas.Data.Models.News.NewsModel
 
-@Html.Raw(Json.Encode(Model))
+@Html.Raw(JsonConvert.DeserializeXNode(json, "channel"))

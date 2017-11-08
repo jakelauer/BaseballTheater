@@ -1,4 +1,4 @@
-﻿using BaseballTheater.Areas.Data.Models.Patreon;
+﻿using BaseballTheater.Areas.Data.Models.News;
 using System.Web.Mvc;
 
 namespace BaseballTheater.Areas.Data
@@ -11,9 +11,12 @@ namespace BaseballTheater.Areas.Data
 			return View();
 		}
 
-		public ActionResult News()
+		[OutputCache(Duration = 60)]
+		public ActionResult News(string feeds = "")
 		{
-			var model = new NewsModel();
+			var feedList = feeds.Split(',');
+
+			var model = new NewsModel(feedList);
 			model.PopulateModel();
 
 			return View(model);

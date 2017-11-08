@@ -75,9 +75,9 @@ namespace BaseballTheater.Areas.Data.Models.Patreon
 			new TeamSponsor(Teams.nyy, "Jan Larson", isStarBacker: true),
 			new TeamSponsor(Teams.bos, "Mike Kearsley", isStarBacker: true),
 			new TeamSponsor(Teams.chc, "Brad Koons", isStarBacker: true),
-			new TeamSponsor(Teams.phi, "Curtis Gale", isStarBacker: true),
 			new TeamSponsor(Teams.stl, "Kuhan", isStarBacker: true),
 
+			new TeamSponsor(Teams.nyy, "Nicholas Eby", isBeerBacker: true),
 			new TeamSponsor(Teams.oak, "Brisa", isBeerBacker: true),
 			new TeamSponsor(Teams.none, "Alec Sandberg", isBeerBacker: true),
 			new TeamSponsor(Teams.stl, "Ben Bradley", isBeerBacker: true),
