@@ -12,11 +12,11 @@ namespace BaseballTheater.Areas.Data
 		}
 
 		[OutputCache(Duration = 60)]
-		public ActionResult News(string feeds = "")
+		public ActionResult News(string feeds = "", string favTeam = "")
 		{
 			var feedList = feeds.Split(',');
 
-			var model = new NewsModel(feedList);
+			var model = new NewsModel(feedList, favTeam);
 			model.PopulateModel();
 
 			return View(model);

@@ -252,6 +252,7 @@
     <Compile Include="Areas\Proxy\Models\ProxyModel.cs" />
     <Compile Include="Areas\Proxy\ProxyAreaRegistration.cs" />
     <Compile Include="Extensions\CustomViewEngine.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

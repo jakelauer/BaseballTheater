@@ -3,6 +3,7 @@
 	public enum NewsFeeds
 	{
 		mlb,
+		mtr,
 		fangraphs,
 		fivethirtyeight,
 		si,
