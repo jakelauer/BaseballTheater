@@ -20,7 +20,8 @@ namespace BaseballTheater.Areas.Data.Models.News
 			{NewsFeeds.fangraphs, "http://www.fangraphs.com/blogs/feed/"},
 			{NewsFeeds.fivethirtyeight, "https://fivethirtyeight.com/tag/mlb/feed/"},
 			{NewsFeeds.mlb, "http://mlb.mlb.com/partnerxml/gen/news/rss/mlb.xml"},
-			{NewsFeeds.mtr, "https://www.mlbtraderumors.com/feed"}
+			{NewsFeeds.mtr, "https://www.mlbtraderumors.com/feed"},
+			{NewsFeeds.reddit, "https://www.reddit.com/r/baseball/.rss"}
 		};
 
 		private static readonly Dictionary<string, string> MtrMap = new Dictionary<string, string>
@@ -57,6 +58,41 @@ namespace BaseballTheater.Areas.Data.Models.News
 			{"was", "washington-nationals"}
 		};
 
+
+		private static readonly Dictionary<string, string> RedditMap = new Dictionary<string, string>
+		{
+			{"ari", "azdiamondbacks"},
+			{"atl", "braves"},
+			{"bal", "orioles"},
+			{"bos", "redsox"},
+			{"chc", "chicubs"},
+			{"cws", "whitesox"},
+			{"cin", "reds"},
+			{"cle", "wahoostipi"},
+			{"col", "coloradorockies"},
+			{"det", "motorcitykitties"},
+			{"mia", "letsgofish"},
+			{"hou", "astros"},
+			{"kc", "kcroyals"},
+			{"ana", "angelsbaseball"},
+			{"la", "angelsbaseball"},
+			{"mil", "brewers"},
+			{"min", "minnesotatwins"},
+			{"nym", "newyorkmets"},
+			{"nyy", "nyyankees"},
+			{"oak", "oaklandathletics"},
+			{"phi", "phillies"},
+			{"pit", "buccos"},
+			{"sd", "padres"},
+			{"sf", "sfgiants"},
+			{"sea", "mariners"},
+			{"stl", "cardinals"},
+			{"tb", "tampabayrays"},
+			{"tex", "texasrangers"},
+			{"tor", "torontobluejays"},
+			{"was", "nationals"},
+		};
+
 		public NewsModel(IEnumerable<string> feedNames, string favTeam)
 		{
 			var feeds = new List<NewsFeeds>();
@@ -80,6 +116,11 @@ namespace BaseballTheater.Areas.Data.Models.News
 						var teamName = MtrMap.TryGetValueOrDefault(favTeam);
 						feedUrlsExtra.Add(new Tuple<NewsFeeds, string>(NewsFeeds.mtr, $"https://www.mlbtraderumors.com/{teamName}/feed"));
 					}
+					else if (name == "reddit_fav_team")
+					{
+						var teamName = RedditMap.TryGetValueOrDefault(favTeam);
+						feedUrlsExtra.Add(new Tuple<NewsFeeds, string>(NewsFeeds.reddit, $"https://www.reddit.com/r/{teamName}/.rss"));
+					}
 				}
 			}
 
@@ -93,17 +134,26 @@ namespace BaseballTheater.Areas.Data.Models.News
 			var allFeedItems = new List<RssItem>();
 			foreach (var feed in this.Feeds)
 			{
-				var rss = feedCreator.GetFeed(FeedUrls[feed]);
-				foreach (var item in rss.RssChannel.RssItems)
+				var rss = feed == NewsFeeds.reddit
+					? feedCreator.GetAtomFeed(FeedUrls[feed])
+					: feedCreator.GetFeed(FeedUrls[feed]);
+
+				if (rss.RssChannel.RssItems != null)
 				{
-					item.NewsFeed = feed.ToString();
+					foreach (var item in rss.RssChannel.RssItems)
+					{
+						item.NewsFeed = feed.ToString();
+					}
+					allFeedItems.AddRange(rss.RssChannel.RssItems);
 				}
-				allFeedItems.AddRange(rss.RssChannel.RssItems);
 			}
 
 			foreach (var feedUrlTuple in this.FeedUrlsExtra)
 			{
-				var rss = feedCreator.GetFeed(feedUrlTuple.Item2);
+				var rss = feedUrlTuple.Item1 == NewsFeeds.reddit
+					? feedCreator.GetAtomFeed(feedUrlTuple.Item2)
+					: feedCreator.GetFeed(feedUrlTuple.Item2);
+
 				foreach (var item in rss.RssChannel.RssItems)
 				{
 					item.NewsFeed = feedUrlTuple.Item1.ToString();
@@ -111,7 +161,17 @@ namespace BaseballTheater.Areas.Data.Models.News
 				allFeedItems.AddRange(rss.RssChannel.RssItems);
 			}
 
-			this.Item = allFeedItems.OrderByDescending(a => a.PubDate);
+			this.Item = allFeedItems
+				.Where(a => a.PubDate != null)
+				.Where(a =>
+				{
+					var diff = DateTime.UtcNow - a.PubDate.Value;
+					var withinWeek = diff.TotalDays <= 7;
+
+					return withinWeek;
+				})
+				.OrderByDescending(a => a.PubDate)
+				.Take(50);
 		}
 	}
 }

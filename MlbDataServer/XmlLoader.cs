@@ -34,11 +34,13 @@ namespace MlbDataServer
 					}
 					catch (Exception e)
 					{
+						throw e;
 					}
 				}
 			}
 			catch (Exception e)
 			{
+				throw e;
 			}
 
 

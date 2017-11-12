@@ -6,7 +6,7 @@
 		mtr,
 		fangraphs,
 		fivethirtyeight,
-		si,
-		espn
+		espn,
+		reddit
 	}
 }

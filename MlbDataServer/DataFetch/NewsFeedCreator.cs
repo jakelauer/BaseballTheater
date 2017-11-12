@@ -13,12 +13,20 @@ namespace MlbDataServer.DataFetch
 
 		public RssFeed GetFeed(string url)
 		{
-			RssFeed feed = null;
-
 			var xmlLoader = new XmlLoader();
-			feed = xmlLoader.GetXml<RssFeed>(url);
+			var feed = xmlLoader.GetXml<RssFeed>(url);
 
 			return feed;
+		}
+
+		public RssFeed GetAtomFeed(string url)
+		{
+			var xmlLoader = new XmlLoader();
+			var atomFeed = xmlLoader.GetXml<AtomFeed>(url);
+
+			var rssFeed = new RssFeed(atomFeed);
+
+			return rssFeed;
 		}
 	}
 }
