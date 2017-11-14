@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
@@ -9,6 +10,39 @@ namespace MlbDataServer.DataStructures.News
 	{
 		[XmlElement("channel")]
 		public RssChannel RssChannel { get; set; }
+
+		public RssFeed()
+		{
+			
+		}
+
+		public RssFeed(AtomFeed atomFeed)
+		{
+			this.RssChannel = new RssChannel();
+
+			if (atomFeed != null)
+			{
+				RssChannel.Link = atomFeed.Link;
+				RssChannel.RssImage = new RssImage();
+				RssChannel.RssImage.Url = atomFeed.ImageUrl;
+				RssChannel.Title = atomFeed.Title;
+				var rssItems = new List<RssItem>();
+
+				foreach (var item in atomFeed.Items)
+				{
+					var newRssItem = new RssItem();
+					newRssItem.Link = item.LinkHref;
+					newRssItem.Description = item.Content;
+					newRssItem.NewsFeed = NewsFeeds.reddit.ToString();
+					newRssItem.PubDateString = item.PubDateString;
+					newRssItem.Title = item.Title;
+
+					rssItems.Add(newRssItem);
+				}
+
+				RssChannel.RssItems = rssItems.ToArray();
+			}
+		}
 	}
 
 	[Serializable]

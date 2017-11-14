@@ -24,7 +24,7 @@
 
 	initializeCurrentPage = () =>
 	{
-		showDisclaimer();
+		//showDisclaimer();
 
 		$(window).scrollTop(0);
 
