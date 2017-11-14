@@ -98,7 +98,7 @@ namespace BaseballTheater.Areas.Data.Models.News
 			var feeds = new List<NewsFeeds>();
 			var feedUrlsExtra = new List<Tuple<NewsFeeds, string>>();
 
-			foreach (var name in feedNames)
+			foreach (var name in feedNames.Distinct())
 			{
 				if (Enum.TryParse(name, out NewsFeeds feed))
 				{
@@ -162,6 +162,8 @@ namespace BaseballTheater.Areas.Data.Models.News
 			}
 
 			this.Item = allFeedItems
+				.GroupBy(a => a.Link)
+				.Select(a => a.First())
 				.Where(a => a.PubDate != null)
 				.Where(a =>
 				{
