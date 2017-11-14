@@ -100,7 +100,8 @@ namespace BaseballTheater.Areas.Data.Models.News
 
 			foreach (var name in feedNames.Distinct())
 			{
-				if (Enum.TryParse(name, out NewsFeeds feed))
+				NewsFeeds feed;
+				if (Enum.TryParse(name, out feed))
 				{
 					feeds.Add(feed);
 				}
