@@ -91,7 +91,7 @@ namespace MlbDataServer.DataStructures.News
 			get
 			{
 				DateTime? parsedDate = null;
-				var pubDateStringReplaced = PubDateString.Replace("EDT", "-4").Replace("\n\t", "");
+				var pubDateStringReplaced = PubDateString.Replace("EDT", "-4").Replace("EST", "-4").Replace("\n\t", "");
 				try
 				{
 					parsedDate = DateTime.Parse(pubDateStringReplaced, CultureInfo.InvariantCulture);
@@ -105,7 +105,7 @@ namespace MlbDataServer.DataStructures.News
 				{
 					try
 					{
-						parsedDate = DateTime.ParseExact(pubDateStringReplaced, "ddd, d MMM yyyy hh:mm:ss z", CultureInfo.InvariantCulture);
+						parsedDate = DateTime.ParseExact(pubDateStringReplaced, "ddd, d MMM yyyy HH:mm:ss z", CultureInfo.InvariantCulture);
 					}
 					catch
 					{
