@@ -31,6 +31,7 @@
     <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -419,10 +420,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseballTheaterBot\RedditBot.csproj">
-      <Project>{51e3ded2-c774-4ef8-a114-3819051aa361}</Project>
-      <Name>RedditBot</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
       <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
       <Name>MlbDataServer</Name>
