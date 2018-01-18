@@ -140,9 +140,9 @@
 
 				summaries.then((gameSummaryCollection) =>
 				{
-					if (gameSummaryCollection.games && gameSummaryCollection.games.games)
+					if (gameSummaryCollection.games && gameSummaryCollection.games.game)
 					{
-						const gameList = gameSummaryCollection.games.games;
+						const gameList = gameSummaryCollection.games.game;
 						for (var game of gameList)
 						{
 							if (game.game_pk === this.gamePk)

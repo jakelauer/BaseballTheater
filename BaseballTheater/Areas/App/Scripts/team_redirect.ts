@@ -75,7 +75,7 @@
 			if (gameCollection)
 			{
 				const matches: IGameSummary[] = [];
-				for (let game of gameCollection.games.games)
+				for (let game of gameCollection.games.game)
 				{
 					const teamMatched = game.away_file_code === this.team || game.home_file_code === this.team;
 					if (teamMatched)

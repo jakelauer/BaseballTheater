@@ -32,9 +32,9 @@
 
 			summaries.then((gameSummaryCollection) =>
 			{
-				var games = gameSummaryCollection.games.games;
+				var games = gameSummaryCollection.games.game;
 				this.sortGames(games, favoriteTeam);
-				App.Instance.gameListVueData.gameSummaries = gameSummaryCollection.games.games;
+				App.Instance.gameListVueData.gameSummaries = gameSummaryCollection.games.game;
 
 				Site.stopLoading();
 
