@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFetch\NewsFeedCreator.cs" />
+    <Compile Include="DataFetch\Search.cs" />
+    <Compile Include="DataFetch\SqlRunner.cs" />
     <Compile Include="DataStructures\LocalHighlight.cs" />
     <Compile Include="DataStructures\News\AtomFeed.cs" />
     <Compile Include="DataStructures\News\FeedItem.cs" />
