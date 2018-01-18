@@ -17,19 +17,22 @@ namespace MlbDataServer.DataStructures
 		[XmlAttribute("date")]
 		public string Date { get; set; }
 
-		public DateTime DateObj
-		{
-			get
-			{
-				return DateTime.Parse(Date, CultureInfo.InvariantCulture);
-			}
-		}
+		[XmlElement("player")]
+		public Players Players { get; set; }
+
+		[XmlElement("team")]
+		public Team Team { get; set; }
+
+		public DateTime DateObj => DateTime.Parse(Date, CultureInfo.InvariantCulture);
 
 		[XmlElement("headline")]
 		public string Headline { get; set; }
 
 		[XmlElement("blurb")]
 		public string Blurb { get; set; }
+
+		[XmlElement("bigblurb")]
+		public string BigBlurb { get; set; }
 
 		[XmlElement("duration")]
 		public string Duration { get; set; }

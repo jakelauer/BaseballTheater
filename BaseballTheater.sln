@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballTheater", "Baseball
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlbDataServer", "MlbDataServer\MlbDataServer.csproj", "{ACF910FE-C059-4EEE-BEDC-E7F4EB6E8906}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Populator", "Populator\Populator.csproj", "{95CF7312-7F53-42BE-AE41-51C8229A0E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ACF910FE-C059-4EEE-BEDC-E7F4EB6E8906}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACF910FE-C059-4EEE-BEDC-E7F4EB6E8906}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACF910FE-C059-4EEE-BEDC-E7F4EB6E8906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

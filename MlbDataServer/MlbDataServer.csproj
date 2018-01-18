@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <ApplicationInsightsResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/MlbDataServer</ApplicationInsightsResourceId>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFetch\NewsFeedCreator.cs" />
+    <Compile Include="DataStructures\LocalHighlight.cs" />
     <Compile Include="DataStructures\News\AtomFeed.cs" />
     <Compile Include="DataStructures\News\FeedItem.cs" />
     <Compile Include="DataStructures\News\NewsFeeds.cs" />
@@ -77,6 +79,8 @@
     <Compile Include="DataStructures\GameDay.cs" />
     <Compile Include="DataFetch\GameDetailCreator.cs" />
     <Compile Include="DataFetch\GameSummaryCreator.cs" />
+    <Compile Include="DataStructures\Players.cs" />
+    <Compile Include="DataStructures\Team.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlLoader.cs" />
   </ItemGroup>
