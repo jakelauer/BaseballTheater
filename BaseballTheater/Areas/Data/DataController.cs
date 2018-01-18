@@ -1,5 +1,6 @@
 ﻿using BaseballTheater.Areas.Data.Models.News;
 using System.Web.Mvc;
+using MlbDataServer.DataFetch;
 
 namespace BaseballTheater.Areas.Data
 {
@@ -20,6 +21,12 @@ namespace BaseballTheater.Areas.Data
 			model.PopulateModel();
 
 			return View(model);
+		}
+
+		public ActionResult SearchHighlights(string query, int page, int perpage)
+		{
+			var result = Search.SearchHighlights(query, page, perpage);
+			return View(result);
 		}
 	}
 }

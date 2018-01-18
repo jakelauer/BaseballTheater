@@ -362,6 +362,7 @@
     <Content Include="Areas\App\Views\_news.cshtml" />
     <Content Include="Areas\App\Views\_game_list.cshtml" />
     <Content Include="Areas\Data\Views\_DataLayoutXml.cshtml" />
+    <Content Include="Areas\Data\Views\SearchHighlights.cshtml" />
     <None Include="BundleTransformer.Configuration.xsd">
       <SubType>Designer</SubType>
     </None>

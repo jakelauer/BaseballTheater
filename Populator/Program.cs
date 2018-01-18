@@ -16,7 +16,14 @@ namespace Populator
 		{
 			if (args.Length > 0)
 			{
-				Date = DateTime.ParseExact(args[0], "yyyyMMdd", CultureInfo.CurrentCulture);
+				try
+				{
+					Date = DateTime.ParseExact(args[0], "yyyyMMdd", CultureInfo.CurrentCulture);
+				}
+				catch (Exception)
+				{
+					Date = DateTime.UtcNow.AddDays(-1);
+				}
 			}
 
 			if (args.Length > 1)
