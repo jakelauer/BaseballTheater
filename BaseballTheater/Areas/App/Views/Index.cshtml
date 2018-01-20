@@ -37,6 +37,19 @@
 	</div>
 </div>
 
+<div id="search-fake">
+	<input style="width: 90%; max-width: none;margin: 3rem auto;padding: 10px; font-size: 36px;" v-model="query" placeholder="Search for highlights" v-on:keyup="search"/>
+	<div id="results">
+		<a v-bind:href="result.video_s" v-for="result in results" style="display: flex; margin-bottom: 1rem;">
+			<div v-bind:style="{backgroundImage: 'url(' + result.thumb_s + ')'}" style="width: 50px; height: 50px; background-size: cover; background-position: center;display: block; margin-right: 1rem;"></div> <p style="padding-left: 1rem; margin: 0;">
+				{{result.headline}} ({{result.duration}})
+				<br/>
+				<span style="color: black;">{{getDate(result)}}</span>
+			</p>
+		</a>
+	</div>
+</div>
+
 
 @Html.Partial("_game_list")
 
