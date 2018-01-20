@@ -51,6 +51,7 @@
 		private highlightsVue: vuejs.Vue;
 		private backersVue: vuejs.Vue;
 		private newsVue: vuejs.Vue;
+		private searchVue: vuejs.Vue;
 		public static now = moment();
 
 		public static get clientNetSpeed()
@@ -110,6 +111,35 @@
 			BackersList.Instance.getBackers();
 
 			App.Instance.settingsVueData.showingGameList = false;
+
+			var data = {
+				query: "",
+				results: []
+			}
+			var tm = 0;
+			this.searchVue = new Vue({
+				el: "#search-fake",
+				data: data,
+				methods: {
+					getDate: (record) => {
+						return moment(record.datetime).format("MMM DD, YYYY");
+					},
+					search: () => {
+						clearTimeout(tm);
+						tm = setTimeout(() => {
+							$.ajax({
+								type: "GET",
+								url: `/Data/SearchHighlights?query=${data.query}&page=1&perPage=20`,
+								success: (result) => {
+									console.log(result);
+									data.results = result;
+								},
+								error: (error) => alert(JSON.stringify(error))
+							});
+						}, 500);
+					}
+				}
+			});
 
 			this.gameListVue = new Vue({
 				el: ".game-list",
