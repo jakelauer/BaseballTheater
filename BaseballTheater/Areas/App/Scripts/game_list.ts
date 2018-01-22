@@ -32,13 +32,17 @@
 
 			summaries.then((gameSummaryCollection) =>
 			{
-				var games = gameSummaryCollection.games.game;
-				this.sortGames(games, favoriteTeam);
-				App.Instance.gameListVueData.gameSummaries = gameSummaryCollection.games.game;
-
 				Site.stopLoading();
-
 				this.initCalendar();
+
+				if (gameSummaryCollection && gameSummaryCollection.games) {
+					var games = gameSummaryCollection.games.game;
+					this.sortGames(games, favoriteTeam);
+					App.Instance.gameListVueData.gameSummaries = games;
+
+				} else {
+					App.Instance.gameListVueData.gameSummaries = null;
+				}
 			});
 		}
 

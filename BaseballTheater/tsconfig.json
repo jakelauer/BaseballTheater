@@ -1,0 +1,25 @@
+﻿{
+	"include": [
+		"Scripts/**/*",
+		"Shared/Scripts/**/*",
+		"Areas/**/*"
+	],
+	"compileOnSave": true,
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"sourceMap": true,
+		"lib": [
+			"es5",
+			"esnext",
+			"dom"
+		],
+		"noImplicitThis": true,
+		"baseUrl": "Scripts/typings",
+		"typeRoots": [
+			"Scripts/typings"
+		],
+		"types": [],
+		"jsx": "react"
+	}
+}

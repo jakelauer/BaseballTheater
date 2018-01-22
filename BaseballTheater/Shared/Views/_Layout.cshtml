@@ -19,8 +19,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<title>@ViewBag.Title</title>
 
-
-
 	@Html.Partial("_favicons")
 
 	<meta name="msapplication-TileColor" content="#ffffff">
@@ -47,9 +45,6 @@
 			<a href="/" data-name="games">
 				Games
 			</a>
-			<a href="/news" data-name="news">
-				Articles
-			</a>
 			<a href="/backers" data-name="backers">
 				Backers
 			</a>
@@ -59,6 +54,10 @@
 			<a href="https://www.reddit.com/r/BaseballTheater/submit?selftext=true" target="_blank">
 				Feedback
 			</a>
+		</div>
+		
+		<div class="login">
+			<a href="https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=https://baseball.theater">Log in with Patron</a>
 		</div>
 	</div>
 	<div class="stitch"></div>
@@ -98,9 +97,11 @@
 </script>
 	
 <script type="text/javascript" src="~/Shared/Scripts/libraries/bluebird.min.js"></script>
-@Scripts.Render("~/scriptbundles/lib")
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
 	
-@Scripts.Render("~/scriptbundles/app")
+@Scripts.Render("~/scriptbundles/lib")
 
 @RenderSection("Scripts", false)
 	
