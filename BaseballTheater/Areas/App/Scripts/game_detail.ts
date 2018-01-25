@@ -99,11 +99,11 @@
 					{
 						const homeHighlights = highlights.filter((highlight) =>
 						{
-							return highlight.team_id === boxScore.home_id;
+							return highlight.team_id === boxScore.home_id.toString();
 						});
 
 						const awayHighlights = highlights.filter((highlight) => {
-							return highlight.team_id === boxScore.away_id;
+							return highlight.team_id === boxScore.away_id.toString();
 						});
 
 						App.Instance.highlightsVueData.homeHighlights = homeHighlights;

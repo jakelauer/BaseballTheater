@@ -40,6 +40,12 @@
 		}
 	}
 
+	export enum HomeAway
+	{
+		Home,
+		Away
+	}
+
 	export interface IHomeAway
 	{
 		home: string;

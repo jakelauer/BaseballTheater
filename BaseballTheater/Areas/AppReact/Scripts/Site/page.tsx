@@ -1,9 +1,14 @@
-﻿namespace Theater.Site
+﻿namespace Theater
 {
+	export interface ILocationDependentProps
+	{
+		onLocationTrigger: () => void;
+	}
+
 	export interface IReactPageRegister
 	{
 		matchingUrl: RegExp;
-		page: React.Component;
+		page: React.ReactElement<ILocationDependentProps>;
 		name: string;
 	}
 }

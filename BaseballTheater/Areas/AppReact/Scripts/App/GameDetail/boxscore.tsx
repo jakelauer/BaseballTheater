@@ -7,6 +7,9 @@
 
 	export class BoxScoreReact extends React.Component<IBoxScoreProps, any>
 	{
-
+		public render()
+		{
+			return (<div/>);
+		}
 	}
 }

@@ -48,7 +48,13 @@
 			const fileCode = teamType === HomeAway.Away ? game.away_file_code : game.home_file_code;
 			const teamCity = teamType === HomeAway.Away ? game.away_team_city : game.home_team_city;
 			const teamName = teamType === HomeAway.Away ? game.away_team_name : game.home_team_name;
-			const linescoreRuns = teamType === HomeAway.Away ? game.linescore.r.away : game.linescore.r.home;
+
+			let linescoreRuns = "";
+
+			if (game.linescore)
+			{
+				linescoreRuns = teamType === HomeAway.Away ? game.linescore.r.away : game.linescore.r.home;
+			}
 
 			return (
 				<div className={`team-row ${homeAwayClass} ${winnerClass}`}>
@@ -67,22 +73,49 @@
 
 		private getGameLink(): string
 		{
-			return "";
+			const game = this.props.game;
+
+			const dayString = game.dateObj.local().format("YYYYMMDD");
+			return `/react/game/${dayString}/${game.game_pk}`;
 		}
 
 		private linescoreItem(input: string): string
 		{
-			return "";
+			return input;
 		}
 
 		private getCurrentInning(): string
 		{
-			return "";
+			const game = this.props.game;
+
+			if (game.status.ind === "F")
+			{
+				return game.status.status;
+			}
+
+			if (game.status.reason)
+			{
+				return `${game.status.status} (${game.status.reason})`;
+			}
+
+			return game.status.inning_state
+				       ? `${game.status.inning_state} ${game.status.inning}`
+				       : this.getStatusTime();
 		}
 
 		private getWinner(): HomeAway
 		{
 			return HomeAway.Away;
+		}
+
+		private getStatusTime()
+		{
+			const game = this.props.game;
+
+			var time = game.dateObj.local().format("h:mm a");
+			var timeZone = moment.tz(0, moment.tz.guess()).zoneAbbr();
+
+			return `${time} ${timeZone}`;
 		}
 	}
 }
