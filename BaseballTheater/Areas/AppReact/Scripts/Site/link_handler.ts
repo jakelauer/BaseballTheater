@@ -51,8 +51,8 @@
 				var $response = $(response);
 				var bodyClass = response.match(/<body.*class=['"](.*)['"].*>/)[1];
 
-				var bodyContent = $response.find(".body-content").html();
-				$(".body-content").html(bodyContent);
+				var bodyContent = $response.find("#body-content").html();
+				$("#body-content").html(bodyContent);
 
 				$("body").attr("class", bodyClass as string);
 

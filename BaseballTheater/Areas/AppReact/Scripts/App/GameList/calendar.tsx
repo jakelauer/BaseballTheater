@@ -43,21 +43,41 @@
 			this.pikaday.show();
 		}
 
+		private getUrlForDateChangeDelta(deltaDays: number)
+		{
+			const newDate = this.getDateforChangeDelta(deltaDays);
+			return this.getUrlForDate(newDate);
+		}
+
+		private getUrlForDate(newDate: moment.Moment)
+		{
+			return `/react/${newDate.format("YYYYMMDD")}`;
+		}
+
+		private getDateforChangeDelta(deltaDays: number)
+		{
+			const date = this.state.date;
+			const newDate = moment(date);
+			newDate.add(deltaDays, "d");
+
+			return newDate;
+		}
+
 		private changeDate(newDate: moment.Moment)
 		{
-			const newUrl = `/react/${newDate.format("YYYYMMDD")}`;
+			const newUrl = this.getUrlForDate(newDate);
 
 			SiteReact.LinkHandler.pushState(newUrl);
 			this.setState({
 				date: newDate
-			});
-			this.props.onDateChange(newDate);
+			}, () => this.props.onDateChange(newDate));
 		}
 
-		private changeDateDelta(_, deltaDays: number)
+		private changeDateDelta(e: React.MouseEvent<HTMLAnchorElement>, deltaDays: number)
 		{
-			const date = this.state.date;
-			const newDate = moment(date).add("d", deltaDays);
+			e.preventDefault();
+
+			const newDate = this.getDateforChangeDelta(deltaDays);
 
 			this.changeDate(newDate);
 		}
@@ -71,17 +91,24 @@
 
 		public render()
 		{
+			const friendlyDate = this.getFriendlyDate();
+			const onClickNext = (e) => this.changeDateDelta(e, 1);
+			const onClickPrev = (e) => this.changeDateDelta(e, -1);
+			const nextButtonUrl = this.getUrlForDateChangeDelta(1);
+			const prevButtonUrl = this.getUrlForDateChangeDelta(-1);
+			const inputSize = this.getFriendlyDate().length + 1;
+
 			return (
 				<div className={`day-nav`}>
-					<a onClick={e => this.changeDateDelta(e, -1)}>
+					<a onClick={onClickPrev} href={prevButtonUrl}>
 						<i className={`fa fa-chevron-circle-left`}></i>
 					</a>
-					<input type={`text`} id={`calendarpicker`} value={this.getFriendlyDate()} size={this.getFriendlyDate().length + 1}/>
+					<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>
 					<i className={`fa fa-calendar`} aria-hidden={`true`} onClick={this.showCalendar} ></i>
-					<a onClick={e => this.changeDateDelta(e, 1)}>
+					<a onClick={onClickNext} href={nextButtonUrl}>
 						<i className={`fa fa-chevron-circle-right`}></i>
 					</a>
-				</div >
+				</div>
 			);
 		}
 	}
