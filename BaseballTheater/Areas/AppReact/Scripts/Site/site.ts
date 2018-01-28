@@ -37,7 +37,7 @@
 
 				ReactDOM.render(
 					page.page,
-					document.getElementById("body-wrapper")
+					document.getElementById("body-content")
 				);
 
 				currentPage = page;

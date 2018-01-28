@@ -230,8 +230,12 @@ select
 footer
 {
 	padding: 20px 0;
-
 	text-align: center;
+
+	body.GameList &
+	{
+		padding-left: 33vw;
+	}
 }
 
 .loading-spinner

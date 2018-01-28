@@ -18,7 +18,7 @@
 
 			this.state = {
 				gameSummaries: [],
-				date
+				date,
 			};
 		}
 
@@ -52,9 +52,7 @@
 		{
 			this.setState({
 				date: newDate
-			});
-			
-			this.loadGamesForCurrentDate();
+			}, () => this.loadGamesForCurrentDate());
 		}
 
 		private getDefaultDate()
@@ -70,20 +68,6 @@
 				: moment(lastEndingDay, "YYYYMMDD");
 
 			return date;
-		}
-
-		private sortGames(games: GameSummary[], favoriteTeam: string)
-		{
-			games.sort((a, b) =>
-			{
-				var aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
-				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
-				var favoriteReturn = aIsFavorite - bIsFavorite;
-
-				var startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
-
-				return favoriteReturn || startTimeReturn;
-			});
 		}
 
 		private getInningCount(linescore: Linescore)
@@ -103,6 +87,7 @@
 
 		private loadGamesForCurrentDate()
 		{
+			SiteReact.startLoading();
 			const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.state.date);
 			const favoriteTeam = Cookies.get("favoriteteam");
 
@@ -114,9 +99,25 @@
 					this.sortGames(games, favoriteTeam);
 
 					this.setState({
-						gameSummaries: games
+						gameSummaries: games,
 					});
+
+					SiteReact.stopLoading();
 				}
+			});
+		}
+
+		private sortGames(games: GameSummary[], favoriteTeam: string)
+		{
+			games.sort((a, b) =>
+			{
+				var aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
+				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
+				var favoriteReturn = aIsFavorite - bIsFavorite;
+
+				var startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
+
+				return favoriteReturn || startTimeReturn;
 			});
 		}
 
@@ -124,12 +125,14 @@
 		{
 			const games = this.state.gameSummaries.map((gameSummary, i) =>
 			{
-				return <GameSummaryReact game={gameSummary} key={i} />;
+				return <GameSummaryReact game={gameSummary} key={i}/>;
 			});
 
 			return (
 				<div className={`game-list-container`}>
-					<CalendarReact initialDate={this.state.date} onDateChange={this.updateDate} />
+					<div className={`settings`}>
+						<CalendarReact initialDate={this.state.date} onDateChange={this.updateDate}/>
+					</div>
 					<div className={`game-list`}>
 						{games}
 					</div>
