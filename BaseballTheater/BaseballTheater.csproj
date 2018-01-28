@@ -261,9 +261,6 @@
     <Compile Include="Areas\AppReact\AppReactAreaRegistration.cs" />
     <Compile Include="Areas\AppReact\AppReactController.cs" />
     <Compile Include="Areas\AppReact\BundleConfig.cs" />
-    <Compile Include="Areas\App\BundleConfig.cs" />
-    <Compile Include="Areas\App\AppAreaRegistration.cs" />
-    <Compile Include="Areas\App\AppController.cs" />
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
@@ -284,9 +281,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\App\Styles\game.scss" />
-    <Content Include="Areas\App\Styles\game-list.scss" />
-    <Content Include="Areas\App\Styles\pikaday.scss" />
     <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
     <Content Include="Areas\Data\Views\patreon.cshtml" />
     <Content Include="Content\Site.css" />
@@ -359,11 +353,20 @@
     <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
     <Content Include="images\manifest.json" />
-    <Content Include="Areas\App\Views\Index.cshtml" />
-    <Content Include="Areas\App\Views\web.config" />
-    <Content Include="Areas\App\Views\Components\_Backers.cshtml" />
     <Content Include="Areas\AppReact\Views\Index.cshtml" />
     <Content Include="Areas\AppReact\Views\web.config" />
+    <Content Include="Areas\AppReact\Styles\backers.scss" />
+    <Content Include="Areas\AppReact\Styles\base.scss" />
+    <Content Include="Areas\AppReact\Styles\boxscore.scss" />
+    <Content Include="Areas\AppReact\Styles\game-list.scss" />
+    <Content Include="Areas\AppReact\Styles\game.scss" />
+    <Content Include="Areas\AppReact\Styles\news.scss" />
+    <Content Include="Areas\AppReact\Styles\pikaday.scss" />
+    <Content Include="Areas\AppReact\Styles\resets.scss" />
+    <Content Include="Areas\AppReact\Styles\team-colors.scss" />
+    <Content Include="Areas\AppReact\Styles\teams.scss" />
+    <Content Include="Areas\AppReact\Styles\video-modal.scss" />
+    <Content Include="Areas\AppReact\Styles\_vars.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -371,15 +374,9 @@
     <Content Include="Shared\Scripts\libraries\bluebird.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
-    <Content Include="Areas\App\Views\Components\_Highlight.cshtml" />
-    <Content Include="Areas\App\Views\Components\_GameSummary.cshtml" />
     <Content Include="Areas\Proxy\Views\web.config" />
     <Content Include="Areas\Proxy\Views\Index.cshtml" />
     <Content Include="Areas\Data\Views\web.config" />
-    <Content Include="Areas\App\Views\Components\_BoxScore.cshtml" />
-    <Content Include="Areas\App\Styles\backers.scss" />
-    <Content Include="Areas\App\Styles\boxscore.scss" />
-    <Content Include="Areas\App\Styles\team-colors.scss" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff2" />
     <Content Include="Shared\Styles\fonts\bebasneue_book-webfont.woff" />
@@ -390,14 +387,7 @@
     <Content Include="Shared\Styles\fonts\bebasneue_regular-webfont.woff2" />
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_thin-webfont.woff2" />
-    <Content Include="Areas\App\Styles\_vars.scss" />
     <Content Include="Areas\Data\Views\News.cshtml" />
-    <Content Include="Areas\App\Styles\news.scss" />
-    <Content Include="Areas\App\Styles\video-modal.scss" />
-    <Content Include="Areas\App\Views\_game_detail.cshtml" />
-    <Content Include="Areas\App\Views\_backers.cshtml" />
-    <Content Include="Areas\App\Views\_news.cshtml" />
-    <Content Include="Areas\App\Views\_game_list.cshtml" />
     <Content Include="Areas\Data\Views\_DataLayoutXml.cshtml" />
     <Content Include="Areas\Data\Views\SearchHighlights.cshtml" />
     <None Include="BundleTransformer.Configuration.xsd">
@@ -421,8 +411,6 @@
     <Content Include="Shared\Scripts\libraries\vue.dev.js" />
     <Content Include="Shared\Scripts\libraries\vue.prod.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
-    <Content Include="Areas\App\Styles\base.scss" />
-    <Content Include="Areas\App\Styles\teams.scss" />
     <Content Include="Shared\Scripts\sw.js" />
     <Content Include="Shared\Views\_patreon.cshtml" />
     <Content Include="Web.config">
@@ -439,7 +427,6 @@
     <Content Include="Shared\Views\_Layout.cshtml" />
     <Content Include="Shared\Views\_game_summary.cshtml" />
     <Content Include="Shared\Views\_favicons.cshtml" />
-    <Content Include="Areas\App\Styles\resets.scss" />
     <Content Include="Shared\Styles\modal.scss" />
     <Content Include="Views\web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
@@ -458,6 +445,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\AppReact\Scripts\app.tsx" />
     <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameDetail\game_detail.tsx" />
     <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameList\calendar.tsx" />
     <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameList\game_list.tsx" />
@@ -486,16 +474,6 @@
     <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\page.tsx" />
     <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\responsive.ts" />
     <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\site.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\app.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\backers.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Components\backer_components.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Components\boxscore.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\config.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Helpers\backers_list.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Components\highlight.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\game_detail.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\news.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\team_redirect.ts" />
     <TypeScriptCompile Include="Scripts\typings\modernizr\modernizr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
@@ -504,16 +482,8 @@
     <TypeScriptCompile Include="Scripts\typings\react\global.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\react\index.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\game_list.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Components\game_summary.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\link_handler.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\modal.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\page.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\responsive.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\site.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\utility.ts" />
     <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
   </ItemGroup>
   <PropertyGroup>

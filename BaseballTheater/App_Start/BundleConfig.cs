@@ -22,12 +22,6 @@ namespace BaseballTheater
 				.Include("~/Shared/Scripts/libraries/pikaday.js")
 				.Include("~/Shared/Scripts/libraries/x2js.js");
 
-#if DEBUG
-			libraries.Include("~/Shared/Scripts/libraries/vue.dev.js");
-#else
-			libraries.Include("~/Shared/Scripts/libraries/vue.prod.js");
-#endif
-
 			bundles.Add(libraries);
 
 			var scssBundle = new Bundle("~/stylebundles/scss")
