@@ -6,6 +6,11 @@ interface Window
 	ga: (...args: any[]) => void;
 }
 
+interface JQueryStatic
+{
+	connection: any;
+}
+
 interface IBacker {
 	backerName: string;
 	isBeerBacker: boolean;
