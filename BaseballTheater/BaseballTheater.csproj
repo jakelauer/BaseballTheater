@@ -121,6 +121,12 @@
     <Reference Include="LibSassHost, Version=1.1.3.0, Culture=neutral, PublicKeyToken=3e24e88796a38e46, processorArchitecture=MSIL">
       <HintPath>..\packages\LibSassHost.1.1.3\lib\net45\LibSassHost.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.2\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -258,9 +264,9 @@
     <Compile Include="App_Start\JsEngineSwitcherConfig.cs" />
     <Compile Include="App_Start\ReactConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\AppReact\AppReactAreaRegistration.cs" />
-    <Compile Include="Areas\AppReact\AppReactController.cs" />
-    <Compile Include="Areas\AppReact\BundleConfig.cs" />
+    <Compile Include="Areas\App\AppAreaRegistration.cs" />
+    <Compile Include="Areas\App\AppController.cs" />
+    <Compile Include="Areas\App\BundleConfig.cs" />
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
@@ -276,14 +282,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\LiveGameHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared\Models\BaseModel.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="App_Start\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
     <Content Include="Areas\Data\Views\patreon.cshtml" />
-    <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="images\android-icon-144x144.png" />
@@ -353,23 +359,25 @@
     <Content Include="images\ring.svg" />
     <Content Include="images\team_logos.png" />
     <Content Include="images\manifest.json" />
-    <Content Include="Areas\AppReact\Views\Index.cshtml" />
-    <Content Include="Areas\AppReact\Views\web.config" />
-    <Content Include="Areas\AppReact\Styles\backers.scss" />
-    <Content Include="Areas\AppReact\Styles\base.scss" />
-    <Content Include="Areas\AppReact\Styles\boxscore.scss" />
-    <Content Include="Areas\AppReact\Styles\game-list.scss" />
-    <Content Include="Areas\AppReact\Styles\game.scss" />
-    <Content Include="Areas\AppReact\Styles\news.scss" />
-    <Content Include="Areas\AppReact\Styles\pikaday.scss" />
-    <Content Include="Areas\AppReact\Styles\resets.scss" />
-    <Content Include="Areas\AppReact\Styles\team-colors.scss" />
-    <Content Include="Areas\AppReact\Styles\teams.scss" />
-    <Content Include="Areas\AppReact\Styles\video-modal.scss" />
-    <Content Include="Areas\AppReact\Styles\_vars.scss" />
+    <Content Include="Areas\App\Views\Index.cshtml" />
+    <Content Include="Areas\App\Views\web.config" />
+    <Content Include="Areas\App\Styles\backers.scss" />
+    <Content Include="Areas\App\Styles\base.scss" />
+    <Content Include="Areas\App\Styles\boxscore.scss" />
+    <Content Include="Areas\App\Styles\game-list.scss" />
+    <Content Include="Areas\App\Styles\game.scss" />
+    <Content Include="Areas\App\Styles\news.scss" />
+    <Content Include="Areas\App\Styles\pikaday.scss" />
+    <Content Include="Areas\App\Styles\resets.scss" />
+    <Content Include="Areas\App\Styles\team-colors.scss" />
+    <Content Include="Areas\App\Styles\teams.scss" />
+    <Content Include="Areas\App\Styles\video-modal.scss" />
+    <Content Include="Areas\App\Styles\_vars.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.js" />
     <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
@@ -377,6 +385,7 @@
     <Content Include="Areas\Proxy\Views\web.config" />
     <Content Include="Areas\Proxy\Views\Index.cshtml" />
     <Content Include="Areas\Data\Views\web.config" />
+    <Content Include="Shared\Scripts\libraries\jquery.signalR-2.2.2.min.js" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff2" />
     <Content Include="Shared\Styles\fonts\bebasneue_book-webfont.woff" />
@@ -445,35 +454,35 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\app.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameDetail\game_detail.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameList\calendar.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameList\game_list.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameList\game_summary.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameDetail\boxscore.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\App\GameDetail\highlight.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\link_handler.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\batting.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\box_score.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\game_center.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\game_summary.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\game_summary_collection.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\highlight.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\highlights_collection.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\keyword.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\linescore.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\pitching.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\player.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\probably_pitcher.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\rss.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\DataStructures\teams.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\game_detail_creator.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\game_summary_creator.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\news_feed_creator.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\MlbDataServer\Utils\xml_loader.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\page.tsx" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\responsive.ts" />
-    <TypeScriptCompile Include="Areas\AppReact\Scripts\Site\site.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\global.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\game_detail.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\calendar.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\game_list.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\game_summary.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\boxscore.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\highlight.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\link_handler.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\batting.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\box_score.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_center.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_summary.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\game_summary_collection.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\highlight.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\highlights_collection.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\keyword.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\linescore.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\pitching.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\player.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\probably_pitcher.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\rss.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\teams.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_detail_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_summary_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\news_feed_creator.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\Utils\xml_loader.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\page.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\responsive.ts" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\site.ts" />
     <TypeScriptCompile Include="Scripts\typings\modernizr\modernizr.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment-timezone\moment-timezone.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\moment\moment.d.ts" />
@@ -483,7 +492,6 @@
     <TypeScriptCompile Include="Scripts\typings\react\index.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\x2js\xml2json.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\vue\vue.d.ts" />
     <TypeScriptCompile Include="Shared\Scripts\_references.d.ts" />
   </ItemGroup>
   <PropertyGroup>

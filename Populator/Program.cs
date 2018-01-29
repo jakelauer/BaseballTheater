@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Populator
 {
-	class Program
+	internal class Program
 	{
-		static DateTime Date = new DateTime(2015, 7, 25);
+		private static DateTime Date = new DateTime(2015, 7, 25);
 		private static bool DoLoop = false;
 
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			if (args.Length > 0)
 			{
@@ -28,14 +28,14 @@ namespace Populator
 
 			if (args.Length > 1)
 			{
-				DoLoop = Boolean.Parse(args[1]);
+				DoLoop = bool.Parse(args[1]);
 			}
 			Loop();
 		}
 
-		static void Loop()
+		private static void Loop()
 		{
-			var processGame = new ProcessGame(Date);
+			var processGame = new LoadHighlights(Date);
 			processGame.Process();
 
 			Date = Date.AddDays(1);

@@ -1,6 +1,7 @@
 ﻿using BaseballTheater.Areas.Data.Models.News;
 using System.Web.Mvc;
 using MlbDataServer.DataFetch;
+using System.Threading.Tasks;
 
 namespace BaseballTheater.Areas.Data
 {
@@ -27,6 +28,12 @@ namespace BaseballTheater.Areas.Data
 		{
 			var result = Search.SearchHighlights(query, page, perpage);
 			return View(result);
+		}
+
+		public async Task<ActionResult> GetRealTimeEvents(string subscribeToKey)
+		{
+		//	var rte = await RealTimeEvents.GetRealTimeEvents(subscribeToKey);
+			return View();
 		}
 	}
 }
