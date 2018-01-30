@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BaseballTheater.Extensions
+namespace Common
 {
 	public static class DictionaryExtensions
 	{

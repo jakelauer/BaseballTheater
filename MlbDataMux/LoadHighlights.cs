@@ -4,15 +4,14 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using MlbDataMux;
 using MlbDataServer.DataFetch;
 using MlbDataServer.DataStructures;
 
-namespace Populator
+namespace MlbDataProxy
 {
-	internal class LoadHighlights
+	public class LoadHighlights
 	{
 		private DateTime Date { get; set; }
 		private GameSummaryCreator Gsc { get; set; }

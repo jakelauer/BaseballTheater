@@ -42,8 +42,6 @@
 
 body
 {
-	padding-top: 50px;
-	padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -51,14 +49,6 @@ body
 {
 	padding-left: 15px;
 	padding-right: 15px;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea
-{
-	max-width: 280px;
 }
 
 html
@@ -69,7 +59,6 @@ html
 body #body-wrapper
 {
 	min-height: 600px;
-
 	//opacity: 0;
 }
 
@@ -84,28 +73,20 @@ header
 	position: fixed;
 	z-index: 100;
 	overflow: hidden;
-
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: $header-height;
 	padding-bottom: 5px;
-
 	transition: 0.25s;
-
-	color: #fff;
-	background: $color-accent;
-	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
-
+	color: $color-accent;
 	font-size: 18px;
 
 	.header-content
 	{
 		display: flex;
-
 		width: 100%;
 		padding: 0 20px;
-
 		text-align: center;
 	}
 
@@ -118,10 +99,8 @@ header
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
 			margin-left: -1rem;
 			padding: 0 1rem;
-
 			text-align: center;
 		}
 	}
@@ -129,12 +108,9 @@ header
 	.logo-link
 	{
 		position: relative;
-
 		text-align: center;
 		text-decoration: none;
-
-		color: #eee;
-
+		color: $color-accent;
 		font-family: "bebas", sans-serif;
 		font-size: 26px;
 		font-weight: bold;
@@ -152,84 +128,68 @@ header
 		}
 	}
 
-	.links
+	.right
 	{
-		position: relative;
 		display: flex;
-
-		padding-left: 2rem;
-
-		.r-medium &
-		{
-			position: fixed;
-			display: block;
-
-			top: $header-height;
-			left: -100%;
-			height: calc(100vh - #{$header-height});
-			padding-left: 0;
-
-			transition: 0.25s;
-
-			background: $color-accent;
-
-			&.open
-			{
-				left: 0;
-			}
-		}
+		align-self: center;
+		justify-self: flex-end;
+		justify-content: flex-end;
 	}
 
-	.links a
+	.search
 	{
 		position: relative;
-		display: block;
-
+		border-radius: 5px;
+		align-self: center;
+		justify-content: center;
+		display: flex;
+		align-items: center;
+		flex: auto;
+		margin: 0 2rem;
 		height: 50px;
-		padding: 0 2rem;
 
-		text-decoration: none;
-
-		color: white;
-
-		line-height: 50px;
-
-		&.active,
-		&:hover
+		.label
 		{
-			color: $color-accent;
-			background: white;
-		}
-
-		.r-medium &
-		{
+			position: absolute;
+			top: 0;
+			left: 0;
 			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			text-align: left;
+			left: 100%;
+			margin-left: -50%;
+			transition: 0.25s;
+			display: flex;
+			align-items: center;
 
-			&:after
+			span
 			{
-				display: none;
+				display: inline-block;
+				margin-left: 0.5rem;
+				transition: 0.25s;
 			}
 		}
-	}
 
-	.stitch
-	{
-		width: 100%;
-		height: 1px;
-
-		border-bottom: 1px dashed white;
-
-		&:after
+		input
 		{
-			display: block;
-
+			flex: auto;
 			width: 100%;
-			height: 1px;
-			margin-left: 1px;
+			border: none;
+			padding: 10px;
+			padding-left: 30px;
 
-			content: "";
+			&:focus + .label,
+			&:valid + .label
+			{
+				left: 3px;
+				margin-left: 0;
 
-			border-bottom: 1px dashed rgba(0, 0, 0, 0.5);
+				span
+				{
+					opacity: 0;
+				}
+			}
 		}
 	}
 }
@@ -237,7 +197,6 @@ header
 select
 {
 	height: 20px;
-
 	color: white;
 	border: 1px solid rgba(0, 0, 0, 0.25);
 	background: $color-accent;
@@ -263,24 +222,19 @@ footer
 {
 	position: fixed;
 	z-index: 999;
-
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-
 	transition: background 0.25s;
 	pointer-events: none;
-
 	opacity: 0;
 
 	img
 	{
 		position: absolute;
-
 		top: 50%;
 		left: 50%;
-
 		transform: translateX(-50%) translateY(-50%);
 	}
 }
@@ -288,7 +242,6 @@ footer
 .loading .loading-spinner
 {
 	pointer-events: auto;
-
 	opacity: 1;
 }
 
@@ -296,47 +249,39 @@ footer
 {
 	position: relative;
 	display: block;
-
 	max-width: 800px;
 	margin: 0 auto;
 	padding-bottom: 30px;
-
 	transition: 0.15s;
 	text-decoration: none;
-
 	color: black;
 	background: #fff;
 
 	.game-link
 	{
 		position: absolute;
-
 		top: 10px;
 		right: 10px;
 		bottom: 10px;
 		left: 10px;
 	}
 
-	.game-link:hover
-	{
-		background: rgba(206, 15, 15, 0.05);
-	}
+		.game-link:hover
+		{
+			background: rgba(206, 15, 15, 0.05);
+		}
 
 	table
 	{
 		width: 100%;
-
 		border-spacing: 0;
-
 		border-collapse: collapse;
 
 		th,
 		td
 		{
 			padding: 6px 0;
-
 			text-align: center;
-
 			border: 1px solid #ddd;
 		}
 
@@ -350,39 +295,34 @@ footer
 		{
 			padding-right: 7px;
 			padding-left: 5px;
-
 			text-align: left;
 			white-space: nowrap;
-
 			border-right: 3px solid #ddd;
-
 			font-weight: bold;
 			line-height: 29px;
 		}
 
-		.team-info-basic .team-name
-		{
-			display: inline-flex;
+			.team-info-basic .team-name
+			{
+				display: inline-flex;
+				width: calc(100% - 50px);
+			}
 
-			width: calc(100% - 50px);
-		}
+				.team-info-basic .team-name .team-name-wrap
+				{
+					flex: 1 0;
+				}
 
-		.team-info-basic .team-name .team-name-wrap
-		{
-			flex: 1 0;
-		}
-
-		.team-info-basic .team-name .probable-pitcher
-		{
-			font-weight: normal;
-		}
+				.team-info-basic .team-name .probable-pitcher
+				{
+					font-weight: normal;
+				}
 
 		.runs,
 		.hits,
 		.errors
 		{
 			width: 40px;
-
 			font-weight: bold;
 		}
 
@@ -401,7 +341,6 @@ footer
 .error
 {
 	text-align: center;
-
 	font-size: 1.5em;
 }
 
@@ -412,32 +351,29 @@ footer
 	.day-nav
 	{
 		justify-content: flex-start;
-
 		font-size: 1.5rem;
 		-ms-flex: 1 0;
 		-webkit-flex: 1 0;
 		flex: 1 0;
 	}
 
-	.day-nav a
-	{
-		margin: 0 10px;
-
-		color: $color-accent;
-	}
+		.day-nav a
+		{
+			margin: 0 10px;
+			color: $color-accent;
+		}
 
 	.tools
 	{
 		align-items: center;
 		justify-content: center;
-
 		text-align: center;
 	}
 
-	.tools .hide-scores
-	{
-		margin-left: 20px;
-	}
+		.tools .hide-scores
+		{
+			margin-left: 20px;
+		}
 }
 
 .patreon-goals
@@ -456,23 +392,20 @@ footer
 		color: black;
 	}
 
-	a:hover
-	{
-		text-decoration: none;
-	}
+		a:hover
+		{
+			text-decoration: none;
+		}
 
 	p
 	{
 		position: absolute;
-
 		top: 0;
 		left: 0;
 		width: 100%;
 		margin: 0;
-
 		text-align: center;
 		white-space: nowrap;
-
 		font-weight: bold;
 		line-height: 30px;
 	}
@@ -481,20 +414,17 @@ footer
 	{
 		position: relative;
 		overflow: hidden;
-
 		height: 30px;
 		margin: 10px 0;
-
 		border-radius: 15px;
 		background: #eee;
 	}
 
-	.bar .width
-	{
-		height: 100%;
-
-		background: #e6461a;
-	}
+		.bar .width
+		{
+			height: 100%;
+			background: #e6461a;
+		}
 }
 
 @media all and (max-width: 800px)
@@ -507,18 +437,18 @@ footer
 		flex-wrap: wrap;
 	}
 
-	.settings .day-nav
-	{
-		width: 100%;
-		-ms-flex: none;
-		-webkit-flex: none;
-		flex: none;
-	}
+		.settings .day-nav
+		{
+			width: 100%;
+			-ms-flex: none;
+			-webkit-flex: none;
+			flex: none;
+		}
 
-	.settings .tools
-	{
-		width: 100%;
-	}
+		.settings .tools
+		{
+			width: 100%;
+		}
 
 	.backers-wrapper h1
 	{
@@ -534,9 +464,7 @@ footer
 .empty
 {
 	position: relative;
-
 	padding: 50px 0;
-
 	text-align: center;
 	-webkit-flex: 1 0;
 	-ms-flex: 1 0;
@@ -551,9 +479,7 @@ footer
 .team-info
 {
 	position: relative;
-
 	text-decoration: none !important;
-
 	font-family: "bebas", sans-serif;
 	font-size: 3rem;
 	font-weight: bold;
@@ -568,7 +494,6 @@ footer
 	.team-logo
 	{
 		position: absolute;
-
 		top: 8px;
 		left: 0;
 	}
@@ -583,4 +508,26 @@ footer
 {
 	width: 55rem;
 	max-width: 100%;
+}
+
+.button
+{
+	display: inline-block;;
+	padding: 0.75rem 1.5rem;
+	cursor: default;
+	color: $color-accent;
+	border: 0;
+	border-radius: 2px;
+	background: #EEE;
+	box-shadow: 0 4px 4px -3px rgba(0,0,0,0.2);
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2rem;
+	transition: 0.15s;
+
+	&:hover
+	{
+		background: #F7F7F7;
+		text-decoration: none;
+	}
 }

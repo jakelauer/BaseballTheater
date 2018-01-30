@@ -32,11 +32,6 @@
 
 		$.connection.hub.start().done(() =>
 		{
-			$("body").on("dblclick", () =>
-			{
-				console.log("sending");
-				chat.server.send(Date.now().toString());
-			});
 		});
 	}
 

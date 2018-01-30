@@ -27,6 +27,7 @@
 	<meta name="Description" content="@description" />
 		
 	@Styles.Render("~/stylebundles/scss")
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	@RenderSection("ExtraHead", false)
 
 	<title>@ViewBag.Title</title>
@@ -37,27 +38,24 @@
 <header>
 	<div class="header-content">
 		<div class="mobile-menu-trigger">
-			<i class="fa fa-bars" aria-hidden="true"></i>
+			<i class="material-icons">menu</i>
 		</div>
 		<a class="logo-link" href="/"> Baseball Theater
 		</a>
-		<div class="links">
-			<a href="/" data-name="games">
-				Games
-			</a>
-			<a href="/backers" data-name="backers">
-				Backers
-			</a>
-			<a href="https://www.reddit.com/r/BaseballTheater/submit?selftext=true" target="_blank">
-				Feedback
-			</a>
-		</div>
 		
-		<div class="login">
-			<a href="https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=https://baseball.theater">Log in with Patron</a>
+		<div class="search">
+			<input type="text" required />
+			<div class="label">
+				<i class="material-icons">search</i> <span>Search</span>
+			</div>
+		</div>
+
+		<div class="right">
+			<a class="login button" href="https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=https://baseball.theater">
+				Log in with Patreon
+			</a>
 		</div>
 	</div>
-	<div class="stitch"></div>
 </header>
 <div id="body-wrapper">
 	<div class="loading-spinner">
@@ -93,7 +91,6 @@
 
 </script>
 	
-<script type="text/javascript" src="~/Shared/Scripts/libraries/bluebird.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
@@ -129,8 +126,7 @@
 			});
 	}
 </script>
-	
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" media="none" onload="if(media!=='all')media='all'">
+
 
 </body>
 
