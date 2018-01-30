@@ -9,17 +9,7 @@ namespace BaseballTheater.Areas.App
 		[OutputCache(Duration = 60)]
 		public ActionResult Index(string id = "")
 		{
-			var myThread = new Thread(this.SendMessage);
-			myThread.Start();
-
 			return View();
-		}
-
-		private void SendMessage()
-		{
-			Thread.Sleep(10000);
-
-			LiveGameHub.ClientsInstance.All.receive("lol");
 		}
 	}
 }

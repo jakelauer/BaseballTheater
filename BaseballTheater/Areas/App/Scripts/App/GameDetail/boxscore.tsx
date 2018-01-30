@@ -114,7 +114,7 @@
 							{pitcher.note &&
 								<span className={`note`} dangerouslySetInnerHTML={{ __html: pitcher.note }}></span>
 							}
-							{pitcher.name} ({pitcher.pos})
+							{this.renderPlayerLink(pitcher)} ({pitcher.pos})
 						</td>
 						<td className={`stat`} data-statid="ip">{this.getIP(pitcher.out)}</td>
 						<td className={`stat`} data-statid="h">{pitcher.h}</td>
@@ -147,7 +147,7 @@
 							{batter.note &&
 								<span className={`note`} dangerouslySetInnerHTML={{ __html: batter.note }}></span>
 							}
-							{batter.name} ({batter.pos})
+							{this.renderPlayerLink(batter)} ({batter.pos})
 						</td>
 						<td className={`stat`} data-statid="ab">{batter.ab}</td>
 						<td className={`stat`} data-statid="r">{batter.r}</td>
@@ -163,6 +163,14 @@
 			});
 
 			return batterRows;
+		}
+
+		private renderPlayerLink(player: IPlayer)
+		{
+			const urlName = player.name.replace(/\s\w/, "-").toLowerCase();
+			const playerLink = `http://m.mlb.com/player/${player.id}/${urlName}`;
+
+			return (<a href={playerLink} target={`_blank`}>{player.name}</a>);
 		}
 	}
 }

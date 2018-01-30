@@ -101,12 +101,11 @@
 			return (
 				<div className={`day-nav`}>
 					<a onClick={onClickPrev} href={prevButtonUrl}>
-						<i className={`fa fa-chevron-circle-left`}></i>
+						<i className={`material-icons`}>chevron_left</i>
 					</a>
 					<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>
-					<i className={`fa fa-calendar`} aria-hidden={`true`} onClick={this.showCalendar} ></i>
 					<a onClick={onClickNext} href={nextButtonUrl}>
-						<i className={`fa fa-chevron-circle-right`}></i>
+						<i className={`material-icons`}>chevron_right</i>
 					</a>
 				</div>
 			);

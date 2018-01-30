@@ -18,7 +18,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BaseballTheater</RootNamespace>
     <AssemblyName>BaseballTheater</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -32,6 +32,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -171,27 +172,17 @@
     <Reference Include="React.Web.Mvc4, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
       <HintPath>..\packages\React.Web.Mvc4.3.2.0\lib\net40\React.Web.Mvc4.dll</HintPath>
     </Reference>
-    <Reference Include="RedditSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RedditSharp\RedditSharp\bin\Debug\RedditSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp, Version=104.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.104.0\lib\net4\RestSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -233,6 +224,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="VroomJs, Version=1.2.3.0, Culture=neutral, PublicKeyToken=e7c52e67fcb0044f, processorArchitecture=MSIL">
       <HintPath>..\packages\VroomJs.1.2.3\lib\net45\VroomJs.dll</HintPath>
     </Reference>
@@ -379,8 +371,7 @@
     <Content Include="Scripts\jquery.signalR-2.2.2.js" />
     <Content Include="Scripts\jquery.signalR-2.2.2.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Shared\Scripts\libraries\bluebird.js" />
-    <Content Include="Shared\Scripts\libraries\bluebird.min.js" />
+    <Content Include="Shared\Scripts\libraries\crosstab.js" />
     <Content Include="Shared\Scripts\libraries\jquery-3.js" />
     <Content Include="Areas\Proxy\Views\web.config" />
     <Content Include="Areas\Proxy\Views\Index.cshtml" />
@@ -417,8 +408,6 @@
     <Content Include="Shared\Scripts\libraries\moment-timezone.js" />
     <Content Include="Shared\Scripts\libraries\moment-lib.js" />
     <Content Include="Shared\Scripts\libraries\pikaday.js" />
-    <Content Include="Shared\Scripts\libraries\vue.dev.js" />
-    <Content Include="Shared\Scripts\libraries\vue.prod.js" />
     <Content Include="Shared\Scripts\libraries\x2js.js" />
     <Content Include="Shared\Scripts\sw.js" />
     <Content Include="Shared\Views\_patreon.cshtml" />
@@ -448,6 +437,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{43c780e2-4e6e-4247-b03a-4796405b87cd}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MlbDataMux\MlbDataMux.csproj">
+      <Project>{56889fb2-3890-4a88-a415-9ce40dc053ce}</Project>
+      <Name>MlbDataMux</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
       <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
       <Name>MlbDataServer</Name>
