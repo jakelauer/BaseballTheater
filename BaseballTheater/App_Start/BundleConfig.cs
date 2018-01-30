@@ -14,7 +14,6 @@ namespace BaseballTheater
 			BundleResolver.Current = new CustomBundleResolver();
 
 			var libraries = new ScriptBundle("~/scriptbundles/lib")
-				.Include("~/Shared/Scripts/libraries/crosstab.js")
 				.Include("~/Shared/Scripts/libraries/cookies.js")
 				.Include("~/Shared/Scripts/libraries/jquery-3.js")
 				.Include("~/Shared/Scripts/libraries/jquery.signalR-2.2.2.min.js")
