@@ -134,6 +134,7 @@ header
 		align-self: center;
 		justify-self: flex-end;
 		justify-content: flex-end;
+		flex: auto;
 	}
 
 	.search
@@ -144,9 +145,11 @@ header
 		justify-content: center;
 		display: flex;
 		align-items: center;
-		flex: auto;
 		margin: 0 2rem;
 		height: 50px;
+		max-width: 25vw;
+		min-width: 380px;
+		flex: auto;
 
 		.label
 		{
@@ -161,6 +164,7 @@ header
 			margin-left: -50%;
 			transition: 0.25s;
 			display: flex;
+			font-size: 1rem;
 			align-items: center;
 
 			span
@@ -342,38 +346,6 @@ footer
 {
 	text-align: center;
 	font-size: 1.5em;
-}
-
-.settings
-{
-	margin: 1rem 0;
-
-	.day-nav
-	{
-		justify-content: flex-start;
-		font-size: 1.5rem;
-		-ms-flex: 1 0;
-		-webkit-flex: 1 0;
-		flex: 1 0;
-	}
-
-		.day-nav a
-		{
-			margin: 0 10px;
-			color: $color-accent;
-		}
-
-	.tools
-	{
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-	}
-
-		.tools .hide-scores
-		{
-			margin-left: 20px;
-		}
 }
 
 .patreon-goals

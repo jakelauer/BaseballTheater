@@ -1,4 +1,4 @@
-﻿namespace Theater
+﻿namespace Theater.GameDetail
 {
 	interface IBoxScoreProps
 	{

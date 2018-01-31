@@ -100,11 +100,11 @@
 
 			return (
 				<div className={`day-nav`}>
-					<a onClick={onClickPrev} href={prevButtonUrl}>
+					<a className={`prev`} onClick={onClickPrev} href={prevButtonUrl}>
 						<i className={`material-icons`}>chevron_left</i>
 					</a>
 					<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>
-					<a onClick={onClickNext} href={nextButtonUrl}>
+					<a className={`next`} onClick={onClickNext} href={nextButtonUrl}>
 						<i className={`material-icons`}>chevron_right</i>
 					</a>
 				</div>

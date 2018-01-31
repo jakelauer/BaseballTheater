@@ -1,15 +1,20 @@
-﻿namespace Theater
+﻿namespace Theater.GameDetail
 {
-	interface IGameDetailData
+	enum Tabs
+	{
+		PlayByPlay,
+		BoxScore
+	}
+
+	interface IGameDetailState
 	{
 		gameSummary: GameSummaryData;
 		boxScore: BoxScoreData;
-		allHighlights: IHighlight[];
-		specialHighlights: IHighlight[];
-		detailMode: number;
+		highlightsCollection: IHighlightsCollection,
+		currentTab: Tabs;
 	}
 
-	export class GameDetail extends React.Component<any, IGameDetailData>
+	export class GameDetail extends React.Component<any, IGameDetailState>
 	{
 		private date: moment.Moment = null;
 		private gamePk: string;
@@ -22,19 +27,16 @@
 			this.gamePk = this.getGamePkFromPath(location.pathname);
 
 			this.state = {
-				detailMode: 0,
 				boxScore: null,
-				allHighlights: [],
-				specialHighlights: [],
-				gameSummary: null
+				highlightsCollection: null,
+				gameSummary: null,
+				currentTab: Tabs.PlayByPlay
 			}
 		}
 
-		private switchDetailMode(e: React.MouseEvent<HTMLDivElement>, mode: number)
+		public componentDidMount()
 		{
-			this.setState({
-				detailMode: mode
-			});
+			this.getData();
 		}
 
 		private showNoHighlights()
@@ -84,6 +86,13 @@
 			return pathnamePk;
 		}
 
+		private setTabState(currentTab: Tabs)
+		{
+			this.setState({
+				currentTab
+			});
+		}
+
 		private getCurrentGame(): Promise<GameSummaryData>
 		{
 
@@ -110,67 +119,21 @@
 			});
 		}
 
-		public componentDidMount()
-		{
-			this.getData();
-		}
-
 		private async getData()
 		{
 			App.startLoading();
 
 			try
 			{
-				const currentGame = await this.getCurrentGame();
-				const boxScore = await this.getBoxScore(currentGame);
-				let highlights: IHighlight[] = [];
-				let allHighlights: IHighlight[] = [];
-				let specialHighlights: IHighlight[] = [];
+				const gameSummary = await this.getCurrentGame();
+				const boxScore = await this.getBoxScore(gameSummary);
 
-				//$TODO hook up to favorite team
-				if (currentGame.home_file_code === "")
-				{
-					//App.Instance.highlightsVueData.currentTab = "home";
-				}
-
-				const highlightsCollection = await this.getHighlights(currentGame);
-				if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
-				{
-					for (let highlight of highlightsCollection.highlights.media)
-					{
-						highlight.isPlaying = false;
-					}
-
-					Theater.endTime = moment();
-
-					highlights = highlightsCollection.highlights.media;
-					highlights.sort((a, b) =>
-					{
-						var aIsRecap = a.recap ? -1 : 0;
-						var bIsRecap = b.recap ? -1 : 0;
-						var aIsCondensed = a.condensed ? -1 : 0;
-						var bIsCondensed = b.condensed ? -1 : 0;
-						var idOrder = a.id - b.id;
-
-						return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed) || idOrder;
-					});
-
-					specialHighlights = highlights.filter((highlight) =>
-					{
-						return highlight.recap || highlight.condensed;
-					});
-
-					allHighlights = highlights.filter(highlight =>
-					{
-						return !highlight.recap && !highlight.condensed;
-					});
-				}
+				const highlightsCollection = await this.getHighlights(gameSummary);
 
 				this.setState({
-					gameSummary: currentGame,
+					gameSummary,
 					boxScore,
-					specialHighlights,
-					allHighlights
+					highlightsCollection
 				});
 
 				App.stopLoading();
@@ -192,50 +155,38 @@
 			}
 
 			const boxScoreData = this.state.boxScore;
-			const allHighlights = this.state.allHighlights;
-			const specialHighlights = this.state.specialHighlights;
-
-			const highlightsOnClass = this.state.detailMode === 0 ? "on" : "";
-			const boxScoreOnClass = this.state.detailMode === 1 ? "on" : "";
+			const highlightsCollection = this.state.highlightsCollection;
 
 			return (
 				<div className={`game-detail-container`}>
-					<div className={`highlight-game-summary`}>
-
-						{this.renderTeam(HomeAway.Away)}
-
-						<GameSummary game={gameSummary} />
-
-						{this.renderTeam(HomeAway.Home)}
-
-					</div>
-
-					{boxScoreData && allHighlights &&
-						<div data-vif="boxScore && allHighlights" className={`mode-switch-container`}>
-							<div className={`mode-switch`}>
-								<div className={`switch-item ${highlightsOnClass}`} onClick={e => this.switchDetailMode(e, 0)}>
-									Highlights
-								</div>
-								<div className={`switch-item ${boxScoreOnClass}`} onClick={e => this.switchDetailMode(e, 1)}>
-									Box Score
-								</div>
+					<div className={`game-data-tab-container`}>
+						<div className={`tabs`}>
+							<div className={`tab`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
+								Play by Play
+							</div>
+							<div className={`tab`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
+								Box Score
 							</div>
 						</div>
-					}
+						<div className={`tab-contents`}>
+							<div className={`tab-content`} data-tab={Tabs.PlayByPlay}>
+								<PlayByPlay />
+							</div>
+							<div className={`tab-content`} data-tab={Tabs.BoxScore}>
+								<BoxScore boxScoreData={boxScoreData} />
+							</div>
+						</div>
+					</div>
 
 					<div className={`game-detail-wrapper`}>
-						<div className={`highlights-wrapper ${highlightsOnClass}`}>
-							{this.renderHighlights(specialHighlights, allHighlights)}
+						<div className={`highlights-wrapper on`}>
+							{<Highlights highlightsCollection={highlightsCollection} />}
 
 							{this.showNoHighlights() &&
 								<div className={`empty`}>
 									No highlights found for this game. Highlights for some games may not be published until the game is complete.
 								</div>
 							}
-						</div>
-
-						<div className={`box-score-wrapper ${boxScoreOnClass}`}>
-							<BoxScore boxScoreData={boxScoreData}/>
 						</div>
 					</div>
 				</div>
@@ -263,37 +214,6 @@
 					<a className={`backers`} href="/backers">
 						{this.getTeamSponsors(teamFileCode)}
 					</a>
-				</div>
-			);
-		}
-
-		private renderHighlights(specialHighlights: IHighlight[], allHighlights: IHighlight[])
-		{
-			if (allHighlights.length === 0)
-			{
-				return (<div/>);
-			}
-
-			return (
-				<div className={`highlights-container`}>
-					<h2>Highlights</h2>
-					{specialHighlights && specialHighlights.length > 0 &&
-						<div className={`special-highlights`}>
-							{
-								specialHighlights.map((highlight) => (
-									<Highlight key={highlight.id} highlight={highlight} />
-								))
-							}
-						</div>
-					}
-
-					<div className={`all-highlights`}>
-						{
-							allHighlights.map((highlight) => (
-								<Highlight key={highlight.id} highlight={highlight} />
-							))
-						}
-					</div>
 				</div>
 			);
 		}

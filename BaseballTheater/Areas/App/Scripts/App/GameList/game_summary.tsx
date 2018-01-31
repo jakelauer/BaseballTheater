@@ -7,6 +7,7 @@
 
 	enum HomeAway
 	{
+		None,
 		Home,
 		Away
 	}
@@ -43,7 +44,8 @@
 		{
 			const game = this.props.game;
 
-			const winnerClass = this.getWinner() === teamType ? "winner" : "";
+			const isWinner = this.getWinner() === teamType;
+			const winnerClass = isWinner ? "winner" : "";
 			const homeAwayClass = teamType === HomeAway.Away ? "away-team" : "home-team";
 			const fileCode = teamType === HomeAway.Away ? game.away_file_code : game.home_file_code;
 			const teamCity = teamType === HomeAway.Away ? game.away_team_city : game.home_team_city;
@@ -65,6 +67,7 @@
 					{game.linescore &&
 						<div className={`score`}>
 							{this.linescoreItem(linescoreRuns)}
+							<span className={`winner-indicator ${winnerClass}`}><i className={`material-icons`}>chevron_left</i></span>
 						</div>
 					}
 				</div>
@@ -105,7 +108,16 @@
 
 		private getWinner(): HomeAway
 		{
-			return HomeAway.Away;
+			const game = this.props.game;
+
+			if (game.linescore && game.linescore.r)
+			{
+				return game.linescore.r.away > game.linescore.r.home
+					       ? HomeAway.Away
+					       : HomeAway.Home;
+			}
+
+			return HomeAway.None;
 		}
 
 		private getStatusTime()
