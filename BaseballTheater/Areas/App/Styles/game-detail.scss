@@ -4,13 +4,18 @@
 {
 	display: flex;
 
-	padding-left: 33vw;
+	padding-right: 33vw;
 	flex-wrap: wrap;
 
 	.r-large &
 	{
 		padding-left: 0;
 	}
+}
+
+.game-data-tab-container
+{
+	flex: auto;
 }
 
 .highlight-game-summary
@@ -80,7 +85,7 @@
 	overflow: auto;
 
 	top: 55px;
-	left: 0;
+	right: 0;
 	width: 33vw;
 	height: calc(100vh - 55px);
 	padding: 1rem;
@@ -357,31 +362,6 @@
 	.game-link
 	{
 		display: none;
-	}
-}
-
-#modal-mlb-video
-{
-	.modal
-	{
-		top: 27px;
-		width: 100%;
-		max-width: none;
-		height: calc(100% - 55px);
-		max-height: none;
-		margin: 0;
-		padding: 0;
-
-		.modal-internal
-		{
-			height: 100%;
-			max-height: none;
-		}
-
-		iframe
-		{
-			display: block;
-		}
 	}
 }
 
