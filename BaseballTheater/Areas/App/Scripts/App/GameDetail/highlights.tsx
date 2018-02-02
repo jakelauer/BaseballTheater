@@ -87,7 +87,6 @@
 
 			return (
 				<div className={`highlights-container`}>
-					<h2>Highlights</h2>
 					{specialHighlights && specialHighlights.length > 0 &&
 						<div className={`special-highlights`}>
 							{

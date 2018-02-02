@@ -40,26 +40,19 @@
 	src: url('/Shared/Styles/fonts/bebasneue_thin-webfont.woff2') format('woff2'), url('/Shared/Styles/fonts/bebasneue_thin-webfont.woff') format('woff');
 }
 
-body
-{
-}
-
-/* Set padding to keep content from hitting the edges */
-#body-content
-{
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
 html
 {
 	height: 100%;
 }
 
-body #body-wrapper
+#body-wrapper
 {
-	min-height: 600px;
-	//opacity: 0;
+	height: calc(100vh - #{$header-size});
+
+	#body-content
+	{
+		height: 100%;
+	}
 }
 
 html.ready body #body-wrapper
@@ -70,6 +63,7 @@ html.ready body #body-wrapper
 header
 {
 	$header-height: 55px;
+
 	position: fixed;
 	z-index: 100;
 	overflow: hidden;
@@ -77,7 +71,7 @@ header
 	left: 0;
 	width: 100%;
 	height: $header-height;
-	padding-bottom: 5px;
+	padding-bottom: $header-size - $header-height;
 	transition: 0.25s;
 	color: $color-accent;
 	font-size: 18px;

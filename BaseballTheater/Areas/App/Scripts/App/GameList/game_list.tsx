@@ -72,9 +72,9 @@
 
 		private getInningCount(linescore: Linescore)
 		{
-			if (linescore && linescore.inning)
+			if (linescore && linescore.inning_line_score)
 			{
-				return linescore.inning.length;
+				return linescore.inning_line_score.length;
 			}
 
 			return 0;
