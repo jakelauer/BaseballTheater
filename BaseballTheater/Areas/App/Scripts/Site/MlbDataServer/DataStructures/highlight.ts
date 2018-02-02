@@ -4,7 +4,7 @@
 	{
 		type: string;
 		id: number;
-		team_id: number;
+		team_id: string;
 		date: Date;
 		headline: string;
 		blurb: string;

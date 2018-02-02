@@ -3,10 +3,10 @@ namespace Theater
 {
 	export interface IBoxScoreContainer
 	{
-		boxscore: IBoxScore;
+		boxscore: IBoxScoreData;
 	}
 
-	export interface IBoxScore
+	export interface IBoxScoreData
 	{
 		game_id: string;
 		game_pk: string;
@@ -26,13 +26,13 @@ namespace Theater
 		home_wins: number;
 		home_loss: number;
 		status_ind: string;
-		linescore: ILinescore;
+		linescore: IDetailLinescore;
 		pitching?: IPitching[];
 		batting?: IBatting[];
 		game_info: string;
 	}
 
-	export class BoxScore implements IBoxScore
+	export class BoxScoreData
 	{
 		public batting_home: IBatting;
 		public batting_away: IBatting;
@@ -57,7 +57,7 @@ namespace Theater
 		public home_wins: number;
 		public home_loss: number;
 		public status_ind: string;
-		public linescore: ILinescore;
+		public linescore: Linescore;
 
 		constructor(data: IBoxScoreContainer)
 		{
@@ -112,7 +112,8 @@ namespace Theater
 
 			if (data.boxscore.linescore !== undefined && data.boxscore.linescore != null)
 			{
-				this.linescore = new Linescore(data.boxscore.linescore);
+				this.linescore = new Linescore();
+				this.linescore.setDetailLinescore(data.boxscore.linescore);
 			}
 		}
 	}

@@ -29,12 +29,12 @@
 
 	export interface IGameDay
 	{
-		game?: IGameSummary[];
+		game?: IGameSummaryData[];
 	}
 
 	export class GameDay implements IGameDay
 	{
-		public game: GameSummary[] = [];
+		public game: GameSummaryData[] = [];
 
 		constructor(data: IGameDay)
 		{
@@ -42,14 +42,14 @@
 			{
 				data.game.forEach((game) =>
 				{
-					var gameSummary = new GameSummary(game);
+					var gameSummary = new GameSummaryData(game);
 					this.game.push(gameSummary);
 				});
 			}
 			else if (data.game !== undefined)
 			{
 				// have to do this nefarious stuff because the xml2js library can output an object if there is just one game
-				const gameSummary = new GameSummary((data.game as any) as IGameSummary);
+				const gameSummary = new GameSummaryData((data.game as any) as IGameSummaryData);
 				this.game.push(gameSummary);
 			}
 			else if (data.game === undefined)

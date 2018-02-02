@@ -1,17 +1,14 @@
-﻿namespace Theater.Site
+﻿namespace Theater.App
 {
-	var pages: IPageParams[] = [];
-	var initializedPages: IPageParams[] = [];
-	export var initializeCurrentPage: () => void;
-	var initializeSite: () => void;
+	var pages: IPageRegister[] = [];
 	var siteLoadingTimeout = 0;
 	export var isLoading = false;
 
-	export var currentPage: IPageParams = null;
+	export var currentPage: IPageRegister = null;
 
-	initializeSite = () =>
+	var initializeSite = () =>
 	{
-		Site.LinkHandler.Instance.initialize();
+		LinkHandler.Instance.initialize();
 		initializeCurrentPage();
 
 		Responsive.Instance.initialize();
@@ -20,44 +17,49 @@
 		{
 			$("header .links").toggleClass("open");
 		});
+
+		registerHub();
 	}
 
-	initializeCurrentPage = () =>
+	var registerHub = () =>
 	{
-		//showDisclaimer();
+		var chat = $.connection.liveGameHub;
 
+		chat.client.receive = (message) =>
+		{
+			console.log("received", message);
+		};
+
+		$.connection.hub.start().done(() =>
+		{
+		});
+	}
+
+	export var initializeCurrentPage = () =>
+	{
 		$(window).scrollTop(0);
 
 		$(".links a").removeClass("active");
-
-		if (currentPage !== null)
-		{
-			currentPage.page.destroy();
-		}
 
 		for (let page of pages)
 		{
 			if (page.matchingUrl.test(location.pathname))
 			{
-				$(`.links a[data-name='${page.name}']`).addClass("active");
+				if (currentPage === page)
+				{
+				}
+
+				ReactDOM.render(
+					page.page,
+					document.getElementById("body-content")
+				);
 
 				currentPage = page;
-				if (initializedPages.indexOf(page) > -1)
-				{
-					currentPage.page.renew(location.pathname);
-				}
-				else
-				{
-					initializedPages.push(page);
-
-					currentPage.page.initialize();
-					currentPage.page.dataBind();
-				}
 			}
 		}
 	};
 
-	export var addPage = (params: IPageParams) =>
+	export var addPage = (params: IPageRegister) =>
 	{
 		pages.push(params);
 	};
@@ -69,7 +71,7 @@
 			{
 				$("#body-wrapper").addClass("loading");
 			},
-			250);
+			100);
 		isLoading = true;
 	};
 
@@ -100,18 +102,6 @@
 		if (!location.href.match(".local"))
 		{
 			window.ga("send", "event", category, action, data);
-		}
-	}
-
-	export var showDisclaimer = () =>
-	{
-		const hasSeen = Boolean(Number(Cookies.get("seen-mlb-disclaimer")));
-		if (!hasSeen)
-		{
-			const mlbModal = new Modal("disclaimer", $("#mlb-update").html());
-			mlbModal.open();
-
-			Cookies.set("seen-mlb-disclaimer", 1, { expires: 999 });
 		}
 	}
 
