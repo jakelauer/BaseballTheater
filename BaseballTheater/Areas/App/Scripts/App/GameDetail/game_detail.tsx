@@ -1,7 +1,8 @@
 ﻿namespace Theater.GameDetail
 {
-	enum Tabs
+	export enum Tabs
 	{
+		Highlights,
 		PlayByPlay,
 		BoxScore
 	}
@@ -16,8 +17,8 @@
 
 	export class GameDetail extends React.Component<any, IGameDetailState>
 	{
-		private date: moment.Moment = null;
-		private gamePk: string;
+		private readonly date: moment.Moment = null;
+		private readonly gamePk: string;
 
 		constructor(props: any)
 		{
@@ -30,7 +31,7 @@
 				boxScore: null,
 				highlightsCollection: null,
 				gameSummary: null,
-				currentTab: Tabs.PlayByPlay
+				currentTab: Tabs.Highlights
 			}
 		}
 
@@ -127,7 +128,6 @@
 			{
 				const gameSummary = await this.getCurrentGame();
 				const boxScore = await this.getBoxScore(gameSummary);
-
 				const highlightsCollection = await this.getHighlights(gameSummary);
 
 				this.setState({
@@ -157,36 +157,44 @@
 			const boxScoreData = this.state.boxScore;
 			const highlightsCollection = this.state.highlightsCollection;
 
+			const highlightsTabClass = this.state.currentTab === Tabs.Highlights ? "on" : "";
+			const playByPlayTabClass = this.state.currentTab === Tabs.PlayByPlay ? "on" : "";
+			const boxScoreTabClass = this.state.currentTab === Tabs.BoxScore ? "on" : "";
+
 			return (
 				<div className={`game-detail-container`}>
 					<div className={`game-data-tab-container`}>
 						<div className={`tabs`}>
-							<div className={`tab`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
+							<div className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(Tabs.Highlights)}>
+								Highlights
+							</div>
+							<div className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
 								Play by Play
 							</div>
-							<div className={`tab`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
+							<div className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
 								Box Score
 							</div>
 						</div>
 						<div className={`tab-contents`}>
-							<div className={`tab-content`} data-tab={Tabs.PlayByPlay}>
+							<div className={`tab-content ${highlightsTabClass}`} data-tab={Tabs.Highlights}>
+								{<Highlights highlightsCollection={highlightsCollection} />}
+
+								{this.showNoHighlights() &&
+									<div className={`empty`}>
+										No highlights found for this game. Highlights for some games may not be published until the game is complete.
+								</div>
+								}
+							</div>
+							<div className={`tab-content ${playByPlayTabClass}`} data-tab={Tabs.PlayByPlay}>
+								<MiniBoxScore boxScoreData={boxScoreData} />
+
 								<PlayByPlay />
 							</div>
-							<div className={`tab-content`} data-tab={Tabs.BoxScore}>
+							<div className={`tab-content ${boxScoreTabClass}`} data-tab={Tabs.BoxScore}>
+								<MiniBoxScore boxScoreData={boxScoreData} />
+
 								<BoxScore boxScoreData={boxScoreData} />
 							</div>
-						</div>
-					</div>
-
-					<div className={`game-detail-wrapper`}>
-						<div className={`highlights-wrapper on`}>
-							{<Highlights highlightsCollection={highlightsCollection} />}
-
-							{this.showNoHighlights() &&
-								<div className={`empty`}>
-									No highlights found for this game. Highlights for some games may not be published until the game is complete.
-								</div>
-							}
 						</div>
 					</div>
 				</div>

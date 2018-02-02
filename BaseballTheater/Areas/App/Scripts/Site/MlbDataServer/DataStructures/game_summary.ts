@@ -29,7 +29,7 @@ namespace Theater
 		home_team_id: number;
 		home_file_code: string;
 		game_data_directory: string;
-		linescore: ILinescore;
+		linescore: ISummaryLinescore;
 		home_win: string;
 		home_loss: string;
 		away_win: string;
@@ -68,7 +68,7 @@ namespace Theater
 		public away_win: string;
 		public away_loss: string;
 		public game_data_directory: string;
-		private _linescore: ILinescore;
+		private _linescore: ISummaryLinescore;
 		public linescore: Linescore;
 		public dateObj: moment.Moment;
 		public dateObjLocal: moment.Moment;
@@ -134,7 +134,8 @@ namespace Theater
 			}
 			if (data.linescore !== undefined && data.linescore != null)
 			{
-				this.linescore = new Linescore(data.linescore);
+				this.linescore = new Linescore();
+				this.linescore.setSummaryLinescore(data.linescore);
 			}
 		}
 

@@ -34,6 +34,7 @@
 								</tbody>
 							</table>
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.note)}></div>
+							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.text_data)} />
 							<table className={`player-list pitchers`}>
 								<tbody>
 								{this.renderPitcherHeaders()}
@@ -50,6 +51,7 @@
 								</tbody>
 							</table>
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.note)}></div>
+							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.text_data)} />
 							<table className={`player-list pitchers`}>
 								<tbody>
 								{this.renderPitcherHeaders()}
@@ -59,6 +61,10 @@
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_home.note)}></div>
 						</div>
 					</div>
+					<div className={`game-notes`}>
+						<h2>Game Notes</h2>
+						<div className={`game-info`} dangerouslySetInnerHTML={this.markup(boxScore.game_info)} />
+						</div>
 				</div>
 			);
 		}
