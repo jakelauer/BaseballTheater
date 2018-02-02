@@ -1,4 +1,6 @@
-﻿using MlbDataServer.DataStructures;
+﻿using System.Collections.Generic;
+using System.Net;
+using MlbDataServer.DataStructures;
 
 namespace MlbDataServer.DataFetch
 {
@@ -40,6 +42,22 @@ namespace MlbDataServer.DataFetch
 			gameCenter = xmlLoader.GetXml<GameCenter>(GameCenterXmlUrl);
 
 			return gameCenter;
+		}
+
+		public Dictionary<string, string> GetGameCenterHeaders()
+		{
+			var headers = new Dictionary<string, string>();
+			var webRequest = WebRequest.Create(GameCenterXmlUrl);
+			webRequest.Method = "HEAD";
+			using (var webResponse = webRequest.GetResponse())
+			{
+				foreach (string header in webResponse.Headers)
+				{
+					headers.Add(header, webResponse.Headers[header]);
+				}
+			}
+
+			return headers;
 		}
 
 		public GameSummary GetGameSummary()

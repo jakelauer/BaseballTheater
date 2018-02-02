@@ -1,4 +1,4 @@
-﻿namespace Theater.Site
+﻿namespace Theater.App
 {
 	export class LinkHandler
 	{
@@ -31,16 +31,7 @@
 
 			$(window).on("popstate statechange", (e) =>
 			{
-				if (Site.currentPage.matchingUrl.test(location.pathname))
-				{
-					Site.currentPage.page.renew(location.pathname);
-				}
-				else
-				{
-					Site.initializeCurrentPage();
-					//this.loadNew(location.pathname);
-				}
-
+				App.initializeCurrentPage();
 				$("header .links").removeClass("open");
 			});
 		}
@@ -53,21 +44,19 @@
 
 		private async loadNew(href: string)
 		{
-			Site.startLoading();
+			App.startLoading();
 
 			this.ajax(href).then((response: string) =>
 			{
 				var $response = $(response);
 				var bodyClass = response.match(/<body.*class=['"](.*)['"].*>/)[1];
 
-				var bodyContent = $response.find(".body-content").html();
-				$(".body-content").html(bodyContent);
+				var bodyContent = $response.find("#body-content").html();
+				$("#body-content").html(bodyContent);
 
 				$("body").attr("class", bodyClass as string);
 
-				Site.stopLoading();
-
-				Site.initializeCurrentPage();
+				Global.stopLoading();
 			});
 		}
 

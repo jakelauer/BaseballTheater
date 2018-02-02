@@ -13,8 +13,8 @@
 		public constructor(directory: string, directoryIsFullyQualified = false)
 		{
 			this.directoryUrl = directoryIsFullyQualified
-				? directory
-				: GameDetailCreator.urlBase + directory;
+			                    ? directory
+			                    : GameDetailCreator.urlBase + directory;
 
 			this.highlightsUrl = this.directoryUrl + "/media/mobile.xml";
 			this.gameCenterUrl = this.directoryUrl + "/gamecenter.xml";
@@ -36,16 +36,18 @@
 			return gameCenterObj;
 		}
 
-		public async getGameSummary() {
-			const gameSummaryObj = await Utils.XmlLoader.load<IGameSummary>(this.gameSummaryUrl, "gameSummary");
+		public async getGameSummary()
+		{
+			const gameSummaryObj = await Utils.XmlLoader.load<IGameSummaryData>(this.gameSummaryUrl, "gameSummary");
 
 			return gameSummaryObj;
 		}
 
-		public async getBoxscore() {
+		public async getBoxscore()
+		{
 			const boxScoreObj = await Utils.XmlLoader.load<IBoxScoreContainer>(this.boxScoreUrl, "boxScore");
 
-			return new BoxScore(boxScoreObj);
+			return new BoxScoreData(boxScoreObj);
 		}
 
 		private async get<T>(url: string)

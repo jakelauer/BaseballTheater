@@ -4,50 +4,104 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommandLine;
+using MlbDataMux;
+using MlbDataProxy;
 
 namespace Populator
 {
-	class Program
+	internal enum Mode
 	{
-		static DateTime Date = new DateTime(2015, 7, 25);
-		private static bool DoLoop = false;
+		PopulateHighlights,
+		PopulateGames,
+		HandleLiveGames
+	}
 
-		static void Main(string[] args)
+	class Options
+	{
+		[Option('m', "mode", Required = true)]
+		public Mode Mode { get; set; }
+
+		[Option('d', "date", Required = false, HelpText = "Must be in the format yyyyMMdd")]
+		public string DateString { get; set; }
+
+		[Option('l', "loop", Default = false, HelpText = "If true, the program will go to the next day after this day is over")]
+		public bool LoopDates { get; set; }
+
+		[Option('i', "interval", Default = 10, HelpText = "The number of seconds to wait between checking something")]
+		public bool CheckIntervalSeconds { get; set; }
+	}
+
+	internal class Program
+	{
+		private static DateTime Date = new DateTime(2015, 7, 25);
+		private static bool LoopDates = false;
+
+		private static void Main(string[] args)
 		{
-			if (args.Length > 0)
-			{
-				try
-				{
-					Date = DateTime.ParseExact(args[0], "yyyyMMdd", CultureInfo.CurrentCulture);
-				}
-				catch (Exception)
-				{
-					Date = DateTime.UtcNow.AddDays(-1);
-				}
-			}
-
-			if (args.Length > 1)
-			{
-				DoLoop = Boolean.Parse(args[1]);
-			}
-			Loop();
+			Parser.Default.ParseArguments<Options>(args)
+				.WithParsed<Options>(onParsed)
+				.WithNotParsed<Options>(onParseFail);
 		}
 
-		static void Loop()
+		private static void onParsed(Options options)
 		{
-			var processGame = new ProcessGame(Date);
-			processGame.Process();
+			LoopDates = options.LoopDates;
 
-			Date = Date.AddDays(1);
-			if (Date > DateTime.UtcNow)
+			try
 			{
-				return;
+				Date = DateTime.ParseExact(options.DateString, "yyyyMMdd", CultureInfo.CurrentCulture);
+			}
+			catch (Exception)
+			{
+				Date = DateTime.UtcNow.AddDays(-1);
 			}
 
-			if (DoLoop)
+			switch (options.Mode)
 			{
-				Loop();
+				case Mode.PopulateHighlights:
+					LoadHighlights();
+					break;
+				case Mode.PopulateGames:
+					break;
+				case Mode.HandleLiveGames:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
+
+			if (options.LoopDates)
+			{
+			}
+		}
+
+		private static void onParseFail(IEnumerable<Error> errors)
+		{
+			foreach (var error in errors)
+			{
+				Console.WriteLine($"Error parsing option: {error}");
+			}
+		}
+
+		private static void LoadHighlights()
+		{
+			var loadNext = true;	
+			while (loadNext)
+			{
+				var processGame = new LoadHighlights(Date);
+				processGame.Process();
+
+				Date = Date.AddDays(1);
+				if (Date > DateTime.UtcNow || !LoopDates)
+				{
+					loadNext = false;
+				}
+			}
+		}
+
+		private static void HandleLiveGames()
+		{
+
 		}
 	}
 }
