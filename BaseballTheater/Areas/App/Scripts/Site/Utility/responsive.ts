@@ -1,4 +1,4 @@
-﻿namespace Theater.App
+﻿namespace Theater.Utility
 {
 	class MediaQuery
 	{

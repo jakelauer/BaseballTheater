@@ -8,7 +8,7 @@ dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
+figure, figcaption, footer, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video
 {
@@ -17,6 +17,10 @@ time, mark, audio, video
 	border: 0;
 	font: inherit;
 	vertical-align: baseline;
+}
+
+html{
+	overflow-y: scroll;
 }
 
 h1{

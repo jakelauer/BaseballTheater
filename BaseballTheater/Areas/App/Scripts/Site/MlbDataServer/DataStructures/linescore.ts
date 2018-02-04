@@ -3,7 +3,7 @@
 
 	export interface ISummaryLinescore
 	{
-		inning_line_score: IInning[];
+		inning_line_score: ILinescoreInning[];
 		r: IRuns;
 		h: IHits;
 		e: IErrors;
@@ -11,7 +11,7 @@
 
 	export interface IDetailLinescore
 	{
-		inning_line_score: IInning[];
+		inning_line_score: ILinescoreInning[];
 		away_team_runs: string;
 		home_team_runs: string;
 		away_team_hits: string;
@@ -29,7 +29,7 @@
 
 	export class Linescore implements ISummaryLinescore
 	{
-		public inning_line_score: IInning[];
+		public inning_line_score: ILinescoreInning[];
 		public r: IRuns;
 		public h: IHits;
 		public e: IErrors;
@@ -133,7 +133,7 @@
 		away: string;
 	}
 
-	export interface IInning extends IHomeAway
+	export interface ILinescoreInning extends IHomeAway
 	{
 
 	}

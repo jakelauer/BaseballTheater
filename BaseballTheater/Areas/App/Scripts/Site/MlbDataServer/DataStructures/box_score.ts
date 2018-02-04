@@ -59,6 +59,20 @@ namespace Theater
 		public status_ind: string;
 		public linescore: Linescore;
 
+		public get allPlayers()
+		{
+			const allPlayersArray = [
+				...this.batting_home.batter,
+				...this.batting_away.batter,
+				...this.pitching_home.pitcher,
+				...this.pitching_away.pitcher
+			];
+
+			const allPlayersById = new Map(allPlayersArray.map((player): [string, IBatter | IPitcher] => ([player.id, player]) as [string, IBatter | IPitcher]));
+
+			return allPlayersById;
+		}
+
 		constructor(data: IBoxScoreContainer)
 		{
 			if (!data || !data.boxscore)

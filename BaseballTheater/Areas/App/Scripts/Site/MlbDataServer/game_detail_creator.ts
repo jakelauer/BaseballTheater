@@ -8,6 +8,7 @@
 		private readonly highlightsUrl: string;
 		private readonly gameCenterUrl: string;
 		private readonly boxScoreUrl: string;
+		private readonly inningsUrl: string;
 		private readonly gameSummaryUrl: string;
 
 		public constructor(directory: string, directoryIsFullyQualified = false)
@@ -20,6 +21,7 @@
 			this.gameCenterUrl = this.directoryUrl + "/gamecenter.xml";
 			this.gameSummaryUrl = this.directoryUrl + "/linescore.xml";
 			this.boxScoreUrl = this.directoryUrl + "/boxscore.xml";
+			this.inningsUrl = this.directoryUrl + "/inning/inning_all.xml";
 		}
 
 		public async getHighlights()
@@ -48,6 +50,17 @@
 			const boxScoreObj = await Utils.XmlLoader.load<IBoxScoreContainer>(this.boxScoreUrl, "boxScore");
 
 			return new BoxScoreData(boxScoreObj);
+		}
+
+		/**
+		 * Gets the play-by-play for the game in question. 
+		 * @param game Required to get information about players when they are only specified by ID
+		 */
+		public async getInnings(boxScore: BoxScoreData)
+		{
+			const inningsObj = await Utils.XmlLoader.load<IInningsContainer>(this.inningsUrl, "innings");
+
+			return new Innings(inningsObj, boxScore);
 		}
 
 		private async get<T>(url: string)

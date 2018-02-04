@@ -87,7 +87,7 @@
 
 		private loadGamesForCurrentDate()
 		{
-			App.startLoading();
+			startLoading();
 			const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.state.date);
 			const favoriteTeam = Cookies.get("favoriteteam");
 
@@ -102,7 +102,7 @@
 						gameSummaries: games,
 					});
 
-					App.stopLoading();
+					stopLoading();
 				}
 			});
 		}
@@ -141,7 +141,7 @@
 		}
 	}
 
-	App.addPage({
+	addPage({
 		matchingUrl:
 			/^\/?([0-9]{8})?(\?.*)?$/i, //match URLs of nothing, or just a /, or a / then 8 digits and an optional querystring
 		page: <GameList />,
