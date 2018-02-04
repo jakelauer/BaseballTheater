@@ -71,6 +71,7 @@ header
 	left: 0;
 	width: 100%;
 	height: $header-height;
+	background: $color-body-background;
 	padding-bottom: $header-size - $header-height;
 	transition: 0.25s;
 	color: $color-accent;
@@ -383,7 +384,7 @@ footer
 		height: 30px;
 		margin: 10px 0;
 		border-radius: 15px;
-		background: #eee;
+		background: $color-basic-background;
 	}
 
 		.bar .width
@@ -484,7 +485,7 @@ footer
 	color: $color-accent;
 	border: 0;
 	border-radius: 2px;
-	background: #EEE;
+	background: $color-basic-background;
 	box-shadow: 0 4px 4px -3px rgba(0,0,0,0.2);
 	font-size: 1rem;
 	font-weight: 600;

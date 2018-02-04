@@ -1,4 +1,65 @@
-﻿.box-score-wrapper
+﻿@import "../_Base/_vars.scss";
+
+.mini-box-score
+{
+	display: flex;
+
+	table
+	{
+		border-collapse: collapse;
+	}
+
+	td
+	{
+		line-height: 1.5rem;
+		padding: 0.25rem;
+		border: 1px solid $color-basic-background;
+	}
+
+	.team-table
+	{
+		font-weight: bold;
+
+		td
+		{
+			padding-right: 1rem;
+			border-right: 0;
+			white-space: nowrap;
+		}
+	}
+
+	.innings-table
+	{
+		flex: auto;
+		table-layout: fixed;
+
+		table
+		{
+			width: 100%;
+		}
+	}
+
+	td.single-val
+	{
+		min-width: 1.5rem;
+		text-align: center;
+	}
+
+	.headers
+	{
+		font-weight: bold;
+		background: #F7F7F7;
+	}
+
+	td.r,
+	td.h,
+	td.e
+	{
+		font-weight: bold;
+	}
+}
+
+.box-score-wrapper
 {
 	flex: auto;
 

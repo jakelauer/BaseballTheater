@@ -1,0 +1,172 @@
+﻿@import "../_Base/_vars.scss";
+
+.play-by-play-container
+{
+	padding-bottom: 2rem;
+
+	.inning-label
+	{
+		font-weight: bold;
+		font-size: 1.25rem;
+		margin-bottom: 0.5rem;
+		margin-top: 2rem;
+	}
+
+	.strikezone
+	{
+		display: flex;
+		width: 100%;
+		max-width: 500px;
+		position: relative;
+		margin-bottom: 3rem;
+		align-items: center;
+		justify-content: center;
+		background: url("/images/strikezone.png") center center no-repeat;
+		background-size: cover;
+
+		.r-large &
+		{
+			width: 300px;
+		}
+
+		.r-medium &
+		{
+			width: 500px;
+		}
+
+		.force-square
+		{
+			width: 100%;
+			padding-bottom: 100%;
+		}
+
+		.actual-strikezone
+		{
+			position: absolute;
+			width: 23%;
+			height: 34%;
+			border: 1px solid black;
+		}
+
+		.pitch
+		{
+			position: absolute;
+			transform: translateX(-50%) translateY(-50%);
+
+			.pitch-count
+			{
+				width: 25px;
+				height: 25px;
+				line-height: 25px;
+				font-size: 0.8rem;
+			}
+		}
+	}
+
+	.pitch
+	{
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 0.5rem;
+
+		.pitch-count
+		{
+			$circle-size: 30px;
+
+			width: $circle-size;
+			height: $circle-size;
+			border-radius: 50%;
+			color: white;
+			text-align: center;
+			line-height: $circle-size;
+			background: #CCC;
+			margin-right: 1rem;
+		}
+
+		&[data-type="B"] .pitch-count
+		{
+			background: #179727;
+		}
+
+		&[data-type="S"] .pitch-count
+		{
+			background: #a80000;
+		}
+
+		&[data-type="X"] .pitch-count
+		{
+			background: #0082ff;
+		}
+
+		.pitch-description
+		{
+			flex: 1;
+			max-width: 200px;
+			display: flex;
+			align-items: center;
+		}
+
+		.pitch-details
+		{
+			flex: 1;
+			align-items: center;
+		}
+	}
+
+	.batter
+	{
+		.result
+		{
+			border-bottom: 1px solid $color-basic-background;
+			padding: 0.5rem 0;
+			cursor: pointer;
+
+			&:hover
+			{
+				background: $color-basic-accent;
+			}
+
+			.current-score
+			{
+				opacity: 0.5;
+				display: inline-block;
+				margin-right: 0.5rem;
+			}
+		}
+
+		.pitches
+		{
+			transform: translateY(-20px);
+			opacity: 0;
+			height: 0;
+			overflow: hidden;
+			transition: 0.25s;
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+
+			.pitch-list
+			{
+				padding-left: 2rem;
+				flex: 1;
+
+				.r-medium &
+				{
+					width: 100%;
+					flex: none;
+				}
+			}
+		}
+
+		&.expanded
+		{
+			.pitches
+			{
+				transform: translateY(0);
+				opacity: 1;
+				height: auto;
+				padding: 1rem 0;
+			}
+		}
+	}
+}

@@ -11,7 +11,8 @@
 	{
 		gameSummary: GameSummaryData;
 		boxScore: BoxScoreData;
-		highlightsCollection: IHighlightsCollection,
+		highlightsCollection: IHighlightsCollection;
+		playByPlay: IInningsContainer;
 		currentTab: Tabs;
 	}
 
@@ -27,11 +28,17 @@
 			this.date = this.getDateFromPath(location.pathname);
 			this.gamePk = this.getGamePkFromPath(location.pathname);
 
+			const hashState = Utility.LinkHandler.parseHash();
+			const currentTab = ("tab" in hashState)
+				                   ? parseInt(hashState["tab"]) as Tabs
+				                   : Tabs.Highlights;
+
 			this.state = {
 				boxScore: null,
 				highlightsCollection: null,
 				gameSummary: null,
-				currentTab: Tabs.Highlights
+				playByPlay: null,
+				currentTab
 			}
 		}
 
@@ -69,6 +76,18 @@
 				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
 				const boxScore = await gameDetailCreator.getBoxscore();
 				return boxScore;
+			}
+
+			return null;
+		}
+
+		private async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
+		{
+			if (currentGame)
+			{
+				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+				const playByPlay = await gameDetailCreator.getInnings(boxScore);
+				return playByPlay;
 			}
 
 			return null;
@@ -122,27 +141,29 @@
 
 		private async getData()
 		{
-			App.startLoading();
+			startLoading();
 
 			try
 			{
 				const gameSummary = await this.getCurrentGame();
 				const boxScore = await this.getBoxScore(gameSummary);
 				const highlightsCollection = await this.getHighlights(gameSummary);
+				const playByPlay = await this.getPlayByPlay(gameSummary, boxScore);
 
 				this.setState({
 					gameSummary,
 					boxScore,
-					highlightsCollection
+					highlightsCollection,
+					playByPlay
 				});
 
-				App.stopLoading();
+				stopLoading();
 			}
 			catch (e)
 			{
 				console.log(e);
 
-				App.stopLoading();
+				stopLoading();
 			}
 		}
 
@@ -156,6 +177,7 @@
 
 			const boxScoreData = this.state.boxScore;
 			const highlightsCollection = this.state.highlightsCollection;
+			const playByPlayData = this.state.playByPlay;
 
 			const highlightsTabClass = this.state.currentTab === Tabs.Highlights ? "on" : "";
 			const playByPlayTabClass = this.state.currentTab === Tabs.PlayByPlay ? "on" : "";
@@ -165,15 +187,15 @@
 				<div className={`game-detail-container`}>
 					<div className={`game-data-tab-container`}>
 						<div className={`tabs`}>
-							<div className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(Tabs.Highlights)}>
-								Highlights
-							</div>
-							<div className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
-								Play by Play
-							</div>
-							<div className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
-								Box Score
-							</div>
+							<a href={`#tab=${Tabs.Highlights}`} className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(Tabs.Highlights)}>
+								<span>Highlights</span>
+							</a>
+							<a href={`#tab=${Tabs.PlayByPlay}`} className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
+									<span>Play by Play</span>
+							</a>
+							<a href={`#tab=${Tabs.BoxScore}`} className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
+								<span>Box Score</span>
+							</a>
 						</div>
 						<div className={`tab-contents`}>
 							<div className={`tab-content ${highlightsTabClass}`} data-tab={Tabs.Highlights}>
@@ -188,7 +210,7 @@
 							<div className={`tab-content ${playByPlayTabClass}`} data-tab={Tabs.PlayByPlay}>
 								<MiniBoxScore boxScoreData={boxScoreData} />
 
-								<PlayByPlay />
+								<PlayByPlay inningsData={playByPlayData} />
 							</div>
 							<div className={`tab-content ${boxScoreTabClass}`} data-tab={Tabs.BoxScore}>
 								<MiniBoxScore boxScoreData={boxScoreData} />
@@ -227,7 +249,7 @@
 		}
 	}
 
-	App.addPage({
+	addPage({
 		page: <GameDetail />,
 		matchingUrl: /^\/game\/(.*)/,
 		name: "game"

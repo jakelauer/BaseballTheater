@@ -67,7 +67,7 @@
 		{
 			const newUrl = this.getUrlForDate(newDate);
 
-			App.LinkHandler.pushState(newUrl);
+			Utility.LinkHandler.pushState(newUrl);
 			this.setState({
 				date: newDate
 			}, () => this.props.onDateChange(newDate));

@@ -1,4 +1,4 @@
-﻿namespace Theater.App
+﻿namespace Theater
 {
 	var pages: IPageRegister[] = [];
 	var siteLoadingTimeout = 0;
@@ -8,10 +8,10 @@
 
 	var initializeSite = () =>
 	{
-		LinkHandler.Instance.initialize();
+		Utility.LinkHandler.Instance.initialize();
 		initializeCurrentPage();
 
-		Responsive.Instance.initialize();
+		Utility.Responsive.Instance.initialize();
 
 		$(".mobile-menu-trigger").on("click", () =>
 		{

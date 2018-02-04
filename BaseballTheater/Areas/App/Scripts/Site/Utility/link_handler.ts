@@ -1,4 +1,4 @@
-﻿namespace Theater.App
+﻿namespace Theater.Utility
 {
 	export class LinkHandler
 	{
@@ -31,7 +31,7 @@
 
 			$(window).on("popstate statechange", (e) =>
 			{
-				App.initializeCurrentPage();
+				initializeCurrentPage();
 				$("header .links").removeClass("open");
 			});
 		}
@@ -44,7 +44,7 @@
 
 		private async loadNew(href: string)
 		{
-			App.startLoading();
+			startLoading();
 
 			this.ajax(href).then((response: string) =>
 			{
@@ -71,6 +71,20 @@
 					error: error => reject(error)
 				});
 			});
+		}
+
+		public static parseHash()
+		{
+			const kvpArray = location.hash.substr(1).split("&");
+			const dict: { [key: string]: string } = {};
+
+			kvpArray.forEach((kvpString) =>
+			{
+				const kvp = kvpString.split("=");
+				dict[kvp[0]] = kvp[1];
+			});
+
+			return dict;
 		}
 	}
 }
