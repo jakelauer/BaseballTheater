@@ -48,3 +48,27 @@ declare namespace __Modernizr
 		mobile: boolean;
 	}
 }
+
+declare namespace Flux
+{
+	export class Dispatcher<T>
+	{
+		public dispatch(...args: any[]);
+		public register(...args: any[]);
+	}
+}
+
+declare namespace FluxUtils
+{
+	export class ReduceStore<T, TPayload>
+	{
+		constructor(...args: any[]);
+
+		public getState();
+	}
+
+	export class Container
+	{
+		public static createFunctional(...args: any[]);
+	}
+}

@@ -12,6 +12,14 @@
 		margin-top: 2rem;
 	}
 
+	.pitcher-changed
+	{
+		font-style: italic;
+		border-bottom: 1px solid $color-basic-background;
+		padding: 0.5rem 0;
+		font-size: 0.9rem;
+	}
+
 	.strikezone
 	{
 		display: flex;
@@ -26,12 +34,12 @@
 
 		.r-large &
 		{
-			width: 300px;
+			max-width: 300px;
 		}
 
 		.r-medium &
 		{
-			width: 500px;
+			max-width: 500px;
 		}
 
 		.force-square
@@ -117,20 +125,45 @@
 	{
 		.result
 		{
+			position: relative;
 			border-bottom: 1px solid $color-basic-background;
-			padding: 0.5rem 0;
-			cursor: pointer;
+			display: flex;
+			align-content: center;
 
-			&:hover
+			.result-trigger
 			{
-				background: $color-basic-accent;
+				padding: 0.5rem;
+				display: flex;
+				flex: 1 auto;
+				cursor: pointer;
+
+				&:hover
+				{
+					background: $color-basic-accent;
+				}
 			}
 
 			.current-score
 			{
 				opacity: 0.5;
 				display: inline-block;
+				margin-left: 0.5rem;
+				white-space: nowrap;
+			}
+
+			.play-highlight
+			{
+				color: $color-basic-accent;
+				display: inline-block;
 				margin-right: 0.5rem;
+				padding: 0.5rem 0;
+				pointer-events: none;
+
+				&.has-highlight
+				{
+					color: $color-accent;
+					pointer-events: auto;
+				}
 			}
 		}
 

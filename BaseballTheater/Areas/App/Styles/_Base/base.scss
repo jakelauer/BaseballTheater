@@ -453,9 +453,8 @@ footer
 	//padding-left: 50px;
 	flex: 1 0;
 
-	.team-name
-	{
-		opacity: 0.6;
+	&.small{
+		font-size: 1.5rem;
 	}
 
 	.team-logo
@@ -468,6 +467,14 @@ footer
 	.r-mobile &
 	{
 		font-size: 2rem;
+	}
+}
+
+.mobile-only{
+	display: none;
+
+	.r-mobile &{
+		display: block;
 	}
 }
 

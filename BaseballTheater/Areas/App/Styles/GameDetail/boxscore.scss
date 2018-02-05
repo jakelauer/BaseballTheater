@@ -85,12 +85,24 @@
 		{
 			padding-right: 0.75rem;
 			flex: 1 0;
+
+			.r-mobile &
+			{
+				flex: none;
+				padding: 0;
+				width: 100%;
+			}
 		}
 
 			.team + .team
 			{
 				padding-right: 0;
 				padding-left: 0.75rem;
+
+				.r-mobile &
+				{
+					padding: 0;
+				}
 			}
 	}
 

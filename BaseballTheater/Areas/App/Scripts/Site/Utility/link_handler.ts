@@ -5,6 +5,8 @@
 		public static Instance = new LinkHandler();
 		private initialized = false;
 
+		public onStateChange: () => void = () => {};
+
 		public initialize()
 		{
 			if (this.initialized)
@@ -31,8 +33,7 @@
 
 			$(window).on("popstate statechange", (e) =>
 			{
-				initializeCurrentPage();
-				$("header .links").removeClass("open");
+				this.onStateChange();
 			});
 		}
 
@@ -40,7 +41,7 @@
 		{
 			history.pushState(null, null, href);
 			$(window).trigger("statechange");
-		}
+		}/*
 
 		private async loadNew(href: string)
 		{
@@ -58,7 +59,7 @@
 
 				Global.stopLoading();
 			});
-		}
+		}*/
 
 		private ajax(href: string)
 		{
