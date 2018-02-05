@@ -175,7 +175,7 @@
 
 		private renderPlayerLink(player: IPlayer)
 		{
-			const urlName = player.name.replace(/\s\w/, "-").toLowerCase();
+			const urlName = encodeURIComponent(player.name_display_first_last.replace(/[^a-z]/gi, "-").toLowerCase());
 			const playerLink = `http://m.mlb.com/player/${player.id}/${urlName}`;
 
 			return (<a href={playerLink} target={`_blank`}>{player.name}</a>);
