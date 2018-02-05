@@ -14,6 +14,11 @@ namespace BaseballTheater
 			BundleResolver.Current = new CustomBundleResolver();
 
 			var libraries = new ScriptBundle("~/scriptbundles/lib")
+				.Include("~/Shared/Scripts/libraries/react.js")
+				.Include("~/Shared/Scripts/libraries/react-dom.js")
+				.Include("~/Shared/Scripts/libraries/remarkable.min.js")
+				.Include("~/Shared/Scripts/libraries/Flux.js")
+				.Include("~/Shared/Scripts/libraries/FluxUtils.js")
 				.Include("~/Shared/Scripts/libraries/cookies.js")
 				.Include("~/Shared/Scripts/libraries/jquery-3.js")
 				.Include("~/Shared/Scripts/libraries/jquery.signalR-2.2.2.min.js")

@@ -10,8 +10,10 @@
 		private renderTeamTable()
 		{
 			const boxScoreData = this.props.boxScoreData;
-			const awayTeamName = boxScoreData.away_fname;
-			const homeTeamName = boxScoreData.home_fname;
+			const awayTeamName = boxScoreData.away_sname;
+			const homeTeamName = boxScoreData.home_sname;
+			const awayTeamCode = boxScoreData.away_team_code;
+			const homeTeamCode = boxScoreData.home_team_code;
 
 			return (
 				<table>
@@ -20,10 +22,18 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr className={`away`}>
-						<td>{awayTeamName}</td>
+						<td>
+							<div className={`team-info small`}>
+								<div className={`team-city team-color ${awayTeamCode}`}>{awayTeamName}</div>
+							</div>
+						</td>
 					</tr>
 					<tr className={`home`}>
-						<td>{homeTeamName}</td>
+						<td>
+							<div className={`team-info small`}>
+								<div className={`team-city team-color ${homeTeamCode}`}>{homeTeamName}</div>
+							</div>
+						</td>
 					</tr>
 					</tbody>
 				</table>

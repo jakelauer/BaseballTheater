@@ -31,7 +31,7 @@
 			const hashState = Utility.LinkHandler.parseHash();
 			const currentTab = ("tab" in hashState)
 				                   ? parseInt(hashState["tab"]) as Tabs
-				                   : Tabs.Highlights;
+				                   : Tabs.PlayByPlay;
 
 			this.state = {
 				boxScore: null,
@@ -141,7 +141,7 @@
 
 		private async getData()
 		{
-			startLoading();
+			App.startLoading();
 
 			try
 			{
@@ -157,14 +157,49 @@
 					playByPlay
 				});
 
-				stopLoading();
+				App.stopLoading();
 			}
 			catch (e)
 			{
 				console.log(e);
 
-				stopLoading();
+				App.stopLoading();
 			}
+		}
+
+		private renderCurrentTab(currentTab: Tabs)
+		{
+			const boxScoreData = this.state.boxScore;
+			const highlightsCollection = this.state.highlightsCollection;
+			const playByPlayData = this.state.playByPlay;
+
+			let renderables = [<div/>];
+			switch (currentTab)
+			{
+				case Tabs.Highlights:
+					renderables = [
+						<Highlights highlightsCollection={highlightsCollection} key={0}/>
+					];
+					break;
+				case Tabs.BoxScore:
+					renderables = [
+						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
+						<BoxScore boxScoreData={boxScoreData} key={1} />
+					];
+					break;
+				case Tabs.PlayByPlay:
+					renderables = [
+						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+						<PlayByPlay inningsData={playByPlayData} highlights={highlightsCollection} allPlayers={boxScoreData.allPlayers} key={1}/>
+					];
+					break;
+			}
+
+			return (
+				<div className={`tab-content on`} data-tab={currentTab}>
+					{renderables}
+				</div>
+			);
 		}
 
 		public render()
@@ -174,10 +209,6 @@
 			{
 				return (<div/>);
 			}
-
-			const boxScoreData = this.state.boxScore;
-			const highlightsCollection = this.state.highlightsCollection;
-			const playByPlayData = this.state.playByPlay;
 
 			const highlightsTabClass = this.state.currentTab === Tabs.Highlights ? "on" : "";
 			const playByPlayTabClass = this.state.currentTab === Tabs.PlayByPlay ? "on" : "";
@@ -198,58 +229,15 @@
 							</a>
 						</div>
 						<div className={`tab-contents`}>
-							<div className={`tab-content ${highlightsTabClass}`} data-tab={Tabs.Highlights}>
-								{<Highlights highlightsCollection={highlightsCollection} />}
-
-								{this.showNoHighlights() &&
-									<div className={`empty`}>
-										No highlights found for this game. Highlights for some games may not be published until the game is complete.
-								</div>
-								}
-							</div>
-							<div className={`tab-content ${playByPlayTabClass}`} data-tab={Tabs.PlayByPlay}>
-								<MiniBoxScore boxScoreData={boxScoreData} />
-
-								<PlayByPlay inningsData={playByPlayData} />
-							</div>
-							<div className={`tab-content ${boxScoreTabClass}`} data-tab={Tabs.BoxScore}>
-								<MiniBoxScore boxScoreData={boxScoreData} />
-
-								<BoxScore boxScoreData={boxScoreData} />
-							</div>
+							{this.renderCurrentTab(this.state.currentTab)}
 						</div>
 					</div>
 				</div>
 			);
 		}
-
-		private renderTeam(teamType: HomeAway)
-		{
-			const gameSummary = this.state.gameSummary;
-			const teamTypeClass = teamType === HomeAway.Away ? "away" : "home";
-			const teamFileCode = teamType === HomeAway.Away ? gameSummary.away_file_code : gameSummary.home_file_code;
-			const teamName = teamType === HomeAway.Away ? gameSummary.away_team_name : gameSummary.home_team_name;
-			const teamCity = teamType === HomeAway.Away ? gameSummary.away_team_city : gameSummary.home_team_city;
-
-			return(
-				<div className={`team ${teamTypeClass}`}>
-					<a className={`team-info`} href="/backers">
-						<div className={`team-city team-color ${teamFileCode}`}>
-							{teamCity}
-						</div>
-						<div className={`team-name team-color ${teamFileCode}`}>
-							{teamName}
-						</div>
-					</a>
-					<a className={`backers`} href="/backers">
-						{this.getTeamSponsors(teamFileCode)}
-					</a>
-				</div>
-			);
-		}
 	}
 
-	addPage({
+	App.Instance.addPage({
 		page: <GameDetail />,
 		matchingUrl: /^\/game\/(.*)/,
 		name: "game"

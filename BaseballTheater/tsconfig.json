@@ -6,13 +6,15 @@
 	],
 	"compileOnSave": true,
 	"compilerOptions": {
+		"moduleResolution": "node",
 		"target": "es6",
 		"module": "commonjs",
 		"sourceMap": true,
 		"lib": [
 			"es5",
 			"esnext",
-			"dom"
+			"dom",
+			"es6"
 		],
 		"noImplicitThis": true,
 		"baseUrl": "Scripts/typings",

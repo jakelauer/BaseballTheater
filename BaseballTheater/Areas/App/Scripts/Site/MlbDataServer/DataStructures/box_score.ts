@@ -79,14 +79,14 @@ namespace Theater
 			{
 				return;
 			}
-			
+
 			this.game_info = data.boxscore.game_info;
 			this.game_id = data.boxscore.game_id;
 			this.game_pk = data.boxscore.game_pk;
 			this.venue_id = data.boxscore.venue_id;
 			this.venue_name = data.boxscore.venue_name;
-			this.away_team_code = data.boxscore.away_team_code;
-			this.home_team_code = data.boxscore.home_team_code;
+			this.away_team_code = this.fixTeamCode(data.boxscore.away_team_code);
+			this.home_team_code = this.fixTeamCode(data.boxscore.home_team_code);
 			this.away_id = data.boxscore.away_id;
 			this.home_id = data.boxscore.home_id;
 			this.away_fname = data.boxscore.away_fname;
@@ -114,7 +114,8 @@ namespace Theater
 
 			for (var pitching of data.boxscore.pitching)
 			{
-				if (!(pitching.pitcher instanceof Array)) {
+				if (!(pitching.pitcher instanceof Array))
+				{
 					pitching.pitcher = [(pitching.pitcher as any)];
 				}
 
@@ -129,6 +130,42 @@ namespace Theater
 				this.linescore = new Linescore();
 				this.linescore.setDetailLinescore(data.boxscore.linescore);
 			}
+		}
+
+		private fixTeamCode(code: string)
+		{
+			let fixedCode = code;
+			switch (code)
+			{
+				case "cha":
+					fixedCode = "chw";
+					break;
+				case "chn":
+					fixedCode = "chc";
+					break;
+				case "kca":
+					fixedCode = "kc";
+					break;
+				case "nyn":
+					fixedCode = "nym";
+					break;
+				case "nya":
+					fixedCode = "nyy";
+					break;
+				case "sdn":
+					fixedCode = "sd";
+					break;
+				case "sfn":
+					fixedCode = "sf";
+					break;
+				case "sln":
+					fixedCode = "stl";
+					break;
+				case "tba":
+					fixedCode = "tb";
+					break;
+			}
+			return fixedCode;
 		}
 	}
 }

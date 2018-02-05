@@ -1,4 +1,4 @@
-﻿namespace Theater.MlbDataServer
+﻿namespace Theater
 {
 	export class Teams
 	{

@@ -5,11 +5,21 @@
 	flex: auto;
 	height: 100%;
 	display: flex;
+	flex-wrap: wrap;
 
 	.tabs
 	{
 		flex: 1;
 		height: 100%;
+
+		.r-mobile &
+		{
+			height: auto;
+			width: 100%;
+			flex: none;
+			display: flex;
+			margin-bottom: 1rem;
+		}
 
 		.tab
 		{
@@ -20,6 +30,13 @@
 			display: block;
 			color: black;
 			text-decoration: none;
+
+			.r-mobile &
+			{
+				flex: 1 auto;
+				border-bottom: 3px solid rgba(0,0,0,0);
+				text-align: center;
+			}
 
 			span
 			{
@@ -56,6 +73,18 @@
 					color: $color-accent;
 					font-weight: bold;
 					transform: translateX(15px);
+				}
+
+				.r-mobile &
+				{
+					border-bottom: 3px solid $color-accent;
+					border-left: 0;
+
+					span
+					{
+						font-weight: normal;
+						transform: translateX(0);
+					}
 				}
 			}
 

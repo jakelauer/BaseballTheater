@@ -6,7 +6,7 @@
 
 		public static async load<T>(url: string, uniqueRequestType: string = ""): Promise<T>
 		{
-			console.debug(`Request for ${url}`);
+			//console.debug(`Request for ${url}`);
 
 			const proxyUrl = this.transformUrl(url);
 
@@ -45,7 +45,7 @@
 
 			if (uniqueRequestType)
 			{
-				console.debug(`Setting unique request of type ${uniqueRequestType}`);
+				//console.debug(`Setting unique request of type ${uniqueRequestType}`);
 				this.requests[uniqueRequestType] = ajaxRequest;
 
 				promise.then(() =>

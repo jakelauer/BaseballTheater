@@ -5,6 +5,8 @@
 	interface IPlayByPlayProps
 	{
 		inningsData: IInningsContainer;
+		allPlayers: Map<string, IBatter | IPitcher>;
+		highlights: IHighlightsCollection;
 	}
 
 	interface IPlayByPlayState
@@ -91,10 +93,55 @@
 			);
 		}
 
-		private renderBatter(batter: IAtBat, batterIndex: number)
+		private getSvIdsForPlay(play: IAtBat)
+		{
+			if (play.pitch)
+			{
+				return play.pitch.map(a => a.sv_id);
+			}
+
+			return [];
+		}
+
+		private getHighlightForPlay(play: IAtBat): IHighlight
+		{
+			const guid = play.play_guid;
+			const svIds = this.getSvIdsForPlay(play);
+			const hc = this.props.highlights;
+			let foundHighlight: IHighlight = null;
+			if (hc && hc.highlights && hc.highlights.media)
+			{
+				const highlights = hc.highlights.media;
+				const matching = highlights.find(highlight =>
+				{
+					let found = false;
+					if (highlight.keywords && highlight.keywords.keyword)
+					{
+						const keywords = highlight.keywords.keyword instanceof Array
+							                 ? highlight.keywords.keyword
+							                 : ([highlight.keywords.keyword] as any) as Keyword[];
+
+						keywords.forEach(keyword =>
+						{
+							found = found || (keyword.type === "sv_id" && (keyword.value === guid || svIds.indexOf(keyword.value) > -1));
+						});
+					}
+					return found;
+				});
+
+				if (matching)
+				{
+					foundHighlight = matching;
+				}
+			}
+
+			return foundHighlight;
+		}
+
+		private renderBatter(batter: IAtBat, batterIndex: number, oldPitcher: IPitcher, newPitcher: IPitcher)
 		{
 			let pitches: JSX.Element[] = [];
-			let strikezone: JSX.Element = <div/>;
+			let strikezone = <div/>;
 			if (batter.pitch)
 			{
 				pitches = batter.pitch.map((pitch, i) =>
@@ -107,40 +154,75 @@
 
 			const onClickBatter = () => this.toggleBatter(batter);
 			const expandedClass = this.state.expandedBatters.indexOf(batter.num) > -1 ? "expanded" : "";
+			const relatedHighlight = this.getHighlightForPlay(batter);
+			const highlightHref = relatedHighlight ? HighlightUtility.getDefaultUrl(relatedHighlight) : "";
+			const hasHighlight = highlightHref.trim() !== "" ? "has-highlight" : "";
+			const pitcherChanged = (!oldPitcher) || (oldPitcher.id !== newPitcher.id);
+
+			let pitcherChangedRendered = <div/>;
+			if (pitcherChanged)
+			{
+				const changedString = oldPitcher !== null
+					                      ? `${newPitcher.name_display_first_last} relieved ${oldPitcher.name_display_first_last}`
+					                      : `${newPitcher.name_display_first_last} pitching`;
+				pitcherChangedRendered = <div className={`pitcher-changed`} key={batterIndex * 99}>
+					                         {changedString}
+				                         </div>;
+			}
 
 			return (
-				<div className={`batter ${expandedClass}`} key={batterIndex} onClick={onClickBatter}>
-					<div className={`result`}>
-						<span className={`current-score`}>({batter.away_team_runs} - {batter.home_team_runs})</span> {batter.des}
-					</div>
-					<div className={`pitches`}>
-						{strikezone}
-						<div className={`pitch-list`}>
-							{pitches}
+				<div className={`play-by-play-event`} key={batterIndex}>
+					{pitcherChangedRendered}
+					<div className={`batter ${expandedClass}`}>
+						<div className={`result`}>
+							<a className={`play-highlight ${hasHighlight}`} target={`_blank`} href={highlightHref}>
+								<i className={`material-icons`}>play_circle_filled</i>
+							</a>
+							<div className={`result-trigger`} onClick={onClickBatter}>
+								<span className={`play-description`}>{batter.des}</span>
+								<span className={`current-score`}>({batter.away_team_runs} - {batter.home_team_runs})</span>
+							</div>
+						</div>
+						<div className={`pitches`}>
+							{strikezone}
+							<div className={`pitch-list`}>
+								{pitches}
+							</div>
 						</div>
 					</div>
-				</div>	
+				</div>
 			);
 		}
 
 		private renderHalfInning(halfInning: IInningHalf, halfInningType: HalfInningType, inningIndex: number)
 		{
-			const batters = halfInning.atbat.map((batter, i) =>
+			const players = this.props.allPlayers;
+			if (halfInning && halfInning.atbat)
 			{
-				return this.renderBatter(batter, i);
-			});
+				let oldPitcherData: IPitcher = null;
+				const batters = halfInning.atbat.map((batter, i) =>
+				{
+					const newPitcherData = players.get(batter.pitcher) as IPitcher;
+					const rendered = this.renderBatter(batter, i, oldPitcherData, newPitcherData);
+					oldPitcherData = players.get(batter.pitcher) as IPitcher;
 
-			const inningHalfLabel = halfInningType === "top" ? "Top" : "Bottom";
-			const inningLabel = `${inningHalfLabel} ${inningIndex + 1}`;
+					return rendered;
+				});
 
-			return (
-				<div className={`half-inning ${halfInningType}`}>
-					<div className={`inning-label`}>{inningLabel}</div>
-					<div className={`batters`}>
-						{batters}
+				const inningHalfLabel = halfInningType === "top" ? "Top" : "Bottom";
+				const inningLabel = `${inningHalfLabel} ${inningIndex + 1}`;
+
+				return (
+					<div className={`half-inning ${halfInningType}`}>
+						<div className={`inning-label`}>{inningLabel}</div>
+						<div className={`batters`}>
+							{batters}
+						</div>
 					</div>
-				</div>
-			);
+				);
+			}
+
+			return (<div/>);
 		}
 
 		private renderInning(inning: IInning, inningIndex: number)

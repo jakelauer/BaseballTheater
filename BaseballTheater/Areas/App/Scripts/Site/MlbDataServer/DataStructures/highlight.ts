@@ -12,7 +12,7 @@
 		url: IUrl[];
 		thumb: IUrl;
 		thumbnails: IThumbnails;
-		keywords: Keyword[];
+		keywords: IKeywords;
 		condensed: boolean;
 		recap: boolean;
 		"top-play": string;
@@ -35,5 +35,10 @@
 	{
 		type: string;
 		__text: string;
+	}
+
+	export interface IKeywords
+	{
+		keyword: Keyword[];
 	}
 }

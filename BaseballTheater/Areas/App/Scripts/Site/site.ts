@@ -1,70 +1,11 @@
 ﻿namespace Theater
 {
-	var pages: IPageRegister[] = [];
 	var siteLoadingTimeout = 0;
 	export var isLoading = false;
 
 	export var currentPage: IPageRegister = null;
 
-	var initializeSite = () =>
-	{
-		Utility.LinkHandler.Instance.initialize();
-		initializeCurrentPage();
-
-		Utility.Responsive.Instance.initialize();
-
-		$(".mobile-menu-trigger").on("click", () =>
-		{
-			$("header .links").toggleClass("open");
-		});
-
-		registerHub();
-	}
-
-	var registerHub = () =>
-	{
-		var chat = $.connection.liveGameHub;
-
-		chat.client.receive = (message) =>
-		{
-			console.log("received", message);
-		};
-
-		$.connection.hub.start().done(() =>
-		{
-		});
-	}
-
-	export var initializeCurrentPage = () =>
-	{
-		$(window).scrollTop(0);
-
-		$(".links a").removeClass("active");
-
-		for (let page of pages)
-		{
-			if (page.matchingUrl.test(location.pathname))
-			{
-				if (currentPage === page)
-				{
-				}
-
-				ReactDOM.render(
-					page.page,
-					document.getElementById("body-content")
-				);
-
-				currentPage = page;
-			}
-		}
-	};
-
-	export var addPage = (params: IPageRegister) =>
-	{
-		pages.push(params);
-	};
-
-	export var startLoading = () =>
+	/*export var startLoading = () =>
 	{
 		clearTimeout(siteLoadingTimeout);
 		siteLoadingTimeout = setTimeout(() =>
@@ -80,7 +21,7 @@
 		clearTimeout(siteLoadingTimeout);
 		$("#body-wrapper").removeClass("loading");
 		isLoading = false;
-	};
+	};*/
 
 	export var trackEvent = (category: string, action: string, label?: string, value?: any, metricObject?: any) =>
 	{
@@ -132,9 +73,4 @@
 			catch (e) {
 			}
 		});
-
-	$(document).ready(() =>
-	{
-		initializeSite();
-	});
 }

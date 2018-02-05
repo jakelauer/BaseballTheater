@@ -27,6 +27,7 @@
 				<div className={`boxscore`} data-homecode={boxScore.home_team_code} data-awaycode={boxScore.away_team_code}>
 					<div className={`teams`}>
 						<div className={`team away`}>
+							<h2 className={`mobile-only`}>{boxScore.away_fname}</h2>
 							<table className={`player-list batters`}>
 								<tbody>
 								{this.renderBatterHeaders()}
@@ -44,6 +45,7 @@
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_away.note)}></div>
 						</div>
 						<div className={`team home`}>
+							<h2 className={`mobile-only`}>{boxScore.home_fname}</h2>
 							<table className={`player-list batters`}>
 								<tbody>
 								{this.renderBatterHeaders()}
