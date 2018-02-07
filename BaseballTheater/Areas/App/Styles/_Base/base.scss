@@ -60,6 +60,11 @@ html.ready body #body-wrapper
 	opacity: 1;
 }
 
+.app-container
+{
+	padding: 60px 0 0;
+}
+
 header
 {
 	$header-height: 55px;
@@ -503,5 +508,20 @@ footer
 	{
 		background: #F7F7F7;
 		text-decoration: none;
+	}
+}
+
+.r-mobile .app-mode
+{
+	padding-top: 20px;
+
+	header
+	{
+		display: none;
+	}
+
+	.tabs
+	{
+		display: none;
 	}
 }
