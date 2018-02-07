@@ -2,7 +2,7 @@
 {
 	interface IAppProps
 	{
-
+		isAppMode: boolean;
 	}
 
 	interface IAppState
@@ -24,6 +24,12 @@
 		public appDistributor = new Utility.Distributor<IAppDistributorPayload>();
 		private pages: IPageRegister[] = [];
 
+		public get isAppMode()
+		{
+			const queries = Utility.LinkHandler.parseQuery();
+			return "app" in queries && queries["app"] === "true";
+		}
+
 		public get allpages()
 		{
 			return this.pages;
@@ -38,7 +44,7 @@
 		{
 
 			ReactDOM.render(
-				<AppContainer />,
+				<AppContainer isAppMode={this.isAppMode} />,
 				document.getElementById("app-container")
 			);
 		}
@@ -134,9 +140,10 @@
 			const renderablePage = this.state.currentPage && this.state.currentPage.page ? this.state.currentPage.page : <div />;
 
 			const loadingClass = this.state.isLoading ? "loading" : "";
+			const appModeClass = this.props.isAppMode ? "app-mode" : "";
 
 			return (
-				<div className={`app-container`}>
+				<div className={`app-container ${appModeClass}`}>
 					<header>
 						<div className={`header-content`}>
 							<div className={`mobile-menu-trigger`}>

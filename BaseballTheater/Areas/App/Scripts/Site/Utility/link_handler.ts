@@ -77,6 +77,17 @@
 		public static parseHash()
 		{
 			const kvpArray = location.hash.substr(1).split("&");
+			return this.parseKvps(kvpArray);
+		}
+
+		public static parseQuery()
+		{
+			const kvpArray = location.search.substr(1).split("&");
+			return this.parseKvps(kvpArray);
+		}
+
+		private static parseKvps(kvpArray: string[])
+		{
 			const dict: { [key: string]: string } = {};
 
 			kvpArray.forEach((kvpString) =>

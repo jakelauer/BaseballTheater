@@ -29,9 +29,14 @@
 			this.gamePk = this.getGamePkFromPath(location.pathname);
 
 			const hashState = Utility.LinkHandler.parseHash();
-			const currentTab = ("tab" in hashState)
-				                   ? parseInt(hashState["tab"]) as Tabs
-				                   : Tabs.PlayByPlay;
+			let currentTab = ("tab" in hashState)
+				? parseInt(hashState["tab"]) as Tabs
+				: Tabs.PlayByPlay;
+
+			if (App.Instance.isAppMode)
+			{
+				currentTab = Tabs.BoxScore;
+			}
 
 			this.state = {
 				boxScore: null,
@@ -173,12 +178,12 @@
 			const highlightsCollection = this.state.highlightsCollection;
 			const playByPlayData = this.state.playByPlay;
 
-			let renderables = [<div/>];
+			let renderables = [<div />];
 			switch (currentTab)
 			{
 				case Tabs.Highlights:
 					renderables = [
-						<Highlights highlightsCollection={highlightsCollection} key={0}/>
+						<Highlights highlightsCollection={highlightsCollection} key={0} />
 					];
 					break;
 				case Tabs.BoxScore:
@@ -189,8 +194,8 @@
 					break;
 				case Tabs.PlayByPlay:
 					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
-						<PlayByPlay inningsData={playByPlayData} highlights={highlightsCollection} allPlayers={boxScoreData.allPlayers} key={1}/>
+						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
+						<PlayByPlay inningsData={playByPlayData} highlights={highlightsCollection} allPlayers={boxScoreData.allPlayers} key={1} />
 					];
 					break;
 			}
@@ -207,7 +212,7 @@
 			const gameSummary = this.state.gameSummary;
 			if (!gameSummary)
 			{
-				return (<div/>);
+				return (<div />);
 			}
 
 			const highlightsTabClass = this.state.currentTab === Tabs.Highlights ? "on" : "";
@@ -222,7 +227,7 @@
 								<span>Highlights</span>
 							</a>
 							<a href={`#tab=${Tabs.PlayByPlay}`} className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
-									<span>Play by Play</span>
+								<span>Play by Play</span>
 							</a>
 							<a href={`#tab=${Tabs.BoxScore}`} className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
 								<span>Box Score</span>
