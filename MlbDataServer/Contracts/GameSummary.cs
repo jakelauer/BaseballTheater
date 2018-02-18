@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures
+namespace MlbDataServer.Contracts
 {
 	[Serializable, XmlRoot("game")]
 	public class GameSummary

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures
+namespace MlbDataServer.Contracts
 {
 	[Serializable, XmlRoot("media")]
 	public class Highlight

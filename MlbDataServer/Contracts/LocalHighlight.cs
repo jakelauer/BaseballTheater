@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace MlbDataServer.DataStructures
+namespace MlbDataServer.Contracts
 {
+	[Serializable]
 	public class LocalHighlight
 	{
 		public long Id { get; set; }

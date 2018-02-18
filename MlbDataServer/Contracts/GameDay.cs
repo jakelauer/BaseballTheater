@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MlbDataServer.DataStructures
+namespace MlbDataServer.Contracts
 {
 	public class GameDay
 	{

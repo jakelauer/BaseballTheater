@@ -1,4 +1,4 @@
-﻿namespace MlbDataServer.DataStructures.News
+﻿namespace MlbDataServer.Contracts.News
 {
 	public enum NewsFeeds
 	{

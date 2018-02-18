@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures
+namespace MlbDataServer.Contracts
 {
 	[Serializable, XmlRoot("game")]
 	public class GameCenter

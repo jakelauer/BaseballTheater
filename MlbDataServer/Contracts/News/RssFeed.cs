@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures.News
+namespace MlbDataServer.Contracts.News
 {
 	[Serializable, XmlRoot("rss")]
 	public class RssFeed
