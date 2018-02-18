@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Common;
-using MlbDataServer.DataFetch;
-using MlbDataServer.DataStructures;
+using MlbDataServer.Contracts;
+using MlbDataServer.Engine;
 
 namespace MlbDataMux
 {

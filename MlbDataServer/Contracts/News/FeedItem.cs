@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures.News
+namespace MlbDataServer.Contracts.News
 {
 	/// <summary>
 	/// Generic feed item object that contains some basic properties. The feed item is typically

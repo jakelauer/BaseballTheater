@@ -1,9 +1,9 @@
 ﻿using BaseballTheater.Extensions;
-using MlbDataServer.DataFetch;
-using MlbDataServer.DataStructures.News;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MlbDataServer.Contracts.News;
+using MlbDataServer.Engine;
 
 namespace BaseballTheater.Areas.Data.Models.News
 {

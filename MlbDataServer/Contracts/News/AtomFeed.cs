@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace MlbDataServer.DataStructures.News
+namespace MlbDataServer.Contracts.News
 {
 	[Serializable, XmlRoot("feed", Namespace = "http://www.w3.org/2005/Atom")]
 	public class AtomFeed

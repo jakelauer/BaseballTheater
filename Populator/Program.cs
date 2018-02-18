@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CommandLine;
 using MlbDataMux;
-using MlbDataProxy;
 
 namespace Populator
 {
@@ -29,7 +28,7 @@ namespace Populator
 		public bool LoopDates { get; set; }
 
 		[Option('i', "interval", Default = 10, HelpText = "The number of seconds to wait between checking something")]
-		public bool CheckIntervalSeconds { get; set; }
+		public int CheckIntervalSeconds { get; set; }
 	}
 
 	internal class Program
@@ -40,8 +39,8 @@ namespace Populator
 		private static void Main(string[] args)
 		{
 			Parser.Default.ParseArguments<Options>(args)
-				.WithParsed<Options>(onParsed)
-				.WithNotParsed<Options>(onParseFail);
+				.WithParsed(onParsed)
+				.WithNotParsed(onParseFail);
 		}
 
 		private static void onParsed(Options options)

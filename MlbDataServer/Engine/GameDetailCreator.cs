@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using MlbDataServer.DataStructures;
+using MlbDataServer.Contracts;
 
-namespace MlbDataServer.DataFetch
+namespace MlbDataServer.Engine
 {
 	public class GameDetailCreator
 	{

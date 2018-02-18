@@ -1,6 +1,6 @@
-﻿using MlbDataServer.DataStructures.News;
+﻿using MlbDataServer.Contracts.News;
 
-namespace MlbDataServer.DataFetch
+namespace MlbDataServer.Engine
 {
 	public class NewsFeedCreator
 	{

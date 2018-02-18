@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MlbDataMux;
-using MlbDataServer.DataFetch;
-using MlbDataServer.DataStructures;
+using MlbDataServer.Contracts;
+using MlbDataServer.Engine;
+using Newtonsoft.Json;
 
-namespace MlbDataProxy
+namespace MlbDataMux
 {
 	public class LoadHighlights
 	{
@@ -133,15 +134,32 @@ namespace MlbDataProxy
 
 			this.TempList = tempList;
 
-			
-			Logger.Log($"Inserting {tempList.Count} highlights");
-			this.InsertAll();
+			this.JsonSaveAll();
+			//this.SqlInsertAll();
 		}
 
-		private void InsertAll()
+		private void JsonSaveAll()
+		{ 
+			Logger.Log($"Saving {this.TempList.Count()} highlights");
+
+			var allJson = JsonConvert.SerializeObject(this.TempList);
+			var filename = this.Date.ToString("yyyyMMdd") + ".json";
+			var filePath = @"C:/highlightdata/" + filename;
+
+			if (!File.Exists(filePath))
+			{
+				using (var sw = File.CreateText(filePath))
+				{
+					sw.Write(allJson);
+				}	
+			}
+		}
+
+		private void SqlInsertAll()
 		{
-			ConnectionStringSettings settings;
-			settings = ConfigurationManager.ConnectionStrings["Bbt"];
+			Logger.Log($"Inserting {this.TempList.Count()} highlights");
+
+			var settings = ConfigurationManager.ConnectionStrings["Bbt"];
 			var connectionString = settings.ConnectionString;
 
 			using (SqlConnection con = new SqlConnection(connectionString))
