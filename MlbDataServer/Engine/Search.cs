@@ -1,22 +1,33 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using MlbDataServer.Contracts;
 
 namespace MlbDataServer.Engine
 {
 	public class Search
 	{
-		public static DataTable SearchHighlights(string query, int page, int recordsPerPage)
+		public static IEnumerable<LocalHighlight> SearchHighlights(string query, int page, int recordsPerPage)
 		{
 			var words = query.Split(' ');
-			var newQuery = string.Join(" AND ", words);
+			var upperWords = words.Select(a => a.ToUpperInvariant());
 
-			var data = SqlRunner.RunSproc("dbo.search_highlights", new[]
+			var matches = HighlightDatabase.AllHighlights.Where(a =>
 			{
-				new SprocParam("query", SqlDbType.NVarChar, newQuery),
-				new SprocParam("page", SqlDbType.Int, page),
-				new SprocParam("recsPerPage", SqlDbType.Int, recordsPerPage), 
+
+				var checkAgainst = $"{a.PlayerNames ?? ""} {a.Headline ?? ""} {a.TeamName ?? ""} {a.BigBlurb ?? ""}".ToUpperInvariant();
+				var checkAgainstFixed = new string(checkAgainst.Select(c => char.IsPunctuation(c) ? ' ' : c).ToArray());
+
+				var matched = upperWords.All(checkAgainstFixed.Contains);
+
+				return matched;
 			});
 
-			return data;
+			return matches
+				.OrderByDescending(a => a.Date)
+				.Skip(page * recordsPerPage)
+				.Take(recordsPerPage);
 		}
 	}
 }

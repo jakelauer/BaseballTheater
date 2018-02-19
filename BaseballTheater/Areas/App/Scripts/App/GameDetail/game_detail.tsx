@@ -244,7 +244,7 @@
 
 	App.Instance.addPage({
 		page: <GameDetail />,
-		matchingUrl: /^\/game\/(.*)/,
+		matchingUrl: /^\/game\/(.*)/gi,
 		name: "game"
 	});
 }

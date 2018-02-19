@@ -1,0 +1,24 @@
+﻿.search-results{
+	padding: 2rem;
+}
+
+.highlight-result
+{
+	display: flex;
+	margin-bottom: 1rem;
+
+	.thumb
+	{
+		width: 150px;
+		height: 100px;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+		margin-right: 1rem;
+	}
+
+	.headline
+	{
+		font-size: 1.5rem;
+	}
+}

@@ -4,8 +4,7 @@
 	{
 		public static Instance = new LinkHandler();
 		private initialized = false;
-
-		public onStateChange: () => void = () => {};
+		public stateChangeDistributor: Distributor<Location>;
 
 		public initialize()
 		{
@@ -13,6 +12,8 @@
 			{
 				return;
 			}
+
+			this.stateChangeDistributor = new Distributor<Location>();
 
 			this.addListeners();
 
@@ -33,7 +34,7 @@
 
 			$(window).on("popstate statechange", (e) =>
 			{
-				this.onStateChange();
+				this.stateChangeDistributor.distribute(location);
 			});
 		}
 
@@ -41,25 +42,7 @@
 		{
 			history.pushState(null, null, href);
 			$(window).trigger("statechange");
-		}/*
-
-		private async loadNew(href: string)
-		{
-			startLoading();
-
-			this.ajax(href).then((response: string) =>
-			{
-				var $response = $(response);
-				var bodyClass = response.match(/<body.*class=['"](.*)['"].*>/)[1];
-
-				var bodyContent = $response.find("#body-content").html();
-				$("#body-content").html(bodyContent);
-
-				$("body").attr("class", bodyClass as string);
-
-				Global.stopLoading();
-			});
-		}*/
+		}
 
 		private ajax(href: string)
 		{
