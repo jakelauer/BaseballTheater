@@ -77,8 +77,8 @@ namespace MlbDataMux
 
 					if (link1200 != null)
 					{
-						link1800 = Regex.Replace(link1200, pattern, "1800k", RegexOptions.IgnoreCase);
-						link2500 = Regex.Replace(link1200, pattern, "2500k", RegexOptions.IgnoreCase);
+						link1800 = Regex.Replace(link1200, pattern, "1800K", RegexOptions.IgnoreCase);
+						link2500 = Regex.Replace(link1200, pattern, "2500K", RegexOptions.IgnoreCase);
 					}
 
 					var thumbDefault = highlight.Thumbs[highlight.Thumbs.Length - 1];

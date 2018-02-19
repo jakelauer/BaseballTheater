@@ -1,9 +1,11 @@
-﻿using BaseballTheater.Extensions;
+﻿using System.Threading;
+using BaseballTheater.Extensions;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using MlbDataServer.Engine;
 
 namespace BaseballTheater
 {
@@ -11,6 +13,8 @@ namespace BaseballTheater
 	{
 		protected void Application_Start()
 		{
+			Thread.Sleep(10000);
+
 			ViewEngines.Engines.Clear();
 			var viewEngine = new CustomViewEngine();
 			ViewEngines.Engines.Add(viewEngine);
@@ -20,10 +24,11 @@ namespace BaseballTheater
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			var v8ef = new V8JsEngineFactory();
-			JsEngineSwitcher.Instance.EngineFactories.Add(v8ef);
+			var v8Ef = new V8JsEngineFactory();
+			JsEngineSwitcher.Instance.EngineFactories.Add(v8Ef);
+			JsEngineSwitcher.Instance.DefaultEngineName = v8Ef.EngineName;
 
-			JsEngineSwitcher.Instance.DefaultEngineName = v8ef.EngineName;
+			HighlightDatabase.Initialize();
 		}
 	}
 }

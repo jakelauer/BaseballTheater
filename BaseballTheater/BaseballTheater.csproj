@@ -363,6 +363,7 @@
     <Content Include="Areas\App\Styles\GameDetail\highlights.scss" />
     <Content Include="Areas\App\Styles\GameDetail\play-by-play.scss" />
     <Content Include="README.md" />
+    <Content Include="Areas\App\Styles\Search\search.scss" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -453,11 +454,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\App\Scripts\App\0_Base\SearchBox.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\highlights.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\highlight_utility.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\miniboxscore.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\play_by_play.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\0_Base\app.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\Search\search.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\global.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\game_detail.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\calendar.tsx" />

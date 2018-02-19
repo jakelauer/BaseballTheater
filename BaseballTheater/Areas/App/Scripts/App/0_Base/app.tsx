@@ -84,7 +84,7 @@
 		{
 			Utility.Responsive.Instance.initialize();
 			Utility.LinkHandler.Instance.initialize();
-			Utility.LinkHandler.Instance.onStateChange = () => this.setCurrentPageState();
+			Utility.LinkHandler.Instance.stateChangeDistributor.subscribe(() => this.setCurrentPageState());
 
 			App.Instance.appDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
 
@@ -137,7 +137,9 @@
 		{
 			const patreonLogin = "https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=https://baseball.theater";
 
-			const renderablePage = this.state.currentPage && this.state.currentPage.page ? this.state.currentPage.page : <div />;
+			const renderablePage = this.state.currentPage && this.state.currentPage.page
+				? this.state.currentPage.page
+				: <div />;
 
 			const loadingClass = this.state.isLoading ? "loading" : "";
 			const appModeClass = this.props.isAppMode ? "app-mode" : "";
@@ -153,12 +155,7 @@
 							</a>
 
 							<div className={`right`}>
-								<div className={`search`}>
-									<input type="text" required/>
-									<div className={`label`}>
-										<i className={`material-icons`}>search</i> <span>Find games &amp; highlights</span>
-									</div>
-								</div>
+								<SearchBox />
 								<a className={`login button`} href={patreonLogin}>
 									Log in with Patreon
 								</a>
@@ -167,7 +164,7 @@
 					</header>
 					<div id="body-wrapper" className={loadingClass}>
 						<div className={`loading-spinner`}>
-							<img src={`/images/ring.svg`}/>
+							<img src={`/images/ring.svg`} />
 						</div>
 						<div id="body-content">
 							{renderablePage}

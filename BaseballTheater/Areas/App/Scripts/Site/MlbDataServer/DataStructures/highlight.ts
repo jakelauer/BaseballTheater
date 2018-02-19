@@ -1,4 +1,5 @@
-﻿namespace Theater
+﻿// ReSharper disable InconsistentNaming
+namespace Theater
 {
 	export interface IHighlight
 	{
@@ -18,6 +19,28 @@
 		"top-play": string;
 
 		isPlaying: boolean;
+	}
+	
+	export interface IHighlightSearchResult
+	{
+		Id: number;
+		Date: Date;
+		TeamId: number;
+		TeamName: string;
+		PlayerIds: string;
+		PlayerNames: string;
+
+		Headline: string;
+		Duration: string;
+		Blurb: string;
+		BigBlurb: string;
+		Thumb_s: string;
+		Thumb_m: string;
+		Thumb_l: string;
+		Video_s: string;
+		Video_m: string;
+		Video_l: string;
+		GameId: number;
 	}
 
 	export interface IThumbnails
