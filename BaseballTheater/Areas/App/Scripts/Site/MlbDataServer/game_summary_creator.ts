@@ -10,7 +10,7 @@
 			const monthFolder = `month_${date.format("MM")}`;
 			const dayFolder = `day_${date.format("DD")}`;
 
-			return `${this.urlBase}/components/game/mlb/${yearFolder}/${monthFolder}/${dayFolder}/scoreboard_android.xml`;
+			return `${this.urlBase}/components/game/mlb/${yearFolder}/${monthFolder}/${dayFolder}/master_scoreboard.xml`;
 		}
 
 		public static async getSummaryCollection(date: moment.Moment)
