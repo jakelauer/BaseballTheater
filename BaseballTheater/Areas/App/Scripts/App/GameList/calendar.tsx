@@ -94,17 +94,15 @@
 			const friendlyDate = this.getFriendlyDate();
 			const onClickNext = (e) => this.changeDateDelta(e, 1);
 			const onClickPrev = (e) => this.changeDateDelta(e, -1);
-			const nextButtonUrl = this.getUrlForDateChangeDelta(1);
-			const prevButtonUrl = this.getUrlForDateChangeDelta(-1);
 			const inputSize = this.getFriendlyDate().length + 1;
 
 			return (
 				<div className={`day-nav`}>
-					<a className={`prev`} onClick={onClickPrev} href={prevButtonUrl}>
+					<a className={`prev`} onClick={onClickPrev} href={`javascript:void(0)`}>
 						<i className={`material-icons`}>chevron_left</i>
 					</a>
 					<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>
-					<a className={`next`} onClick={onClickNext} href={nextButtonUrl}>
+					<a className={`next`} onClick={onClickNext} href={`javascript:void(0)`}>
 						<i className={`material-icons`}>chevron_right</i>
 					</a>
 				</div>

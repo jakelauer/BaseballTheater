@@ -183,6 +183,11 @@
 		}
 	}
 
+	 .team-row:not(.winner) .winner-indicator
+	 {
+		 opacity: 0;
+	 }
+
 	&.final .team-row.winner .score:after
 	{
 		opacity: 1;

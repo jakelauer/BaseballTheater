@@ -112,7 +112,7 @@
 
 			if (game.linescore && game.linescore.r)
 			{
-				return game.linescore.r.away > game.linescore.r.home
+				return parseInt(game.linescore.r.away) > parseInt(game.linescore.r.home)
 					       ? HomeAway.Away
 					       : HomeAway.Home;
 			}
