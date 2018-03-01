@@ -69,28 +69,9 @@
 			});
 		}
 
-		private renderHighlight(highlight: IHighlightSearchResult)
-		{
-			const style = {
-				backgroundImage: `url(${highlight.Thumb_m})`
-			};
-
-			const date = moment(highlight.Date).format("dddd, MMMM Do YYYY");
-
-			return (
-				<a className={`highlight-result`} href={highlight.Video_s} target={`blank`}>
-					<div className={`thumb`} style={style}/>
-					<div className={`text-info`}>
-						<div className={`headline`}>{highlight.Headline}</div>
-						<div className={`date`}>{date}</div>
-					</div>
-				</a>
-			);
-		}
-
 		public render()
 		{
-			const highlightsRendered = this.state.highlights.map(highlight => this.renderHighlight(highlight));
+			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight highlight={searchResult.Highlight} />);
 
 			return (
 				<div className={`search-results`}>

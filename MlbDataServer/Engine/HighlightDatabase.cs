@@ -10,7 +10,7 @@ namespace MlbDataServer.Engine
 {
 	public class HighlightDatabase
 	{
-		public static IEnumerable<LocalHighlight> AllHighlights { get; private set; }
+		public static IEnumerable<HighlightSearchResult> AllHighlights { get; private set; }
 
 		public static void Initialize()
 		{
@@ -19,12 +19,12 @@ namespace MlbDataServer.Engine
 
 		private static void LoadFiles()
 		{
-			var allHighlights = new List<LocalHighlight>();
+			var allHighlights = new List<HighlightSearchResult>();
 
 			foreach (var file in Directory.EnumerateFiles(@"C:\highlightdata", "*.json"))
 			{
 				var contents = File.ReadAllText(file);
-				var highlightsInFile = JsonConvert.DeserializeObject<List<LocalHighlight>>(contents);
+				var highlightsInFile = JsonConvert.DeserializeObject<List<HighlightSearchResult>>(contents);
 				allHighlights.AddRange(highlightsInFile);
 			}
 

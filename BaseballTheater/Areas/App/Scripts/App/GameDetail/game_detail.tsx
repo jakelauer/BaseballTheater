@@ -9,16 +9,16 @@
 
 	interface IGameDetailState
 	{
-		gameSummary: GameSummaryData;
-		boxScore: BoxScoreData;
-		highlightsCollection: IHighlightsCollection;
-		playByPlay: IInningsContainer;
-		currentTab: Tabs;
+		gameSummary: GameSummaryData | null;
+		boxScore: BoxScoreData | null;
+		highlightsCollection: IHighlightsCollection | null;
+		playByPlay: IInningsContainer | null;
+		currentTab: Tabs | null;
 	}
 
 	export class GameDetail extends React.Component<any, IGameDetailState>
 	{
-		private readonly date: moment.Moment = null;
+		private readonly date: moment.Moment | null = null;
 		private readonly gamePk: string;
 
 		constructor(props: any)
@@ -177,6 +177,7 @@
 			const boxScoreData = this.state.boxScore;
 			const highlightsCollection = this.state.highlightsCollection;
 			const playByPlayData = this.state.playByPlay;
+			const gameSummary = this.state.gameSummary;
 
 			let renderables = [<div />];
 			switch (currentTab)
@@ -195,7 +196,12 @@
 				case Tabs.PlayByPlay:
 					renderables = [
 						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
-						<PlayByPlay inningsData={playByPlayData} highlights={highlightsCollection} allPlayers={boxScoreData.allPlayers} key={1} />
+						<PlayByPlay
+							key={1}
+							isSpringTraining={gameSummary.isSpringTraining}
+							inningsData={playByPlayData}
+							highlights={highlightsCollection}
+							allPlayers={boxScoreData.allPlayers} />
 					];
 					break;
 			}

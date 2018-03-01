@@ -18,6 +18,7 @@ namespace Theater
 		status: IGameStatus;
 		league: string;
 		inning: string;
+		gameday_sw: string;
 		away_name_abbrev: string;
 		away_team_name: string;
 		away_team_id: number;
@@ -67,6 +68,7 @@ namespace Theater
 		public home_loss: string;
 		public away_win: string;
 		public away_loss: string;
+		public gameday_sw: string;
 		public game_data_directory: string;
 		private _linescore: ISummaryLinescore;
 		public linescore: Linescore;
@@ -86,6 +88,11 @@ namespace Theater
 		public get away_record()
 		{
 			return `${this.away_win}-${this.away_loss}`;
+		}
+
+		public get isSpringTraining()
+		{
+			return this.gameday_sw === "Y";
 		}
 
 		constructor(data: IGameSummaryData)
@@ -126,6 +133,7 @@ namespace Theater
 			this.home_loss = data.home_loss;
 			this.away_win = data.away_win;
 			this.away_loss = data.away_loss;
+			this.gameday_sw = data.gameday_sw;
 			this.home_probable_pitcher = data.home_probable_pitcher;
 			this.away_probable_pitcher = data.away_probable_pitcher;
 			if (data.highlights)

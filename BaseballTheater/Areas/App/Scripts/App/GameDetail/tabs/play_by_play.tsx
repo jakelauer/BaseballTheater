@@ -4,6 +4,7 @@
 
 	interface IPlayByPlayProps
 	{
+		isSpringTraining: boolean;
 		inningsData: IInningsContainer;
 		allPlayers: Map<string, IBatter | IPitcher>;
 		highlights: IHighlightsCollection;
@@ -45,52 +46,21 @@
 
 		private renderPitch(pitch: IPitch, pitchIndex: number)
 		{
-			return (
-				<div className={`pitch`} key={pitchIndex} data-type={pitch.type}>
-					<div className={`pitch-count`}>{pitchIndex + 1}</div>
-					<div className={`pitch-description`}>{pitch.des}</div>
-					<div className={`pitch-details`}>
-						{pitch.start_speed} MPH {pitch.pitch_type_detail}
-					</div>
-				</div>
-			);
-		}
+			let rendered = <div />;
 
-		private renderStrikezone(pitches: IPitch[])
-		{
-			const maxY = 250;
-			const minY = 100;
-			const maxX = 250;
-			const minX = 15;
-
-			const pitchesRendered = pitches.map((pitch, i) =>
+			if (pitch)
 			{
-				const pitchX = parseFloat(pitch.x);
-				const pitchY = parseFloat(pitch.y);
+				rendered =
+					<div className={`pitch`} key={pitchIndex} data-type={pitch.type}>
+						<div className={`pitch-count`}>{pitchIndex + 1}</div>
+						<div className={`pitch-description`}>{pitch.des}</div>
+						<div className={`pitch-details`}>
+							{pitch.start_speed} MPH {pitch.pitch_type_detail}
+						</div>
+					</div>;
+			}
 
-				const leftPct = ((maxX - pitchX - minX)) / (maxX - minX);
-				const topPct = (pitchY - minY) / (maxY - minY);
-
-				const style = {
-					left: `${leftPct * 100}%`,
-					top: `${topPct * 100}%`,
-					zIndex: i + 1
-				}
-
-				return (
-					<div className={`pitch`} style={style} key={i} data-type={pitch.type}>
-						<span className={`pitch-count`}>{i + 1}</span>
-					</div>
-				);
-			});
-
-			return (
-				<div className={`strikezone`}>
-					<div className={`force-square`}></div>
-					{pitchesRendered}
-					<div className={`actual-strikezone`}></div>
-				</div>
-			);
+			return rendered;
 		}
 
 		private getSvIdsForPlay(play: IAtBat)
@@ -111,7 +81,10 @@
 			let foundHighlight: IHighlight = null;
 			if (hc && hc.highlights && hc.highlights.media)
 			{
-				const highlights = hc.highlights.media;
+				const highlights = hc.highlights.media instanceof Array
+					? hc.highlights.media
+					: [(hc.highlights.media as any) as IHighlight];
+
 				const matching = highlights.find(highlight =>
 				{
 					let found = false;
@@ -149,7 +122,7 @@
 					return this.renderPitch(pitch, i);
 				});
 
-				strikezone = this.renderStrikezone(batter.pitch);
+				strikezone = <PlayByPlayPitches pitches={batter.pitch} isSpringTraining={this.props.isSpringTraining} />;
 			}
 
 			const onClickBatter = () => this.toggleBatter(batter);
