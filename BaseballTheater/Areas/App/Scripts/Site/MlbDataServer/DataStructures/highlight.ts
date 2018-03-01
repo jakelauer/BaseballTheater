@@ -23,23 +23,7 @@ namespace Theater
 	
 	export interface IHighlightSearchResult
 	{
-		Id: number;
-		Date: Date;
-		TeamId: number;
-		TeamName: string;
-		PlayerIds: string;
-		PlayerNames: string;
-
-		Headline: string;
-		Duration: string;
-		Blurb: string;
-		BigBlurb: string;
-		Thumb_s: string;
-		Thumb_m: string;
-		Thumb_l: string;
-		Video_s: string;
-		Video_m: string;
-		Video_l: string;
+		Highlight: IHighlight;
 		GameId: number;
 	}
 

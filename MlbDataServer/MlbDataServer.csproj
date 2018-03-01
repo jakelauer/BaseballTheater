@@ -109,7 +109,7 @@
     <Compile Include="Engine\NewsFeedCreator.cs" />
     <Compile Include="Engine\Search.cs" />
     <Compile Include="Engine\SqlRunner.cs" />
-    <Compile Include="Contracts\LocalHighlight.cs" />
+    <Compile Include="Contracts\HighlightSearchResult.cs" />
     <Compile Include="Contracts\News\AtomFeed.cs" />
     <Compile Include="Contracts\News\FeedItem.cs" />
     <Compile Include="Contracts\News\NewsFeeds.cs" />

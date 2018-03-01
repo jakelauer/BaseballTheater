@@ -24,11 +24,15 @@
 		{
 			$(document).on("click", "a[href]:not([href^='http'])", (e) =>
 			{
+				if (e.metaKey || e.shiftKey || e.ctrlKey)
+				{
+					return true;
+				}
+
 				e.preventDefault();
 
 				var $el = $(e.currentTarget);
 				var href = $el.attr("href");
-
 				LinkHandler.pushState(href);
 			});
 

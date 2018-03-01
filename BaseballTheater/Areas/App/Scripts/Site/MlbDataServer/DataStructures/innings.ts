@@ -146,15 +146,22 @@
 						atBat.batterData = player;
 					}
 
-					if (!(atBat.pitch instanceof Array))
+					if (atBat.pitch)
 					{
-						atBat.pitch = [(atBat.pitch as any) as IPitch];
-					}
+						if (!(atBat.pitch instanceof Array))
+						{
+							atBat.pitch = [(atBat.pitch as any) as IPitch];
+						}
 
-					atBat.pitch.forEach(pitch =>
-					{
-						pitch.pitch_type_detail = this.getPitchTypeDetail(pitch);
-					});
+
+						atBat.pitch.forEach(pitch =>
+						{
+							if (pitch)
+							{
+								pitch.pitch_type_detail = this.getPitchTypeDetail(pitch);
+							}
+						});
+					}
 				}
 			}
 		}
@@ -162,49 +169,52 @@
 		private getPitchTypeDetail(pitch: IPitch)
 		{
 			let detail = "Unknown pitch";
-			switch (pitch.pitch_type)
+			if (pitch && pitch.pitch_type)
 			{
-				case "CH":
-					detail = "Changeup";
-					break;
-				case "CU":
-					detail = "Curve";
-					break;
-				case "EP":
-					detail = "Eephus";
-					break;
-				case "FC":
-					detail = "Cutter";
-					break;
-				case "FF":
-					detail = "Four-seam Fastball";
-					break;
-				case "FO":
-				case "PO":
-					detail = "Pitch Out";
-					break;
-				case "FS":
-				case "SI":
-					detail = "Sinker";
-					break;
-				case "FT":
-					detail = "Two-seam Fastball";
-					break;
-				case "KC":
-					detail = "Knuckle Curve";
-					break;
-				case "KN":
-					detail = "Knuckleball";
-					break;
-				case "SF":
-					detail = "Split-finger Fastball";
-					break;
-				case "SL":
-					detail = "Slider";
-					break;
+				switch (pitch.pitch_type)
+				{
+					case "CH":
+						detail = "Changeup";
+						break;
+					case "CU":
+						detail = "Curve";
+						break;
+					case "EP":
+						detail = "Eephus";
+						break;
+					case "FC":
+						detail = "Cutter";
+						break;
+					case "FF":
+						detail = "Four-seam Fastball";
+						break;
+					case "FO":
+					case "PO":
+						detail = "Pitch Out";
+						break;
+					case "FS":
+					case "SI":
+						detail = "Sinker";
+						break;
+					case "FT":
+						detail = "Two-seam Fastball";
+						break;
+					case "KC":
+						detail = "Knuckle Curve";
+						break;
+					case "KN":
+						detail = "Knuckleball";
+						break;
+					case "SF":
+						detail = "Split-finger Fastball";
+						break;
+					case "SL":
+						detail = "Slider";
+						break;
 
-				default:
-					break;
+					default:
+						break;
+				}
 			}
 
 			return detail;

@@ -1,5 +1,15 @@
-﻿namespace Theater.GameDetail
+﻿namespace Theater
 {
+	interface IHighlightDisplay
+	{
+		thumb: string;
+		links: ILink[];
+		videoUrl: string;
+		teamId: string;
+		headline: string;
+		overrideTitle: string | null;
+	}
+
 	export interface ILink
 	{
 		url: string;
@@ -70,6 +80,44 @@
 			}
 
 			return validLinks;
+		}
+
+		public static getDisplayProps(highlight: IHighlight): IHighlightDisplay | null
+		{
+			let displayProps: IHighlightDisplay | null = {
+				thumb: "",
+				links: [],
+				videoUrl: "",
+				overrideTitle: null,
+				headline: "",
+				teamId: ""
+			}
+
+			if (highlight)
+			{
+				displayProps.thumb = HighlightUtility.getDefaultThumb(highlight);
+				displayProps.links = HighlightUtility.getLinks(highlight);
+				displayProps.videoUrl = HighlightUtility.getDefaultUrl(highlight);
+				displayProps.teamId = highlight.team_id;
+
+				if (highlight.recap)
+				{
+					displayProps.overrideTitle = "Recap";
+				}
+
+				if (highlight.condensed)
+				{
+					displayProps.overrideTitle = "Condensed Game";
+				}
+
+				displayProps.headline = highlight.headline;
+			}
+			else
+			{
+				displayProps = null;
+			}
+
+			return displayProps;
 		}
 	}
 }
