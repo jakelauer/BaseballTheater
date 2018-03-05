@@ -2,7 +2,7 @@
 {
 	interface IBoxScoreProps
 	{
-		boxScoreData: BoxScoreData;
+		boxScoreData: BoxScoreData | null;
 	}
 
 	export class BoxScore extends React.Component<IBoxScoreProps, any>
@@ -23,6 +23,11 @@
 		{
 			const boxScore = this.props.boxScoreData;
 
+			if (!boxScore)
+			{
+				return null;
+			}
+
 			return (
 				<div className={`boxscore`} data-homecode={boxScore.home_team_code} data-awaycode={boxScore.away_team_code}>
 					<div className={`teams`}>
@@ -35,7 +40,7 @@
 								</tbody>
 							</table>
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.note)}></div>
-							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.text_data)} />
+							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.text_data)}/>
 							<table className={`player-list pitchers`}>
 								<tbody>
 								{this.renderPitcherHeaders()}
@@ -53,7 +58,7 @@
 								</tbody>
 							</table>
 							<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.note)}></div>
-							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.text_data)} />
+							<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.text_data)}/>
 							<table className={`player-list pitchers`}>
 								<tbody>
 								{this.renderPitcherHeaders()}
@@ -65,8 +70,8 @@
 					</div>
 					<div className={`game-notes`}>
 						<h2>Game Notes</h2>
-						<div className={`game-info`} dangerouslySetInnerHTML={this.markup(boxScore.game_info)} />
-						</div>
+						<div className={`game-info`} dangerouslySetInnerHTML={this.markup(boxScore.game_info)}/>
+					</div>
 				</div>
 			);
 		}
@@ -110,6 +115,12 @@
 		private renderPitcherStats(teamType: HomeAway)
 		{
 			const boxScore = this.props.boxScoreData;
+
+			if (!boxScore)
+			{
+				return null;
+			}
+
 			const pitchers = teamType === HomeAway.Away
 				                 ? boxScore.pitching_away.pitcher
 				                 : boxScore.pitching_home.pitcher;
@@ -143,6 +154,12 @@
 		private renderBatterStats(teamType: HomeAway)
 		{
 			const boxScore = this.props.boxScoreData;
+
+			if (!boxScore)
+			{
+				return null;
+			}
+
 			const batters = teamType === HomeAway.Away
 				                ? boxScore.batting_away.batter
 				                : boxScore.batting_home.batter;

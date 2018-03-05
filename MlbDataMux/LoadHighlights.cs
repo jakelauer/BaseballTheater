@@ -46,8 +46,6 @@ namespace MlbDataMux
 
 			var tempList = new List<HighlightSearchResult>();
 
-			Logger.Log("Loading games for " + Date);
-
 			foreach (var gameSummary in summary.GameSummaries)
 			{
 
@@ -88,7 +86,7 @@ namespace MlbDataMux
 
 		private void JsonSaveAll()
 		{
-			Logger.Log($"Saving {this.TempList.Count()} highlights");
+			Logger.Log($"Saving {this.TempList.Count()} highlights for ${this.Date}");
 
 			var allJson = JsonConvert.SerializeObject(this.TempList);
 			var filename = this.Date.ToString("yyyyMMdd") + ".json";

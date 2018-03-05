@@ -13,16 +13,19 @@
 
 		constructor(data: IGameSummaryCollection)
 		{
-			this.time_date = data.time_date;
-			if (data.games)
+			if (data)
 			{
-				//const gamesArray = data.games.game instanceof Array
-				//	? data.games.game
-				//	: [(data.games.game as any)] as IGameSummary[];
+				this.time_date = data.time_date;
+				if (data.games)
+				{
+					//const gamesArray = data.games.game instanceof Array
+					//	? data.games.game
+					//	: [(data.games.game as any)] as IGameSummary[];
 
-				//data.games.game = gamesArray;
+					//data.games.game = gamesArray;
 
-				this.games = new GameDay(data.games);
+					this.games = new GameDay(data.games);
+				}
 			}
 		}
 	}

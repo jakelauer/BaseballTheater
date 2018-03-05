@@ -17,16 +17,16 @@ namespace MlbDataServer.Engine
 			{
 				if (a?.Highlight == null) return false;
 
-				var checkAgainst = $"{a.Highlight.Headline ?? ""} {a.Highlight.BigBlurb ?? ""} {a.Highlight.Blurb ?? ""}";
+				var checkAgainst = $"{a.Highlight.headline ?? ""} {a.Highlight.bigblurb ?? ""} {a.Highlight.blurb ?? ""}";
 					
-				if (a.Highlight.Team?.Name != null)
+				if (a.Highlight.team?.Name != null)
 				{
-					checkAgainst += " " + a.Highlight.Team.Name + " ";
+					checkAgainst += " " + a.Highlight.team.Name + " ";
 				}
 
-				if (a.Highlight.Players?.Names != null)
+				if (a.Highlight.players?.Names != null)
 				{
-					checkAgainst += " " + a.Highlight.Players.Names + " ";
+					checkAgainst += " " + a.Highlight.players.Names + " ";
 				}
 
 				checkAgainst = checkAgainst.ToUpperInvariant();
@@ -40,7 +40,7 @@ namespace MlbDataServer.Engine
 			});
 
 			return matches
-				.OrderByDescending(a => a.Highlight.DateObj)
+				.OrderByDescending(a => a.Highlight.dateObj)
 				.Skip(page * recordsPerPage)
 				.Take(recordsPerPage);
 		}

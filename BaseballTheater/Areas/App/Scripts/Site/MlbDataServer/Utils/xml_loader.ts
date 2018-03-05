@@ -41,18 +41,18 @@
 						reject(error);
 					}
 				});
+
+				if (uniqueRequestType)
+				{
+					//console.debug(`Setting unique request of type ${uniqueRequestType}`);
+					this.requests[uniqueRequestType] = ajaxRequest;
+				}
 			});
 
-			if (uniqueRequestType)
+			promise.then(() =>
 			{
-				//console.debug(`Setting unique request of type ${uniqueRequestType}`);
-				this.requests[uniqueRequestType] = ajaxRequest;
-
-				promise.then(() =>
-				{
-					delete this.requests[uniqueRequestType];
-				});
-			}
+				delete this.requests[uniqueRequestType];
+			});
 
 			return promise;
 		}

@@ -9,59 +9,59 @@ namespace MlbDataServer.Contracts
 	public class Highlight
 	{
 		[XmlAttribute("type")]
-		public string Type { get; set; }
+		public string type { get; set; }
 
 		[XmlAttribute("id")]
-		public long Id { get; set; }
+		public long id { get; set; }
 
 		[XmlAttribute("date")]
-		public string Date { get; set; }
+		public string date { get; set; }
 
 		[XmlElement("player")]
-		public Players Players { get; set; }
+		public Players players { get; set; }
 
 		[XmlElement("team")]
-		public Team Team { get; set; }
+		public Team team { get; set; }
 
-		public DateTime DateObj => DateTime.Parse(Date, CultureInfo.InvariantCulture);
+		public DateTime dateObj => DateTime.Parse(date, CultureInfo.InvariantCulture);
 
 		[XmlElement("headline")]
-		public string Headline { get; set; }
+		public string headline { get; set; }
 
 		[XmlElement("blurb")]
-		public string Blurb { get; set; }
+		public string blurb { get; set; }
 
 		[XmlElement("bigblurb")]
-		public string BigBlurb { get; set; }
+		public string bigblurb { get; set; }
 
 		[XmlElement("duration")]
-		public string Duration { get; set; }
+		public string duration { get; set; }
 
 		[XmlElement("url")]
-		public string[] Urls { get; set; }
+		public string[] url { get; set; }
 
 		[XmlElement("thumb")]
-		public string Thumb { get; set; }
+		public string thumb { get; set; }
 
 		[XmlArray("thumbnails")]
 		[XmlArrayItem("thumb")]
-		public string[] Thumbs { get; set; }
+		public string[] thumbnails { get; set; }
 
 		[XmlArray("keywords")]
 		[XmlArrayItem("keyword")]
-		public Keyword[] Keywords { get; set; }
+		public Keyword[] keywords { get; set; }
 
 		[XmlAttribute("condensed")]
-		public bool Condensed { get; set; }
+		public bool condensed { get; set; }
 
 		[XmlAttribute("recap")]
-		public bool Recap { get; set; }
+		public bool recap { get; set; }
 
 		public string GetGameDetailDirectory
 		{
 			get
 			{
-				var keyword = this.Keywords.FirstOrDefault(a => a.Type == "game_events_location_plist");
+				var keyword = this.keywords.FirstOrDefault(a => a.Type == "game_events_location_plist");
 				if (keyword != null)
 				{
 					var gameEventsLocationPlist = keyword.Value;

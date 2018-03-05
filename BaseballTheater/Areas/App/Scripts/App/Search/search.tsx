@@ -8,7 +8,9 @@
 
 	export class Search extends React.Component<any, ISearchState>
 	{
-		private static readonly regex = /^\/search\/(.*)(\/|\?)?/i;
+		public static readonly regex = /^\/search\/(.*)(\/|\?)?/i;
+		private readonly PER_PAGE = 20;
+		private nextPage = 0;
 
 		constructor(props: any)
 		{
@@ -22,20 +24,23 @@
 
 		public componentDidMount()
 		{
-			this.loadData();
+			this.loadNextHighlightPage();
 
 			Utility.LinkHandler.Instance.stateChangeDistributor.subscribe(() =>
 			{
 				if (Search.getQuery().trim() !== "")
 				{
 					this.setQuery();
-					this.loadData();
+					this.updateHighlights(null);
+					this.loadNextHighlightPage();
 				}
 			});
 		}
 
 		private setQuery()
 		{
+			this.nextPage = 0;
+
 			this.setState({
 				query: Search.getQuery()
 			});
@@ -51,31 +56,60 @@
 			return decodeURI(query);
 		}
 
-		private updateHighlights(highlights: IHighlightSearchResult[])
+		private updateHighlights(highlights: IHighlightSearchResult[] | null)
 		{
 			App.stopLoading();
+
+			const setTo = highlights === null
+				              ? [] as IHighlightSearchResult[]
+				              : [...this.state.highlights, ...highlights];
+
 			this.setState({
-				highlights
+				highlights: setTo
 			});
 		}
 
-		public loadData()
+		public loadNextHighlightPage()
 		{
 			App.startLoading();
+
 			$.ajax({
-				url: `/Data/SearchHighlights/?query=${this.state.query}&page=0&perpage=20`,
+				url: `/Data/SearchHighlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`,
 				dataType: "json",
 				success: data => this.updateHighlights(data)
 			});
+
+			this.nextPage++;
+		}
+
+		private renderLoadMoreButton()
+		{
+			return (
+				<div className={`load-more-container`}>
+					<div className={`load-more button`} onClick={() => this.loadNextHighlightPage()}>Load More</div>
+				</div>
+				);
 		}
 
 		public render()
 		{
-			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight highlight={searchResult.Highlight} />);
+			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight key={searchResult.Highlight.id} renderDate={true} highlight={searchResult.Highlight} />);
+
+			const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
+				&& this.state.highlights.length > 0
+				&& !App.isLoading;
+
+			const loadMoreButton = shouldShowLoadMore
+				? this.renderLoadMoreButton()
+				: null;
 
 			return (
-				<div className={`search-results`}>
-					{highlightsRendered}
+				<div className={`search-results highlights-container`}>
+					<div className={`all-highlights`}>
+						{highlightsRendered}
+					</div>
+
+					{loadMoreButton}
 				</div>
 			);
 		}
@@ -83,7 +117,7 @@
 
 	App.Instance.addPage({
 		page: <Search/>,
-		matchingUrl: /^\/search\/(.*)/gi,
+		matchingUrl: Search.regex,
 		name: "game"
 	});
 }

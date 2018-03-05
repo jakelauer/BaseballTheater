@@ -100,28 +100,34 @@ namespace Theater
 			this.home_loss = data.boxscore.home_loss;
 			this.status_ind = data.boxscore.status_ind;
 
-			for (var batting of data.boxscore.batting)
+			if (data.boxscore.batting)
 			{
-				if (!(batting.batter instanceof Array))
+				for (var batting of data.boxscore.batting)
 				{
-					batting.batter = [(batting.batter as any)];
-				}
+					if (!(batting.batter instanceof Array))
+					{
+						batting.batter = [(batting.batter as any)];
+					}
 
-				batting.team_flag === "home"
-					? this.batting_home = batting
-					: this.batting_away = batting;
+					batting.team_flag === "home"
+						? this.batting_home = batting
+						: this.batting_away = batting;
+				}
 			}
 
-			for (var pitching of data.boxscore.pitching)
+			if (data.boxscore.pitching)
 			{
-				if (!(pitching.pitcher instanceof Array))
+				for (var pitching of data.boxscore.pitching)
 				{
-					pitching.pitcher = [(pitching.pitcher as any)];
-				}
+					if (!(pitching.pitcher instanceof Array))
+					{
+						pitching.pitcher = [(pitching.pitcher as any)];
+					}
 
-				pitching.team_flag === "home"
-					? this.pitching_home = pitching
-					: this.pitching_away = pitching;
+					pitching.team_flag === "home"
+						? this.pitching_home = pitching
+						: this.pitching_away = pitching;
+				}
 			}
 
 

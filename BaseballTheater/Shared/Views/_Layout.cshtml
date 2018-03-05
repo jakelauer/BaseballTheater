@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization;
+@using Newtonsoft.Json
 
 @model BaseballTheater.Shared.Models.BaseModel
 
@@ -53,7 +54,10 @@
 
 	ga('create', 'UA-23730353-4', 'auto');
 	ga('send', 'pageview');
+</script>
 
+<script>
+	window.PAGE_DATA = @Html.Raw(JsonConvert.SerializeObject(ViewBag.PageData))
 </script>
 	
 @Scripts.Render("~/scriptbundles/lib")

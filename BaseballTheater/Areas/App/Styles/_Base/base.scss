@@ -48,6 +48,7 @@ html
 #body-wrapper
 {
 	height: calc(100vh - #{$header-size});
+	font-size: 1rem;
 
 	#body-content
 	{
@@ -80,7 +81,6 @@ header
 	padding-bottom: $header-size - $header-height;
 	transition: 0.25s;
 	color: $color-accent;
-	font-size: 18px;
 
 	.header-content
 	{
@@ -88,21 +88,6 @@ header
 		width: 100%;
 		padding: 0 20px;
 		text-align: center;
-	}
-
-	.mobile-menu-trigger
-	{
-		display: none;
-
-		.r-medium &
-		{
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			margin-left: -1rem;
-			padding: 0 1rem;
-			text-align: center;
-		}
 	}
 
 	.logo-link
@@ -120,18 +105,13 @@ header
 		{
 			text-decoration: none;
 		}
-
-		.r-medium &
-		{
-			text-align: right;
-			flex: 1 0 auto;
-		}
 	}
 
 	.right
 	{
 		display: flex;
 		align-self: center;
+		align-items: center;
 		justify-self: flex-end;
 		justify-content: flex-end;
 		flex: auto;
@@ -491,13 +471,13 @@ footer
 
 .button
 {
-	display: inline-block;;
+	display: inline-block;
 	padding: 0.75rem 1.5rem;
 	cursor: default;
-	color: $color-accent;
+	color: $color-basic-background;
 	border: 0;
 	border-radius: 2px;
-	background: $color-basic-background;
+	background: $color-accent;
 	box-shadow: 0 4px 4px -3px rgba(0,0,0,0.2);
 	font-size: 1rem;
 	font-weight: 600;
@@ -506,7 +486,7 @@ footer
 
 	&:hover
 	{
-		background: #F7F7F7;
+		background: darken($color-accent, 10%);
 		text-decoration: none;
 	}
 }

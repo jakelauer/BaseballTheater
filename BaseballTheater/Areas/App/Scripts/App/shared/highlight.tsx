@@ -2,6 +2,7 @@
 {
 	interface IHighlightProps
 	{
+		renderDate: boolean;
 		highlight: IHighlight | IHighlightSearchResult;
 	}
 
@@ -15,6 +16,11 @@
 		private renderTitle()
 		{
 			const displayProps = HighlightUtility.getDisplayProps(this.highlight);
+
+			if (!displayProps)
+			{
+				return null;
+			}
 
 			const teamCode = Teams.TeamIdList[parseInt(displayProps.teamId)] || "";
 			return (
@@ -48,6 +54,13 @@
 				return <a href={link.url} key={i}>{link.label}</a>;
 			});
 
+			const dateString = moment(this.highlight.date).format("MMM D, YYYY");
+			const dateRendered = this.props.renderDate
+				                     ? <div className={`date`}>
+					                       {dateString}
+				                       </div>
+				                     : null;
+
 			return (
 				<div className={`highlight`}>
 					<div className={`video-info`}>
@@ -58,6 +71,7 @@
 							<h2>{this.renderTitle()}</h2>
 						</a>
 					</div>
+					{dateRendered}
 					<div className={`links`}>
 						{links}
 					</div>

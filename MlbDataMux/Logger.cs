@@ -10,7 +10,10 @@ namespace MlbDataMux
 			// Create a writer and open the file:
 			StreamWriter log;
 
-			var path = @".\logfile.txt";
+			var value = DateTime.Now + " | " + text;
+			
+			Console.WriteLine(value);
+			/*var path = @".\logfile.txt";
 			if (!File.Exists(path))
 			{
 				log = new StreamWriter(path);
@@ -20,11 +23,10 @@ namespace MlbDataMux
 				log = File.AppendText(path);
 			}
 
-			var value = DateTime.Now + " | " + text;
 			log.WriteLine(value);
-			Console.WriteLine(value);
+			log.Close();*/
 
-			log.Close();
+
 		}
 	}
 }

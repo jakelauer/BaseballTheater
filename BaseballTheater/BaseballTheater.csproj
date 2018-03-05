@@ -259,6 +259,10 @@
     <Compile Include="Areas\App\AppAreaRegistration.cs" />
     <Compile Include="Areas\App\AppController.cs" />
     <Compile Include="Areas\App\BundleConfig.cs" />
+    <Compile Include="Areas\Auth\AuthAreaRegistration.cs" />
+    <Compile Include="Areas\Auth\AuthController.cs" />
+    <Compile Include="Areas\Auth\Models\AuthContext.cs" />
+    <Compile Include="Areas\Auth\Models\BTController.cs" />
     <Compile Include="Areas\Data\DataController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\Data\Models\Patreon\BackersList.cs" />
@@ -364,6 +368,8 @@
     <Content Include="Areas\App\Styles\GameDetail\play-by-play.scss" />
     <Content Include="README.md" />
     <Content Include="Areas\App\Styles\Search\search.scss" />
+    <Content Include="Areas\Auth\Views\web.config" />
+    <Content Include="Areas\Auth\Views\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -454,15 +460,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\App\Scripts\App\0_Base\auth_context.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\0_Base\SearchBox.tsx" />
-    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\shared\play_by_play_pitches.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\tabs\play-by-play\batter.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\tabs\play-by-play\play_by_play_pitches.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\shared\highlights.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\shared\highlight_utility.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\shared\miniboxscore.tsx" />
-    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\tabs\play_by_play.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\tabs\play-by-play\play_by_play.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\0_Base\app.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\Search\search.tsx" />
-    <TypeScriptCompile Include="Areas\App\Scripts\global.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameDetail\game_detail.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\calendar.tsx" />
     <TypeScriptCompile Include="Areas\App\Scripts\App\GameList\game_list.tsx" />
@@ -487,9 +494,9 @@
     <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\DataStructures\teams.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_detail_creator.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\game_summary_creator.ts" />
-    <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\news_feed_creator.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\MlbDataServer\Utils\xml_loader.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\page.tsx" />
+    <TypeScriptCompile Include="Areas\App\Scripts\Site\Utility\page_data.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\Utility\responsive.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\site.ts" />
     <TypeScriptCompile Include="Areas\App\Scripts\Site\Utility\subscribable.ts" />
