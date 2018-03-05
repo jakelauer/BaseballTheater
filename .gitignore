@@ -195,3 +195,6 @@ ModelManifest.xml
 /.vs/slnx.sqlite
 /.vs/BaseballTheater/v15/Server/sqlite3
 /Populator/App.config
+/BaseballTheater/Scripts/typings/fbemitter/fbemitter.d.ts
+/.vs/BaseballTheater/v15/TabsStudio.marker.tss
+/.vs/BaseballTheater/v15/TabsStudio.tss

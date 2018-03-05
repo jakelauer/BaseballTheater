@@ -21,11 +21,18 @@ namespace MlbDataServer.Engine
 		{
 			var allHighlights = new List<HighlightSearchResult>();
 
-			foreach (var file in Directory.EnumerateFiles(@"C:\highlightdata", "*.json"))
+			try
 			{
-				var contents = File.ReadAllText(file);
-				var highlightsInFile = JsonConvert.DeserializeObject<List<HighlightSearchResult>>(contents);
-				allHighlights.AddRange(highlightsInFile);
+				foreach (var file in Directory.EnumerateFiles(@"C:\highlightdata", "*.json"))
+				{
+					var contents = File.ReadAllText(file);
+					var highlightsInFile = JsonConvert.DeserializeObject<List<HighlightSearchResult>>(contents);
+					allHighlights.AddRange(highlightsInFile);
+				}
+			}
+			catch (Exception)
+			{
+				// ignored
 			}
 
 			AllHighlights = allHighlights;
