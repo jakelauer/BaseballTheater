@@ -152,7 +152,7 @@
 
 				return (
 					<a className={`login button`} href={patreonLogin}>
-						Log in with Patreon
+						Patreon Login
 					</a>	
 				);
 			}
@@ -180,7 +180,9 @@
 				<div className={`app-container ${appModeClass}`}>
 					<header>
 						<div className={`header-content`}>
-							<a className={`logo-link`} href={`/`}> Baseball Theater
+							<a className={`logo-link`} href={`/`}> 
+								<span className={`logo-circle`}></span>
+								<span className={`logo-text`}>Baseball Theater</span>
 							</a>
 
 							<div className={`right`}>

@@ -304,6 +304,7 @@
     <Content Include="images\favicon-32x32.png" />
     <Content Include="images\favicon-96x96.png" />
     <Content Include="images\favicon.ico" />
+    <Content Include="images\logo-circle.png" />
     <Content Include="images\logo-large.png" />
     <Content Include="images\logo.jpg" />
     <Content Include="images\logos\al.gif" />
