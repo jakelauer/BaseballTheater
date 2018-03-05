@@ -27,7 +27,7 @@
 				return thumbFinal.replace("http:", location.protocol);
 			}
 
-			return null;
+			return "";
 		}
 
 		public static getDefaultUrl(highlight: IHighlight)

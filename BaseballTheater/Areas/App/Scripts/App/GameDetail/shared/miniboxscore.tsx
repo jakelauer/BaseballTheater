@@ -42,7 +42,7 @@
 				);
 			} 
 
-			return null;
+			return <div/>;
 		}
 
 		private renderInningsTable()

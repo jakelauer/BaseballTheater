@@ -19,7 +19,7 @@
 
 			if (!displayProps)
 			{
-				return null;
+				return <div/>;
 			}
 
 			const teamCode = Teams.TeamIdList[parseInt(displayProps.teamId)] || "";

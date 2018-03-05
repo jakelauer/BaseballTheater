@@ -14,7 +14,7 @@
 
 		.r-mobile &
 		{
-			height: auto;
+			height: 4rem;
 			width: 100%;
 			flex: none;
 			display: flex;
@@ -108,6 +108,10 @@
 			{
 				display: block;
 			}
+		}
+
+		.r-mobile &{
+			height: 100%;
 		}
 	}
 }

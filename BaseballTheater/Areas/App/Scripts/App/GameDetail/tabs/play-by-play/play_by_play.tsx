@@ -66,7 +66,7 @@
 
 			if (!inningsData)
 			{
-				return null;
+				return <div/>;
 			}
 
 			if (inningsData.game

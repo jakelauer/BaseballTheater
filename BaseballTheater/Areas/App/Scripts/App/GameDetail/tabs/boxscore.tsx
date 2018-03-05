@@ -25,7 +25,7 @@
 
 			if (!boxScore)
 			{
-				return null;
+				return <div/>;
 			}
 
 			return (
@@ -118,7 +118,7 @@
 
 			if (!boxScore)
 			{
-				return null;
+				return <div/>;
 			}
 
 			const pitchers = teamType === HomeAway.Away
@@ -157,7 +157,7 @@
 
 			if (!boxScore)
 			{
-				return null;
+				return <div/>;
 			}
 
 			const batters = teamType === HomeAway.Away

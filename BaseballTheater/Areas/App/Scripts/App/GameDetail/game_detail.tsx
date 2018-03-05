@@ -20,7 +20,6 @@
 	{
 		private readonly date: moment.Moment;
 		private readonly gamePk: string;
-		private readonly crapPromise = new Promise((resolve, reject) => { reject() });
 
 		constructor(props: any)
 		{
@@ -31,8 +30,8 @@
 
 			const hashState = Utility.LinkHandler.parseHash();
 			let currentTab = ("tab" in hashState)
-				? parseInt(hashState["tab"]) as Tabs
-				: Tabs.PlayByPlay;
+				                 ? parseInt(hashState["tab"]) as Tabs
+				                 : Tabs.Highlights;
 
 			if (App.Instance.isAppMode)
 			{
@@ -65,38 +64,23 @@
 
 		private async getHighlights(currentGame: GameSummaryData): Promise<IHighlightsCollection>
 		{
-			if (currentGame !== null)
-			{
-				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
-				const highlights = await gameDetailCreator.getHighlights();
-				return highlights;
-			}
-
-			return this.crapPromise as Promise<IHighlightsCollection>;
+			const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+			const highlights = await gameDetailCreator.getHighlights();
+			return highlights;
 		}
 
 		private async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
 		{
-			if (currentGame !== null)
-			{
-				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
-				const boxScore = await gameDetailCreator.getBoxscore();
-				return boxScore;
-			}
-
-			return this.crapPromise as Promise<BoxScoreData>
+			const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+			const boxScore = await gameDetailCreator.getBoxscore();
+			return boxScore;
 		}
 
 		private async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
 		{
-			if (currentGame)
-			{
-				const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
-				const playByPlay = await gameDetailCreator.getInnings(boxScore);
-				return playByPlay;
-			}
-
-			return this.crapPromise as Promise<Innings>;
+			const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+			const playByPlay = await gameDetailCreator.getInnings(boxScore);
+			return playByPlay;
 		}
 
 		private getDateFromPath(pathname: string)
@@ -121,7 +105,6 @@
 
 		private getCurrentGame(): Promise<GameSummaryData>
 		{
-
 			return new Promise((resolve, reject) =>
 			{
 				const summaries = MlbDataServer.GameSummaryCreator.getSummaryCollection(this.date);
@@ -181,30 +164,30 @@
 			const gameSummary = this.state.gameSummary;
 			const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
-			let renderables = [<div />];
+			let renderables = [<div/>];
 
 			switch (currentTab)
 			{
 				case Tabs.Highlights:
 					renderables = [
-						<Highlights highlightsCollection={highlightsCollection} key={0} />
+						<Highlights highlightsCollection={highlightsCollection} key={0}/>
 					];
 					break;
 				case Tabs.BoxScore:
 					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
-						<BoxScore boxScoreData={boxScoreData} key={1} />
+						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+						<BoxScore boxScoreData={boxScoreData} key={1}/>
 					];
 					break;
 				case Tabs.PlayByPlay:
 					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
+						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
 						<PlayByPlay
 							key={1}
 							gameSummary={gameSummary}
 							inningsData={playByPlayData}
 							highlights={highlightsCollection}
-							allPlayers={allPlayers} />
+							allPlayers={allPlayers}/>
 					];
 					break;
 			}
@@ -221,7 +204,7 @@
 			const gameSummary = this.state.gameSummary;
 			if (!gameSummary)
 			{
-				return (<div />);
+				return (<div/>);
 			}
 
 			const highlightsTabClass = this.state.currentTab === Tabs.Highlights ? "on" : "";
@@ -252,7 +235,7 @@
 	}
 
 	App.Instance.addPage({
-		page: <GameDetail />,
+		page: <GameDetail/>,
 		matchingUrl: /^\/game\/(.*)/gi,
 		name: "game"
 	});
