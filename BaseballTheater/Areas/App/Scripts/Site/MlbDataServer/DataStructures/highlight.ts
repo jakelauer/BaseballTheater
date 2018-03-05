@@ -9,6 +9,7 @@ namespace Theater
 		date: Date;
 		headline: string;
 		blurb: string;
+		bigblurb: string;
 		duration: string;
 		url: IUrl[];
 		thumb: IUrl;

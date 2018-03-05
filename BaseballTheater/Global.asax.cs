@@ -1,10 +1,13 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using System.Web;
 using BaseballTheater.Extensions;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using BaseballTheater.Areas.Auth.Models;
 using MlbDataServer.Engine;
 
 namespace BaseballTheater
@@ -29,6 +32,22 @@ namespace BaseballTheater
 			JsEngineSwitcher.Instance.DefaultEngineName = v8Ef.EngineName;
 
 			HighlightDatabase.Initialize();
+		}
+
+		public override string GetVaryByCustomString(HttpContext context, string arg) 
+		{ 
+			if (arg.Equals("User", StringComparison.InvariantCultureIgnoreCase))
+			{
+				var authCookie = context.Request.Cookies[AuthContext.PatreonAuthCookieName];
+				if (authCookie != null)
+				{
+					return authCookie.Value;
+				}
+
+				return "";
+			}
+
+			return base.GetVaryByCustomString(context, arg); 
 		}
 	}
 }

@@ -2,7 +2,7 @@
 {
 	interface IHighlightsProps
 	{
-		highlightsCollection: IHighlightsCollection;
+		highlightsCollection: IHighlightsCollection | null;
 	}
 
 	interface IHighlightsState
@@ -31,9 +31,8 @@
 		private process()
 		{
 			const highlightsCollection = this.props.highlightsCollection;
-			const hasHighlights = highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media;
 
-			if (hasHighlights)
+			if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
 			{
 				let highlights: IHighlight[] = [];
 				let allHighlights: IHighlight[] = [];
@@ -43,8 +42,6 @@
 				{
 					highlight.isPlaying = false;
 				}
-
-				Theater.endTime = moment();
 
 				highlights = highlightsCollection.highlights.media;
 				highlights.sort((a, b) =>
@@ -91,7 +88,7 @@
 						<div className={`special-highlights`}>
 							{
 								specialHighlights.map((highlight) => (
-									<Highlight key={highlight.id} highlight={highlight} />
+									<Highlight renderDate={false} key={highlight.id} highlight={highlight} />
 								))
 							}
 						</div>
@@ -100,7 +97,7 @@
 					<div className={`all-highlights`}>
 						{
 							allHighlights.map((highlight) => (
-								<Highlight key={highlight.id} highlight={highlight} />
+								<Highlight renderDate={false} key={highlight.id} highlight={highlight} />
 							))
 						}
 					</div>

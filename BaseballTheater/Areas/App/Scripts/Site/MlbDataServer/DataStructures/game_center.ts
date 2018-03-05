@@ -18,5 +18,11 @@
 	{
 		headline: string;
 		blurb: string;
+		url: IGCUrl;
+	}
+
+	export interface IGCUrl
+	{
+		cid: string;
 	}
 }

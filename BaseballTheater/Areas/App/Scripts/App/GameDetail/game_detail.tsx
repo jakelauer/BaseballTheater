@@ -13,13 +13,14 @@
 		boxScore: BoxScoreData | null;
 		highlightsCollection: IHighlightsCollection | null;
 		playByPlay: IInningsContainer | null;
-		currentTab: Tabs | null;
+		currentTab: Tabs;
 	}
 
 	export class GameDetail extends React.Component<any, IGameDetailState>
 	{
-		private readonly date: moment.Moment | null = null;
+		private readonly date: moment.Moment;
 		private readonly gamePk: string;
+		private readonly crapPromise = new Promise((resolve, reject) => { reject() });
 
 		constructor(props: any)
 		{
@@ -71,7 +72,7 @@
 				return highlights;
 			}
 
-			return null;
+			return this.crapPromise as Promise<IHighlightsCollection>;
 		}
 
 		private async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
@@ -83,7 +84,7 @@
 				return boxScore;
 			}
 
-			return null;
+			return this.crapPromise as Promise<BoxScoreData>
 		}
 
 		private async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
@@ -95,7 +96,7 @@
 				return playByPlay;
 			}
 
-			return null;
+			return this.crapPromise as Promise<Innings>;
 		}
 
 		private getDateFromPath(pathname: string)
@@ -172,14 +173,16 @@
 			}
 		}
 
-		private renderCurrentTab(currentTab: Tabs)
+		private renderCurrentTab(currentTab: Tabs | null)
 		{
 			const boxScoreData = this.state.boxScore;
 			const highlightsCollection = this.state.highlightsCollection;
 			const playByPlayData = this.state.playByPlay;
 			const gameSummary = this.state.gameSummary;
+			const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
 			let renderables = [<div />];
+
 			switch (currentTab)
 			{
 				case Tabs.Highlights:
@@ -198,10 +201,10 @@
 						<MiniBoxScore boxScoreData={boxScoreData} key={0} />,
 						<PlayByPlay
 							key={1}
-							isSpringTraining={gameSummary.isSpringTraining}
+							gameSummary={gameSummary}
 							inningsData={playByPlayData}
 							highlights={highlightsCollection}
-							allPlayers={boxScoreData.allPlayers} />
+							allPlayers={allPlayers} />
 					];
 					break;
 			}

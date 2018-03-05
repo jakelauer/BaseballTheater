@@ -2,7 +2,7 @@
 {
 	interface IBoxScoreProps
 	{
-		boxScoreData: BoxScoreData;
+		boxScoreData: BoxScoreData | null;
 	}
 
 	export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
@@ -10,34 +10,39 @@
 		private renderTeamTable()
 		{
 			const boxScoreData = this.props.boxScoreData;
-			const awayTeamName = boxScoreData.away_sname;
-			const homeTeamName = boxScoreData.home_sname;
-			const awayTeamCode = boxScoreData.away_team_code;
-			const homeTeamCode = boxScoreData.home_team_code;
+			if (boxScoreData)
+			{
+				const awayTeamName = boxScoreData.away_sname;
+				const homeTeamName = boxScoreData.home_sname;
+				const awayTeamCode = boxScoreData.away_team_code;
+				const homeTeamCode = boxScoreData.home_team_code;
 
-			return (
-				<table>
-					<tbody>
-					<tr>
-						<td>&nbsp;</td>
-					</tr>
-					<tr className={`away`}>
-						<td>
-							<div className={`team-info small`}>
-								<div className={`team-city team-color ${awayTeamCode}`}>{awayTeamName}</div>
-							</div>
-						</td>
-					</tr>
-					<tr className={`home`}>
-						<td>
-							<div className={`team-info small`}>
-								<div className={`team-city team-color ${homeTeamCode}`}>{homeTeamName}</div>
-							</div>
-						</td>
-					</tr>
-					</tbody>
-				</table>
-			);
+				return (
+					<table>
+						<tbody>
+						<tr>
+							<td>&nbsp;</td>
+						</tr>
+						<tr className={`away`}>
+							<td>
+								<div className={`team-info small`}>
+									<div className={`team-city team-color ${awayTeamCode}`}>{awayTeamName}</div>
+								</div>
+							</td>
+						</tr>
+						<tr className={`home`}>
+							<td>
+								<div className={`team-info small`}>
+									<div className={`team-city team-color ${homeTeamCode}`}>{homeTeamName}</div>
+								</div>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				);
+			} 
+
+			return null;
 		}
 
 		private renderInningsTable()

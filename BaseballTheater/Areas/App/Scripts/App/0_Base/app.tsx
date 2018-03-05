@@ -9,10 +9,10 @@
 	{
 		isLoading: boolean;
 		pages: IPageRegister[];
-		currentPage: IPageRegister;
+		currentPage: IPageRegister | null;
 	}
 
-	interface IAppDistributorPayload
+	interface ILoadingDistributor
 	{
 		isLoading: boolean;
 	}
@@ -21,8 +21,15 @@
 	{
 		public static Instance = new App();
 
-		public appDistributor = new Utility.Distributor<IAppDistributorPayload>();
+		public loadingDistributor = new Utility.Distributor<ILoadingDistributor>();
+
 		private pages: IPageRegister[] = [];
+
+		private static _isLoading = false;
+		public static get isLoading()
+		{
+			return this._isLoading;
+		}
 
 		public get isAppMode()
 		{
@@ -42,7 +49,6 @@
 
 		public initialize()
 		{
-
 			ReactDOM.render(
 				<AppContainer isAppMode={this.isAppMode} />,
 				document.getElementById("app-container")
@@ -51,15 +57,17 @@
 
 		public static startLoading()
 		{
-			App.Instance.appDistributor.distribute({
-				isLoading: true
+			this._isLoading = true;
+			App.Instance.loadingDistributor.distribute({
+				isLoading: this.isLoading
 			});
 		}
 
 		public static stopLoading()
 		{
-			App.Instance.appDistributor.distribute({
-				isLoading: false
+			this._isLoading = false;
+			App.Instance.loadingDistributor.distribute({
+				isLoading: this.isLoading
 			});
 		}
 	}
@@ -80,13 +88,14 @@
 			}
 		}
 
-		public componentDidMount()
+		public componentWillMount()
 		{
 			Utility.Responsive.Instance.initialize();
 			Utility.LinkHandler.Instance.initialize();
 			Utility.LinkHandler.Instance.stateChangeDistributor.subscribe(() => this.setCurrentPageState());
+			AuthContext.Instance.initialize();
 
-			App.Instance.appDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
+			App.Instance.loadingDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
 
 			this.setCurrentPageState();
 			this.registerHub();
@@ -133,13 +142,36 @@
 			}
 		}
 
+		private renderLoginButton()
+		{
+			const isAuthenticated = AuthContext.Instance.IsAuthenticated;
+			if (!isAuthenticated)
+			{
+				const redirect = `${location.origin}/Auth`;
+				const patreonLogin = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=${redirect}`;
+
+				return (
+					<a className={`login button`} href={patreonLogin}>
+						Log in with Patreon
+					</a>	
+				);
+			}
+
+			return (
+				<a href={`/Auth/Logout`}>Log Out</a>	
+			);
+		}
+
 		public render()
 		{
-			const patreonLogin = "https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=https://baseball.theater";
 
-			const renderablePage = this.state.currentPage && this.state.currentPage.page
-				? this.state.currentPage.page
-				: <div />;
+			let renderablePage: React.ReactElement<any> | null = null;
+
+			const currentPage = this.state.currentPage;
+			if (currentPage)
+			{
+				renderablePage = currentPage.page;
+			}
 
 			const loadingClass = this.state.isLoading ? "loading" : "";
 			const appModeClass = this.props.isAppMode ? "app-mode" : "";
@@ -148,17 +180,12 @@
 				<div className={`app-container ${appModeClass}`}>
 					<header>
 						<div className={`header-content`}>
-							<div className={`mobile-menu-trigger`}>
-								<i className={`material-icons`}>menu</i>
-							</div>
 							<a className={`logo-link`} href={`/`}> Baseball Theater
 							</a>
 
 							<div className={`right`}>
 								<SearchBox />
-								<a className={`login button`} href={patreonLogin}>
-									Log in with Patreon
-								</a>
+								{this.renderLoginButton()}
 							</div>
 						</div>
 					</header>

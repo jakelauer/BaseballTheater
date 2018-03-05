@@ -1,27 +1,8 @@
 ﻿namespace Theater
 {
-	var siteLoadingTimeout = 0;
 	export var isLoading = false;
 
-	export var currentPage: IPageRegister = null;
-
-	/*export var startLoading = () =>
-	{
-		clearTimeout(siteLoadingTimeout);
-		siteLoadingTimeout = setTimeout(() =>
-			{
-				$("#body-wrapper").addClass("loading");
-			},
-			100);
-		isLoading = true;
-	};
-
-	export var stopLoading = () =>
-	{
-		clearTimeout(siteLoadingTimeout);
-		$("#body-wrapper").removeClass("loading");
-		isLoading = false;
-	};*/
+	export var currentPage: IPageRegister | null = null;
 
 	export var trackEvent = (category: string, action: string, label?: string, value?: any, metricObject?: any) =>
 	{

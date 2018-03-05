@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CommandLine;
 using MlbDataMux;
@@ -18,23 +19,22 @@ namespace Populator
 
 	class Options
 	{
-		[Option('m', "mode", Required = true)]
+		[Option('m', "mode", Required = false, Default = 0)]
 		public Mode Mode { get; set; }
 
 		[Option('d', "date", Required = false, HelpText = "Must be in the format yyyyMMdd")]
 		public string DateString { get; set; }
 
-		[Option('l', "loop", Default = false, HelpText = "If true, the program will go to the next day after this day is over")]
+		[Option('l', "loop", HelpText = "If true, the program will go to the next day after this day is over", Default = true)]
 		public bool LoopDates { get; set; }
-
-		[Option('i', "interval", Default = 10, HelpText = "The number of seconds to wait between checking something")]
-		public int CheckIntervalSeconds { get; set; }
 	}
 
 	internal class Program
 	{
-		private static DateTime Date = new DateTime(2015, 7, 25);
+		private static DateTime _date;
+		private static List<DateTime> HandledDates = new List<DateTime>();
 		private static bool LoopDates = false;
+		private static bool loadNext = true;
 
 		private static void Main(string[] args)
 		{
@@ -49,11 +49,11 @@ namespace Populator
 
 			try
 			{
-				Date = DateTime.ParseExact(options.DateString, "yyyyMMdd", CultureInfo.CurrentCulture);
+				_date = DateTime.ParseExact(options.DateString, "yyyyMMdd", CultureInfo.CurrentCulture);
 			}
 			catch (Exception)
 			{
-				Date = DateTime.UtcNow.AddDays(-1);
+				_date = DateTime.UtcNow.AddDays(-2);
 			}
 
 			switch (options.Mode)
@@ -84,18 +84,32 @@ namespace Populator
 
 		private static void LoadHighlights()
 		{
-			var loadNext = true;	
-			while (loadNext)
+			var taskCount = 8;
+			var tasks = new List<Task>();
+			for (var i = 0; i < taskCount; i++)
 			{
-				var processGame = new LoadHighlights(Date);
-				processGame.Process();
-
-				Date = Date.AddDays(1);
-				if (Date > DateTime.UtcNow || !LoopDates)
-				{
-					loadNext = false;
-				}
+				var i1 = i;
+				var dateToHandle = _date.AddDays(i1 + 1);
+				var task = Task.Factory.StartNew(() => DoLoadHighlightsForDate(dateToHandle));
+				tasks.Add(task);
 			}
+
+			_date = _date.AddDays(taskCount);
+			
+			Task.WaitAll(tasks.ToArray());
+
+			loadNext = _date <= DateTime.UtcNow && LoopDates;
+
+			if (loadNext)
+			{
+				LoadHighlights();
+			}
+		}
+
+		private static void DoLoadHighlightsForDate(DateTime date)
+		{
+			var processGame = new LoadHighlights(date);
+			processGame.Process();
 		}
 
 		private static void HandleLiveGames()

@@ -29,10 +29,15 @@
 					return true;
 				}
 
-				e.preventDefault();
-
 				var $el = $(e.currentTarget);
 				var href = $el.attr("href");
+
+				if (href.startsWith("/Auth/"))
+				{
+					return true;
+				}
+
+				e.preventDefault();
 				LinkHandler.pushState(href);
 			});
 
@@ -44,7 +49,7 @@
 
 		public static pushState(href: string)
 		{
-			history.pushState(null, null, href);
+			history.pushState({}, "", href);
 			$(window).trigger("statechange");
 		}
 

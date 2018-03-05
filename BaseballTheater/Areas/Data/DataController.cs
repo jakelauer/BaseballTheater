@@ -1,11 +1,12 @@
 ﻿using BaseballTheater.Areas.Data.Models.News;
 using System.Web.Mvc;
 using System.Threading.Tasks;
+using BaseballTheater.Areas.Auth.Models;
 using MlbDataServer.Engine;
 
 namespace BaseballTheater.Areas.Data
 {
-	public class DataController : Controller
+	public class DataController : BTController
 	{
 		[OutputCache(Duration = 300)]
 		public ActionResult Patreon()

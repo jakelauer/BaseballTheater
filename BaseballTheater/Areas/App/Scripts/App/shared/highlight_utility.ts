@@ -2,7 +2,7 @@
 {
 	interface IHighlightDisplay
 	{
-		thumb: string;
+		thumb: string | null;
 		links: ILink[];
 		videoUrl: string;
 		teamId: string;
@@ -20,8 +20,14 @@
 	{
 		public static getDefaultThumb(highlight: IHighlight)
 		{
-			const thumbFinal = highlight.thumbnails.thumb[1].__text;
-			return thumbFinal.replace("http:", location.protocol);
+			if (highlight && highlight.thumbnails)
+			{
+				const thumbs = highlight.thumbnails.thumb ? highlight.thumbnails.thumb : ((highlight.thumbnails as any) as IThumb[]);
+				const thumbFinal = thumbs[1].__text || (thumbs[1] as any) as string;
+				return thumbFinal.replace("http:", location.protocol);
+			}
+
+			return null;
 		}
 
 		public static getDefaultUrl(highlight: IHighlight)
@@ -44,19 +50,22 @@
 		public static getLinks(highlight: IHighlight): ILink[]
 		{
 			const qkRegex = /(\d{4}K)/;
-			const links = highlight.url;
-			let q1200k: ILink = null;
+			const links = (highlight.url instanceof Array) ? highlight.url : [(highlight.url as any) as IUrl];
+			let q1200k: ILink | null = null;
 
 			// For some reason, Safari doesn't like this particular 
 			// variable when it's a 'let' when it's minified. 
 			// ReSharper disable once VariableCanBeMadeLet
 			for (var link of links)
 			{
-				const matches = link.__text.match(qkRegex);
+				const linkText = link.__text ? link.__text : (link as any) as string;
+
+				const matches = linkText.match(qkRegex);
+
 				if (matches && matches.length > 0)
 				{
 					q1200k = {
-						url: link.__text.replace("http:", location.protocol),
+						url: linkText.replace("http:", location.protocol),
 						label: "low"
 					};
 				}
