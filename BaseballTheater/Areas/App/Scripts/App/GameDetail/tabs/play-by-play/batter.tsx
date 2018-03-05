@@ -109,7 +109,7 @@
 
 			if (!batter)
 			{
-				return null;
+				return <div/>;
 			}
 				
 			let pitches: JSX.Element[] = [];

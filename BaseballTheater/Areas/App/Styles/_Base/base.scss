@@ -106,11 +106,14 @@ header
 
 		.logo-circle
 		{
-			width: 3rem;
-			height: 3rem;
+			width: 2.5rem;
+			height: 2.5rem;
 			display: inline-block;
 			margin-right: 1rem;
 			background: url('/images/logo-circle.png') center center no-repeat;
+			image-rendering: crisp-edges;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
 			background-size: cover;
 		}
 

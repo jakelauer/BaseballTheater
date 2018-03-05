@@ -53,7 +53,7 @@ namespace Populator
 			}
 			catch (Exception)
 			{
-				_date = DateTime.UtcNow.AddDays(-2);
+				_date = DateTime.UtcNow.AddDays(-4);
 			}
 
 			switch (options.Mode)
