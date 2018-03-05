@@ -93,6 +93,7 @@ header
 	.logo-link
 	{
 		position: relative;
+		display: flex;
 		text-align: center;
 		text-decoration: none;
 		color: $color-accent;
@@ -100,10 +101,27 @@ header
 		font-size: 26px;
 		font-weight: bold;
 		line-height: 50px;
+		white-space: nowrap;
+		align-items: center;
+
+		.logo-circle
+		{
+			width: 3rem;
+			height: 3rem;
+			display: inline-block;
+			margin-right: 1rem;
+			background: url('/images/logo-circle.png') center center no-repeat;
+			background-size: cover;
+		}
 
 		&:hover
 		{
 			text-decoration: none;
+		}
+
+		.r-mobile & .logo-text
+		{
+			display: none;
 		}
 	}
 
@@ -115,6 +133,15 @@ header
 		justify-self: flex-end;
 		justify-content: flex-end;
 		flex: auto;
+
+		.login
+		{
+			.r-mobile &
+			{
+				display: block;
+				flex: 0 0 auto;
+			}
+		}
 	}
 
 	.search
@@ -152,6 +179,22 @@ header
 				display: inline-block;
 				margin-left: 0.5rem;
 				transition: 0.25s;
+			}
+		}
+
+		.r-mobile &
+		{
+			max-width: none;
+			min-width: 0;
+
+			.label
+			{
+				margin-left: -20%;
+
+				span
+				{
+					display: none;
+				}
 			}
 		}
 
