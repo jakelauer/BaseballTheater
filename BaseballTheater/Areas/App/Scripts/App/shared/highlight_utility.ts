@@ -1,5 +1,12 @@
 ﻿namespace Theater
 {
+	enum HighlightThumbQuality
+	{
+		Low,
+		Med,
+		High,
+	}
+
 	export interface IHighlightDisplay
 	{
 		thumb: string | null;
@@ -18,12 +25,41 @@
 
 	export class HighlightUtility
 	{
-		public static getDefaultThumb(highlight: IHighlight)
+		private static getThumbQualities(highlight: IHighlight): { [key: number]: IThumb }
+		{
+			const thumbs = highlight.thumbnails.thumb ? highlight.thumbnails.thumb : ((highlight.thumbnails as any) as IThumb[]);
+
+			const low = thumbs.filter(a =>
+			{
+				const thumbString = a.__text || (a as any) as string;
+				return thumbString.endsWith("51.jpg");
+			})[0] || thumbs[1];
+
+			const med = thumbs.filter(a =>
+			{
+				const thumbString = a.__text || (a as any) as string;
+				return thumbString.endsWith("49.jpg");
+			})[0] || low;
+
+			const high = thumbs.filter(a =>
+			{
+				const thumbString = a.__text || (a as any) as string;
+				return thumbString.endsWith("48.jpg") || thumbString.endsWith("53.jpg");
+			})[0] || low;
+
+			return {
+				0: low, 
+				1: med, 
+				2: high
+			};
+		}
+
+		public static getDefaultThumb(highlight: IHighlight, quality: HighlightThumbQuality = HighlightThumbQuality.Med)
 		{
 			if (highlight && highlight.thumbnails)
 			{
-				const thumbs = highlight.thumbnails.thumb ? highlight.thumbnails.thumb : ((highlight.thumbnails as any) as IThumb[]);
-				const thumbFinal = thumbs[1].__text || (thumbs[1] as any) as string;
+				const thumb = this.getThumbQualities(highlight)[quality];
+				const thumbFinal = thumb.__text || (thumb as any) as string;
 				return thumbFinal.replace("http:", location.protocol);
 			}
 
@@ -100,7 +136,7 @@
 			return validLinks;
 		}
 
-		public static getDisplayProps(highlight: IHighlight, searchResult?: IHighlightSearchResult | null): IHighlightDisplay | null
+		public static getDisplayProps(highlight: IHighlight, hideScores: boolean, searchResult?: IHighlightSearchResult | null): IHighlightDisplay | null
 		{
 			let displayProps: IHighlightDisplay | null = {
 				thumb: "",
@@ -133,7 +169,7 @@
 					displayProps.overrideTitle = "Condensed Game";
 				}
 
-				displayProps.headline = highlight.headline;
+				displayProps.headline = (highlight.recap && hideScores) ? "Recap" : highlight.headline;
 			}
 			else
 			{

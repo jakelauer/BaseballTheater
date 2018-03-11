@@ -4,6 +4,7 @@
 	{
 		renderDate: boolean;
 		highlight: IHighlight | IHighlightSearchResult;
+		hideScores: boolean;
 	}
 
 	export class Highlight extends React.Component<IHighlightProps, any>
@@ -45,7 +46,7 @@
 
 		public render()
 		{
-			const displayProps = HighlightUtility.getDisplayProps(this.highlight, this.searchResult);
+			const displayProps = HighlightUtility.getDisplayProps(this.highlight, this.props.hideScores, this.searchResult);
 
 			if (!displayProps)
 			{

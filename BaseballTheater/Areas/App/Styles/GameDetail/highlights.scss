@@ -1,4 +1,5 @@
-﻿
+﻿@import "../_Base/_vars.scss";
+
 .highlight-game-summary
 {
 	display: flex;
@@ -48,7 +49,8 @@
 	{
 		position: relative;
 		width: 25%;
-		margin: 0.5rem auto 2.5rem;
+		max-width: 25%;
+		margin: 0.5rem 0 2.5rem;
 		padding: 0 10px;
 		font-size: 1rem;
 		flex: 1 0 auto;
@@ -82,8 +84,7 @@
 					height: 12rem;
 					margin-right: 1rem;
 					border-radius: 5px;
-					background-repeat: no-repeat;
-					background-position: center 25%;
+					background: $color-basic-accent no-repeat center 25%;
 					background-size: cover;
 				}
 

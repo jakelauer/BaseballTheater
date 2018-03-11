@@ -147,6 +147,21 @@ header
 		}
 	}
 
+	.settings-trigger
+	{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0 1rem;
+		cursor: default;
+		transition: 0.25s;
+
+		&:hover
+		{
+			transform: rotateZ(90deg);
+		}
+	}
+
 	.search
 	{
 		position: relative;
@@ -224,16 +239,44 @@ header
 	}
 }
 
+.settings-container
+{
+	display: table;
+
+	.setting
+	{
+		display: table-row;
+		border-bottom: 1px solid $color-basic-accent;
+		padding: 1rem;
+
+		.setting-info,
+		.setting-trigger
+		{
+			display: table-cell;
+			vertical-align: middle;
+			padding: 1rem;
+			border-bottom: 1px solid $color-basic-accent;
+		}
+
+		.setting-info .label
+		{
+			font-weight: bold;
+			padding-bottom: 0.5rem;
+		}
+	}
+}
+
 select
 {
 	height: 20px;
-	color: white;
+	color: $color-accent;
 	border: 1px solid rgba(0, 0, 0, 0.25);
-	background: $color-accent;
+	padding: 0.5rem;
+	box-sizing: content-box !important;
+	background: $color-basic-accent;
 
 	select option
 	{
-		background: rgb(206, 15, 15);
 	}
 }
 
@@ -296,10 +339,10 @@ footer
 		left: 10px;
 	}
 
-		.game-link:hover
-		{
-			background: rgba(206, 15, 15, 0.05);
-		}
+	.game-link:hover
+	{
+		background: rgba(206, 15, 15, 0.05);
+	}
 
 	table
 	{
@@ -332,21 +375,21 @@ footer
 			line-height: 29px;
 		}
 
-			.team-info-basic .team-name
-			{
-				display: inline-flex;
-				width: calc(100% - 50px);
-			}
+		.team-info-basic .team-name
+		{
+			display: inline-flex;
+			width: calc(100% - 50px);
+		}
 
-				.team-info-basic .team-name .team-name-wrap
-				{
-					flex: 1 0;
-				}
+		.team-info-basic .team-name .team-name-wrap
+		{
+			flex: 1 0;
+		}
 
-				.team-info-basic .team-name .probable-pitcher
-				{
-					font-weight: normal;
-				}
+		.team-info-basic .team-name .probable-pitcher
+		{
+			font-weight: normal;
+		}
 
 		.runs,
 		.hits,
@@ -390,10 +433,10 @@ footer
 		color: black;
 	}
 
-		a:hover
-		{
-			text-decoration: none;
-		}
+	a:hover
+	{
+		text-decoration: none;
+	}
 
 	p
 	{
@@ -418,11 +461,11 @@ footer
 		background: $color-basic-background;
 	}
 
-		.bar .width
-		{
-			height: 100%;
-			background: #e6461a;
-		}
+	.bar .width
+	{
+		height: 100%;
+		background: #e6461a;
+	}
 }
 
 @media all and (max-width: 800px)
@@ -435,18 +478,18 @@ footer
 		flex-wrap: wrap;
 	}
 
-		.settings .day-nav
-		{
-			width: 100%;
-			-ms-flex: none;
-			-webkit-flex: none;
-			flex: none;
-		}
+	.settings .day-nav
+	{
+		width: 100%;
+		-ms-flex: none;
+		-webkit-flex: none;
+		flex: none;
+	}
 
-		.settings .tools
-		{
-			width: 100%;
-		}
+	.settings .tools
+	{
+		width: 100%;
+	}
 
 	.backers-wrapper h1
 	{
@@ -484,7 +527,8 @@ footer
 	//padding-left: 50px;
 	flex: 1 0;
 
-	&.small{
+	&.small
+	{
 		font-size: 1.5rem;
 	}
 
@@ -501,10 +545,12 @@ footer
 	}
 }
 
-.mobile-only{
+.mobile-only
+{
 	display: none;
 
-	.r-mobile &{
+	.r-mobile &
+	{
 		display: block;
 	}
 }
@@ -524,7 +570,7 @@ footer
 	border: 0;
 	border-radius: 2px;
 	background: $color-accent;
-	box-shadow: 0 4px 4px -3px rgba(0,0,0,0.2);
+	box-shadow: 0 4px 4px -3px rgba(0, 0, 0, 0.2);
 	font-size: 1rem;
 	font-weight: 600;
 	line-height: 1.2rem;
@@ -535,6 +581,13 @@ footer
 		background: darken($color-accent, 10%);
 		text-decoration: none;
 	}
+}
+
+.no-data
+{
+	font-size: 1.5rem;
+	text-align: center;
+	padding: 2rem;
 }
 
 .r-mobile .app-mode

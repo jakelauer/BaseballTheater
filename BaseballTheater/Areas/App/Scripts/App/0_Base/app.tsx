@@ -10,6 +10,8 @@
 		isLoading: boolean;
 		pages: IPageRegister[];
 		currentPage: IPageRegister | null;
+		isSettingsModalOpen: boolean;
+		settings: ISettings;
 	}
 
 	interface ILoadingDistributor
@@ -28,6 +30,7 @@
 
 		public loadingDistributor = new Utility.Distributor<ILoadingDistributor>();
 		public gameUpdateDistributor = new Utility.Distributor<IGameUpdateDistributorPayload>();
+		public settingsDistributor = new Utility.Distributor<ISettings>();
 
 		private pages: IPageRegister[] = [];
 
@@ -58,7 +61,7 @@
 			this.registerHub();
 
 			ReactDOM.render(
-				<AppContainer isAppMode={this.isAppMode} />,
+				<AppContainer isAppMode={this.isAppMode}/>,
 				document.getElementById("app-container")
 			);
 		}
@@ -110,7 +113,12 @@
 			this.state = {
 				isLoading: false,
 				pages: [],
-				currentPage: null
+				currentPage: null,
+				isSettingsModalOpen: false,
+				settings: {
+					favoriteTeam: Cookies.get("favoriteteam"),
+					hideScores: Cookies.get("hidescores") === true
+				}
 			}
 		}
 
@@ -122,6 +130,9 @@
 			AuthContext.Instance.initialize();
 
 			App.Instance.loadingDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
+			App.Instance.settingsDistributor.subscribe(settings => this.setState({
+				settings
+			}));
 
 			this.setCurrentPageState();
 		}
@@ -151,6 +162,8 @@
 					});
 				}
 			}
+			
+			window.scrollTo(0, 0);
 		}
 
 		private renderLoginButton()
@@ -164,13 +177,20 @@
 				return (
 					<a className={`login button`} href={patreonLogin}>
 						Patreon Login
-					</a>	
+					</a>
 				);
 			}
 
 			return (
-				<a href={`/Auth/Logout`}>Log Out</a>	
+				<a href={`/Auth/Logout`}>Log Out</a>
 			);
+		}
+
+		private toggleSettingsModal(isSettingsModalOpen: boolean)
+		{
+			this.setState({
+				isSettingsModalOpen
+			});
 		}
 
 		public render()
@@ -181,7 +201,9 @@
 			const currentPage = this.state.currentPage;
 			if (currentPage)
 			{
-				renderablePage = currentPage.page;
+				renderablePage = currentPage.page({
+					settings: this.state.settings
+				});
 			}
 
 			const loadingClass = this.state.isLoading ? "loading" : "";
@@ -191,25 +213,33 @@
 				<div className={`app-container ${appModeClass}`}>
 					<header>
 						<div className={`header-content`}>
-							<a className={`logo-link`} href={`/`}> 
-								<span className={`logo-circle`}></span>
+							<a className={`logo-link`} href={`/`}>
+								<span className={`logo-circle`}/>
 								<span className={`logo-text`}>Baseball Theater</span>
 							</a>
 
 							<div className={`right`}>
-								<SearchBox />
-								<Settings/>
+								<SearchBox/>
+								<SettingsButton onSettingsClicked={() => this.toggleSettingsModal(true)}/>
 								{this.renderLoginButton()}
 							</div>
 						</div>
 					</header>
 					<div id="body-wrapper" className={loadingClass}>
 						<div className={`loading-spinner`}>
-							<img src={`/images/ring.svg`} />
+							<img src={`/images/ring.svg`}/>
 						</div>
 						<div id="body-content">
 							{renderablePage}
 						</div>
+
+						<Modal id={`settings`}
+							   isOpen={this.state.isSettingsModalOpen}
+							   onClose={() => this.toggleSettingsModal(false)}>
+
+							<SettingsContainer settings={this.state.settings}/>
+
+						</Modal>
 					</div>
 				</div>
 			);

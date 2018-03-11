@@ -3,6 +3,7 @@
 	interface GameSummaryProps
 	{
 		game: GameSummaryData;
+		hideScores: boolean;
 	}
 
 	enum HomeAway
@@ -69,7 +70,9 @@
 					{game.linescore &&
 						<div className={`score`}>
 							{this.linescoreItem(linescoreRuns)}
-							<span className={`winner-indicator ${winnerClass}`}><i className={`material-icons`}>chevron_left</i></span>
+							<span className={`winner-indicator ${winnerClass}`}>
+								<i className={`material-icons`}>chevron_left</i>
+							</span>
 						</div>
 					}
 				</div>
@@ -86,7 +89,9 @@
 
 		private linescoreItem(input: string): string
 		{
-			return input;
+			return this.props.hideScores 
+				? "▨" 
+				: input;
 		}
 
 		private getCurrentInning(): string
@@ -97,7 +102,7 @@
 				return game.status.note;
 			}*/
 
-			if (game.status.ind === "F" || game.status.ind === "FT")
+			if (game.isFinal)
 			{
 				const tieString = game.status.ind === "FT" ? " (Tie)" : "";
 				return game.status.status + tieString;
@@ -117,7 +122,7 @@
 		{
 			const game = this.props.game;
 
-			if (game.linescore && game.linescore.r)
+			if (game.linescore && game.linescore.r && !this.props.hideScores)
 			{
 				const away = parseInt(game.linescore.r.away);
 				const home = parseInt(game.linescore.r.home);
