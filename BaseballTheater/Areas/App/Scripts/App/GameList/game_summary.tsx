@@ -23,11 +23,13 @@
 		{
 			const game = this.props.game;
 
-			const gameStatusClass = game.status.ind === "F" || game.status.ind === "O" ? "final" : "";
+			const gameStatusClass = game.isFinal ? "final" : "";
 
 			return (
 				<div className={`game-summary-simple ${gameStatusClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
-					<a href={this.getGameLink()} className={`game-link`}></a>
+					<a href={this.getGameLink()} className={`game-link`}>
+						<i className="material-icons">keyboard_arrow_right</i>
+					</a>
 
 					{this.renderTeamRow(HomeAway.Away)}
 
@@ -90,10 +92,15 @@
 		private getCurrentInning(): string
 		{
 			const game = this.props.game;
+			
+		/*	if (game.status.note){
+				return game.status.note;
+			}*/
 
-			if (game.status.ind === "F")
+			if (game.status.ind === "F" || game.status.ind === "FT")
 			{
-				return game.status.status;
+				const tieString = game.status.ind === "FT" ? " (Tie)" : "";
+				return game.status.status + tieString;
 			}
 
 			if (game.status.reason)
@@ -112,9 +119,14 @@
 
 			if (game.linescore && game.linescore.r)
 			{
-				return parseInt(game.linescore.r.away) > parseInt(game.linescore.r.home)
-					       ? HomeAway.Away
-					       : HomeAway.Home;
+				const away = parseInt(game.linescore.r.away);
+				const home = parseInt(game.linescore.r.home);
+				if (away !== home)
+				{
+					return parseInt(game.linescore.r.away) > parseInt(game.linescore.r.home)
+						? HomeAway.Away
+						: HomeAway.Home;
+				}
 			}
 
 			return HomeAway.None;

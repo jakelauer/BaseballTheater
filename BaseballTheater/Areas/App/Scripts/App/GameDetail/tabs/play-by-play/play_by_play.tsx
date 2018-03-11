@@ -12,7 +12,7 @@
 
 	export class PlayByPlay extends React.Component<IPlayByPlayProps, any>
 	{
-		private renderHalfInning(halfInning: IInningHalf, halfInningType: HalfInningType, inningIndex: number)
+		private renderHalfInning(halfInning: IInningHalf, halfInningType: HalfInningType, inningNum: number)
 		{
 			const gameSummary = this.props.gameSummary;
 			const players = this.props.allPlayers;
@@ -20,13 +20,23 @@
 			if (gameSummary && players && halfInning && halfInning.atbat)
 			{
 				const isSpringTraining = gameSummary.isSpringTraining;
+				
+				const atBat = halfInning.atbat instanceof Array ? halfInning.atbat : [(halfInning.atbat as any) as IAtBat];
 
 				let oldPitcherData: IPitcher | null = null;
-				const batters = halfInning.atbat.map((batter, i) =>
+				const batters = atBat.reverse().map((batter, i) =>
 				{
 					const newPitcherData = players.get(batter.pitcher) as IPitcher;
 
-					const rendered = <Batter highlights={this.props.highlights} isSpringTraining={isSpringTraining} batter={batter} batterIndex={i} oldPitcher={oldPitcherData} newPitcher={newPitcherData} />;
+					const rendered =
+						<Batter
+							key={i}
+							highlights={this.props.highlights}
+							isSpringTraining={isSpringTraining}
+							batter={batter}
+							batterIndex={i}
+							oldPitcher={oldPitcherData}
+							newPitcher={newPitcherData}/>;
 
 					oldPitcherData = players.get(batter.pitcher) as IPitcher;
 
@@ -34,7 +44,7 @@
 				});
 
 				const inningHalfLabel = halfInningType === "top" ? "Top" : "Bottom";
-				const inningLabel = `${inningHalfLabel} ${inningIndex + 1}`;
+				const inningLabel = `${inningHalfLabel} ${inningNum}`;
 
 				return (
 					<div className={`half-inning ${halfInningType}`}>
@@ -49,12 +59,14 @@
 			return (<div/>);
 		}
 
-		private renderInning(inning: IInning, inningIndex: number)
+		private renderInning(inning: IInning)
 		{
+			const inningNum = parseInt(inning.num);
+			
 			return (
-				<div className={`inning`} key={inningIndex}>
-					{this.renderHalfInning(inning.top, "top", inningIndex)}
-					{this.renderHalfInning(inning.bottom, "bottom", inningIndex)}
+				<div className={`inning`} key={inningNum}>
+					{this.renderHalfInning(inning.bottom, "bottom", inningNum)}
+					{this.renderHalfInning(inning.top, "top", inningNum)}
 				</div>
 			);
 		}
@@ -74,9 +86,11 @@
 				&& inningsData.game.inning
 				&& inningsData.game.inning.length > 0)
 			{
-				inningsRendered = inningsData.game.inning.map((inning, i) =>
+				const inningsSorted = inningsData.game.inning.reverse();
+				
+				inningsRendered = inningsSorted.map((inning, i) =>
 				{
-					return this.renderInning(inning, i);
+					return this.renderInning(inning);
 				});
 			}
 

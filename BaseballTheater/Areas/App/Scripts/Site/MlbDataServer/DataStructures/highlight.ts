@@ -21,10 +21,18 @@ namespace Theater
 
 		isPlaying: boolean;
 	}
-	
+
+	export interface IHighlightThumbnails
+	{
+		High: string;
+		Med: string;
+		Low: string;
+	}
+
 	export interface IHighlightSearchResult
 	{
 		Highlight: IHighlight;
+		Thumbnails: IHighlightThumbnails;
 		GameId: number;
 	}
 
@@ -45,8 +53,9 @@ namespace Theater
 		__text: string;
 	}
 
-	export interface IKeywords
+	interface IKeywords
 	{
 		keyword: Keyword[];
 	}
 }
+

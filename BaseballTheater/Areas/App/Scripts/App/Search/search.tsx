@@ -93,7 +93,7 @@
 
 		public render()
 		{
-			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight key={searchResult.Highlight.id} renderDate={true} highlight={searchResult.Highlight} />);
+			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight key={searchResult.Highlight.id} renderDate={true} highlight={searchResult} />);
 
 			const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
 				&& this.state.highlights.length > 0

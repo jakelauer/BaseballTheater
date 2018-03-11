@@ -68,11 +68,23 @@ namespace MlbDataMux
 
 				foreach (var highlight in highlights.Highlights)
 				{
+					highlight.url = highlight.url != null && highlight.url.Length > 0
+						? highlight.url.Where(a => a.Contains(".mp4")).ToArray()
+						: new string[0];
+
+					if (highlight.url.Length == 0)
+					{
+						continue;
+					}
+
 					var newLocalHighlight = new HighlightSearchResult
 					{
 						GameId = gameSummary.GamePk,
-						Highlight = highlight
+						Highlight = highlight,
+						Thumbnails = HighlightThumbnails.Make(highlight)
 					};
+
+					highlight.thumbnails = new string[0];
 
 					tempList.Add(newLocalHighlight);
 				}
@@ -80,8 +92,10 @@ namespace MlbDataMux
 
 			this.TempList = tempList;
 
-			this.JsonSaveAll();
-			//this.SqlInsertAll();
+			if (this.TempList.Any())
+			{
+				this.JsonSaveAll();
+			}
 		}
 
 		private void JsonSaveAll()

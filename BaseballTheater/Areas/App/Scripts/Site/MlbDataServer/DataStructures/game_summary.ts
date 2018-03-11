@@ -6,6 +6,19 @@ namespace Theater
 		media: IHighlight[];
 	}
 
+	interface IProbablePitcher
+	{
+		id: number;
+		first_name: string;
+		last_name: string;
+		name_display_roster: string;
+		number: number;
+		throwinghand: string;
+		wins: number;
+		losses: number;
+		era: number;
+	}
+	
 	export interface IGameSummaryData
 	{
 		id: string;
@@ -79,6 +92,18 @@ namespace Theater
 		public away_probable_pitcher: IProbablePitcher;
 		public topPlayHighlights: IHighlight[];
 		public highlights: HighlightContainer;
+		
+		public get isFinal(){
+			if (this.status && this.status.status)
+			{
+				return this.status.ind === "F" 
+					|| this.status.ind === "FT" 
+					|| this.status.ind === "CR" 
+					|| this.status.ind === "C"
+					|| this.status.ind === "O";
+			}
+			return true;
+		}
 
 		public get home_record()
 		{
@@ -97,7 +122,21 @@ namespace Theater
 
 		constructor(data: IGameSummaryData)
 		{
-			const input = data.time_date;
+			let input = data.time_date;
+			if (!input)
+			{
+				const anydata = data as any;
+				try
+				{
+					input = anydata.original_date + " " + anydata.time;
+				}
+				catch (e)
+				{
+					console.error(e);
+				}
+			}
+
+
 			const fmt = "YYYY/MM/DD hh:mm";
 			const zone = "America/New_York";
 

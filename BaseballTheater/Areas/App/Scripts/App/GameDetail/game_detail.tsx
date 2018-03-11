@@ -20,6 +20,7 @@
 	{
 		private readonly date: moment.Moment;
 		private readonly gamePk: string;
+		private liveSubscription: Theater.Utility.Subscription<IGameUpdateDistributorPayload>;
 
 		constructor(props: any)
 		{
@@ -30,8 +31,8 @@
 
 			const hashState = Utility.LinkHandler.parseHash();
 			let currentTab = ("tab" in hashState)
-				                 ? parseInt(hashState["tab"]) as Tabs
-				                 : Tabs.Highlights;
+				? parseInt(hashState["tab"]) as Tabs
+				: Tabs.Highlights;
 
 			if (App.Instance.isAppMode)
 			{
@@ -50,6 +51,12 @@
 		public componentDidMount()
 		{
 			this.getData();
+			this.subscribeToLiveData();
+		}
+
+		public componentWillUnmount()
+		{
+			this.unsubscribeToLiveData();
 		}
 
 		private showNoHighlights()
@@ -103,6 +110,26 @@
 			});
 		}
 
+		private subscribeToLiveData()
+		{
+			this.liveSubscription = App.Instance.gameUpdateDistributor.subscribe(payload =>
+			{
+				if (payload.gameIds.indexOf(parseInt(this.gamePk)) > -1)
+				{
+					console.log("Live update triggered.");
+					this.getData();
+				}
+			})
+		}
+
+		private unsubscribeToLiveData()
+		{
+			if (this.liveSubscription)
+			{
+				App.Instance.gameUpdateDistributor.unsubscribe(this.liveSubscription);
+			}
+		}
+
 		private getCurrentGame(): Promise<GameSummaryData>
 		{
 			return new Promise((resolve, reject) =>
@@ -136,8 +163,18 @@
 			{
 				const gameSummary = await this.getCurrentGame();
 				const boxScore = await this.getBoxScore(gameSummary);
-				const highlightsCollection = await this.getHighlights(gameSummary);
-				const playByPlay = await this.getPlayByPlay(gameSummary, boxScore);
+				const highlightsCollectionPromise = this.getHighlights(gameSummary);
+				const playByPlayPromise = this.getPlayByPlay(gameSummary, boxScore);
+				
+				const both = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
+				const highlightsCollection = (!(both[0] instanceof Error)) 
+					? both[0] as IHighlightsCollection 
+					: null;
+
+				const playByPlay = (!(both[1] instanceof Error))
+					? both[1] as Innings
+					: null;
+				
 
 				this.setState({
 					gameSummary,
@@ -169,26 +206,57 @@
 			switch (currentTab)
 			{
 				case Tabs.Highlights:
-					renderables = [
-						<Highlights highlightsCollection={highlightsCollection} key={0}/>
-					];
+					if (!highlightsCollection
+						|| !highlightsCollection.highlights
+						|| !highlightsCollection.highlights.media
+						|| highlightsCollection.highlights.media.length === 0)
+					{
+						renderables = [
+							<div key={0} className="no-data">No box score data is available for this game.</div>
+						];
+					}
+					else
+					{
+						renderables = [
+							<Highlights highlightsCollection={highlightsCollection} key={0}/>
+						];
+
+					}
 					break;
 				case Tabs.BoxScore:
-					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
-						<BoxScore boxScoreData={boxScoreData} key={1}/>
-					];
+					if (!boxScoreData)
+					{
+						renderables = [
+							<div key={0} className="no-data">No box score data is available for this game.</div>
+						];
+					}
+					else
+					{
+						renderables = [
+							<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+							<BoxScore boxScoreData={boxScoreData} key={1}/>
+						];
+					}
 					break;
 				case Tabs.PlayByPlay:
-					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
-						<PlayByPlay
-							key={1}
-							gameSummary={gameSummary}
-							inningsData={playByPlayData}
-							highlights={highlightsCollection}
-							allPlayers={allPlayers}/>
-					];
+					if (!boxScoreData || !gameSummary || !playByPlayData)
+					{
+						renderables = [
+							<div key={0} className="no-data">No play-by-play data is available for this game.</div>
+						];
+					}
+					else
+					{
+						renderables = [
+							<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+							<PlayByPlay
+								key={1}
+								gameSummary={gameSummary}
+								inningsData={playByPlayData}
+								highlights={highlightsCollection}
+								allPlayers={allPlayers}/>
+						];
+					}
 					break;
 			}
 

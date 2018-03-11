@@ -56,24 +56,6 @@ namespace MlbDataServer.Contracts
 
 		[XmlAttribute("recap")]
 		public bool recap { get; set; }
-
-		public string GetGameDetailDirectory
-		{
-			get
-			{
-				var keyword = this.keywords.FirstOrDefault(a => a.Type == "game_events_location_plist");
-				if (keyword != null)
-				{
-					var gameEventsLocationPlist = keyword.Value;
-					var splitDirectory = gameEventsLocationPlist.Split('/');
-					splitDirectory = splitDirectory.Take(splitDirectory.Length - 1).ToArray();
-					var rootDirectory = string.Join("/", splitDirectory);
-					return rootDirectory;
-				}
-
-				return null;
-			}
-		}
 	}
 
 }
