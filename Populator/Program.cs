@@ -95,8 +95,12 @@ namespace Populator
 			}
 
 			_date = _date.AddDays(taskCount);
-			
-			Task.WaitAll(tasks.ToArray());
+
+			var allTasks = tasks.ToArray();
+			if (allTasks != null && allTasks.All(a => a != null))
+			{
+				Task.WaitAll(tasks.ToArray());
+			}
 
 			loadNext = _date <= DateTime.UtcNow && LoopDates;
 

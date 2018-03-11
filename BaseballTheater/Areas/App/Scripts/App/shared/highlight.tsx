@@ -13,10 +13,15 @@
 			return (this.props.highlight as IHighlightSearchResult).Highlight || (this.props.highlight as IHighlight);
 		}
 
-		private renderTitle()
+		private get searchResult() : IHighlightSearchResult | null
 		{
-			const displayProps = HighlightUtility.getDisplayProps(this.highlight);
+			const asSearchResult = (this.props.highlight as IHighlightSearchResult);
+			const isSearchResult = !!asSearchResult.Highlight;
+			return isSearchResult ? asSearchResult : null;
+		}
 
+		private renderTitle(displayProps: IHighlightDisplay | null)
+		{
 			if (!displayProps)
 			{
 				return <div/>;
@@ -40,7 +45,7 @@
 
 		public render()
 		{
-			const displayProps = HighlightUtility.getDisplayProps(this.highlight);
+			const displayProps = HighlightUtility.getDisplayProps(this.highlight, this.searchResult);
 
 			if (!displayProps)
 			{
@@ -51,7 +56,7 @@
 
 			const links = displayProps.links.map((link, i) =>
 			{
-				return <a href={link.url} key={i}>{link.label}</a>;
+				return <a href={link.url} target="_blank" key={i}>{link.label}</a>;
 			});
 
 			const dateString = moment(this.highlight.date).format("MMM D, YYYY");
@@ -68,7 +73,7 @@
 							<div className={`thumb`} style={thumbStyle}>
 
 							</div>
-							<h2>{this.renderTitle()}</h2>
+							<h2>{this.renderTitle(displayProps)}</h2>
 						</a>
 					</div>
 					{dateRendered}

@@ -111,31 +111,62 @@
 		{
 			games.sort((a, b) =>
 			{
-				var aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
-				var bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
-				var favoriteReturn = aIsFavorite - bIsFavorite;
+				const aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
+				const bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
+				const favoriteReturn = aIsFavorite - bIsFavorite;
 
-				var startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
+				const startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
 
-				return favoriteReturn || startTimeReturn;
+				const finalReturn = a.isFinal ? 1 : -1;
+
+				return favoriteReturn || finalReturn || startTimeReturn;
 			});
 		}
 
 		public render(): React.ReactNode
 		{
-			const games = this.state.gameSummaries.map((gameSummary, i) =>
+			const gamesInProgress = this.state.gameSummaries.filter(a => !a.isFinal);
+			const gamesFinal = this.state.gameSummaries.filter(a => a.isFinal);
+
+			const gamesInProgressRendered = gamesInProgress.map((gameSummary, i) =>
 			{
 				return <GameSummary game={gameSummary} key={i}/>;
 			});
+
+			const finalGamesRendered = gamesFinal.map((gameSummary, i) =>
+			{
+				const key = gamesInProgress.length + i;
+				return <GameSummary game={gameSummary} key={key}/>;
+			});
+
+			const noGames = this.state.gameSummaries.length === 0
+				? <div className={`no-data`}>No games found for this date.</div>
+				: null;
+
+			const someFinalSomeNot = gamesInProgress.length > 0 && gamesFinal.length > 0;
 
 			return (
 				<div className={`game-list-container`}>
 					<div className={`settings`}>
 						<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
 					</div>
+
+					{someFinalSomeNot &&
+					<h2>In Progress</h2>
+					}
+
 					<div className={`game-list`}>
-						{games}
+						{gamesInProgressRendered}
 					</div>
+
+					{someFinalSomeNot &&
+					<h2>Final</h2>
+					}
+					<div className={`game-list`}>
+						{finalGamesRendered}
+					</div>
+
+					{noGames}
 				</div>
 			);
 		}
@@ -144,7 +175,7 @@
 	App.Instance.addPage({
 		matchingUrl:
 			/^\/?([0-9]{8})?(\?.*)?$/i, //match URLs of nothing, or just a /, or a / then 8 digits and an optional querystring
-		page: <GameList />,
+		page: <GameList/>,
 		name: "games"
 	});
 }

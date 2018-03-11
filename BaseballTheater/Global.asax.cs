@@ -16,6 +16,8 @@ namespace BaseballTheater
 	{
 		protected void Application_Start()
 		{
+			Thread.Sleep(10000);
+
 			ViewEngines.Engines.Clear();
 			var viewEngine = new CustomViewEngine();
 			ViewEngines.Engines.Add(viewEngine);
@@ -30,6 +32,7 @@ namespace BaseballTheater
 			JsEngineSwitcher.Instance.DefaultEngineName = v8Ef.EngineName;
 
 			HighlightDatabase.Initialize();
+			log4net.Config.XmlConfigurator.Configure();
 		}
 
 		public override string GetVaryByCustomString(HttpContext context, string arg) 

@@ -1,6 +1,6 @@
 ﻿namespace Theater
 {
-	interface IHighlightDisplay
+	export interface IHighlightDisplay
 	{
 		thumb: string | null;
 		links: ILink[];
@@ -49,9 +49,11 @@
 
 		public static getLinks(highlight: IHighlight): ILink[]
 		{
-			const qkRegex = /(\d{4}K)/;
+			const qkRegex = /(\d{4}k?\.)/i;
 			const links = (highlight.url instanceof Array) ? highlight.url : [(highlight.url as any) as IUrl];
 			let q1200k: ILink | null = null;
+			let hasK = false;
+			const dateBefore2013 = moment(highlight.date).year() < 2013;
 
 			// For some reason, Safari doesn't like this particular 
 			// variable when it's a 'let' when it's minified. 
@@ -64,6 +66,8 @@
 
 				if (matches && matches.length > 0)
 				{
+					hasK = !!matches[0].match(/k/i);
+
 					q1200k = {
 						url: linkText.replace("http:", location.protocol),
 						label: "low"
@@ -75,23 +79,28 @@
 
 			if (q1200k !== null)
 			{
-				const q1800K = {
-					url: q1200k.url.replace(qkRegex, "1800K").replace("http:", location.protocol),
-					label: "mid"
-				};
+				validLinks.push(q1200k);
 
-				const q2500K = {
-					url: q1200k.url.replace(qkRegex, "2500K").replace("http:", location.protocol),
-					label: "high"
-				};
+				if (hasK && !dateBefore2013)
+				{
+					const q1800K = {
+						url: q1200k.url.replace(qkRegex, `1800K.`).replace("http:", location.protocol),
+						label: "mid"
+					};
 
-				validLinks.push(q1200k, q1800K, q2500K);
+					const q2500K = {
+						url: q1200k.url.replace(qkRegex, `2500K.`).replace("http:", location.protocol),
+						label: "high"
+					};
+
+					validLinks.push(q1800K, q2500K);
+				}
 			}
 
 			return validLinks;
 		}
 
-		public static getDisplayProps(highlight: IHighlight): IHighlightDisplay | null
+		public static getDisplayProps(highlight: IHighlight, searchResult?: IHighlightSearchResult | null): IHighlightDisplay | null
 		{
 			let displayProps: IHighlightDisplay | null = {
 				thumb: "",
@@ -102,9 +111,14 @@
 				teamId: ""
 			}
 
+			if (searchResult)
+			{
+				displayProps.thumb = searchResult.Thumbnails.High;
+			}
+
 			if (highlight)
 			{
-				displayProps.thumb = HighlightUtility.getDefaultThumb(highlight);
+				displayProps.thumb = displayProps.thumb || HighlightUtility.getDefaultThumb(highlight);
 				displayProps.links = HighlightUtility.getLinks(highlight);
 				displayProps.videoUrl = HighlightUtility.getDefaultUrl(highlight);
 				displayProps.teamId = highlight.team_id;

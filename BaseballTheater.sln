@@ -11,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Populator", "Populator\Popu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlbDataMux", "MlbDataMux\MlbDataMux.csproj", "{56889FB2-3890-4A88-A415-9CE40DC053CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{43C780E2-4E6E-4247-B03A-4796405B87CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{43C780E2-4E6E-4247-B03A-4796405B87CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballTheaterCore", "BaseballTheaterCore\BaseballTheaterCore.csproj", "{7C065600-9791-4756-B5B7-87758D3914AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{43C780E2-4E6E-4247-B03A-4796405B87CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43C780E2-4E6E-4247-B03A-4796405B87CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43C780E2-4E6E-4247-B03A-4796405B87CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C065600-9791-4756-B5B7-87758D3914AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C065600-9791-4756-B5B7-87758D3914AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C065600-9791-4756-B5B7-87758D3914AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C065600-9791-4756-B5B7-87758D3914AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,11 +6,13 @@ using Microsoft.Owin;
 using MlbDataMux;
 using Owin;
 
-[assembly: OwinStartup(typeof(BaseballTheater.Startup))]
+[assembly: OwinStartup(typeof(BaseballTheater.Startup), "Configuration")]
 namespace BaseballTheater
 {
 	public class Startup
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public void Configuration(IAppBuilder app)
 		{
 			app.MapSignalR();
@@ -20,10 +22,13 @@ namespace BaseballTheater
 
 		private void DoGameUpdates()
 		{
-			var handleLiveGames = new HandleLiveGames(10, (games) => { LiveGameHub.ClientsInstance.All.receive(games); });
-			handleLiveGames.Start();
+			log.Info("Running DoGameUpdates");
 
-			LiveGameHub.ClientsInstance.All.receive("lol");
+			var handleLiveGames = new HandleLiveGames(10, (games) =>
+			{
+				LiveGameHub.ClientsInstance.All.receive(games); 
+			});
+			handleLiveGames.Start();
 		}
 	}
 }

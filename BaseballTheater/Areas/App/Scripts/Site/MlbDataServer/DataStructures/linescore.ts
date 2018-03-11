@@ -1,6 +1,5 @@
 ﻿namespace Theater
 {
-
 	export interface ISummaryLinescore
 	{
 		inning_line_score: ILinescoreInning[];
@@ -160,6 +159,7 @@
 		inning: string;
 		top_inning: string;
 		inning_state: string;
+		note: string;
 		reason: string;
 	}
 

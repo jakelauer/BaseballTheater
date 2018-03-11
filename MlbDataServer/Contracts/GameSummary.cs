@@ -28,13 +28,18 @@ namespace MlbDataServer.Contracts
 		[XmlAttribute("time_zone")]
 		public string TimeZone { get; set; }
 
-		public DateTime DateObj
+		public DateTime DateObjUtc
 		{
 			get
 			{
 				try
 				{
-					return Date != null ? DateTime.Parse(Date, CultureInfo.InvariantCulture) : DateTime.UtcNow;
+					var dateRaw = Date != null ? DateTime.Parse(Date, CultureInfo.InvariantCulture) : DateTime.UtcNow;
+					var hoursToAdd = dateRaw.Hour >= 12 ? 0 : 12;
+					dateRaw = dateRaw.AddHours(hoursToAdd);
+					var tz = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+					var date = dateRaw.Subtract(tz.BaseUtcOffset);
+					return date;
 				}
 				catch
 				{

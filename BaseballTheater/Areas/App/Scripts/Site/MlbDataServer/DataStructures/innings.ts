@@ -106,11 +106,14 @@
 
 		constructor(data: IInningsContainer, private readonly boxScore: BoxScoreData)
 		{
-			this.game = data.game;
+			if (data && boxScore)
+			{
+				this.game = data.game;
 
-			this.allPlayersInGame = boxScore.allPlayers;
+				this.allPlayersInGame = boxScore.allPlayers;
 
-			this.process();
+				this.process();
+			}
 		}
 
 		private process()

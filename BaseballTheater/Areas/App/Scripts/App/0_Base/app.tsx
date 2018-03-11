@@ -17,11 +17,17 @@
 		isLoading: boolean;
 	}
 
+	export interface IGameUpdateDistributorPayload
+	{
+		gameIds: number[]
+	}
+
 	export class App
 	{
 		public static Instance = new App();
 
 		public loadingDistributor = new Utility.Distributor<ILoadingDistributor>();
+		public gameUpdateDistributor = new Utility.Distributor<IGameUpdateDistributorPayload>();
 
 		private pages: IPageRegister[] = [];
 
@@ -49,10 +55,30 @@
 
 		public initialize()
 		{
+			this.registerHub();
+
 			ReactDOM.render(
 				<AppContainer isAppMode={this.isAppMode} />,
 				document.getElementById("app-container")
 			);
+		}
+
+		private registerHub()
+		{
+			const chat = $.connection.liveGameHub;
+
+			chat.client.receive = (gameIds: number[]) =>
+			{
+				console.log("Received gameIds update", gameIds);
+
+				this.gameUpdateDistributor.distribute({
+					gameIds
+				});
+			};
+
+			$.connection.hub.start().done(() =>
+			{
+			});
 		}
 
 		public static startLoading()
@@ -98,7 +124,6 @@
 			App.Instance.loadingDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
 
 			this.setCurrentPageState();
-			this.registerHub();
 		}
 
 		public addPage(params: IPageRegister)
@@ -110,20 +135,6 @@
 		{
 			this.setState({
 				isLoading
-			});
-		}
-
-		private registerHub()
-		{
-			const chat = $.connection.liveGameHub;
-
-			chat.client.receive = (message) =>
-			{
-				console.log("received", message);
-			};
-
-			$.connection.hub.start().done(() =>
-			{
 			});
 		}
 
@@ -187,6 +198,7 @@
 
 							<div className={`right`}>
 								<SearchBox />
+								<Settings/>
 								{this.renderLoginButton()}
 							</div>
 						</div>

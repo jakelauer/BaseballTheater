@@ -24,6 +24,14 @@
 	position: absolute;
 }
 
+.game-list-container
+{
+	h2
+	{
+		text-align: center;
+	}
+}
+
 .game-list
 {
 	display: flex;
@@ -79,30 +87,30 @@
 		justify-content: center;
 	}
 
-		.day-nav a
+	.day-nav a
+	{
+		margin: 0 10px;
+		color: $color-accent;
+		display: flex;
+		align-content: center;
+		text-decoration: none;
+		transition: 0.25s;
+
+		&.prev:hover
 		{
-			margin: 0 10px;
-			color: $color-accent;
-			display: flex;
-			align-content: center;
-			text-decoration: none;
-			transition: 0.25s;
-
-			&.prev:hover
-			{
-				transform: translateX(-5px);
-			}
-
-			&.next:hover
-			{
-				transform: translateX(5px);
-			}
-
-			i
-			{
-				font-size: 2.5rem;
-			}
+			transform: translateX(-5px);
 		}
+
+		&.next:hover
+		{
+			transform: translateX(5px);
+		}
+
+		i
+		{
+			font-size: 2.5rem;
+		}
+	}
 
 	.tools
 	{
@@ -111,12 +119,11 @@
 		text-align: center;
 	}
 
-		.tools .hide-scores
-		{
-			margin-left: 20px;
-		}
+	.tools .hide-scores
+	{
+		margin-left: 20px;
+	}
 }
-
 
 .game-summary-simple
 {
@@ -132,21 +139,45 @@
 	color: black;
 	background: #fff;
 	font-family: "bebas", sans-serif;
+	border-left: 0 solid red;
 
 	&:hover
 	{
-		transform: scale(1.05);
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+		.game-link
+		{
+			background-color: rgba(#FFF, 0.75);
+		}
+
+		.game-link .material-icons
+		{
+			opacity: 1;
+			transform: translateX(0);
+		}
 	}
 
 	.game-link
 	{
 		position: absolute;
+		background-color: rgba(#FFF, 0);
+		display: flex;
+		align-items: center;
 		z-index: 10;
 		top: 10px;
 		right: 10px;
 		bottom: 10px;
 		left: 10px;
+		transition: 0.25s;
+
+		.material-icons
+		{
+			opacity: 0;
+			position: absolute;
+			font-size: 5rem;
+			right: 0;
+			color: $color-accent;
+			transition: 0.5s;
+			transform: translateX(-50px);
+		}
 	}
 
 	.team-row
@@ -183,10 +214,10 @@
 		}
 	}
 
-	 .team-row:not(.winner) .winner-indicator
-	 {
-		 opacity: 0;
-	 }
+	.team-row:not(.winner) .winner-indicator
+	{
+		opacity: 0;
+	}
 
 	&.final .team-row.winner .score:after
 	{

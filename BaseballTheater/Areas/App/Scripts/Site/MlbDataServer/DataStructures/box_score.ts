@@ -61,12 +61,19 @@ namespace Theater
 
 		public get allPlayers()
 		{
-			const allPlayersArray = [
-				...this.batting_home.batter,
-				...this.batting_away.batter,
-				...this.pitching_home.pitcher,
-				...this.pitching_away.pitcher
-			];
+			let allPlayersArray: (IBatter | IPitcher)[] = [];
+			try
+			{
+				allPlayersArray = [
+					...this.batting_home.batter,
+					...this.batting_away.batter,
+					...this.pitching_home.pitcher,
+					...this.pitching_away.pitcher
+				];
+			}
+			catch (e)
+			{
+			}
 
 			const allPlayersById = new Map(allPlayersArray.map((player): [string, IBatter | IPitcher] => ([player.id, player]) as [string, IBatter | IPitcher]));
 

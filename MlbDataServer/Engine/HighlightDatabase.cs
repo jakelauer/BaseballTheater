@@ -10,6 +10,8 @@ namespace MlbDataServer.Engine
 {
 	public class HighlightDatabase
 	{
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		public static IEnumerable<HighlightSearchResult> AllHighlights { get; private set; }
 
 		public static void Initialize()
@@ -30,9 +32,9 @@ namespace MlbDataServer.Engine
 					allHighlights.AddRange(highlightsInFile);
 				}
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
-				// ignored
+				log.Error("Exception occured loading highlight data", e);
 			}
 
 			AllHighlights = allHighlights;
