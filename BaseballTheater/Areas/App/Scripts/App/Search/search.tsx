@@ -50,8 +50,8 @@
 		{
 			const matches = this.regex.exec(location.pathname);
 			const query = matches != null && matches.length > 0
-				              ? matches[1]
-				              : "";
+				? matches[1]
+				: "";
 
 			return decodeURI(query);
 		}
@@ -61,8 +61,8 @@
 			App.stopLoading();
 
 			const setTo = highlights === null
-				              ? [] as IHighlightSearchResult[]
-				              : [...this.state.highlights, ...highlights];
+				? [] as IHighlightSearchResult[]
+				: [...this.state.highlights, ...highlights];
 
 			this.setState({
 				highlights: setTo
@@ -88,12 +88,13 @@
 				<div className={`load-more-container`}>
 					<div className={`load-more button`} onClick={() => this.loadNextHighlightPage()}>Load More</div>
 				</div>
-				);
+			);
 		}
 
 		public render()
 		{
-			const highlightsRendered = this.state.highlights.map(searchResult => <Highlight key={searchResult.Highlight.id} renderDate={true} highlight={searchResult} />);
+			const highlightsRendered = this.state.highlights.map(searchResult =>
+				<Highlight hideScores={false} key={searchResult.Highlight.id} renderDate={true} highlight={searchResult}/>);
 
 			const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
 				&& this.state.highlights.length > 0
@@ -116,7 +117,7 @@
 	}
 
 	App.Instance.addPage({
-		page: <Search/>,
+		page: _ => <Search/>,
 		matchingUrl: Search.regex,
 		name: "game"
 	});

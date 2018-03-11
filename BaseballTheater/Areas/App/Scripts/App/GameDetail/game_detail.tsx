@@ -16,7 +16,7 @@
 		currentTab: Tabs;
 	}
 
-	export class GameDetail extends React.Component<any, IGameDetailState>
+	export class GameDetail extends React.Component<IPageProps, IGameDetailState>
 	{
 		private readonly date: moment.Moment;
 		private readonly gamePk: string;
@@ -165,16 +165,16 @@
 				const boxScore = await this.getBoxScore(gameSummary);
 				const highlightsCollectionPromise = this.getHighlights(gameSummary);
 				const playByPlayPromise = this.getPlayByPlay(gameSummary, boxScore);
-				
+
 				const both = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
-				const highlightsCollection = (!(both[0] instanceof Error)) 
-					? both[0] as IHighlightsCollection 
+				const highlightsCollection = (!(both[0] instanceof Error))
+					? both[0] as IHighlightsCollection
 					: null;
 
 				const playByPlay = (!(both[1] instanceof Error))
 					? both[1] as Innings
 					: null;
-				
+
 
 				this.setState({
 					gameSummary,
@@ -201,6 +201,8 @@
 			const gameSummary = this.state.gameSummary;
 			const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
+			const gameIsInFuture = gameSummary && gameSummary.dateObj.isSameOrAfter(moment());
+
 			let renderables = [<div/>];
 
 			switch (currentTab)
@@ -209,22 +211,23 @@
 					if (!highlightsCollection
 						|| !highlightsCollection.highlights
 						|| !highlightsCollection.highlights.media
-						|| highlightsCollection.highlights.media.length === 0)
+						|| highlightsCollection.highlights.media.length === 0
+						|| gameIsInFuture)
 					{
 						renderables = [
-							<div key={0} className="no-data">No box score data is available for this game.</div>
+							<div key={0} className="no-data">No highlights are available for this game.</div>
 						];
 					}
 					else
 					{
 						renderables = [
-							<Highlights highlightsCollection={highlightsCollection} key={0}/>
+							<Highlights highlightsCollection={highlightsCollection} hideScores={this.props.settings.hideScores} key={0}/>
 						];
 
 					}
 					break;
 				case Tabs.BoxScore:
-					if (!boxScoreData)
+					if (!boxScoreData || gameIsInFuture)
 					{
 						renderables = [
 							<div key={0} className="no-data">No box score data is available for this game.</div>
@@ -233,13 +236,13 @@
 					else
 					{
 						renderables = [
-							<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+							<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.props.settings.hideScores} key={0}/>,
 							<BoxScore boxScoreData={boxScoreData} key={1}/>
 						];
 					}
 					break;
 				case Tabs.PlayByPlay:
-					if (!boxScoreData || !gameSummary || !playByPlayData)
+					if (!boxScoreData || !gameSummary || !playByPlayData || gameIsInFuture)
 					{
 						renderables = [
 							<div key={0} className="no-data">No play-by-play data is available for this game.</div>
@@ -248,7 +251,7 @@
 					else
 					{
 						renderables = [
-							<MiniBoxScore boxScoreData={boxScoreData} key={0}/>,
+							<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.props.settings.hideScores} key={0}/>,
 							<PlayByPlay
 								key={1}
 								gameSummary={gameSummary}
@@ -283,15 +286,17 @@
 				<div className={`game-detail-container`}>
 					<div className={`game-data-tab-container`}>
 						<div className={`tabs`}>
-							<a href={`#tab=${Tabs.Highlights}`} className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(Tabs.Highlights)}>
-								<span>Highlights</span>
-							</a>
-							<a href={`#tab=${Tabs.PlayByPlay}`} className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
-								<span>Play by Play</span>
-							</a>
-							<a href={`#tab=${Tabs.BoxScore}`} className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
-								<span>Box Score</span>
-							</a>
+							<div className={`tab-container`}>
+								<a href={`javascript:void(0)`} className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(Tabs.Highlights)}>
+									<span>Highlights</span>
+								</a>
+								<a href={`javascript:void(0)`} className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(Tabs.PlayByPlay)}>
+									<span>Play by Play</span>
+								</a>
+								<a href={`javascript:void(0)`} className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(Tabs.BoxScore)}>
+									<span>Box Score</span>
+								</a>
+							</div>
 						</div>
 						<div className={`tab-contents`}>
 							{this.renderCurrentTab(this.state.currentTab)}
@@ -303,7 +308,7 @@
 	}
 
 	App.Instance.addPage({
-		page: <GameDetail/>,
+		page: props => <GameDetail settings={props.settings}/>,
 		matchingUrl: /^\/game\/(.*)/gi,
 		name: "game"
 	});

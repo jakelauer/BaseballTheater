@@ -16,7 +16,7 @@ namespace BaseballTheater
 	{
 		protected void Application_Start()
 		{
-			Thread.Sleep(10000);
+			//Thread.Sleep(10000);
 
 			ViewEngines.Engines.Clear();
 			var viewEngine = new CustomViewEngine();

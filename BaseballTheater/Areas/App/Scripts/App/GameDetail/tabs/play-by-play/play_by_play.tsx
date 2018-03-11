@@ -24,7 +24,7 @@
 				const atBat = halfInning.atbat instanceof Array ? halfInning.atbat : [(halfInning.atbat as any) as IAtBat];
 
 				let oldPitcherData: IPitcher | null = null;
-				const batters = atBat.reverse().map((batter, i) =>
+				const batters = [...atBat].reverse().map((batter, i) =>
 				{
 					const newPitcherData = players.get(batter.pitcher) as IPitcher;
 
@@ -86,7 +86,7 @@
 				&& inningsData.game.inning
 				&& inningsData.game.inning.length > 0)
 			{
-				const inningsSorted = inningsData.game.inning.reverse();
+				const inningsSorted = [...inningsData.game.inning].reverse();
 				
 				inningsRendered = inningsSorted.map((inning, i) =>
 				{

@@ -38,6 +38,12 @@
 				}
 
 				e.preventDefault();
+
+				if (href.startsWith("javascript"))
+				{
+					return false;
+				}
+
 				LinkHandler.pushState(href);
 			});
 

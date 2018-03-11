@@ -12,6 +12,19 @@
 		flex: 1;
 		height: 100%;
 
+		.tab-container
+		{
+			width: 16.667%;
+			position: fixed;
+
+			.r-mobile &
+			{
+				position: relative;
+				display: flex;
+				width: 100%;
+			}
+		}
+
 		.r-mobile &
 		{
 			height: 4rem;
@@ -34,7 +47,7 @@
 			.r-mobile &
 			{
 				flex: 1 auto;
-				border-bottom: 3px solid rgba(0,0,0,0);
+				border-bottom: 3px solid rgba(0, 0, 0, 0);
 				text-align: center;
 			}
 
@@ -110,7 +123,8 @@
 			}
 		}
 
-		.r-mobile &{
+		.r-mobile &
+		{
 			height: 100%;
 		}
 	}

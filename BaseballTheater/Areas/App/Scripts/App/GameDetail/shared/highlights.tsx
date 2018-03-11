@@ -3,6 +3,7 @@
 	interface IHighlightsProps
 	{
 		highlightsCollection: IHighlightsCollection | null;
+		hideScores: boolean;
 	}
 
 	interface IHighlightsState
@@ -88,7 +89,7 @@
 						<div className={`special-highlights`}>
 							{
 								specialHighlights.map((highlight) => (
-									<Highlight renderDate={false} key={highlight.id} highlight={highlight} />
+									<Highlight hideScores={this.props.hideScores} renderDate={false} key={highlight.id} highlight={highlight} />
 								))
 							}
 						</div>
@@ -97,7 +98,7 @@
 					<div className={`all-highlights`}>
 						{
 							allHighlights.map((highlight) => (
-								<Highlight renderDate={false} key={highlight.id} highlight={highlight} />
+								<Highlight hideScores={this.props.hideScores} renderDate={false} key={highlight.id} highlight={highlight} />
 							))
 						}
 					</div>

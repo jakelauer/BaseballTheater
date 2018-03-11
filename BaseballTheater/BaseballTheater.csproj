@@ -275,6 +275,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\App\Scripts\App\0_Base\Settings.tsx" />
+    <Content Include="Areas\App\Scripts\App\0_Base\SettingsButton.tsx" />
+    <Content Include="Areas\App\Scripts\App\shared\modal.tsx" />
     <Content Include="Areas\App\Scripts\Site\MlbDataServer\mlb_data_server.ts" />
     <Content Include="Areas\App\Scripts\Site\Utility\promises.ts" />
     <Content Include="Areas\Data\Views\_DataLayout.cshtml" />
