@@ -2,13 +2,15 @@
 {
 	import IPageProps = Theater.IPageProps;
 	import ISettings = Theater.ISettings;
+	import Subscription = Theater.Utility.Subscription;
 
 	interface IGameListState
 	{
 		gameSummaries: GameSummaryData[];
 		date: moment.Moment;
+		navigating: boolean;
 	}
-	
+
 	interface IGameListProps extends IPageProps
 	{
 		settings: ISettings;
@@ -17,35 +19,32 @@
 	class GameList extends React.Component<IGameListProps, IGameListState>
 	{
 		private pikaday: any;
+		private linkHandlerSubscription: Subscription<Location>;
 
 		constructor(props: IGameListProps)
 		{
 			super(props);
 
-			const date = this.getDateFromPath(location.pathname);
+			const date = GameList.getDateFromPath();
 
 			this.state = {
 				gameSummaries: [],
 				date,
+				navigating: false
 			};
 		}
 
-		public OnLocationTrigger()
+		public static getDateFromPath()
 		{
-			this.setState({
-				date: this.getDateFromPath(location.pathname)
-			});
-		}
+			const pathname = location.pathname;
 
-		private getDateFromPath(pathname: string)
-		{
 			let dateString: string = "";
 			if (pathname.length > 1)
 			{
 				dateString = pathname.replace(/[^0-9]+/, "");
 			}
 
-			if (dateString.trim().length === 0)
+			if (dateString.trim().length < 2)
 			{
 				dateString = this.getDefaultDate().format("YYYYMMDD");
 			}
@@ -60,7 +59,7 @@
 			}, () => this.loadGamesForCurrentDate());
 		};
 
-		private getDefaultDate()
+		public static getDefaultDate()
 		{
 			const lastEndingDay = "20171101";
 			const nextOpeningDay = "20180223";
@@ -78,6 +77,22 @@
 		public componentDidMount()
 		{
 			this.loadGamesForCurrentDate();
+
+			this.linkHandlerSubscription = Utility.LinkHandler.Instance.stateChangeDistributor.subscribe(payload =>
+			{
+				if (payload.pathname.length < 2)
+				{
+					this.updateDate(GameList.getDateFromPath());
+				}
+			});
+		}
+
+		public componentWillUnmount()
+		{
+			if (this.linkHandlerSubscription)
+			{
+				Utility.LinkHandler.Instance.stateChangeDistributor.unsubscribe(this.linkHandlerSubscription);
+			}
 		}
 
 		private loadGamesForCurrentDate()
@@ -121,29 +136,30 @@
 		{
 			const gamesInProgress = this.state.gameSummaries.filter(a => !a.isFinal);
 			const gamesFinal = this.state.gameSummaries.filter(a => a.isFinal);
-			
+
 			this.sortGames(gamesInProgress);
 			this.sortGames(gamesFinal);
 
 			const gamesInProgressRendered = gamesInProgress.map((gameSummary, i) =>
 			{
-				return <GameSummary game={gameSummary} key={i} hideScores={this.props.settings.hideScores}/>;
+				return <GameSummary game={gameSummary} index={i} key={i} hideScores={this.props.settings.hideScores}/>;
 			});
 
 			const finalGamesRendered = gamesFinal.map((gameSummary, i) =>
 			{
 				const key = gamesInProgress.length + i;
-				return <GameSummary game={gameSummary} key={key} hideScores={this.props.settings.hideScores}/>;
+				return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.props.settings.hideScores}/>;
 			});
 
-			const noGames = this.state.gameSummaries.length === 0
+			const noGames = this.state.gameSummaries.length === 0 && !App.isLoading
 				? <div className={`no-data`}>No games found for this date.</div>
 				: null;
 
 			const someFinalSomeNot = gamesInProgress.length > 0 && gamesFinal.length > 0;
+			const navigatingClass = this.state.navigating ? "navigating" : "";
 
 			return (
-				<div className={`game-list-container`}>
+				<div className={`game-list-container ${navigatingClass}`}>
 					<div className={`settings`}>
 						<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
 					</div>
@@ -152,7 +168,7 @@
 						{gamesInProgressRendered}
 					</div>
 
-					{someFinalSomeNot &&
+					{(someFinalSomeNot && !App.isLoading) &&
 					<h2>Final</h2>
 					}
 					<div className={`game-list`}>
@@ -168,7 +184,7 @@
 	App.Instance.addPage({
 		matchingUrl:
 			/^\/?([0-9]{8})?(\?.*)?$/i, //match URLs of nothing, or just a /, or a / then 8 digits and an optional querystring
-		page: props => <GameList settings={props.settings} />,
+		page: props => <GameList settings={props.settings}/>,
 		name: "games"
 	});
 }

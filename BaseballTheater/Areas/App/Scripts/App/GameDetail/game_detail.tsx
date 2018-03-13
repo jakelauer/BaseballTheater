@@ -13,6 +13,7 @@
 		boxScore: BoxScoreData | null;
 		highlightsCollection: IHighlightsCollection | null;
 		playByPlay: IInningsContainer | null;
+		liveData: MlbLiveData.LiveData | null;
 		currentTab: Tabs;
 	}
 
@@ -29,10 +30,11 @@
 			this.date = this.getDateFromPath(location.pathname);
 			this.gamePk = this.getGamePkFromPath(location.pathname);
 
-			const hashState = Utility.LinkHandler.parseHash();
-			let currentTab = ("tab" in hashState)
-				? parseInt(hashState["tab"]) as Tabs
-				: Tabs.Highlights;
+			let currentTab = parseInt(this.props.settings.defaultTab);
+			if (isNaN(currentTab))
+			{
+				currentTab = Tabs.Highlights;
+			}
 
 			if (App.Instance.isAppMode)
 			{
@@ -44,6 +46,7 @@
 				highlightsCollection: null,
 				gameSummary: null,
 				playByPlay: null,
+				liveData: null,
 				currentTab
 			}
 		}
@@ -90,6 +93,13 @@
 			return playByPlay;
 		}
 
+		private async getLiveData(currentGame: GameSummaryData): Promise<MlbLiveData.LiveData>
+		{
+			const gameDetailCreator = new MlbDataServer.GameDetailCreator(currentGame.game_data_directory, false);
+			const liveData = gameDetailCreator.getLiveGame(currentGame.game_pk);
+			return liveData;
+		}
+
 		private getDateFromPath(pathname: string)
 		{
 			const pathnameDateString = pathname.split("/")[2].replace(/[^0-9]/, "");
@@ -112,6 +122,11 @@
 
 		private subscribeToLiveData()
 		{
+			if (!Config.liveDataEnabled)
+			{
+				return null;
+			}
+
 			this.liveSubscription = App.Instance.gameUpdateDistributor.subscribe(payload =>
 			{
 				if (payload.gameIds.indexOf(parseInt(this.gamePk)) > -1)
@@ -165,15 +180,20 @@
 				const boxScore = await this.getBoxScore(gameSummary);
 				const highlightsCollectionPromise = this.getHighlights(gameSummary);
 				const playByPlayPromise = this.getPlayByPlay(gameSummary, boxScore);
+				//const liveDataPromise = this.getLiveData(gameSummary);
 
-				const both = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
-				const highlightsCollection = (!(both[0] instanceof Error))
-					? both[0] as IHighlightsCollection
-					: null;
+				const rest = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
+				const highlightsCollection = (!(rest[0] instanceof Error))
+					? rest[0] as IHighlightsCollection
+					: console.error("Highlights failed to load", rest[0]) || null;
 
-				const playByPlay = (!(both[1] instanceof Error))
-					? both[1] as Innings
-					: null;
+				const playByPlay = (!(rest[1] instanceof Error))
+					? rest[1] as Innings
+					: console.error("Play by play data failed to load", rest[1]) || null;
+
+				/*const liveData = (!(rest[2] instanceof Error))
+					? rest[2] as MlbLiveData.LiveData
+					: null;*/
 
 
 				this.setState({
@@ -199,6 +219,7 @@
 			const highlightsCollection = this.state.highlightsCollection;
 			const playByPlayData = this.state.playByPlay;
 			const gameSummary = this.state.gameSummary;
+			const liveData = this.state.liveData;
 			const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
 			const gameIsInFuture = gameSummary && gameSummary.dateObj.isSameOrAfter(moment());

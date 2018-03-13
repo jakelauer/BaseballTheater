@@ -86,7 +86,7 @@
 		public static getLinks(highlight: IHighlight): ILink[]
 		{
 			const qkRegex = /(\d{4}k?\.)/i;
-			const links = (highlight.url instanceof Array) ? highlight.url : [(highlight.url as any) as IUrl];
+			const links = Utility.forceArray(highlight.url);
 			let q1200k: ILink | null = null;
 			let hasK = false;
 			const dateBefore2013 = moment(highlight.date).year() < 2013;

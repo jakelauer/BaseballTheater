@@ -14,7 +14,7 @@
 		settings: ISettings;
 	}
 
-	interface ILoadingDistributor
+	export interface ILoadingPayload
 	{
 		isLoading: boolean;
 	}
@@ -28,7 +28,7 @@
 	{
 		public static Instance = new App();
 
-		public loadingDistributor = new Utility.Distributor<ILoadingDistributor>();
+		public loadingDistributor = new Utility.Distributor<ILoadingPayload>();
 		public gameUpdateDistributor = new Utility.Distributor<IGameUpdateDistributorPayload>();
 		public settingsDistributor = new Utility.Distributor<ISettings>();
 
@@ -68,6 +68,11 @@
 
 		private registerHub()
 		{
+			if (!Config.liveDataEnabled)
+			{
+				return null;
+			}
+
 			const chat = $.connection.liveGameHub;
 
 			chat.client.receive = (gameIds: number[]) =>
@@ -116,6 +121,7 @@
 				currentPage: null,
 				isSettingsModalOpen: false,
 				settings: {
+					defaultTab: Cookies.get("defaulttab"),
 					favoriteTeam: Cookies.get("favoriteteam"),
 					hideScores: Cookies.get("hidescores") === true
 				}
@@ -162,12 +168,17 @@
 					});
 				}
 			}
-			
+
 			window.scrollTo(0, 0);
 		}
 
 		private renderLoginButton()
 		{
+			if (!Config.loginEnabled)
+			{
+				return null;
+			}
+
 			const isAuthenticated = AuthContext.Instance.IsAuthenticated;
 			if (!isAuthenticated)
 			{

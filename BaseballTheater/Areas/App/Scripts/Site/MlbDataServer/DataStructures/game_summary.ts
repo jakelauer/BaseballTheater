@@ -97,11 +97,9 @@ namespace Theater
 		{
 			if (this.status && this.status.status)
 			{
-				return this.status.ind === "F"
-					|| this.status.ind === "FT"
+				return this.status.ind.startsWith("F")
+					|| this.status.ind.startsWith("C")
 					|| this.status.ind === "DR"
-					|| this.status.ind === "CR"
-					|| this.status.ind === "C"
 					|| this.status.ind === "O";
 			}
 			return true;

@@ -8,6 +8,7 @@ namespace Theater
 	export interface ISettings
 	{
 		favoriteTeam: string;
+		defaultTab: string;
 		hideScores: boolean;
 	}
 
@@ -27,14 +28,51 @@ namespace Theater
 				return <option value={teamKey} key={i}>{teamName}</option>;
 			});
 
+			options.splice(0, 0, <option value={-1} key={999}>None</option>);
+
 			return <select defaultValue={this.props.settings.favoriteTeam} onChange={e => this.setFavoriteTeam(e)}>{options}</select>
+		}
+
+		private tabNameFromTab(tab: GameDetail.Tabs)
+		{
+			let tabName = "";
+			switch (tab)
+			{
+				case GameDetail.Tabs.BoxScore:
+					tabName = "Box Score";
+					break;
+
+				case GameDetail.Tabs.Highlights:
+					tabName = "Highlights";
+					break;
+
+				case GameDetail.Tabs.PlayByPlay:
+					tabName = "Play By Play";
+					break;
+			}
+
+			return tabName;
+		}
+
+		private renderDefaultTabDropdown()
+		{
+			const tabKeys = Object.keys(GameDetail.Tabs);
+			const options = tabKeys.map((tabKeyString, i) =>
+			{
+				const tabKey = parseInt(tabKeyString) as GameDetail.Tabs;
+				const tabName = this.tabNameFromTab(tabKey);
+				return <option value={tabKeyString} key={i}>{tabName}</option>
+			});
+
+			return <select defaultValue={this.props.settings.defaultTab} onChange={e => this.setDefaultTab(e)}>{options}</select>
 		}
 
 		private setFavoriteTeam(event: React.ChangeEvent<HTMLSelectElement>)
 		{
 			this.updateSettings({
 				favoriteTeam: event.currentTarget.value,
-				hideScores: this.props.settings.hideScores
+				hideScores: this.props.settings.hideScores,
+				defaultTab: this.props.settings.defaultTab
 			})
 		}
 
@@ -42,7 +80,17 @@ namespace Theater
 		{
 			this.updateSettings({
 				favoriteTeam: this.props.settings.favoriteTeam,
-				hideScores: event.currentTarget.checked
+				hideScores: event.currentTarget.checked,
+				defaultTab: this.props.settings.defaultTab
+			})
+		}
+
+		private setDefaultTab(event: React.ChangeEvent<HTMLSelectElement>)
+		{
+			this.updateSettings({
+				favoriteTeam: this.props.settings.favoriteTeam,
+				defaultTab: event.currentTarget.value,
+				hideScores: this.props.settings.hideScores
 			})
 		}
 
@@ -50,6 +98,7 @@ namespace Theater
 		{
 			Cookies.set("hidescores", settings.hideScores);
 			Cookies.set("favoriteteam", settings.favoriteTeam);
+			Cookies.set("defaulttab", settings.defaultTab);
 			App.Instance.settingsDistributor.distribute(settings)
 		}
 
@@ -64,12 +113,18 @@ namespace Theater
 					</SettingDisplay>
 
 					<SettingDisplay
+						label={`Default Tab`}
+						description={`Set the default tab for game details`}>
+						{this.renderDefaultTabDropdown()}
+					</SettingDisplay>
+
+					<SettingDisplay
 						label={"Hide Scores"}
 						description={"When checked, scores and game data will be hidden to prevent spoilers. Box scores will still show data."}>
 
-						<input type={`checkbox`} checked={this.props.settings.hideScores}  onChange={e => this.setHideScores(e)}/>
-
+						<input type={`checkbox`} checked={this.props.settings.hideScores} onChange={e => this.setHideScores(e)}/>
 					</SettingDisplay>
+
 				</div>
 			);
 		}

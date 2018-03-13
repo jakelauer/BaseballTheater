@@ -4,12 +4,46 @@
 {
 	padding-bottom: 2rem;
 
+	.inning-links
+	{
+		margin-top: 3rem;
+		font-size: 1.25rem;
+		font-weight: bold;
+
+		a
+		{
+			display: inline-block;
+			margin: 0 0.5rem;
+			width: 2rem;
+			height: 2rem;
+			line-height: 2rem;
+			background: $color-basic-accent;
+			text-align: center;
+			color: $color-accent;
+			text-decoration: none;
+
+			&:hover
+			{
+				background: darken($color-basic-accent, 10%);
+			}
+		}
+	}
+
+	.inning
+	{
+		padding-top: 3rem;
+
+		.half-inning.top
+		{
+			padding-top: 3rem;
+		}
+	}
+
 	.inning-label
 	{
 		font-weight: bold;
 		font-size: 1.25rem;
 		margin-bottom: 0.5rem;
-		margin-top: 2rem;
 	}
 
 	.pitcher-changed

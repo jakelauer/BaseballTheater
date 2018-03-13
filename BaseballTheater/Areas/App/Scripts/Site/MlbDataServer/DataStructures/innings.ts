@@ -118,6 +118,7 @@
 
 		private process()
 		{
+			this.game.inning = Utility.forceArray(this.game.inning);
 			if (this.game && this.game.inning && this.game.inning.length > 0)
 			{
 				const innings = this.game.inning;
@@ -139,6 +140,8 @@
 
 		private processHalfInning(halfInning: IInningHalf)
 		{
+			halfInning.atbat = Utility.forceArray(halfInning.atbat);
+			
 			if (halfInning.atbat && halfInning.atbat.length > 0)
 			{
 				for (let atBat of halfInning.atbat)
@@ -151,11 +154,7 @@
 
 					if (atBat.pitch)
 					{
-						if (!(atBat.pitch instanceof Array))
-						{
-							atBat.pitch = [(atBat.pitch as any) as IPitch];
-						}
-
+						atBat.pitch = Utility.forceArray(atBat.pitch);
 
 						atBat.pitch.forEach(pitch =>
 						{

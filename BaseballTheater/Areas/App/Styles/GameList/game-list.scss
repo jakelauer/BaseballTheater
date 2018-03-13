@@ -30,6 +30,12 @@
 	{
 		text-align: center;
 	}
+
+	&.navigating
+	{
+		opacity: 0;
+		transform: translateX(50px);
+	}
 }
 
 .game-list
@@ -39,6 +45,11 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
+	perspective: 1000px;
+	perspective-origin: center 0;
+	transform: translateY(0);
+	opacity: 1;
+	transition: 0.25s;
 
 	.game-summary
 	{
@@ -134,12 +145,15 @@
 	margin: 0 1rem;
 	margin-bottom: 4rem;
 	padding: 10px;
-	transition: 0.15s;
+	transition: 0.25s;
 	text-decoration: none;
 	color: black;
 	background: #fff;
 	font-family: "bebas", sans-serif;
 	border-left: 0 solid red;
+	opacity: 0;
+	transform: translateX(-25px);
+	transform-origin: center 0;
 
 	&:hover
 	{
@@ -153,6 +167,12 @@
 			opacity: 1;
 			transform: translateX(0);
 		}
+	}
+
+	&.on
+	{
+		transform: translateX(0);
+		opacity: 1;
 	}
 
 	.game-link

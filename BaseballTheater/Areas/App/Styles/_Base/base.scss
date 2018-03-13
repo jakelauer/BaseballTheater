@@ -53,6 +53,7 @@ html
 	#body-content
 	{
 		height: 100%;
+		transition: 0.5s;
 	}
 }
 
@@ -68,7 +69,6 @@ html.ready body #body-wrapper
 
 header
 {
-	$header-height: 55px;
 
 	position: fixed;
 	z-index: 100;
@@ -76,9 +76,8 @@ header
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: $header-height;
+	height: $header-size;
 	background: $color-body-background;
-	padding-bottom: $header-size - $header-height;
 	transition: 0.25s;
 	color: $color-accent;
 
@@ -139,6 +138,8 @@ header
 
 		.login
 		{
+			margin-left: 1rem;
+
 			.r-mobile &
 			{
 				display: block;
@@ -152,7 +153,7 @@ header
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin: 0 1rem;
+		margin: 0 1rem 0 1rem;
 		cursor: default;
 		transition: 0.25s;
 
@@ -204,6 +205,7 @@ header
 		{
 			max-width: none;
 			min-width: 0;
+			margin: 0;
 
 			.label
 			{
@@ -264,6 +266,25 @@ header
 			padding-bottom: 0.5rem;
 		}
 	}
+
+	.r-mobile &
+	{
+		display: flex;
+		flex-wrap: wrap;
+
+		.setting
+		{
+			width: 100%;
+			background: $color-basic-accent;
+			margin-bottom: 1rem;
+
+			.setting-info,
+			.setting-trigger
+			{
+				display: block;
+			}
+		}
+	}
 }
 
 select
@@ -299,9 +320,10 @@ footer
 	right: 0;
 	bottom: 0;
 	left: 0;
-	transition: background 0.25s;
+	transition: 0.25s;
 	pointer-events: none;
 	opacity: 0;
+	transform: scale(0.5);
 
 	img
 	{
@@ -316,6 +338,7 @@ footer
 {
 	pointer-events: auto;
 	opacity: 1;
+	transform: scale(1);
 }
 
 .game-summary

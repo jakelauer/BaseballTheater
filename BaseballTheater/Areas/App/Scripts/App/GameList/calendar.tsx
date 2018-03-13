@@ -11,7 +11,7 @@
 		date: moment.Moment;
 	}
 
-	export class Calendar extends React.Component<ICalendarProps, any>
+	export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 	{
 		private pikaday: any;
 
@@ -24,7 +24,7 @@
 			};
 		}
 
-		public componentDidMount(): void
+		public componentDidMount()
 		{
 			this.pikaday = new Pikaday({
 				field: $("#calendarpicker")[0],
@@ -32,21 +32,21 @@
 				onSelect: (date) =>
 				{
 					const newDate = moment(date);
-
-					this.changeDate(newDate);
+					
+					if (!newDate.isSame(this.state.date))
+					{
+						this.changeDate(newDate);
+					}
 				}
 			});
 		}
 
-		private showCalendar = () =>
+		public componentWillReceiveProps(nextProps: Readonly<ICalendarProps>)
 		{
-			this.pikaday.show();
-		}
-
-		private getUrlForDateChangeDelta(deltaDays: number)
-		{
-			const newDate = this.getDateforChangeDelta(deltaDays);
-			return this.getUrlForDate(newDate);
+			if (nextProps.initialDate !== this.state.date)
+			{
+				this.pikaday.setMoment(nextProps.initialDate)
+			}
 		}
 
 		private getUrlForDate(newDate: moment.Moment)
