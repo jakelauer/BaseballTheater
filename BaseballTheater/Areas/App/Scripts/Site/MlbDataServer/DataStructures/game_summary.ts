@@ -1,10 +1,26 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace Theater {
-	interface HighlightContainer {
+namespace Theater
+{
+	interface HighlightContainer
+	{
 		media: IHighlight[];
 	}
 
-	export interface IGameSummary {
+	interface IProbablePitcher
+	{
+		id: number;
+		first_name: string;
+		last_name: string;
+		name_display_roster: string;
+		number: number;
+		throwinghand: string;
+		wins: number;
+		losses: number;
+		era: number;
+	}
+
+	export interface IGameSummaryData
+	{
 		id: string;
 		game_pk: string;
 		time_date: string;
@@ -15,6 +31,7 @@ namespace Theater {
 		status: IGameStatus;
 		league: string;
 		inning: string;
+		gameday_sw: string;
 		away_name_abbrev: string;
 		away_team_name: string;
 		away_team_id: number;
@@ -26,7 +43,7 @@ namespace Theater {
 		home_team_id: number;
 		home_file_code: string;
 		game_data_directory: string;
-		linescore: ILinescore;
+		linescore: ISummaryLinescore;
 		home_win: string;
 		home_loss: string;
 		away_win: string;
@@ -38,7 +55,8 @@ namespace Theater {
 		highlights: HighlightContainer;
 	}
 
-	export class GameSummary implements IGameSummary {
+	export class GameSummaryData implements IGameSummaryData
+	{
 		public id: string;
 		public game_pk: string;
 		public time_date: string;
@@ -63,8 +81,9 @@ namespace Theater {
 		public home_loss: string;
 		public away_win: string;
 		public away_loss: string;
+		public gameday_sw: string;
 		public game_data_directory: string;
-		private _linescore: ILinescore;
+		private _linescore: ISummaryLinescore;
 		public linescore: Linescore;
 		public dateObj: moment.Moment;
 		public dateObjLocal: moment.Moment;
@@ -74,19 +93,53 @@ namespace Theater {
 		public topPlayHighlights: IHighlight[];
 		public highlights: HighlightContainer;
 
-		public get home_record() {
+		public get isFinal()
+		{
+			if (this.status && this.status.status)
+			{
+				return this.status.ind.startsWith("F")
+					|| this.status.ind.startsWith("C")
+					|| this.status.ind === "DR"
+					|| this.status.ind === "O";
+			}
+			return true;
+		}
+
+		public get home_record()
+		{
 			return `${this.home_win}-${this.home_loss}`;
 		}
 
-		public get away_record() {
+		public get away_record()
+		{
 			return `${this.away_win}-${this.away_loss}`;
 		}
 
-		constructor(data: IGameSummary) {
-			const input = data.time_date;
+		public get isSpringTraining()
+		{
+			return this.gameday_sw === "Y";
+		}
+
+		constructor(data: IGameSummaryData)
+		{
+			let input = data.time_date;
+			if (!input)
+			{
+				const anydata = data as any;
+				try
+				{
+					input = anydata.original_date + " " + anydata.time;
+				}
+				catch (e)
+				{
+					console.error(e);
+				}
+			}
+
+
 			const fmt = "YYYY/MM/DD hh:mm";
 			const zone = "America/New_York";
-			
+
 			const timeEstRaw = moment.tz(input, fmt, zone);
 			const hoursToAdd = Number(timeEstRaw.format("hh")) >= 12 ? 0 : 12;
 			const timeEst = moment.tz(input, fmt, zone).add(hoursToAdd, "hours");
@@ -107,48 +160,58 @@ namespace Theater {
 			this.away_name_abbrev = data.away_name_abbrev;
 			this.away_team_name = data.away_team_name;
 			this.away_team_id = data.away_team_id;
-			this.away_team_city = GameSummary.getCityName(data.away_team_city);
+			this.away_team_city = GameSummaryData.getCityName(data.away_team_city);
 			this.away_file_code = data.away_file_code;
 			this.home_name_abbrev = data.home_name_abbrev;
 			this.home_team_name = data.home_team_name;
 			this.home_team_id = data.home_team_id;
-			this.home_team_city = GameSummary.getCityName(data.home_team_city);
+			this.home_team_city = GameSummaryData.getCityName(data.home_team_city);
 			this.home_file_code = data.home_file_code;
 			this.game_data_directory = data.game_data_directory;
 			this.home_win = data.home_win;
 			this.home_loss = data.home_loss;
 			this.away_win = data.away_win;
 			this.away_loss = data.away_loss;
+			this.gameday_sw = data.gameday_sw;
 			this.home_probable_pitcher = data.home_probable_pitcher;
 			this.away_probable_pitcher = data.away_probable_pitcher;
-			if (data.highlights) {
+			if (data.highlights)
+			{
 				this.topPlayHighlights = data.highlights.media;
 			}
-			if (data.linescore !== undefined && data.linescore != null) {
-				this.linescore = new Linescore(data.linescore);
+			if (data.linescore !== undefined && data.linescore != null)
+			{
+				this.linescore = new Linescore();
+				this.linescore.setSummaryLinescore(data.linescore);
 			}
 		}
 
-		private static stdTimezoneOffset(date: Date) {
+		private static stdTimezoneOffset(date: Date)
+		{
 			const jan = new Date(date.getFullYear(), 0, 1);
 			const jul = new Date(date.getFullYear(), 6, 1);
 			return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 		}
 
-		private static dst(date: Date) {
+		private static dst(date: Date)
+		{
 			return date.getTimezoneOffset() < this.stdTimezoneOffset(date);
 		}
 
-		private static getCityName(cityName: string) {
-			if (cityName.toLowerCase().indexOf("la ") === 0) {
+		private static getCityName(cityName: string)
+		{
+			if (cityName.toLowerCase().indexOf("la ") === 0)
+			{
 				return "Los Angeles";
 			}
 
-			if (cityName.toLowerCase().indexOf("chi") === 0) {
+			if (cityName.toLowerCase().indexOf("chi") === 0)
+			{
 				return "Chicago";
 			}
 
-			if (cityName.toLowerCase().indexOf("ny") === 0) {
+			if (cityName.toLowerCase().indexOf("ny") === 0)
+			{
 				return "New York";
 			}
 

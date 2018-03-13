@@ -1,4 +1,4 @@
-﻿@model MlbDataServer.DataStructures.GameSummary
+﻿@model MlbDataServer.Contracts.GameSummary
 
 @{
 	var game = Model;
@@ -14,7 +14,7 @@
 
 	if (game != null)
 	{
-		dayString = game.DateObj.ToString("yyyyMMdd");
+		dayString = game.DateObjUtc.ToString("yyyyMMdd");
 	}
 
 	var eventTimeString = string.Format("{0}{1} {2}", game.EventTime, game.EventTimeAmPm, game.TimeZone);
@@ -30,7 +30,7 @@
 					@game.Status.Status
 					@if (game.Linescore == null)
 					{
-						<span data-time="@game.DateObj">
+						<span data-time="@game.DateObjUtc">
 							 - @eventTimeString
 						</span>
 					}

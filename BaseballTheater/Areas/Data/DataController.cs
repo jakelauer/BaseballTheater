@@ -1,10 +1,12 @@
 ﻿using BaseballTheater.Areas.Data.Models.News;
 using System.Web.Mvc;
-using MlbDataServer.DataFetch;
+using System.Threading.Tasks;
+using BaseballTheater.Areas.Auth.Models;
+using MlbDataServer.Engine;
 
 namespace BaseballTheater.Areas.Data
 {
-	public class DataController : Controller
+	public class DataController : BTController
 	{
 		[OutputCache(Duration = 300)]
 		public ActionResult Patreon()
@@ -27,6 +29,12 @@ namespace BaseballTheater.Areas.Data
 		{
 			var result = Search.SearchHighlights(query, page, perpage);
 			return View(result);
+		}
+
+		public async Task<ActionResult> GetRealTimeEvents(string subscribeToKey)
+		{
+		//	var rte = await RealTimeEvents.GetRealTimeEvents(subscribeToKey);
+			return View();
 		}
 	}
 }

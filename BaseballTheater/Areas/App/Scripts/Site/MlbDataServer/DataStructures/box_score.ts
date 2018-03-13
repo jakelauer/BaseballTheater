@@ -3,10 +3,10 @@ namespace Theater
 {
 	export interface IBoxScoreContainer
 	{
-		boxscore: IBoxScore;
+		boxscore: IBoxScoreData;
 	}
 
-	export interface IBoxScore
+	export interface IBoxScoreData
 	{
 		game_id: string;
 		game_pk: string;
@@ -26,13 +26,13 @@ namespace Theater
 		home_wins: number;
 		home_loss: number;
 		status_ind: string;
-		linescore: ILinescore;
+		linescore: IDetailLinescore;
 		pitching?: IPitching[];
 		batting?: IBatting[];
 		game_info: string;
 	}
 
-	export class BoxScore implements IBoxScore
+	export class BoxScoreData
 	{
 		public batting_home: IBatting;
 		public batting_away: IBatting;
@@ -57,7 +57,28 @@ namespace Theater
 		public home_wins: number;
 		public home_loss: number;
 		public status_ind: string;
-		public linescore: ILinescore;
+		public linescore: Linescore;
+
+		public get allPlayers()
+		{
+			let allPlayersArray: (IBatter | IPitcher)[] = [];
+			try
+			{
+				allPlayersArray = [
+					...this.batting_home.batter,
+					...this.batting_away.batter,
+					...this.pitching_home.pitcher,
+					...this.pitching_away.pitcher
+				];
+			}
+			catch (e)
+			{
+			}
+
+			const allPlayersById = new Map(allPlayersArray.map((player): [string, IBatter | IPitcher] => ([player.id, player]) as [string, IBatter | IPitcher]));
+
+			return allPlayersById;
+		}
 
 		constructor(data: IBoxScoreContainer)
 		{
@@ -65,14 +86,14 @@ namespace Theater
 			{
 				return;
 			}
-			
+
 			this.game_info = data.boxscore.game_info;
 			this.game_id = data.boxscore.game_id;
 			this.game_pk = data.boxscore.game_pk;
 			this.venue_id = data.boxscore.venue_id;
 			this.venue_name = data.boxscore.venue_name;
-			this.away_team_code = data.boxscore.away_team_code;
-			this.home_team_code = data.boxscore.home_team_code;
+			this.away_team_code = this.fixTeamCode(data.boxscore.away_team_code);
+			this.home_team_code = this.fixTeamCode(data.boxscore.home_team_code);
 			this.away_id = data.boxscore.away_id;
 			this.home_id = data.boxscore.home_id;
 			this.away_fname = data.boxscore.away_fname;
@@ -86,34 +107,78 @@ namespace Theater
 			this.home_loss = data.boxscore.home_loss;
 			this.status_ind = data.boxscore.status_ind;
 
-			for (var batting of data.boxscore.batting)
+			if (data.boxscore.batting)
 			{
-				if (!(batting.batter instanceof Array))
+				for (var batting of data.boxscore.batting)
 				{
-					batting.batter = [(batting.batter as any)];
-				}
+					if (!(batting.batter instanceof Array))
+					{
+						batting.batter = [(batting.batter as any)];
+					}
 
-				batting.team_flag === "home"
-					? this.batting_home = batting
-					: this.batting_away = batting;
+					batting.team_flag === "home"
+						? this.batting_home = batting
+						: this.batting_away = batting;
+				}
 			}
 
-			for (var pitching of data.boxscore.pitching)
+			if (data.boxscore.pitching)
 			{
-				if (!(pitching.pitcher instanceof Array)) {
-					pitching.pitcher = [(pitching.pitcher as any)];
-				}
+				for (var pitching of data.boxscore.pitching)
+				{
+					if (!(pitching.pitcher instanceof Array))
+					{
+						pitching.pitcher = [(pitching.pitcher as any)];
+					}
 
-				pitching.team_flag === "home"
-					? this.pitching_home = pitching
-					: this.pitching_away = pitching;
+					pitching.team_flag === "home"
+						? this.pitching_home = pitching
+						: this.pitching_away = pitching;
+				}
 			}
 
 
 			if (data.boxscore.linescore !== undefined && data.boxscore.linescore != null)
 			{
-				this.linescore = new Linescore(data.boxscore.linescore);
+				this.linescore = new Linescore();
+				this.linescore.setDetailLinescore(data.boxscore.linescore);
 			}
+		}
+
+		private fixTeamCode(code: string)
+		{
+			let fixedCode = code;
+			switch (code)
+			{
+				case "cha":
+					fixedCode = "chw";
+					break;
+				case "chn":
+					fixedCode = "chc";
+					break;
+				case "kca":
+					fixedCode = "kc";
+					break;
+				case "nyn":
+					fixedCode = "nym";
+					break;
+				case "nya":
+					fixedCode = "nyy";
+					break;
+				case "sdn":
+					fixedCode = "sd";
+					break;
+				case "sfn":
+					fixedCode = "sf";
+					break;
+				case "sln":
+					fixedCode = "stl";
+					break;
+				case "tba":
+					fixedCode = "tb";
+					break;
+			}
+			return fixedCode;
 		}
 	}
 }

@@ -1,0 +1,131 @@
+﻿@import "../_Base/_vars.scss";
+
+.game-data-tab-container
+{
+	flex: auto;
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+
+	.tabs
+	{
+		flex: 1;
+		height: 100%;
+
+		.tab-container
+		{
+			width: 16.667%;
+			position: fixed;
+
+			.r-mobile &
+			{
+				position: relative;
+				display: flex;
+				width: 100%;
+			}
+		}
+
+		.r-mobile &
+		{
+			height: 4rem;
+			width: 100%;
+			flex: none;
+			display: flex;
+			margin-bottom: 1rem;
+		}
+
+		.tab
+		{
+			position: relative;
+			padding: 1rem;
+			cursor: pointer;
+			transition: 0.25s;
+			display: block;
+			color: black;
+			text-decoration: none;
+
+			.r-mobile &
+			{
+				flex: 1 auto;
+				border-bottom: 3px solid rgba(0, 0, 0, 0);
+				text-align: center;
+			}
+
+			span
+			{
+				position: relative;
+				display: block;
+				z-index: 2;
+				transition: 0.5s;
+			}
+
+			&:after
+			{
+				content: "";
+				z-index: 1;
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				right: 0;
+				width: 0;
+				background: white;
+				transition: 0.25s;
+			}
+
+			&.on
+			{
+				border-left: 3px solid $color-accent;
+
+				&:after
+				{
+					width: 100%;
+				}
+
+				span
+				{
+					color: $color-accent;
+					font-weight: bold;
+					transform: translateX(15px);
+				}
+
+				.r-mobile &
+				{
+					border-bottom: 3px solid $color-accent;
+					border-left: 0;
+
+					span
+					{
+						font-weight: normal;
+						transform: translateX(0);
+					}
+				}
+			}
+
+			&:not(.on):hover
+			{
+				background: $color-basic-accent;
+			}
+		}
+	}
+
+	.tab-contents
+	{
+		flex: 5;
+		padding: 0 1rem;
+
+		.tab-content
+		{
+			display: none;
+
+			&.on
+			{
+				display: block;
+			}
+		}
+
+		.r-mobile &
+		{
+			height: 100%;
+		}
+	}
+}

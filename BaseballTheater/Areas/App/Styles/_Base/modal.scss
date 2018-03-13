@@ -1,0 +1,139 @@
+﻿@import "_vars.scss";
+
+.modal-wrapper
+{
+	position: fixed;
+	pointer-events: none;
+	display: flex;
+	z-index: 9999;
+	overflow: hidden;
+	align-items: center;
+
+	box-sizing: border-box;
+	top: $header-size;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	transition: 0.25s;
+	text-align: center;
+
+	background: rgba(255, 255, 255, 0);
+
+	&.open
+	{
+		background-color: rgba(255, 255, 255, 1);
+		pointer-events: auto;
+	}
+
+	.modal
+	{
+		position: relative;
+		display: inline-block;
+
+		box-sizing: border-box;
+		width: auto;
+		max-width: calc(100% - 36px);
+		height: auto;
+		max-height: calc(100% - 100px);
+		margin: 0 auto;
+
+		transition: 0.25s;
+		transform: scale(0.9);
+		text-align: left;
+
+		opacity: 0;
+		background: #fff;
+
+		.close-button
+		{
+			position: absolute;
+			z-index: 5;
+			top: 0;
+			right: 0;
+			opacity: 0.5;
+			color: #ce0f0f;
+			font-size: 2rem;
+			width: 2rem;
+			text-align: center;
+			height: 2rem;
+			cursor: default;
+			line-height: 2rem;
+
+			&:hover
+			{
+				opacity: 1;
+			}
+		}
+	}
+
+	.r-tiny
+	{
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.customScrollTray
+	{
+		z-index: 50;
+	}
+
+	.modal-internal
+	{
+		position: relative;
+		overflow: auto;
+
+		box-sizing: border-box;
+		max-height: calc(100vh - 100px);
+		padding: 3rem;
+
+		color: $color-accent;
+	}
+
+	.r-tiny &[data-overflowtype="scrollinmodal"] .modal-internal
+	{
+		max-height: 100vh;
+	}
+
+	.modal-internal.customScroll
+	{
+		overflow: hidden;
+	}
+
+	&.open .modal
+	{
+		transform: scale(1);
+
+		opacity: 1;
+	}
+
+	html.mobile.chrome &.open .modal
+	{
+		-webkit-transform: none;
+		transform: none;
+	}
+
+	html.r-tiny.modal-open,
+	html.r-tiny.modal-open body
+	{
+		position: relative;
+		overflow: hidden;
+	}
+
+	.modal-measure-scrollbar
+	{
+		position: absolute;
+		overflow: scroll;
+		overflow-y: scroll;
+
+		top: -300px;
+		left: -300px;
+		width: 100px;
+		height: 100px;
+	}
+
+	.modal-measure-scrollbar .inner
+	{
+		height: 200px;
+	}
+}

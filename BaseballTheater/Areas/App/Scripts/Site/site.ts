@@ -1,84 +1,8 @@
-﻿namespace Theater.Site
+﻿namespace Theater
 {
-	var pages: IPageParams[] = [];
-	var initializedPages: IPageParams[] = [];
-	export var initializeCurrentPage: () => void;
-	var initializeSite: () => void;
-	var siteLoadingTimeout = 0;
 	export var isLoading = false;
 
-	export var currentPage: IPageParams = null;
-
-	initializeSite = () =>
-	{
-		Site.LinkHandler.Instance.initialize();
-		initializeCurrentPage();
-
-		Responsive.Instance.initialize();
-
-		$(".mobile-menu-trigger").on("click", () =>
-		{
-			$("header .links").toggleClass("open");
-		});
-	}
-
-	initializeCurrentPage = () =>
-	{
-		//showDisclaimer();
-
-		$(window).scrollTop(0);
-
-		$(".links a").removeClass("active");
-
-		if (currentPage !== null)
-		{
-			currentPage.page.destroy();
-		}
-
-		for (let page of pages)
-		{
-			if (page.matchingUrl.test(location.pathname))
-			{
-				$(`.links a[data-name='${page.name}']`).addClass("active");
-
-				currentPage = page;
-				if (initializedPages.indexOf(page) > -1)
-				{
-					currentPage.page.renew(location.pathname);
-				}
-				else
-				{
-					initializedPages.push(page);
-
-					currentPage.page.initialize();
-					currentPage.page.dataBind();
-				}
-			}
-		}
-	};
-
-	export var addPage = (params: IPageParams) =>
-	{
-		pages.push(params);
-	};
-
-	export var startLoading = () =>
-	{
-		clearTimeout(siteLoadingTimeout);
-		siteLoadingTimeout = setTimeout(() =>
-			{
-				$("#body-wrapper").addClass("loading");
-			},
-			250);
-		isLoading = true;
-	};
-
-	export var stopLoading = () =>
-	{
-		clearTimeout(siteLoadingTimeout);
-		$("#body-wrapper").removeClass("loading");
-		isLoading = false;
-	};
+	export var currentPage: IPageRegister | null = null;
 
 	export var trackEvent = (category: string, action: string, label?: string, value?: any, metricObject?: any) =>
 	{
@@ -100,18 +24,6 @@
 		if (!location.href.match(".local"))
 		{
 			window.ga("send", "event", category, action, data);
-		}
-	}
-
-	export var showDisclaimer = () =>
-	{
-		const hasSeen = Boolean(Number(Cookies.get("seen-mlb-disclaimer")));
-		if (!hasSeen)
-		{
-			const mlbModal = new Modal("disclaimer", $("#mlb-update").html());
-			mlbModal.open();
-
-			Cookies.set("seen-mlb-disclaimer", 1, { expires: 999 });
 		}
 	}
 
@@ -142,9 +54,4 @@
 			catch (e) {
 			}
 		});
-
-	$(document).ready(() =>
-	{
-		initializeSite();
-	});
 }

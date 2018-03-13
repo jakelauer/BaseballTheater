@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization;
+@using Newtonsoft.Json
 
 @model BaseballTheater.Shared.Models.BaseModel
 
@@ -19,62 +20,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<title>@ViewBag.Title</title>
 
-
-
 	@Html.Partial("_favicons")
-
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
 	<meta name="theme-color" content="#9e1414">
 	<meta name="Description" content="@description" />
+	
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
 		
 	@Styles.Render("~/stylebundles/scss")
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	@RenderSection("ExtraHead", false)
 
 	<title>@ViewBag.Title</title>
 </head>
 <body class="@ViewBag.BodyClass">
 
+<div id="app-container"></div>
 
-<header>
-	<div class="header-content">
-		<div class="mobile-menu-trigger">
-			<i class="fa fa-bars" aria-hidden="true"></i>
-		</div>
-		<a class="logo-link" href="/"> Baseball Theater
-		</a>
-		<div class="links">
-			<a href="/" data-name="games">
-				Games
-			</a>
-			<a href="/news" data-name="news">
-				Articles
-			</a>
-			<a href="/backers" data-name="backers">
-				Backers
-			</a>
-			<a href="https://www.reddit.com/r/BaseballTheater/" target="_blank">
-				Updates
-			</a>
-			<a href="https://www.reddit.com/r/BaseballTheater/submit?selftext=true" target="_blank">
-				Feedback
-			</a>
-		</div>
-	</div>
-	<div class="stitch"></div>
-</header>
-<div id="body-wrapper">
-	<div class="loading-spinner">
-		<img src="~/images/ring.svg" />
-	</div>
-	<div class="body-content">
-		@RenderBody()
-	</div>
-</div>
-
-<footer>
-
-	@Html.Partial("_patreon")
+@*<footer>
 	<br /><br />
 	Created by <a href="https://github.com/jakelauer/"> Jake Lauer</a> (<a href="http://reddit.com/u/HelloControl_">/u/HelloControl</a>)
 	<br /><br />
@@ -83,7 +46,7 @@
 			Contribute on GitHub
 		</a>
 	</div>
-</footer>
+</footer>*@
 
 
 <script>
@@ -94,13 +57,15 @@
 
 	ga('create', 'UA-23730353-4', 'auto');
 	ga('send', 'pageview');
+</script>
 
+<script>
+	window.PAGE_DATA = @Html.Raw(JsonConvert.SerializeObject(ViewBag.PageData))
 </script>
 	
-<script type="text/javascript" src="~/Shared/Scripts/libraries/bluebird.min.js"></script>
 @Scripts.Render("~/scriptbundles/lib")
-	
-@Scripts.Render("~/scriptbundles/app")
+
+<script src="~/signalr/hubs"></script>
 
 @RenderSection("Scripts", false)
 	
@@ -129,8 +94,7 @@
 			});
 	}
 </script>
-	
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" media="none" onload="if(media!=='all')media='all'">
+
 
 </body>
 

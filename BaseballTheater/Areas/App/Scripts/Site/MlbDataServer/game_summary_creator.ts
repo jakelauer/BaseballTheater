@@ -10,14 +10,14 @@
 			const monthFolder = `month_${date.format("MM")}`;
 			const dayFolder = `day_${date.format("DD")}`;
 
-			return `${this.urlBase}/components/game/mlb/${yearFolder}/${monthFolder}/${dayFolder}/scoreboard_android.xml`;
+			return `${this.urlBase}/components/game/mlb/${yearFolder}/${monthFolder}/${dayFolder}/master_scoreboard.xml`;
 		}
 
 		public static async getSummaryCollection(date: moment.Moment)
 		{
 			const url = this.buildUrl(date);
 
-			const gameSummaryCollectionData = await Utils.XmlLoader.load<GameSummaryCollection>(url, "gameSummaryCollection");
+			const gameSummaryCollectionData = await Utils.DataLoader.loadXml<GameSummaryCollection>(url, "gameSummaryCollection");
 
 			const gameSummaryCollection = new GameSummaryCollection(gameSummaryCollectionData);
 
