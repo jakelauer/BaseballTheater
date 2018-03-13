@@ -1,9 +1,9 @@
 ﻿using BaseballTheater.Extensions;
-using MlbDataServer.DataFetch;
-using MlbDataServer.DataStructures.News;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MlbDataServer.Contracts.News;
+using MlbDataServer.Engine;
 
 namespace BaseballTheater.Areas.Data.Models.News
 {
@@ -100,7 +100,8 @@ namespace BaseballTheater.Areas.Data.Models.News
 
 			foreach (var name in feedNames.Distinct())
 			{
-				if (Enum.TryParse(name, out NewsFeeds feed))
+				NewsFeeds feed;
+				if (Enum.TryParse(name, out feed))
 				{
 					feeds.Add(feed);
 				}

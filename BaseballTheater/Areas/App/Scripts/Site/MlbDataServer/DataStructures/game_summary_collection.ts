@@ -13,28 +13,31 @@
 
 		constructor(data: IGameSummaryCollection)
 		{
-			this.time_date = data.time_date;
-			if (data.games)
+			if (data)
 			{
-				//const gamesArray = data.games.game instanceof Array
-				//	? data.games.game
-				//	: [(data.games.game as any)] as IGameSummary[];
+				this.time_date = data.time_date;
+				if (data.games)
+				{
+					//const gamesArray = data.games.game instanceof Array
+					//	? data.games.game
+					//	: [(data.games.game as any)] as IGameSummary[];
 
-				//data.games.game = gamesArray;
+					//data.games.game = gamesArray;
 
-				this.games = new GameDay(data.games);
+					this.games = new GameDay(data.games);
+				}
 			}
 		}
 	}
 
 	export interface IGameDay
 	{
-		game?: IGameSummary[];
+		game?: IGameSummaryData[];
 	}
 
 	export class GameDay implements IGameDay
 	{
-		public game: GameSummary[] = [];
+		public game: GameSummaryData[] = [];
 
 		constructor(data: IGameDay)
 		{
@@ -42,14 +45,14 @@
 			{
 				data.game.forEach((game) =>
 				{
-					var gameSummary = new GameSummary(game);
+					var gameSummary = new GameSummaryData(game);
 					this.game.push(gameSummary);
 				});
 			}
 			else if (data.game !== undefined)
 			{
 				// have to do this nefarious stuff because the xml2js library can output an object if there is just one game
-				const gameSummary = new GameSummary((data.game as any) as IGameSummary);
+				const gameSummary = new GameSummaryData((data.game as any) as IGameSummaryData);
 				this.game.push(gameSummary);
 			}
 			else if (data.game === undefined)

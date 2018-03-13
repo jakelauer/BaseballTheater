@@ -1,9 +1,14 @@
-﻿using BaseballTheater.Extensions;
+﻿using System;
+using System.Threading;
+using System.Web;
+using BaseballTheater.Extensions;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using BaseballTheater.Areas.Auth.Models;
+using MlbDataServer.Engine;
 
 namespace BaseballTheater
 {
@@ -11,6 +16,8 @@ namespace BaseballTheater
 	{
 		protected void Application_Start()
 		{
+			//Thread.Sleep(10000);
+
 			ViewEngines.Engines.Clear();
 			var viewEngine = new CustomViewEngine();
 			ViewEngines.Engines.Add(viewEngine);
@@ -20,10 +27,28 @@ namespace BaseballTheater
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			var v8ef = new V8JsEngineFactory();
-			JsEngineSwitcher.Instance.EngineFactories.Add(v8ef);
+			var v8Ef = new V8JsEngineFactory();
+			JsEngineSwitcher.Instance.EngineFactories.Add(v8Ef);
+			JsEngineSwitcher.Instance.DefaultEngineName = v8Ef.EngineName;
 
-			JsEngineSwitcher.Instance.DefaultEngineName = v8ef.EngineName;
+			HighlightDatabase.Initialize();
+			log4net.Config.XmlConfigurator.Configure();
+		}
+
+		public override string GetVaryByCustomString(HttpContext context, string arg) 
+		{ 
+			if (arg.Equals("User", StringComparison.InvariantCultureIgnoreCase))
+			{
+				var authCookie = context.Request.Cookies[AuthContext.PatreonAuthCookieName];
+				if (authCookie != null)
+				{
+					return authCookie.Value;
+				}
+
+				return "";
+			}
+
+			return base.GetVaryByCustomString(context, arg); 
 		}
 	}
 }

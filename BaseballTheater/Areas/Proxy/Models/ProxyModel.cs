@@ -3,10 +3,12 @@
 	public class ProxyModel
 	{
 		public string XML { get; set; }
+		public bool IsJson { get; }
 
-		public ProxyModel(string xml)
+		public ProxyModel(string xml, bool isJson)
 		{
 			this.XML = xml;
+			this.IsJson = isJson;
 		}
 	}
 }

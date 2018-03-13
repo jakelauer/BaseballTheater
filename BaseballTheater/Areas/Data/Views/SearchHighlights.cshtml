@@ -1,22 +1,10 @@
 ﻿@using System.Data
-@model System.Data.DataTable
+@model IEnumerable<MlbDataServer.Contracts.HighlightSearchResult>
 
 @{
 	Layout = "_DataLayout.cshtml";
 
-	var rows = new List<Dictionary<string, object>>();
-
-	foreach (DataRow dr in Model.Rows)
-	{
-		var row = new Dictionary<string, object>();
-		foreach (DataColumn col in Model.Columns)
-		{
-			row.Add(col.ColumnName, dr[col]);
-		}
-		rows.Add(row);
-	}
-
-	var json = Json.Encode(rows);
+	var json = Json.Encode(Model);
 }
 
 @Html.Raw(json)
