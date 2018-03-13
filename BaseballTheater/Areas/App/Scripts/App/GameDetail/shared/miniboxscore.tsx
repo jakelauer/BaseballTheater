@@ -56,7 +56,8 @@
 				const innings: (ILinescoreInning | null)[] = [...linescore.inning_line_score];
 				if (innings.length < 9)
 				{
-					for (let i = 0; i < (9 - innings.length); i++)
+					const inningsLength = innings.length;
+					for (let i = 0; i < (9 - inningsLength); i++)
 					{
 						innings.push(null)
 					}

@@ -153,8 +153,8 @@ namespace MlbDataMux
 				var lastModifiedHeader = headers.TryGetValueOrDefault("Last-Modified");
 				if (lastModifiedHeader != null)
 				{
-					var lastModified = DateTime.Parse(lastModifiedHeader);
-					if (lastModified > this.lastCheckedDate || true)
+					var lastModified = DateTime.Parse(lastModifiedHeader).ToUniversalTime();
+					if (lastModified > this.lastCheckedDate)
 					{
 						gamesToBroadcast.Add(game.GamePk);
 					}

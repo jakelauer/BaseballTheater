@@ -3,7 +3,13 @@
 	interface GameSummaryProps
 	{
 		game: GameSummaryData;
+		index: number;
 		hideScores: boolean;
+	}
+
+	interface IGameSummaryState
+	{
+		visible: boolean
 	}
 
 	enum HomeAway
@@ -13,11 +19,48 @@
 		Away
 	}
 
-	export class GameSummary extends React.Component<GameSummaryProps, any>
+	export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryState>
 	{
+		private loadingSubscription: Utility.Subscription<ILoadingPayload>;
+		
 		constructor(props: GameSummaryProps)
 		{
 			super(props);
+
+			this.state = {
+				visible: false
+			};
+		}
+
+		private show()
+		{
+			this.setState({
+				visible: true
+			})
+		}
+
+		public componentDidMount()
+		{
+			setTimeout(() => this.show(), this.props.index * 25);
+
+			this.loadingSubscription = App.Instance.loadingDistributor.subscribe(() =>
+				this.setState({
+					visible: false
+				})
+			);
+		}
+
+		public componentWillUnmount()
+		{
+			App.Instance.loadingDistributor.unsubscribe(this.loadingSubscription);
+		}
+
+		public componentWillReceiveProps(newProps: Readonly<GameSummaryProps>)
+		{
+			if (this.props.game.game_pk !== newProps.game.game_pk)
+			{
+				setTimeout(() => this.show(), this.props.index * 25);
+			}
 		}
 
 		public render()
@@ -25,9 +68,11 @@
 			const game = this.props.game;
 
 			const gameStatusClass = game.isFinal ? "final" : "";
+			const visibleClass = this.state.visible ? "on" : "";
+
 
 			return (
-				<div className={`game-summary-simple ${gameStatusClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
+				<div className={`game-summary-simple ${gameStatusClass} ${visibleClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
 					<a href={this.getGameLink()} className={`game-link`}>
 						<i className="material-icons">keyboard_arrow_right</i>
 					</a>
@@ -68,12 +113,12 @@
 						<div className={`team-name team-color ${fileCode}`}>{teamName}</div>
 					</div>
 					{game.linescore &&
-						<div className={`score`}>
-							{this.linescoreItem(linescoreRuns)}
-							<span className={`winner-indicator ${winnerClass}`}>
+					<div className={`score`}>
+						{this.linescoreItem(linescoreRuns)}
+						<span className={`winner-indicator ${winnerClass}`}>
 								<i className={`material-icons`}>chevron_left</i>
 							</span>
-						</div>
+					</div>
 					}
 				</div>
 			);
@@ -89,18 +134,18 @@
 
 		private linescoreItem(input: string): string
 		{
-			return this.props.hideScores 
-				? "▨" 
+			return this.props.hideScores
+				? "▨"
 				: input;
 		}
 
 		private getCurrentInning(): string
 		{
 			const game = this.props.game;
-			
-		/*	if (game.status.note){
-				return game.status.note;
-			}*/
+
+			/*	if (game.status.note){
+					return game.status.note;
+				}*/
 
 			if (game.isFinal)
 			{
@@ -114,15 +159,15 @@
 			}
 
 			return game.status.inning_state
-				       ? `${game.status.inning_state} ${game.status.inning}`
-				       : this.getStatusTime();
+				? `${game.status.inning_state} ${game.status.inning}`
+				: this.getStatusTime();
 		}
 
 		private getWinner(): HomeAway
 		{
 			const game = this.props.game;
 
-			if (game.linescore && game.linescore.r && !this.props.hideScores)
+			if (game.linescore && game.linescore.r && !this.props.hideScores && game.isFinal)
 			{
 				const away = parseInt(game.linescore.r.away);
 				const home = parseInt(game.linescore.r.home);

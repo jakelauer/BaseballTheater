@@ -58,11 +58,13 @@
 		.r-large &
 		{
 			width: 33%;
+			max-width: 33%;
 		}
 
 		.r-medium &
 		{
 			width: 50%;
+			max-width: 50%;
 		}
 
 		.video-info
@@ -95,6 +97,7 @@
 					font-size: 1rem;
 					font-weight: 400;
 					flex: 1 0;
+					color: black;
 
 					span.team
 					{
@@ -108,10 +111,6 @@
 					}
 				}
 
-				&:hover span.title
-				{
-					text-decoration: underline;
-				}
 			}
 		}
 
@@ -164,16 +163,23 @@
 
 		.highlight
 		{
+			max-width: none;
 			margin-bottom: 0;
 
-			.video-info a h2
+			.video-info a
 			{
-				font-size: 1.5rem;
-			}
+				text-decoration: none;
+				
+				h2
+				{
+					font-size: 1.5rem;
+					color: black;
+				}
 
-			.video-info a .thumb
-			{
-				height: 18vw;
+				.thumb
+				{
+					height: 18vw;
+				}
 			}
 		}
 	}

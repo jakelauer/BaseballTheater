@@ -14,7 +14,7 @@
 			return (this.props.highlight as IHighlightSearchResult).Highlight || (this.props.highlight as IHighlight);
 		}
 
-		private get searchResult() : IHighlightSearchResult | null
+		private get searchResult(): IHighlightSearchResult | null
 		{
 			const asSearchResult = (this.props.highlight as IHighlightSearchResult);
 			const isSearchResult = !!asSearchResult.Highlight;
@@ -36,12 +36,11 @@
 				</div>);
 		}
 
-		private getLink(label: string, url: string): ILink
+		private getGameLink()
 		{
-			return {
-				url,
-				label
-			}
+			const dateString = moment(this.highlight.date).format("YYYYMMDD");
+			const gameId = this.searchResult ? String(this.searchResult.GameId) : null
+			return gameId ? `/game/${dateString}/${gameId}` : "javascript:void(0)";
 		}
 
 		public render()
@@ -53,7 +52,7 @@
 				return <div/>;
 			}
 
-			const thumbStyle = { backgroundImage: `url(${displayProps.thumb})` };
+			const thumbStyle = {backgroundImage: `url(${displayProps.thumb})`};
 
 			const links = displayProps.links.map((link, i) =>
 			{
@@ -62,10 +61,10 @@
 
 			const dateString = moment(this.highlight.date).format("MMM D, YYYY");
 			const dateRendered = this.props.renderDate
-				                     ? <div className={`date`}>
-					                       {dateString}
-				                       </div>
-				                     : null;
+				? <a className={`date`} href={this.getGameLink()}>
+					{dateString} (View game)
+				</a>
+				: null;
 
 			return (
 				<div className={`highlight`}>

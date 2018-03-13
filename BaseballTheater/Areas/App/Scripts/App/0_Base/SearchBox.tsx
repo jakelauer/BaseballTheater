@@ -56,7 +56,7 @@
 				<div className={`search`}>
 					<input type="text" required onChange={e => this.onChange(e)} value={this.state.currentValue} />
 					<div className={`label`}>
-						<i className={`material-icons`}>search</i> <span>Find games &amp; highlights</span>
+						<i className={`material-icons`}>search</i> <span>Search highlights</span>
 					</div>
 				</div>
 			);

@@ -45,8 +45,8 @@
 			if (hc && hc.highlights && hc.highlights.media)
 			{
 				const highlights = hc.highlights.media instanceof Array
-					                   ? hc.highlights.media
-					                   : [(hc.highlights.media as any) as IHighlight];
+					? hc.highlights.media
+					: [(hc.highlights.media as any) as IHighlight];
 
 				const matching = highlights.find(highlight =>
 				{
@@ -54,8 +54,8 @@
 					if (highlight.keywords && highlight.keywords.keyword)
 					{
 						const keywords = highlight.keywords.keyword instanceof Array
-							                 ? highlight.keywords.keyword
-							                 : ([highlight.keywords.keyword] as any) as Keyword[];
+							? highlight.keywords.keyword
+							: ([highlight.keywords.keyword] as any) as Keyword[];
 
 						keywords.forEach(keyword =>
 						{
@@ -76,7 +76,7 @@
 
 		private renderPitch(pitch: IPitch, pitchIndex: number)
 		{
-			let rendered = <div />;
+			let rendered = <div/>;
 
 			if (pitch)
 			{
@@ -93,11 +93,16 @@
 			return rendered;
 		}
 
-		private toggleExpandedState()
+		private toggleExpandedState(e: React.MouseEvent<HTMLDivElement>)
 		{
 			this.setState({
 				isExpanded: !this.state.isExpanded
 			});
+
+			const el = e.currentTarget;
+			const top = el.getBoundingClientRect().top;
+			const totalTop = top + window.scrollY;
+			$("html, body").animate({scrollTop: totalTop - $("header").height()});
 		}
 
 		public render()
@@ -111,9 +116,9 @@
 			{
 				return <div/>;
 			}
-				
+
 			let pitches: JSX.Element[] = [];
-			let strikezone = <div />;
+			let strikezone = <div/>;
 			if (batter && batter.pitch)
 			{
 				pitches = batter.pitch.map((pitch, i) =>
@@ -121,7 +126,7 @@
 					return this.renderPitch(pitch, i);
 				});
 
-				strikezone = <PlayByPlayPitches pitches={batter.pitch} isSpringTraining={this.props.isSpringTraining} />;
+				strikezone = <PlayByPlayPitches pitches={batter.pitch} isSpringTraining={this.props.isSpringTraining}/>;
 			}
 
 			const expandedClass = this.state.isExpanded ? "expanded" : "";
@@ -130,7 +135,7 @@
 			const hasHighlight = highlightHref.trim() !== "" ? "has-highlight" : "";
 			const pitcherChanged = (!oldPitcher) || (newPitcher && oldPitcher.id !== newPitcher.id);
 
-			let pitcherChangedRendered = <div />;
+			let pitcherChangedRendered = <div/>;
 			if (pitcherChanged && newPitcher)
 			{
 				const changedString = oldPitcher !== null
@@ -149,7 +154,7 @@
 							<a className={`play-highlight ${hasHighlight}`} target={`_blank`} href={highlightHref}>
 								<i className={`material-icons`}>play_circle_filled</i>
 							</a>
-							<div className={`result-trigger`} onClick={() => this.toggleExpandedState()}>
+							<div className={`result-trigger`} onClick={(e) => this.toggleExpandedState(e)}>
 								<span className={`play-description`}>{batter.des}</span>
 								<span className={`current-score`}>({batter.away_team_runs} - {batter.home_team_runs})</span>
 							</div>

@@ -32,7 +32,7 @@
 				var $el = $(e.currentTarget);
 				var href = $el.attr("href");
 
-				if (href.startsWith("/Auth/"))
+				if (href.startsWith("/Auth/") || href.startsWith("#"))
 				{
 					return true;
 				}
