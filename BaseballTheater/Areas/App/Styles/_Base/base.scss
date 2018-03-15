@@ -52,8 +52,34 @@ html
 
 	#body-content
 	{
-		height: 100%;
+		min-height: 80%;
 		transition: 0.5s;
+	}
+}
+
+.footer
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	width: 40rem;
+	max-width: 100%;
+	margin: 0 auto 4rem;
+	
+	.shameless-plug
+	{
+		width: 100%;
+		display: block;
+		text-align: center;
+		justify-content: center;
+		margin-top: 2rem;
+		
+		.patreon-button{
+			margin: 1rem auto 0;
+			height: 35px;
+			width: 178px;
+		}
 	}
 }
 

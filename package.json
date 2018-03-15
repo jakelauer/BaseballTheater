@@ -9,5 +9,8 @@
     "gulp-util": "~3.0.8",
     "gulp": "~3.9.1",
     "gulp-csscomb": "~3.0.8"
+  },
+  "dependencies": {
+    "@types/react-router-dom": "^4.2.4"
   }
 }

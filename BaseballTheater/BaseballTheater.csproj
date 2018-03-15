@@ -380,7 +380,9 @@
     <Content Include="Areas\Data\Views\web.config" />
     <Content Include="Shared\Scripts\libraries\jquery.signalR-2.2.2.min.js" />
     <Content Include="Shared\Scripts\libraries\react-dom.js" />
+    <Content Include="Shared\Scripts\libraries\react-dom.min.js" />
     <Content Include="Shared\Scripts\libraries\react.js" />
+    <Content Include="Shared\Scripts\libraries\react.min.js" />
     <Content Include="Shared\Scripts\libraries\remarkable.min.js" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff" />
     <Content Include="Shared\Styles\fonts\bebasneue_bold-webfont.woff2" />
