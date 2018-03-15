@@ -1,4 +1,5 @@
-﻿using BundleTransformer.Core.Builders;
+﻿using System.Diagnostics;
+using BundleTransformer.Core.Builders;
 using BundleTransformer.Core.Orderers;
 using BundleTransformer.Core.Resolvers;
 using BundleTransformer.Core.Transformers;
@@ -8,12 +9,15 @@ namespace BaseballTheater
 {
 	public class BundleConfig
 	{
+
 		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
 			BundleResolver.Current = new CustomBundleResolver();
 
-			var libraries = new ScriptBundle("~/scriptbundles/lib")
+			var libraries = new ScriptBundle("~/scriptbundles/lib");
+			
+			libraries
 				.Include("~/Shared/Scripts/libraries/react.js")
 				.Include("~/Shared/Scripts/libraries/react-dom.js")
 				.Include("~/Shared/Scripts/libraries/remarkable.min.js")

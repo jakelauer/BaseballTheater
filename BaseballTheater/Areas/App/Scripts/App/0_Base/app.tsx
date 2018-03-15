@@ -87,6 +87,8 @@
 			$.connection.hub.start().done(() =>
 			{
 			});
+			
+			
 		}
 
 		public static startLoading()
@@ -242,6 +244,21 @@
 						</div>
 						<div id="body-content">
 							{renderablePage}
+						</div>
+
+						<div className={`footer`}>
+							<span>Created by</span>&nbsp;
+							<a href="https://github.com/jakelauer" target={`_blank`}>Jake Lauer</a>
+							&nbsp;(<a href="https://www.reddit.com/user/HelloControl_/" target={`_blank`}>HelloControl_</a>)
+
+							<div className={`shameless-plug`}>
+								<div>
+									<strong>Like the site?</strong> It costs money to run! Help me keep the site alive:
+								</div>
+								<div className={`patreon-button`}>
+									<a href="https://www.patreon.com/bePatron?u=5206592" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+								</div>
+							</div>
 						</div>
 
 						<Modal id={`settings`}
