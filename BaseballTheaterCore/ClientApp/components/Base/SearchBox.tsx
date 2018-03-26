@@ -1,5 +1,4 @@
 ﻿import * as React from "react";
-import {LinkHandler} from "../../Utility/link_handler";
 import {Search} from "../Search/search";
 
 interface ISearchBoxState
@@ -28,11 +27,11 @@ export class SearchBox extends React.Component<any, ISearchBoxState>
 		this.setState({
 			currentValue: value
 		});
-		this.timer = setTimeout(() => this.performSearch(value), 500);
+		this.timer = window.setTimeout(() => this.performSearch(value), 500);
 	}
 
 	public componentDidMount()
-	{
+	{/*
 		if (LinkHandler.Instance.stateChangeDistributor)
 		{
 			LinkHandler.Instance.stateChangeDistributor.subscribe(() =>
@@ -44,12 +43,12 @@ export class SearchBox extends React.Component<any, ISearchBoxState>
 					});
 				}
 			});
-		}
+		}*/
 	}
 
 	private performSearch(query: string)
 	{
-		LinkHandler.pushState(`/Search/${encodeURI(query)}`);
+		//LinkHandler.pushState(`/Search/${encodeURI(query)}`);
 	}
 
 	public render()

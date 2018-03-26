@@ -37,19 +37,23 @@ export class Responsive
 
 	private addListeners()
 	{
-		$(window).on("resize",
-			() =>
-			{
-				this.determineMq();
-			});
+		window.addEventListener("resize", () => this.determineMq());
 	};
 
 	private determineMq()
 	{
+		const html = document.getElementsByTagName("html")[0];
 		for (let mediaQuery of this.mediaQueries)
 		{
 			const stringClass = `r-${mediaQuery.name}`;
-			$("html").toggleClass(stringClass, mediaQuery.test());
+			if (mediaQuery.test())
+			{
+				html.classList.add(stringClass);
+			}
+			else
+			{
+				html.classList.remove(stringClass);
+			}
 		}
 	};
 }

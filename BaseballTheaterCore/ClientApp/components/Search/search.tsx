@@ -1,6 +1,6 @@
 ﻿import * as React from "react";
+import {RouteComponentProps} from "react-router";
 import {IHighlightSearchResult} from "../../MlbDataServer/Contracts";
-import {LinkHandler} from "../../Utility/link_handler";
 import {App} from "../Base/app";
 import {Highlight} from "../shared/highlight";
 
@@ -10,7 +10,7 @@ interface ISearchState
 	highlights: IHighlightSearchResult[];
 }
 
-export class Search extends React.Component<any, ISearchState>
+export class Search extends React.Component<RouteComponentProps<any>, ISearchState>
 {
 	public static readonly regex = /^\/search\/(.*)(\/|\?)?/i;
 	private readonly PER_PAGE = 20;
@@ -30,7 +30,7 @@ export class Search extends React.Component<any, ISearchState>
 	{
 		this.loadNextHighlightPage();
 
-		LinkHandler.Instance.stateChangeDistributor.subscribe(() =>
+	/*	LinkHandler.Instance.stateChangeDistributor.subscribe(() =>
 		{
 			if (Search.getQuery().trim() !== "")
 			{
@@ -38,7 +38,7 @@ export class Search extends React.Component<any, ISearchState>
 				this.updateHighlights(null);
 				this.loadNextHighlightPage();
 			}
-		});
+		});*/
 	}
 
 	private setQuery()
@@ -77,11 +77,9 @@ export class Search extends React.Component<any, ISearchState>
 	{
 		App.startLoading();
 
-		$.ajax({
-			url: `/Data/SearchHighlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`,
-			dataType: "json",
-			success: data => this.updateHighlights(data)
-		});
+		fetch(`/Data/SearchHighlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
+			.then((response: Response) => response.json())
+			.then(json => this.updateHighlights(json));
 
 		this.nextPage++;
 	}

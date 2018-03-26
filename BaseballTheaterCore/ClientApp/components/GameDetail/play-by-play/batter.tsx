@@ -1,5 +1,6 @@
 ﻿import * as React from "react";
 import {IAtBat, IHighlight, IHighlightsCollection, IPitch, IPitcher, Keyword} from "../../../MlbDataServer/Contracts";
+import {Animate} from "../../../Utility/animate";
 import {HighlightUtility} from "../../shared/highlight_utility";
 import {PlayByPlayPitches} from "./play_by_play_pitches";
 
@@ -105,8 +106,9 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		const el = e.currentTarget;
 		const top = el.getBoundingClientRect().top;
 		const totalTop = top + window.scrollY;
-		const height: number = $("header").height() || 0;
-		$("html, body").animate({scrollTop: totalTop - height});
+		const header = document.getElementsByTagName("header")[0];
+		const height = header.getBoundingClientRect().height || 0;
+		Animate.scrollTop(totalTop - height);
 	}
 
 	public render()

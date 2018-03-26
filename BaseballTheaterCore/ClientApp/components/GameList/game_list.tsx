@@ -1,11 +1,11 @@
 ﻿import * as moment from "moment/moment"
 import * as React from "react"
+import {RouteComponentProps} from "react-router";
+import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
 import {GameSummaryCreator} from "../../MlbDataServer/game_summary_creator";
-import {LinkHandler} from "../../Utility/link_handler";
 import {Subscription} from "../../Utility/subscribable";
 import {App} from "../Base/app";
-import {IPageProps, ISettings} from "../Base/page";
 import {Calendar} from "./calendar";
 import {GameSummary} from "./game_summary";
 
@@ -14,6 +14,7 @@ interface IGameListState
 	gameSummaries: GameSummaryData[];
 	date: moment.Moment;
 	navigating: boolean;
+	settings: ISettings;
 }
 
 interface IGameListRouteParams
@@ -21,33 +22,54 @@ interface IGameListRouteParams
 	date: string;
 }
 
-interface IGameListProps extends IPageProps<IGameListRouteParams>
-{
-	settings: ISettings;
-}
-
-export class GameList extends React.Component<IGameListProps, IGameListState>
+export class GameList extends React.Component<RouteComponentProps<IGameListRouteParams>, IGameListState>
 {
 	private pikaday: any;
 	private linkHandlerSubscription: Subscription<Location>;
+	private settingsDispatcherKey: string;
 
-	constructor(props: IGameListProps)
+	constructor(props: RouteComponentProps<IGameListRouteParams>)
 	{
 		super(props);
 
-		//const date = GameList.getDateFromPath();
+		let date: moment.Moment;
 		const dateString = this.props.match.params.date;
-		const date = moment(dateString, "YYYYMMDD");
+		if (dateString)
+		{
+			date = moment(dateString, "YYYYMMDD");
+		}
+
+		if (!date || !date.isValid())
+		{
+			date = GameList.getDefaultDate();
+		}
 
 		this.state = {
 			gameSummaries: [],
 			date,
-			navigating: false
+			navigating: false,
+			settings:  App.Instance.settingsDispatcher.state
 		};
+	}
+
+	public componentWillMount()
+	{
+		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
+			settings: payload
+		}))
+	}
+
+	private getUrlForDate(newDate: moment.Moment)
+	{
+		return `/${newDate.format("YYYYMMDD")}`;
 	}
 
 	private updateDate = (newDate: moment.Moment) =>
 	{
+		const newUrl = this.getUrlForDate(newDate);
+
+		this.props.history.push(newUrl);
+
 		this.setState({
 			date: newDate
 		}, () => this.loadGamesForCurrentDate());
@@ -71,22 +93,10 @@ export class GameList extends React.Component<IGameListProps, IGameListState>
 	public componentDidMount()
 	{
 		this.loadGamesForCurrentDate();
-
-		/*this.linkHandlerSubscription = LinkHandler.Instance.stateChangeDistributor.subscribe(payload =>
-		{
-			if (payload.pathname.length < 2)
-			{
-				this.updateDate(GameList.getDateFromPath());
-			}
-		});*/
 	}
 
 	public componentWillUnmount()
 	{
-		if (this.linkHandlerSubscription)
-		{
-			LinkHandler.Instance.stateChangeDistributor.unsubscribe(this.linkHandlerSubscription);
-		}
 	}
 
 	private loadGamesForCurrentDate()
@@ -111,7 +121,7 @@ export class GameList extends React.Component<IGameListProps, IGameListState>
 
 	private sortGames(games: GameSummaryData[])
 	{
-		const favoriteTeam = this.props.settings.favoriteTeam;
+		const favoriteTeam = this.state.settings.favoriteTeam;
 		games.sort((a, b) =>
 		{
 			const aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
@@ -136,13 +146,13 @@ export class GameList extends React.Component<IGameListProps, IGameListState>
 
 		const gamesInProgressRendered = gamesInProgress.map((gameSummary, i) =>
 		{
-			return <GameSummary game={gameSummary} index={i} key={i} hideScores={this.props.settings.hideScores}/>;
+			return <GameSummary game={gameSummary} index={i} key={i} hideScores={this.state.settings.hideScores}/>;
 		});
 
 		const finalGamesRendered = gamesFinal.map((gameSummary, i) =>
 		{
 			const key = gamesInProgress.length + i;
-			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.props.settings.hideScores}/>;
+			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
 
 		const noGames = this.state.gameSummaries.length === 0 && !App.isLoading

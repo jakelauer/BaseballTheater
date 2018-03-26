@@ -1,4 +1,5 @@
-﻿import {IHighlight, IHighlightSearchResult, Teams} from "../../MlbDataServer/Contracts";
+﻿import {Link} from "react-router-dom";
+import {IHighlight, IHighlightSearchResult, Teams} from "../../MlbDataServer/Contracts";
 import * as React from "react";
 import {HighlightUtility, IHighlightDisplay} from "./highlight_utility";
 import * as moment from "moment"
@@ -64,9 +65,9 @@ export class Highlight extends React.Component<IHighlightProps, any>
 
 		const dateString = moment(this.highlight.date).format("MMM D, YYYY");
 		const dateRendered = this.props.renderDate
-			? <a className={`date`} href={this.getGameLink()}>
+			? <Link className={`date`} to={this.getGameLink()}>
 				{dateString} (View game)
-			</a>
+			</Link>
 			: null;
 
 		return (

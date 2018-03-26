@@ -1,0 +1,42 @@
+ Volume in drive D is Downloads
+ Volume Serial Number is EA2D-BA66
+
+ Directory of D:\Git\BaseballTheater\BaseballTheater\images\logos
+
+03/30/2017  09:35 PM    <DIR>          .
+03/30/2017  09:35 PM    <DIR>          ..
+03/30/2017  09:32 PM            42,979 al.gif
+03/30/2017  09:30 PM            38,144 ari.png
+03/30/2017  09:30 PM            19,363 atl.png
+03/30/2017  09:31 PM            36,149 bal.png
+03/30/2017  09:31 PM            44,942 bos.png
+03/30/2017  09:29 PM            82,455 chc.png
+03/30/2017  09:31 PM            19,163 chw.png
+03/30/2017  09:29 PM            76,702 cin.png
+03/30/2017  09:31 PM             4,141 cle.png
+03/30/2017  09:29 PM            56,561 col.png
+03/30/2017  09:31 PM            16,893 det.png
+03/30/2017  09:31 PM            84,659 hou.png
+03/30/2017  09:30 PM            18,561 kc.png
+03/30/2017  09:30 PM            18,641 laa.png
+03/30/2017  09:29 PM            21,955 lad.png
+03/30/2017  09:28 PM           139,684 mia.png
+03/30/2017  09:28 PM            62,882 mil.png
+03/30/2017  09:30 PM            43,579 min.png
+03/30/2017  09:32 PM            38,389 nl.gif
+03/30/2017  09:28 PM            38,605 nym.png
+03/30/2017  09:31 PM            32,344 nyy.png
+03/30/2017  09:31 PM            30,159 oak.png
+03/30/2017  09:29 PM            17,602 phi.gif
+03/30/2017  09:29 PM             8,410 pit.png
+03/30/2017  09:29 PM             7,062 sd.png
+03/30/2017  09:31 PM            36,639 sea.png
+03/30/2017  09:28 PM            53,450 sf.png
+03/30/2017  09:28 PM            26,774 stl.gif
+03/30/2017  09:30 PM            22,620 tb.gif
+03/30/2017  09:30 PM           151,088 tex.png
+03/30/2017  09:30 PM            65,284 tor.png
+03/30/2017  09:35 PM                 0 txt.txt
+03/30/2017  09:27 PM           118,033 was.png
+              33 File(s)      1,473,912 bytes
+               2 Dir(s)  1,524,472,586,240 bytes free
