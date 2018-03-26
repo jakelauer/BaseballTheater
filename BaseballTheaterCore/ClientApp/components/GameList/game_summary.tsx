@@ -1,5 +1,6 @@
 ﻿import * as moment from "moment-timezone"
 import * as React from "react"
+import {Link} from "react-router-dom";
 import {GameSummaryData} from "../../MlbDataServer/Contracts";
 import {Subscription} from "../../Utility/subscribable";
 import {App, ILoadingPayload} from "../Base/app";
@@ -77,9 +78,9 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 
 		return (
 			<div className={`game-summary-simple ${gameStatusClass} ${visibleClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
-				<a href={this.getGameLink()} className={`game-link`}>
+				<Link to={this.getGameLink()} className={`game-link`}>
 					<i className="material-icons">keyboard_arrow_right</i>
-				</a>
+				</Link>
 
 				{this.renderTeamRow(HomeAway.Away)}
 

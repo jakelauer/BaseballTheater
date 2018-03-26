@@ -1,9 +1,9 @@
 import * as Cookies from "js-cookie";
 import * as React from "react";
+import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Teams} from "../../MlbDataServer/Contracts";
 import {GameDetailTabs} from "../GameDetail/game_detail";
 import {App} from "./app";
-import {ISettings} from "./page";
 
 interface ISettingsContainerProps
 {
@@ -97,7 +97,11 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 		Cookies.set("hidescores", String(settings.hideScores));
 		Cookies.set("favoriteteam", settings.favoriteTeam);
 		Cookies.set("defaulttab", settings.defaultTab);
-		App.Instance.settingsDistributor.distribute(settings)
+		App.Instance.settingsDispatcher.update({
+			hideScores: settings.hideScores,
+			favoriteTeam: settings.favoriteTeam,
+			defaultTab: settings.defaultTab
+		})
 	}
 
 	public render()

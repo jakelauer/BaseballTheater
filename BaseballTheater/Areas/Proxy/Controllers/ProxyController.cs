@@ -2,6 +2,7 @@
 using MlbDataServer;
 using System.Net;
 using System.Web.Mvc;
+using Common;
 
 namespace BaseballTheater.Areas.Proxy.Controllers
 {

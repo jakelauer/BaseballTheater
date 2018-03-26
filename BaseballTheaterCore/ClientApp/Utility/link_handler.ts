@@ -1,5 +1,4 @@
 ﻿import {Distributor} from "./subscribable";
-import "jquery"
 
 export class LinkHandler
 {
@@ -16,14 +15,14 @@ export class LinkHandler
 
 		this.stateChangeDistributor = new Distributor<Location>();
 
-		this.addListeners();
+		//this.addListeners();
 
 		this.initialized = true;
 	}
 
 	private addListeners()
 	{
-		$(document).on("click", "a[href]:not([href^='http'])", (e) =>
+		/*$(document).on("click", "a[href]:not([href^='http'])", (e) =>
 		{
 			if (e.metaKey || e.shiftKey || e.ctrlKey)
 			{
@@ -51,26 +50,13 @@ export class LinkHandler
 		$(window).on("popstate statechange", (e) =>
 		{
 			this.stateChangeDistributor.distribute(location);
-		});
+		});*/
 	}
-
+	
 	public static pushState(href: string)
 	{
 		history.pushState({}, "", href);
-		$(window).trigger("statechange");
-	}
-
-	private ajax(href: string)
-	{
-		return new Promise((resolve, reject) =>
-		{
-			$.ajax({
-				url: href,
-				type: "GET",
-				success: (response: string) => resolve(response),
-				error: error => reject(error)
-			});
-		});
+		//$(window).trigger("statechange");
 	}
 
 	public static parseHash()

@@ -1,0 +1,184 @@
+﻿@import "../_Base/_vars.scss";
+
+.mini-box-score
+{
+	display: flex;
+
+	table
+	{
+		border-collapse: collapse;
+	}
+
+	td
+	{
+		line-height: 1.5rem;
+		padding: 0.25rem;
+		border: 1px solid $color-basic-background;
+	}
+
+	.team-table
+	{
+		font-weight: bold;
+
+		td
+		{
+			padding-right: 1rem;
+			border-right: 0;
+			white-space: nowrap;
+		}
+	}
+
+	.innings-table
+	{
+		flex: auto;
+		table-layout: fixed;
+
+		table
+		{
+			width: 100%;
+		}
+	}
+
+	td.single-val
+	{
+		min-width: 1.5rem;
+		text-align: center;
+	}
+
+	.headers
+	{
+		font-weight: bold;
+		background: #F7F7F7;
+	}
+
+	td.r,
+	td.h,
+	td.e
+	{
+		font-weight: bold;
+	}
+}
+
+.box-score-wrapper
+{
+	flex: auto;
+
+	.r-large &:not(.detail-mode-on)
+	{
+		display: none;
+	}
+}
+
+.boxscore
+{
+	position: relative;
+	width: 100%;
+	margin: 2rem 0;
+	font-size: 0.85rem;
+
+	.teams
+	{
+		display: flex;
+		flex-wrap: wrap;
+
+		.team
+		{
+			padding-right: 0.75rem;
+			flex: 1 0;
+
+			.r-mobile &
+			{
+				flex: none;
+				padding: 0;
+				width: 100%;
+			}
+		}
+
+			.team + .team
+			{
+				padding-right: 0;
+				padding-left: 0.75rem;
+
+				.r-mobile &
+				{
+					padding: 0;
+				}
+			}
+	}
+
+	.note, .text-data
+	{
+		margin-top: 1rem;
+		font-style: italic;
+
+		b
+		{
+			font-weight: bold;
+		}
+	}
+
+	.team-name
+	{
+		margin-bottom: 1rem;
+		text-align: center;
+		font-size: 2rem;
+	}
+
+	.player-list
+	{
+		width: 100%;
+		border-collapse: collapse;
+
+		&.pitchers
+		{
+			margin-top: 2rem;
+		}
+
+		.player-item
+		{
+			&:nth-of-type(even)
+			{
+				background: rgba(0, 0, 0, 0.025);
+			}
+
+			> div
+			{
+				padding: 0.25rem 0;
+			}
+
+			.stat[data-statid="p-st"],
+			.stat[data-statid="era"]
+			{
+				width: 3rem;
+				white-space: nowrap;
+				flex: none;
+			}
+
+			.note
+			{
+				display: inline-block;
+				margin-top: 0;
+				font-style: normal;
+			}
+
+			.stat
+			{
+				min-width: 1rem;
+				padding: 0.25rem 0;
+			}
+		}
+
+		.header
+		{
+			font-weight: bold;
+		}
+	}
+
+	.game-notes
+	{
+		b
+		{
+			font-weight: bold;
+		}
+	}
+}

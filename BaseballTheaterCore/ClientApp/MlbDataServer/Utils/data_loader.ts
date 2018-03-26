@@ -1,9 +1,9 @@
-﻿import "jquery"
-declare var X2JS: IX2JS;
+﻿import * as X2JS from "x2js"
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 
 export class DataLoader
 {
-	private static requests: { [key: string]: JQueryXHR } = {};
+	private static requests: { [key: string]: AbortController } = {};
 
 	private static async load<T>(url: string, isJson: boolean, uniqueRequestType: string = "")
 	{
@@ -19,20 +19,16 @@ export class DataLoader
 			delete this.requests[uniqueRequestType];
 		}
 
-		const dataType = isJson ? "json" : "html";
-
-		let ajaxRequest: JQueryXHR;
-		const promise = new Promise((resolve: (value: any) => void, reject: (error: JQueryXHR) => void) =>
+		const promise = new Promise((resolve: (value: any) => void, reject: (error: any) => void) =>
 		{
-			ajaxRequest = $.ajax({
-				url: proxyUrl,
-				type: "GET",
-				dataType: dataType,
-				success: (response) =>
-				{
-					resolve(response);
-				},
-				error: (error) =>
+			const controller = new AbortController();
+			const signal = controller.signal;
+			const request = new Request(proxyUrl, {signal});
+
+			fetch(request)
+				.then((response: Response) => response.json())
+				.then((myJson: any) => resolve(myJson))
+				.catch((error: any) =>
 				{
 					if (error.statusText === "abort")
 					{
@@ -40,13 +36,11 @@ export class DataLoader
 					}
 
 					reject(error);
-				}
-			});
+				});
 
 			if (uniqueRequestType)
 			{
-				//console.debug(`Setting unique request of type ${uniqueRequestType}`);
-				this.requests[uniqueRequestType] = ajaxRequest;
+				this.requests[uniqueRequestType] = controller;
 			}
 		});
 
@@ -72,22 +66,33 @@ export class DataLoader
 	public static async loadXml<T>(url: string, uniqueRequestType: string = "")
 	{
 		const result = await this.load(url, false, uniqueRequestType);
-		return this.xmlToJson(result as string) as T
+
+		let objResult;
+		if (typeof result === "string")
+		{
+			objResult = JSON.parse(result) as any;
+		}
+		else
+		{
+			objResult = result;
+		}
+
+		return this.xmlToJson(objResult.data as string) as T
 	}
 
 	private static xmlToJson(xmlString: string)
 	{
-		const x2js = new X2JS({
+		const x = new X2JS({
 			attributePrefix: ""
 		});
-		const json = x2js.xml_str2json(xmlString);
+		const json = x.xml2js(xmlString);
 		return json;
 	}
 
 	private static transformUrl(url: string, isJson: boolean)
 	{
 		const encodedUrl = encodeURIComponent(url);
-		const proxyUrl = `/Proxy?mlbUrl=${encodedUrl}&isJson=${isJson}`;
+		const proxyUrl = `/api/Proxy/Get?mlbUrl=${encodedUrl}&isJson=${isJson}`;
 		return proxyUrl;
 	}
 }

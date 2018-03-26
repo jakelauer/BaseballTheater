@@ -1,13 +1,14 @@
 ﻿import {Moment} from "moment";
 import * as moment from "moment/moment"
 import * as React from "react";
+import {RouteComponentProps} from "react-router";
+import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings, LiveData} from "../../MlbDataServer/Contracts";
 import {GameDetailCreator} from "../../MlbDataServer/game_detail_creator";
 import {GameSummaryCreator} from "../../MlbDataServer/game_summary_creator";
 import {Promises} from "../../Utility/promises";
 import {Subscription} from "../../Utility/subscribable";
 import {App, IGameUpdateDistributorPayload} from "../Base/app";
-import {IPageProps} from "../Base/page";
 import {Config} from "../shared/config";
 import {BoxScore} from "./boxscore";
 import {PlayByPlay} from "./play-by-play/play_by_play";
@@ -29,6 +30,7 @@ interface IGameDetailState
 	playByPlay: IInningsContainer | null;
 	liveData: LiveData | null;
 	currentTab: GameDetailTabs;
+	settings: ISettings | null;
 }
 
 interface IGameDetailUrlParams
@@ -37,11 +39,12 @@ interface IGameDetailUrlParams
 	gamePk: string;
 }
 
-export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>, IGameDetailState>
+export class GameDetail extends React.Component<RouteComponentProps<IGameDetailUrlParams>, IGameDetailState>
 {
 	private readonly date: Moment;
 	private readonly gamePk: string;
 	private liveSubscription: Subscription<IGameUpdateDistributorPayload>;
+	private settingsDispatcherKey: string;
 
 	constructor(props: any)
 	{
@@ -52,12 +55,7 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 
 		this.gamePk = this.props.match.params.gamePk;
 
-		let currentTab = parseInt(this.props.settings.defaultTab);
-		if (isNaN(currentTab))
-		{
-			currentTab = GameDetailTabs.Highlights;
-		}
-
+		let currentTab = GameDetailTabs.Highlights;
 		if (App.Instance.isAppMode)
 		{
 			currentTab = GameDetailTabs.BoxScore;
@@ -69,8 +67,25 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 			gameSummary: null,
 			playByPlay: null,
 			liveData: null,
-			currentTab
+			currentTab,
+			settings: App.Instance.settingsDispatcher.state
 		}
+	}
+
+	public componentWillMount()
+	{
+		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload =>
+		{
+			const defaultTab = parseInt(payload.defaultTab);
+			
+			if (!isNaN(defaultTab))
+			{
+				this.setState({
+					currentTab: parseInt(payload.defaultTab),
+					settings: payload
+				});
+			}
+		});
 	}
 
 	public componentDidMount()
@@ -97,29 +112,25 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 	private async getHighlights(currentGame: GameSummaryData): Promise<IHighlightsCollection>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		const highlights = await gameDetailCreator.getHighlights();
-		return highlights;
+		return await gameDetailCreator.getHighlights();
 	}
 
 	private async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		const boxScore = await gameDetailCreator.getBoxscore();
-		return boxScore;
+		return await gameDetailCreator.getBoxscore();
 	}
 
 	private async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		const playByPlay = await gameDetailCreator.getInnings(boxScore);
-		return playByPlay;
+		return await gameDetailCreator.getInnings(boxScore);
 	}
 
 	private async getLiveData(currentGame: GameSummaryData): Promise<LiveData>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		const liveData = gameDetailCreator.getLiveGame(currentGame.game_pk);
-		return liveData;
+		return gameDetailCreator.getLiveGame(currentGame.game_pk);
 	}
 
 	private setTabState(currentTab: GameDetailTabs)
@@ -251,7 +262,7 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 				else
 				{
 					renderables = [
-						<Highlights highlightsCollection={highlightsCollection} hideScores={this.props.settings.hideScores} key={0}/>
+						<Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores} key={0}/>
 					];
 
 				}
@@ -266,7 +277,7 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 				else
 				{
 					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.props.settings.hideScores} key={0}/>,
+						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores} key={0}/>,
 						<BoxScore boxScoreData={boxScoreData} key={1}/>
 					];
 				}
@@ -281,7 +292,7 @@ export class GameDetail extends React.Component<IPageProps<IGameDetailUrlParams>
 				else
 				{
 					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.props.settings.hideScores} key={0}/>,
+						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores} key={0}/>,
 						<PlayByPlay
 							key={1}
 							gameSummary={gameSummary}

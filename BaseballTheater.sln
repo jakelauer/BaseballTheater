@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlbDataMux", "MlbDataMux\Ml
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{43C780E2-4E6E-4247-B03A-4796405B87CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballTheaterCore", "BaseballTheaterCore\BaseballTheaterCore.csproj", "{01FAD396-57B1-4A37-A992-F51B289F1639}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseballTheaterCore", "BaseballTheaterCore\BaseballTheaterCore.csproj", "{01FAD396-57B1-4A37-A992-F51B289F1639}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

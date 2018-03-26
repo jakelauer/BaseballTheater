@@ -1,12 +1,15 @@
-import 'bootstrap';
+import MomentUtils from "material-ui-pickers/utils/moment-utils";
+import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
 import * as React from 'react';
-import '../css/site.css';
+import '../Styles/all.scss'
 import {AppContainer} from "react-hot-loader";
+import {Route} from "react-router";
 import {BrowserRouter} from "react-router-dom";
-import * as RoutesModule from './routes';
+import {AppWrapper} from "./components/Base/app";
+import {GameDetail} from "./components/GameDetail/game_detail";
+import {GameList} from "./components/GameList/game_list";
+import {Search} from "./components/Search/search";
 import * as ReactDOM from "react-dom";
-
-let routes = RoutesModule.routes;
 
 function renderApp()
 {
@@ -14,21 +17,20 @@ function renderApp()
 	// configuration and injects the app into a DOM element.
 	const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href')!;
 	ReactDOM.render(
-		<AppContainer>
-			<BrowserRouter children={routes} basename={baseUrl}/>
-		</AppContainer>,
+		<MuiPickersUtilsProvider utils={MomentUtils}>
+			<AppContainer>
+				<BrowserRouter basename={baseUrl}>
+					<AppWrapper isAppMode={false}>
+						<Route exact path='/' component={GameList}/>
+						<Route path="/:date" component={GameList}/>
+						<Route path="/game/:date/:gamePk" component={GameDetail}/>
+						<Route path="/search/:query" component={Search}/>
+					</AppWrapper>
+				</BrowserRouter>
+			</AppContainer>
+		</MuiPickersUtilsProvider>,
 		document.getElementById('react-app')
 	);
 }
 
 renderApp();
-
-//Allow Hot Module Replacement
-if (module.hot)
-{
-	module.hot.accept('./routes', () =>
-	{
-		routes = require<typeof RoutesModule>('./routes').routes;
-		renderApp();
-	});
-}

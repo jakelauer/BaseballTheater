@@ -1,3 +1,3 @@
+taskkill /f /IM dotnet.exe
 dotnet restore
-start "" http://jlauer.local
 dotnet run

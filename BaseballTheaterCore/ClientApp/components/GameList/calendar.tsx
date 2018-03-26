@@ -1,7 +1,7 @@
-﻿import * as moment from "moment/moment"
+﻿import {MuiThemeProvider, createMuiTheme} from 'material-ui';
+import * as moment from "moment/moment"
+import {DatePicker} from "material-ui-pickers"
 import * as React from "react"
-import * as Pikaday from "pikaday";
-import {LinkHandler} from "../../Utility/link_handler";
 
 interface ICalendarProps
 {
@@ -16,7 +16,13 @@ interface ICalendarState
 
 export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 {
-	private pikaday: any;
+	private materialTheme = createMuiTheme({
+		palette: {
+			primary: {
+				main: "#ce0f0f"
+			}
+		}
+	});
 
 	constructor(props: ICalendarProps)
 	{
@@ -25,36 +31,6 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		this.state = {
 			date: this.props.initialDate
 		};
-	}
-
-	public componentDidMount()
-	{
-		this.pikaday = new Pikaday({
-			field: $("#calendarpicker")[0],
-			format: "MMM DD, YYYY",
-			onSelect: (date) =>
-			{
-				const newDate = moment(date);
-
-				if (!newDate.isSame(this.state.date))
-				{
-					this.changeDate(newDate);
-				}
-			}
-		});
-	}
-
-	public componentWillReceiveProps(nextProps: Readonly<ICalendarProps>)
-	{
-		if (nextProps.initialDate !== this.state.date)
-		{
-			this.pikaday.setMoment(nextProps.initialDate)
-		}
-	}
-
-	private getUrlForDate(newDate: moment.Moment)
-	{
-		return `/${newDate.format("YYYYMMDD")}`;
 	}
 
 	private getDateforChangeDelta(deltaDays: number)
@@ -68,9 +44,7 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 
 	private changeDate(newDate: moment.Moment)
 	{
-		const newUrl = this.getUrlForDate(newDate);
 
-		LinkHandler.pushState(newUrl);
 		this.setState({
 			date: newDate
 		}, () => this.props.onDateChange(newDate));
@@ -94,17 +68,20 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 
 	public render()
 	{
-		const friendlyDate = this.getFriendlyDate();
 		const onClickNext = (e) => this.changeDateDelta(e, 1);
 		const onClickPrev = (e) => this.changeDateDelta(e, -1);
-		const inputSize = this.getFriendlyDate().length + 1;
 
 		return (
 			<div className={`day-nav`}>
 				<a className={`prev`} onClick={onClickPrev} href={`javascript:void(0)`}>
 					<i className={`material-icons`}>chevron_left</i>
 				</a>
-				<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>
+				{/*<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>*/}
+				<MuiThemeProvider theme={this.materialTheme}>
+					<DatePicker value={this.state.date} 
+								format={"MMM DD, YYYY"}
+								onChange={(date: moment.Moment) => this.changeDate(date)}/>
+				</MuiThemeProvider>
 				<a className={`next`} onClick={onClickNext} href={`javascript:void(0)`}>
 					<i className={`material-icons`}>chevron_right</i>
 				</a>

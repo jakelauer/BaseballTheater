@@ -1,4 +1,5 @@
-﻿using MlbDataServer.Contracts.News;
+﻿using Common;
+using MlbDataServer.Contracts.News;
 
 namespace MlbDataServer.Engine
 {

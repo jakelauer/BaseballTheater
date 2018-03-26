@@ -1,19 +1,20 @@
 ﻿import * as Cookies from "js-cookie";
 import * as React from "react";
+import {Link} from "react-router-dom";
 import {hubConnection} from "signalr-no-jquery";
-import {LinkHandler} from "../../Utility/link_handler";
+import {ISettings, SettingsDispatcher} from "../../DataStore/SettingsDispatcher";
 import {Responsive} from "../../Utility/responsive";
 import {Distributor} from "../../Utility/subscribable";
 import {Config} from "../shared/config";
 import {Modal} from "../shared/modal";
 import {AuthContext} from "./auth_context";
-import {ISettings} from "./page";
 import {SearchBox} from "./SearchBox";
 import {SettingsContainer} from "./Settings";
 import {SettingsButton} from "./SettingsButton";
 
 interface IAppProps
 {
+	children?: React.ReactNode;
 	isAppMode: boolean;
 }
 
@@ -38,9 +39,13 @@ export class App
 {
 	public static Instance = new App();
 
+	public settingsDispatcher = new SettingsDispatcher({
+		defaultTab: Cookies.get("defaulttab") || "",
+		favoriteTeam: Cookies.get("favoriteteam") || "",
+		hideScores: Cookies.get("hidescores") === "true"
+	});
 	public loadingDistributor = new Distributor<ILoadingPayload>();
 	public gameUpdateDistributor = new Distributor<IGameUpdateDistributorPayload>();
-	public settingsDistributor = new Distributor<ISettings>();
 
 	private static _isLoading = false;
 	public static get isLoading()
@@ -50,8 +55,9 @@ export class App
 
 	public get isAppMode()
 	{
-		const queries = LinkHandler.parseQuery();
-		return "app" in queries && queries["app"] === "true";
+		return false;
+		//const queries = LinkHandler.parseQuery();
+		//return "app" in queries && queries["app"] === "true";
 	}
 
 	public initialize()
@@ -110,6 +116,8 @@ export class App
 
 export class AppWrapper extends React.Component<IAppProps, IAppState>
 {
+	private settingsDispatcherKey: string;
+
 	constructor(props: IAppProps)
 	{
 		super(props);
@@ -118,9 +126,9 @@ export class AppWrapper extends React.Component<IAppProps, IAppState>
 			isLoading: false,
 			isSettingsModalOpen: false,
 			settings: {
-				defaultTab: Cookies.get("defaulttab") || "",
-				favoriteTeam: Cookies.get("favoriteteam") || "",
-				hideScores: Cookies.get("hidescores") === "true"
+				favoriteTeam: "",
+				defaultTab: "",
+				hideScores: false
 			}
 		}
 	}
@@ -128,14 +136,19 @@ export class AppWrapper extends React.Component<IAppProps, IAppState>
 	public componentWillMount()
 	{
 		Responsive.Instance.initialize();
-		LinkHandler.Instance.initialize();
+		//LinkHandler.Instance.initialize();
 		AuthContext.Instance.initialize();
 		App.Instance.initialize();
 
 		App.Instance.loadingDistributor.subscribe(payload => this.setLoadingState(payload.isLoading));
-		App.Instance.settingsDistributor.subscribe(settings => this.setState({
+		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(settings => this.setState({
 			settings
 		}));
+	}
+
+	public componentWillUnmount()
+	{
+		App.Instance.settingsDispatcher.deregister(this.settingsDispatcherKey);
 	}
 
 	private setLoadingState(isLoading: boolean)
@@ -186,10 +199,10 @@ export class AppWrapper extends React.Component<IAppProps, IAppState>
 			<div className={`app-container ${appModeClass}`}>
 				<header>
 					<div className={`header-content`}>
-						<a className={`logo-link`} href={`/`}>
+						<Link className={`logo-link`} to={`/`}>
 							<span className={`logo-circle`}/>
 							<span className={`logo-text`}>Baseball Theater</span>
-						</a>
+						</Link>
 
 						<div className={`right`}>
 							<SearchBox/>

@@ -1,19 +1,19 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "baseUrl": ".",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "es5",
     "lib": [
       "es5",
       "esnext",
       "dom",
-      "es6"
+      "es2017"
     ],
     "noImplicitAny": false,
     "jsx": "react",
     "sourceMap": true,
-    "skipDefaultLibCheck": true,
     "strict": false,
     "types": ["webpack-env"]
   },
