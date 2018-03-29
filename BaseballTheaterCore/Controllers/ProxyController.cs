@@ -1,5 +1,5 @@
 using System.Net;
-using BaseballTheater.Areas.Proxy.Models;
+using BaseballTheaterCore.Models;
 using Common;
 using Microsoft.AspNetCore.Mvc;
 

@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MlbDataServer.Contracts.News;
-using MlbDataServer.Engine;
+using MlbDataEngine.Contracts.News;
+using MlbDataEngine.Engine;
 
 namespace BaseballTheater.Areas.Data.Models.News
 {

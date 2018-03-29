@@ -24,8 +24,6 @@ interface IGameListRouteParams
 
 export class GameList extends React.Component<RouteComponentProps<IGameListRouteParams>, IGameListState>
 {
-	private pikaday: any;
-	private linkHandlerSubscription: Subscription<Location>;
 	private settingsDispatcherKey: string;
 
 	constructor(props: RouteComponentProps<IGameListRouteParams>)
@@ -48,7 +46,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 			gameSummaries: [],
 			date,
 			navigating: false,
-			settings:  App.Instance.settingsDispatcher.state
+			settings: App.Instance.settingsDispatcher.state
 		};
 	}
 
@@ -61,7 +59,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 	private getUrlForDate(newDate: moment.Moment)
 	{
-		return `/${newDate.format("YYYYMMDD")}`;
+		return `/gameday/${newDate.format("YYYYMMDD")}`;
 	}
 
 	private updateDate = (newDate: moment.Moment) =>
@@ -155,7 +153,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
 
-		const noGames = this.state.gameSummaries.length === 0 && !App.isLoading
+		const noGames = this.state.gameSummaries.length === 0
 			? <div className={`no-data`}>No games found for this date.</div>
 			: null;
 

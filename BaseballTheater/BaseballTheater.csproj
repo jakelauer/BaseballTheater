@@ -28,7 +28,7 @@
     <ApplicationInsightsResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/871c71d7-89f4-4afd-a330-80b12f7e2742/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/BaseballTheater</ApplicationInsightsAnnotationResourceId>
     <UseGlobalApplicationHostFile />
-    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
@@ -448,13 +448,13 @@
       <Project>{43c780e2-4e6e-4247-b03a-4796405b87cd}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MlbDataEngine\MlbDataEngine.csproj">
+      <Project>{a3a9e0a1-a1d7-4352-bcff-0ad2b0c1e960}</Project>
+      <Name>MlbDataEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MlbDataMux\MlbDataMux.csproj">
       <Project>{56889fb2-3890-4a88-a415-9ce40dc053ce}</Project>
       <Name>MlbDataMux</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
-      <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
-      <Name>MlbDataServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

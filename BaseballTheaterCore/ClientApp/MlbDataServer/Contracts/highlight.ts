@@ -23,16 +23,16 @@ export interface IHighlight
 
 export interface IHighlightThumbnails
 {
-	High: string;
-	Med: string;
-	Low: string;
+	high: string;
+	med: string;
+	low: string;
 }
 
 export interface IHighlightSearchResult
 {
-	Highlight: IHighlight;
-	Thumbnails: IHighlightThumbnails;
-	GameId: number;
+	highlight: IHighlight;
+	thumbnails: IHighlightThumbnails;
+	gameId: number;
 }
 
 export interface IThumbnails

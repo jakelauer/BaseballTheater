@@ -1,5 +1,5 @@
 ﻿import * as X2JS from "x2js"
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
+import "abortcontroller-polyfill/dist/polyfill-patch-fetch"
 
 export class DataLoader
 {

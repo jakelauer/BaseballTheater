@@ -1,4 +1,4 @@
-﻿namespace BaseballTheater.Areas.Proxy.Models
+﻿namespace BaseballTheaterCore.Models
 {
 	public class ProxyModel
 	{

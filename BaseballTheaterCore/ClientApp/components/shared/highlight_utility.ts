@@ -151,7 +151,7 @@ export class HighlightUtility
 
 		if (searchResult)
 		{
-			displayProps.thumb = searchResult.Thumbnails.High;
+			displayProps.thumb = searchResult.thumbnails.high;
 		}
 
 		if (highlight)

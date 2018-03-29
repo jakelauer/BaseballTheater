@@ -10,7 +10,12 @@ interface ISearchState
 	highlights: IHighlightSearchResult[];
 }
 
-export class Search extends React.Component<RouteComponentProps<any>, ISearchState>
+interface ISearchProps
+{
+	query: string;
+}
+
+export class Search extends React.Component<RouteComponentProps<ISearchProps>, ISearchState>
 {
 	public static readonly regex = /^\/search\/(.*)(\/|\?)?/i;
 	private readonly PER_PAGE = 20;
@@ -21,7 +26,7 @@ export class Search extends React.Component<RouteComponentProps<any>, ISearchSta
 		super(props);
 
 		this.state = {
-			query: Search.getQuery(),
+			query: this.props.match.params.query,
 			highlights: []
 		}
 	}
@@ -29,25 +34,6 @@ export class Search extends React.Component<RouteComponentProps<any>, ISearchSta
 	public componentDidMount()
 	{
 		this.loadNextHighlightPage();
-
-	/*	LinkHandler.Instance.stateChangeDistributor.subscribe(() =>
-		{
-			if (Search.getQuery().trim() !== "")
-			{
-				this.setQuery();
-				this.updateHighlights(null);
-				this.loadNextHighlightPage();
-			}
-		});*/
-	}
-
-	private setQuery()
-	{
-		this.nextPage = 0;
-
-		this.setState({
-			query: Search.getQuery()
-		});
 	}
 
 	public static getQuery()
@@ -77,7 +63,7 @@ export class Search extends React.Component<RouteComponentProps<any>, ISearchSta
 	{
 		App.startLoading();
 
-		fetch(`/Data/SearchHighlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
+		fetch(`/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
 			.then((response: Response) => response.json())
 			.then(json => this.updateHighlights(json));
 
@@ -96,7 +82,7 @@ export class Search extends React.Component<RouteComponentProps<any>, ISearchSta
 	public render()
 	{
 		const highlightsRendered = this.state.highlights.map(searchResult =>
-			<Highlight hideScores={false} key={searchResult.Highlight.id} renderDate={true} highlight={searchResult}/>);
+			<Highlight hideScores={false} key={searchResult.highlight.id} renderDate={true} highlight={searchResult}/>);
 
 		const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
 			&& this.state.highlights.length > 0

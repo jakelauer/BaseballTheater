@@ -15,13 +15,13 @@ export class Highlight extends React.Component<IHighlightProps, any>
 {
 	private get highlight()
 	{
-		return (this.props.highlight as IHighlightSearchResult).Highlight || (this.props.highlight as IHighlight);
+		return (this.props.highlight as IHighlightSearchResult).highlight || (this.props.highlight as IHighlight);
 	}
 
 	private get searchResult(): IHighlightSearchResult | null
 	{
 		const asSearchResult = (this.props.highlight as IHighlightSearchResult);
-		const isSearchResult = !!asSearchResult.Highlight;
+		const isSearchResult = !!asSearchResult.highlight;
 		return isSearchResult ? asSearchResult : null;
 	}
 
@@ -43,7 +43,7 @@ export class Highlight extends React.Component<IHighlightProps, any>
 	private getGameLink()
 	{
 		const dateString = moment(this.highlight.date).format("YYYYMMDD");
-		const gameId = this.searchResult ? String(this.searchResult.GameId) : null
+		const gameId = this.searchResult ? String(this.searchResult.gameId) : null
 		return gameId ? `/game/${dateString}/${gameId}` : "javascript:void(0)";
 	}
 
