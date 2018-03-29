@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseballTheaterCore", "BaseballTheaterCore\BaseballTheaterCore.csproj", "{01FAD396-57B1-4A37-A992-F51B289F1639}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlbDataEngine", "MlbDataEngine\MlbDataEngine.csproj", "{A3A9E0A1-A1D7-4352-BCFF-0AD2B0C1E960}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{01FAD396-57B1-4A37-A992-F51B289F1639}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01FAD396-57B1-4A37-A992-F51B289F1639}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01FAD396-57B1-4A37-A992-F51B289F1639}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A9E0A1-A1D7-4352-BCFF-0AD2B0C1E960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A9E0A1-A1D7-4352-BCFF-0AD2B0C1E960}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A9E0A1-A1D7-4352-BCFF-0AD2B0C1E960}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A9E0A1-A1D7-4352-BCFF-0AD2B0C1E960}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

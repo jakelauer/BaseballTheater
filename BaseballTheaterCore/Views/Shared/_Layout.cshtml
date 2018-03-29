@@ -1,21 +1,33 @@
+﻿@{
+	var description = ViewBag.Description ?? "Video highlights for all baseball games!";
+}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BaseballTheaterCore</title>
-    <base href="~/" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Baseball Theater</title>
+	<base href="~/" />
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
-    </environment>
+	@Html.Partial("_favicons")
+	<meta name="theme-color" content="#9e1414">
+	<meta name="Description" content="@description" />
+
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
+
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<environment exclude="Development">
+	</environment>
 </head>
 <body>
     @RenderBody()
 
-    <script src="~/dist/vendor.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" asp-append-version="true"></script>
+<% } %>
 </body>
 </html>

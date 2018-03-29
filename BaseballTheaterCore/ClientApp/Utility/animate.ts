@@ -12,7 +12,7 @@ export class Animate
 			const diff = now - start;
 			const pct = Math.min(1, diff / durationMs);
 			const tweenTargetPx = (scrollDiff * pct) + currentScroll;
-			window.scrollTo(tweenTargetPx);
+			window.scrollTo(0, tweenTargetPx);
 
 			if (pct < 1)
 			{

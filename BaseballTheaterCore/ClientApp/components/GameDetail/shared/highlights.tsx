@@ -1,5 +1,6 @@
-﻿import {IHighlight, IHighlightsCollection} from "../../../MlbDataServer/Contracts";
-import * as React from "react";
+﻿import * as React from "react";
+import {IHighlight, IHighlightsCollection} from "../../../MlbDataServer/Contracts";
+import {DataUtility} from "../../../Utility/base";
 import {Highlight} from "../../shared/highlight";
 
 interface IHighlightsProps
@@ -37,23 +38,23 @@ export class Highlights extends React.Component<IHighlightsProps, IHighlightsSta
 
 		if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
 		{
-			let highlights: IHighlight[] = [];
-			let allHighlights: IHighlight[] = [];
-			let specialHighlights: IHighlight[] = [];
+			let highlights: IHighlight[];
+			let allHighlights: IHighlight[];
+			let specialHighlights: IHighlight[];
 
 			for (let highlight of highlightsCollection.highlights.media)
 			{
 				highlight.isPlaying = false;
 			}
 
-			highlights = highlightsCollection.highlights.media;
+			highlights = DataUtility.forceArray(highlightsCollection.highlights.media);
 			highlights.sort((a, b) =>
 			{
-				var aIsRecap = a.recap ? -1 : 0;
-				var bIsRecap = b.recap ? -1 : 0;
-				var aIsCondensed = a.condensed ? -1 : 0;
-				var bIsCondensed = b.condensed ? -1 : 0;
-				var idOrder = a.id - b.id;
+				const aIsRecap = a.recap ? -1 : 0;
+				const bIsRecap = b.recap ? -1 : 0;
+				const aIsCondensed = a.condensed ? -1 : 0;
+				const bIsCondensed = b.condensed ? -1 : 0;
+				const idOrder = a.id - b.id;
 
 				return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed) || idOrder;
 			});
