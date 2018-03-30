@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Common;
-using MlbDataServer.Contracts;
-using MlbDataServer.Engine;
+using log4net;
+using MlbDataEngine.Contracts;
+using MlbDataEngine.Engine;
 
 namespace MlbDataMux
 {
 	public class HandleLiveGames
 	{
-		private static readonly log4net.ILog log =
-			log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private static readonly ILog log =
+			LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 		private readonly DateTime
 			_date = DateTime.UtcNow.AddHours(-5);
