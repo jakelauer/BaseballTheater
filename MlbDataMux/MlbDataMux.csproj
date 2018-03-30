@@ -59,9 +59,9 @@
       <Project>{43c780e2-4e6e-4247-b03a-4796405b87cd}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MlbDataServer\MlbDataServer.csproj">
-      <Project>{acf910fe-c059-4eee-bedc-e7f4eb6e8906}</Project>
-      <Name>MlbDataServer</Name>
+    <ProjectReference Include="..\MlbDataEngine\MlbDataEngine.csproj">
+      <Project>{a3a9e0a1-a1d7-4352-bcff-0ad2b0c1e960}</Project>
+      <Name>MlbDataEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
