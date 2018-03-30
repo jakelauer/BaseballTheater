@@ -69,7 +69,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 
 	private renderLoginButton()
 	{
-		if (!Config.loginEnabled)
+		if (!Config.loginEnabled || !!1)
 		{
 			return null;
 		}

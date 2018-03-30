@@ -121,6 +121,11 @@ export class GameSummaryData implements IGameSummaryData
 		return this.gameday_sw === "Y";
 	}
 
+	public get urlDate()
+	{
+		return this.time_date.split(" ")[0].replace(/\//g, "");
+	}
+
 	constructor(data: IGameSummaryData)
 	{
 		let input = data.time_date;

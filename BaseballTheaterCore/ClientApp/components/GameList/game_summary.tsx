@@ -133,8 +133,7 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 	{
 		const game = this.props.game;
 
-		const dayString = game.dateObj.local().format("YYYYMMDD");
-		return `/game/${dayString}/${game.game_pk}`;
+		return `/game/${game.urlDate}/${game.game_pk}`;
 	}
 
 	private linescoreItem(input: string): string
