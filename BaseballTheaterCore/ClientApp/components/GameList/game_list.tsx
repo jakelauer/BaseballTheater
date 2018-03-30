@@ -136,20 +136,13 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 	public render()
 	{
-		const gamesInProgress = this.state.gameSummaries.filter(a => !a.isFinal);
-		const gamesFinal = this.state.gameSummaries.filter(a => a.isFinal);
+		const games = this.state.gameSummaries;
 
-		this.sortGames(gamesInProgress);
-		this.sortGames(gamesFinal);
-
-		const gamesInProgressRendered = gamesInProgress.map((gameSummary, i) =>
+		this.sortGames(games);
+		
+		const gamesRendered = games.map((gameSummary, i) =>
 		{
-			return <GameSummary game={gameSummary} index={i} key={i} hideScores={this.state.settings.hideScores}/>;
-		});
-
-		const finalGamesRendered = gamesFinal.map((gameSummary, i) =>
-		{
-			const key = gamesInProgress.length + i;
+			const key = games.length + i;
 			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
 
@@ -157,7 +150,6 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 			? <div className={`no-data`}>No games found for this date.</div>
 			: null;
 
-		const someFinalSomeNot = gamesInProgress.length > 0 && gamesFinal.length > 0;
 		const navigatingClass = this.state.navigating ? "navigating" : "";
 
 		return (
@@ -167,14 +159,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 				</div>
 
 				<div className={`game-list`}>
-					{gamesInProgressRendered}
-				</div>
-
-				{(someFinalSomeNot && !App.isLoading) &&
-				<h2>Final</h2>
-				}
-				<div className={`game-list`}>
-					{finalGamesRendered}
+					{gamesRendered}
 				</div>
 
 				{noGames}
