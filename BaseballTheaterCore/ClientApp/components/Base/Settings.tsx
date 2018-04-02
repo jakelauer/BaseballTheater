@@ -1,3 +1,4 @@
+import {Select, Switch} from "antd";
 import * as Cookies from "js-cookie";
 import * as React from "react";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
@@ -23,12 +24,12 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 		const options = teamKeys.map((teamKey, i) =>
 		{
 			const teamName = Teams.TeamList[teamKey];
-			return <option value={teamKey} key={i}>{teamName}</option>;
+			return <Select.Option value={teamKey} key={i}>{teamName}</Select.Option>;
 		});
 
-		options.splice(0, 0, <option value={-1} key={999}>None</option>);
+		options.splice(0, 0, <Select.Option value={"-1"} key={999}>None</Select.Option>);
 
-		return <select defaultValue={this.props.settings.favoriteTeam} onChange={e => this.setFavoriteTeam(e)}>{options}</select>
+		return <Select style={{width: 200}} defaultValue={this.props.settings.favoriteTeam || "-1"} onChange={(v: string) => this.setFavoriteTeam(v)}>{options}</Select>
 	}
 
 	private tabNameFromTab(tab: GameDetailTabs)
@@ -54,40 +55,43 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 
 	private renderDefaultTabDropdown()
 	{
-		const tabKeys = Object.keys(GameDetailTabs);
+		const allKeys = Object.keys(GameDetailTabs);
+		const tabKeys = allKeys.slice(0, allKeys.length / 2);
 		const options = tabKeys.map((tabKeyString, i) =>
 		{
 			const tabKey = parseInt(tabKeyString) as GameDetailTabs;
 			const tabName = this.tabNameFromTab(tabKey);
-			return <option value={tabKeyString} key={i}>{tabName}</option>
+			return <Select.Option value={tabKeyString} key={i}>{tabName}</Select.Option>
 		});
 
-		return <select defaultValue={this.props.settings.defaultTab} onChange={e => this.setDefaultTab(e)}>{options}</select>
+		return <Select style={{width: 200}} defaultValue={this.props.settings.defaultTab || "0"} onChange={(v: string) => this.setDefaultTab(v)}>
+			{options}
+		</Select>;
 	}
 
-	private setFavoriteTeam(event: React.ChangeEvent<HTMLSelectElement>)
+	private setFavoriteTeam(value: string)
 	{
 		this.updateSettings({
-			favoriteTeam: event.currentTarget.value,
+			favoriteTeam: value,
 			hideScores: this.props.settings.hideScores,
 			defaultTab: this.props.settings.defaultTab
 		})
 	}
 
-	private setHideScores(event: React.ChangeEvent<HTMLInputElement>)
+	private setHideScores(checked: boolean)
 	{
 		this.updateSettings({
 			favoriteTeam: this.props.settings.favoriteTeam,
-			hideScores: event.currentTarget.checked,
+			hideScores: checked,
 			defaultTab: this.props.settings.defaultTab
 		})
 	}
 
-	private setDefaultTab(event: React.ChangeEvent<HTMLSelectElement>)
+	private setDefaultTab(value: string)
 	{
 		this.updateSettings({
 			favoriteTeam: this.props.settings.favoriteTeam,
-			defaultTab: event.currentTarget.value,
+			defaultTab: value,
 			hideScores: this.props.settings.hideScores
 		})
 	}
@@ -124,7 +128,7 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 					label={"Hide Scores"}
 					description={"When checked, scores and game data will be hidden to prevent spoilers. Box scores will still show data."}>
 
-					<input type={`checkbox`} checked={this.props.settings.hideScores} onChange={e => this.setHideScores(e)}/>
+					<Switch checked={this.props.settings.hideScores} onChange={v => this.setHideScores(v)}/>
 				</SettingDisplay>
 
 			</div>

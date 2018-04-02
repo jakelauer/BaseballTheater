@@ -66,7 +66,7 @@ html, body
 	width: 40rem;
 	max-width: 100%;
 	margin: 0 auto 4rem;
-	
+
 	.shameless-plug
 	{
 		width: 100%;
@@ -74,8 +74,9 @@ html, body
 		text-align: center;
 		justify-content: center;
 		margin-top: 2rem;
-		
-		.patreon-button{
+
+		.patreon-button
+		{
 			margin: 1rem auto 0;
 			height: 35px;
 			width: 178px;
@@ -91,6 +92,11 @@ html.ready body #body-wrapper
 .app-container
 {
 	padding: 60px 0 0;
+}
+
+.settings-modal .ant-modal-footer
+{
+	display: none;
 }
 
 header

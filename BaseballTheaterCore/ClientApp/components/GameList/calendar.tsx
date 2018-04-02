@@ -1,6 +1,5 @@
-﻿import {MuiThemeProvider, createMuiTheme} from 'material-ui';
+﻿import {DatePicker, Icon} from 'antd';
 import * as moment from "moment/moment"
-import {DatePicker} from "material-ui-pickers"
 import * as React from "react"
 
 interface ICalendarProps
@@ -16,14 +15,6 @@ interface ICalendarState
 
 export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 {
-	private materialTheme = createMuiTheme({
-		palette: {
-			primary: {
-				main: "#ce0f0f"
-			}
-		}
-	});
-
 	constructor(props: ICalendarProps)
 	{
 		super(props);
@@ -59,13 +50,6 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		this.changeDate(newDate);
 	}
 
-	private getFriendlyDate()
-	{
-		const date = this.state.date;
-		const newDate = moment(date);
-		return newDate.format("MMM DD, YYYY");
-	}
-
 	public render()
 	{
 		const onClickNext = (e) => this.changeDateDelta(e, 1);
@@ -74,16 +58,17 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		return (
 			<div className={`day-nav`}>
 				<a className={`prev`} onClick={onClickPrev} href={`javascript:void(0)`}>
-					<i className={`material-icons`}>chevron_left</i>
+					<Icon type="left" />
 				</a>
 				{/*<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>*/}
-				<MuiThemeProvider theme={this.materialTheme}>
-					<DatePicker value={this.state.date} 
+					<DatePicker value={this.state.date}
 								format={"MMM DD, YYYY"}
-								onChange={(date: moment.Moment) => this.changeDate(date)}/>
-				</MuiThemeProvider>
+								onChange={(date: moment.Moment) => this.changeDate(date)}
+								allowClear={false}/>
+
+
 				<a className={`next`} onClick={onClickNext} href={`javascript:void(0)`}>
-					<i className={`material-icons`}>chevron_right</i>
+					<Icon type="right" />
 				</a>
 			</div>
 		);

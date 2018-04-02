@@ -56,7 +56,7 @@ export class SearchBox extends React.Component<ISearchBoxProps, ISearchBoxState>
 	{
 		return (
 			<div className={`search`}>
-				<input type="text" required onChange={e => this.onChange(e)} defaultValue={this.props.query} value={this.state.currentValue}/>
+				<input type="text" required onChange={e => this.onChange(e)} value={this.state.currentValue}/>
 				<div className={`label`}>
 					<i className={`material-icons`}>search</i> <span>Search highlights</span>
 				</div>
