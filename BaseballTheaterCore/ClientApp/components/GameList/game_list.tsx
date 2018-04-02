@@ -4,7 +4,6 @@ import {RouteComponentProps} from "react-router";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
 import {GameSummaryCreator} from "../../MlbDataServer/game_summary_creator";
-import {Subscription} from "../../Utility/subscribable";
 import {App} from "../Base/app";
 import {Calendar} from "./calendar";
 import {GameSummary} from "./game_summary";

@@ -5,7 +5,7 @@ import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Responsive} from "../../Utility/responsive";
 import {Search} from "../Search/search";
 import {Config} from "../shared/config";
-import {Modal} from "../shared/modal";
+import {Modal} from "antd";
 import {App} from "./app";
 import {AuthContext} from "./auth_context";
 import {SearchBox} from "./SearchBox";
@@ -149,9 +149,8 @@ export class AppWrapper extends React.Component<{}, IAppState>
 						</div>
 					</div>
 
-					<Modal id={`settings`}
-						   isOpen={this.state.isSettingsModalOpen}
-						   onClose={() => this.toggleSettingsModal(false)}>
+					<Modal className={`settings-modal`} visible={this.state.isSettingsModalOpen}
+						   onCancel={() => this.toggleSettingsModal(false)}>
 
 						<SettingsContainer settings={this.state.settings}/>
 

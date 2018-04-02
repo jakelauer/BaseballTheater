@@ -2,16 +2,19 @@
   "name": "BaseballTheaterCore",
   "private": true,
   "version": "0.0.0",
+  "theme": {
+    "primary-color": "#ce0f0f"
+  },
   "devDependencies": {
     "@types/js-cookie": "^2.1.0",
     "@types/moment-timezone": "^0.5.4",
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.41",
     "@types/react-dom": "^16.0.4",
     "@types/react-hot-loader": "3.0.3",
     "@types/react-router": "4.0.12",
     "@types/react-router-dom": "4.0.5",
     "@types/signalr-no-jquery": "^0.1.0",
-    "@types/prop-types": "^15.5.2",
     "@types/webpack-env": "1.13.0",
     "abortcontroller-polyfill": "^1.1.8",
     "aspnet-webpack": "^2.0.1",
@@ -26,9 +29,6 @@
     "isomorphic-fetch": "2.2.1",
     "js-cookie": "^2.2.0",
     "json-loader": "0.5.4",
-    "ts-loader": "^4.1.0",
-    "material-ui": "next",
-    "material-ui-pickers": "^1.0.0-rc.3",
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
     "node-sass": "^4.7.2",
@@ -42,6 +42,7 @@
     "signalr-no-jquery": "^0.1.8",
     "source-map-loader": "^0.2.3",
     "style-loader": "0.18.2",
+    "ts-loader": "^4.1.0",
     "typescript": "2.7.2",
     "url-loader": "0.5.9",
     "webpack": "^4.3.0",
@@ -50,6 +51,7 @@
     "x2js": "^3.2.1"
   },
   "dependencies": {
+    "antd": "^3.3.3",
     "patreon": "^0.4.0"
   }
 }
