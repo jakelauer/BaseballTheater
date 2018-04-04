@@ -1,5 +1,5 @@
 ﻿import {BoxScoreData, ILinescoreInning} from "../../../MlbDataServer/Contracts";
-import * as React from "react";
+import React = require("react");
 
 interface IBoxScoreProps
 {

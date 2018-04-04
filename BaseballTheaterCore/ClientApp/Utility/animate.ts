@@ -1,4 +1,4 @@
-export class Animate
+﻿export class Animate
 {
 	public static scrollTop(targetPx: number, durationMs: number = 250)
 	{
@@ -19,7 +19,7 @@ export class Animate
 				window.requestAnimationFrame(() => animateFunc());
 			}
 		};
-		
+
 		animateFunc();
 	}
 }

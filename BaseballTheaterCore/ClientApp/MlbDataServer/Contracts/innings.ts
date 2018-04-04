@@ -1,4 +1,4 @@
-﻿import {DataUtility} from "../../Utility/base";
+﻿import {DataUtility} from "../../Utility/Data";
 import {IBatter} from "./batting";
 import {IPitcher} from "./pitching";
 import {BoxScoreData} from "./box_score";
@@ -70,9 +70,9 @@ type Next ="Y" | "N";
 		vx0: string;
 		vy0: string;
 		vz0: string;
-		x: string;
+		x: number;
 		x0: string;
-		y: string;
+		y: number;
 		y0: string;
 		z0: string;
 		zone: string;
@@ -164,6 +164,8 @@ type Next ="Y" | "N";
 							if (pitch)
 							{
 								pitch.pitch_type_detail = this.getPitchTypeDetail(pitch);
+								pitch.x = parseFloat((pitch.x as any) as string);
+								pitch.y = parseFloat((pitch.y as any) as string);
 							}
 						});
 					}

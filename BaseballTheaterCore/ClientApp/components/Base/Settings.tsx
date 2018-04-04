@@ -1,6 +1,6 @@
 import {Select, Switch} from "antd";
 import * as Cookies from "js-cookie";
-import * as React from "react";
+import React = require("react");
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Teams} from "../../MlbDataServer/Contracts";
 import {GameDetailTabs} from "../GameDetail/game_detail";
@@ -34,15 +34,11 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 
 	private tabNameFromTab(tab: GameDetailTabs)
 	{
-		let tabName = "";
+		let tabName = GameDetailTabs[tab];
 		switch (tab)
 		{
 			case GameDetailTabs.BoxScore:
 				tabName = "Box Score";
-				break;
-
-			case GameDetailTabs.Highlights:
-				tabName = "Highlights";
 				break;
 
 			case GameDetailTabs.PlayByPlay:

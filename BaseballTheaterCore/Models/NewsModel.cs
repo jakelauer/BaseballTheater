@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using BaseballTheaterCore.Extensions;
 using MlbDataEngine.Contracts.News;
 using MlbDataEngine.Engine;
 
 namespace BaseballTheaterCore.Models
 {
+	[Serializable]
+	[DataContract]
+	[XmlRoot("channel")]
 	public class NewsModel
 	{
-		private IEnumerable<NewsFeeds> Feeds { get; }
-		private IEnumerable<Tuple<NewsFeeds, string>> FeedUrlsExtra { get; }
+		private IEnumerable<NewsFeeds> Feeds { get; set; }
+		
+		private IEnumerable<Tuple<NewsFeeds, string>> FeedUrlsExtra { get; set; }
 
-		public IEnumerable<RssItem> Item { get; set; }
+		[DataMember]
+		[XmlElement ("item")]
+		public List<RssItem> Item { get; set; }
 
 		private static readonly Dictionary<NewsFeeds, string> FeedUrls = new Dictionary<NewsFeeds, string>
 		{
@@ -93,8 +101,9 @@ namespace BaseballTheaterCore.Models
 			{"was", "nationals"},
 		};
 
-		public NewsModel(IEnumerable<string> feedNames, string favTeam)
+		public static NewsModel NewInstance(IEnumerable<string> feedNames, string favTeam)
 		{
+			var newsModel = new NewsModel();
 			var feeds = new List<NewsFeeds>();
 			var feedUrlsExtra = new List<Tuple<NewsFeeds, string>>();
 
@@ -125,8 +134,10 @@ namespace BaseballTheaterCore.Models
 				}
 			}
 
-			this.Feeds = feeds;
-			this.FeedUrlsExtra = feedUrlsExtra;
+			newsModel.Feeds = feeds;
+			newsModel.FeedUrlsExtra = feedUrlsExtra;
+
+			return newsModel;
 		}
 
 		public void PopulateModel()
@@ -174,7 +185,8 @@ namespace BaseballTheaterCore.Models
 					return withinWeek;
 				})
 				.OrderByDescending(a => a.PubDate)
-				.Take(50);
+				.Take(50)
+				.ToList();
 		}
 	}
 }

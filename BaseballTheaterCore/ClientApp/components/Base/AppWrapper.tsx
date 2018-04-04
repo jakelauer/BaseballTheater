@@ -1,5 +1,4 @@
 ﻿import * as PropTypes from "prop-types";
-import * as React from "react";
 import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Responsive} from "../../Utility/responsive";
@@ -11,6 +10,7 @@ import {AuthContext} from "./auth_context";
 import {SearchBox} from "./SearchBox";
 import {SettingsContainer} from "./Settings";
 import {SettingsButton} from "./SettingsButton";
+import React = require("react");
 
 
 interface IAppState
@@ -69,7 +69,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 
 	private renderLoginButton()
 	{
-		if (!Config.loginEnabled || !!1)
+		if (!Config.loginEnabled)
 		{
 			return null;
 		}

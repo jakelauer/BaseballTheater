@@ -1,14 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
 import {AppContainer} from "react-hot-loader";
-import {Route} from "react-router";
 import {BrowserRouter} from "react-router-dom";
 import 'antd/dist/antd.css'
 import '../Styles/all.scss'
-import {AppWrapper} from "./components/Base/AppWrapper";
-import {GameDetail} from "./components/GameDetail/game_detail";
-import {GameList} from "./components/GameList/game_list";
-import {Search} from "./components/Search/search";
+import * as RoutesModule from './routes';
+let routes = RoutesModule.routes;
 
 function renderApp()
 {
@@ -18,12 +15,7 @@ function renderApp()
 	ReactDOM.render(
 		<AppContainer>
 			<BrowserRouter basename={baseUrl}>
-				<AppWrapper>
-					<Route exact path='/' component={GameList}/>
-					<Route path="/gameday/:date" component={GameList}/>
-					<Route path="/game/:date/:gamePk" component={GameDetail}/>
-					<Route path="/search/:query" component={Search}/>
-				</AppWrapper>
+				<BrowserRouter children={ routes } basename={ baseUrl } />
 			</BrowserRouter>
 		</AppContainer>,
 		document.getElementById('react-app')
@@ -31,3 +23,10 @@ function renderApp()
 }
 
 renderApp();
+
+if (module.hot) {
+	module.hot.accept('./routes', () => {
+		routes = require<typeof RoutesModule>('./routes').routes;
+		renderApp();
+	});
+}

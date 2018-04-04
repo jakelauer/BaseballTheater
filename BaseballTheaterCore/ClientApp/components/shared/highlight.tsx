@@ -1,6 +1,6 @@
 ﻿import {Link} from "react-router-dom";
 import {IHighlight, IHighlightSearchResult, Teams} from "../../MlbDataServer/Contracts";
-import * as React from "react";
+import React = require("react");
 import {HighlightUtility, IHighlightDisplay} from "./highlight_utility";
 import * as moment from "moment"
 

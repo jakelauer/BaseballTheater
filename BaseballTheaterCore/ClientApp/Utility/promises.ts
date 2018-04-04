@@ -1,4 +1,4 @@
-export class Promises
+﻿export class Promises
 {
 	public static async all(promises: Promise<any>[])
 	{

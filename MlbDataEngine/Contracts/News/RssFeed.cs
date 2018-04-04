@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace MlbDataEngine.Contracts.News
@@ -67,25 +68,38 @@ namespace MlbDataEngine.Contracts.News
 		public string Url { get; set; }
 	}
 
+	[DataContract]
 	public class RssItem
 	{
+		public RssItem()
+		{
+			
+		}
+		
+		[DataMember]
 		public string NewsFeed { get; set; }
 
 		[XmlElement("title")]
+		[DataMember(Name = "title")]
 		public string Title { get; set; }
 
 		[XmlElement("description")]
+		[DataMember(Name = "description")]
 		public string Description { get; set; }
 
 		[XmlElement("image")]
+		[DataMember(Name = "image")]
 		public string Image { get; set; }
 
 		[XmlElement("link")]
+		[DataMember(Name = "link")]
 		public string Link { get; set; }
 
 		[XmlElement("pubDate")]
+		[DataMember(Name = "pubDateString")]
 		public string PubDateString { get; set; }
 
+		[DataMember(Name = "pubDate")]
 		public DateTime? PubDate
 		{
 			get

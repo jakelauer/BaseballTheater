@@ -1,5 +1,5 @@
 ﻿import {BoxScoreData, HomeAway, IPlayer} from "../../MlbDataServer/Contracts";
-import * as React from "react";
+import React = require("react");
 
 interface IBoxScoreProps
 {
