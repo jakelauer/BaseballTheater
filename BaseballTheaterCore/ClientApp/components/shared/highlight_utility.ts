@@ -1,6 +1,6 @@
 ﻿import {IHighlight, IHighlightSearchResult, IThumb} from "../../MlbDataServer/Contracts";
-import {DataUtility} from "../../Utility/base";
 import * as moment from "moment"
+import {DataUtility} from "../../Utility/Data";
 
 enum HighlightThumbQuality
 {

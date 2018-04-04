@@ -1,18 +1,8 @@
 ﻿import * as Cookies from "js-cookie";
-import * as React from "react";
-import {RouteComponentProps, withRouter} from "react-router";
-import {Link} from "react-router-dom";
 import {hubConnection} from "signalr-no-jquery";
 import {ISettings, SettingsDispatcher} from "../../DataStore/SettingsDispatcher";
-import {Responsive} from "../../Utility/responsive";
 import {Distributor} from "../../Utility/subscribable";
-import {Search} from "../Search/search";
 import {Config} from "../shared/config";
-import {Modal} from "../shared/modal";
-import {AuthContext} from "./auth_context";
-import {SearchBox} from "./SearchBox";
-import {SettingsContainer} from "./Settings";
-import {SettingsButton} from "./SettingsButton";
 
 interface IAppProps
 {
@@ -48,10 +38,11 @@ export class App
 	public loadingDistributor = new Distributor<ILoadingPayload>();
 	public gameUpdateDistributor = new Distributor<IGameUpdateDistributorPayload>();
 
-	private static _isLoading = false;
+	private static _isLoadingCount = 0;
+
 	public static get isLoading()
 	{
-		return this._isLoading;
+		return this._isLoadingCount > 0;
 	}
 
 	public get isAppMode()
@@ -99,7 +90,7 @@ export class App
 
 	public static startLoading()
 	{
-		this._isLoading = true;
+		this._isLoadingCount++;
 		App.Instance.loadingDistributor.distribute({
 			isLoading: this.isLoading
 		});
@@ -107,7 +98,7 @@ export class App
 
 	public static stopLoading()
 	{
-		this._isLoading = false;
+		this._isLoadingCount--;
 		App.Instance.loadingDistributor.distribute({
 			isLoading: this.isLoading
 		});

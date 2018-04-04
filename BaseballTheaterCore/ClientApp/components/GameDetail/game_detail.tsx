@@ -1,22 +1,23 @@
 ﻿import {Moment} from "moment";
 import * as moment from "moment/moment"
-import * as React from "react";
+import React = require("react");
 import {RouteComponentProps} from "react-router";
+import {GameSummaryCreator, GameDetailCreator} from "../../MlbDataServer/MlbDataServer";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
-import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings, LiveData} from "../../MlbDataServer/Contracts";
-import {GameDetailCreator} from "../../MlbDataServer/game_detail_creator";
-import {GameSummaryCreator} from "../../MlbDataServer/game_summary_creator";
+import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "../../MlbDataServer/Contracts";
 import {Promises} from "../../Utility/promises";
 import {Subscription} from "../../Utility/subscribable";
 import {App, IGameUpdateDistributorPayload} from "../Base/app";
 import {Config} from "../shared/config";
 import {BoxScore} from "./boxscore";
+import {GameDetailLive} from "./live/GameDetailLive";
 import {PlayByPlay} from "./play-by-play/play_by_play";
 import {Highlights} from "./shared/highlights";
 import {MiniBoxScore} from "./shared/miniboxscore";
 
 export enum GameDetailTabs
 {
+	//Live,
 	Highlights,
 	PlayByPlay,
 	BoxScore
@@ -28,7 +29,6 @@ interface IGameDetailState
 	boxScore: BoxScoreData | null;
 	highlightsCollection: IHighlightsCollection | null;
 	playByPlay: IInningsContainer | null;
-	liveData: LiveData | null;
 	currentTab: GameDetailTabs;
 	settings: ISettings | null;
 }
@@ -66,7 +66,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			highlightsCollection: null,
 			gameSummary: null,
 			playByPlay: null,
-			liveData: null,
 			currentTab,
 			settings: App.Instance.settingsDispatcher.state
 		}
@@ -77,7 +76,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload =>
 		{
 			const defaultTab = parseInt(payload.defaultTab);
-			
+
 			if (!isNaN(defaultTab))
 			{
 				this.setState({
@@ -99,38 +98,22 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		this.unsubscribeToLiveData();
 	}
 
-	private showNoHighlights()
-	{
-		return true;
-	}
-
-	private getTeamSponsors(fileCode: string)
-	{
-		return 0;
-	}
-
-	private async getHighlights(currentGame: GameSummaryData): Promise<IHighlightsCollection>
+	private static async getHighlights(currentGame: GameSummaryData): Promise<IHighlightsCollection>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
 		return await gameDetailCreator.getHighlights();
 	}
 
-	private async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
+	private static async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
 		return await gameDetailCreator.getBoxscore();
 	}
 
-	private async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
+	private static async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
 		return await gameDetailCreator.getInnings(boxScore);
-	}
-
-	private async getLiveData(currentGame: GameSummaryData): Promise<LiveData>
-	{
-		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		return gameDetailCreator.getLiveGame(currentGame.game_pk);
 	}
 
 	private setTabState(currentTab: GameDetailTabs)
@@ -154,7 +137,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				console.log("Live update triggered.");
 				this.getData();
 			}
-		})
+		});
 	}
 
 	private unsubscribeToLiveData()
@@ -197,10 +180,9 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		try
 		{
 			const gameSummary = await this.getCurrentGame();
-			const boxScore = await this.getBoxScore(gameSummary);
-			const highlightsCollectionPromise = this.getHighlights(gameSummary);
-			const playByPlayPromise = this.getPlayByPlay(gameSummary, boxScore);
-			//const liveDataPromise = this.getLiveData(gameSummary);
+			const boxScore = await GameDetail.getBoxScore(gameSummary);
+			const highlightsCollectionPromise = GameDetail.getHighlights(gameSummary);
+			const playByPlayPromise = GameDetail.getPlayByPlay(gameSummary, boxScore);
 
 			const rest = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
 			const highlightsCollection = (!(rest[0] instanceof Error))
@@ -210,11 +192,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			const playByPlay = (!(rest[1] instanceof Error))
 				? rest[1] as Innings
 				: console.error("Play by play data failed to load", rest[1]) || null;
-
-			/*const liveData = (!(rest[2] instanceof Error))
-				? rest[2] as MlbLiveData.LiveData
-				: null;*/
-
 
 			this.setState({
 				gameSummary,
@@ -239,15 +216,19 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		const highlightsCollection = this.state.highlightsCollection;
 		const playByPlayData = this.state.playByPlay;
 		const gameSummary = this.state.gameSummary;
-		const liveData = this.state.liveData;
 		const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
 		const gameIsInFuture = gameSummary && gameSummary.dateObj.isSameOrAfter(moment());
 
-		let renderables = [<div/>];
+		let renderables = <div/>;
 
 		switch (currentTab)
 		{
+			/*case GameDetailTabs.Live:
+				renderables = <React.Fragment>
+					<GameDetailLive currentGame={gameSummary}/>
+				</React.Fragment>;
+				break;*/
 			case GameDetailTabs.Highlights:
 				if (!highlightsCollection
 					|| !highlightsCollection.highlights
@@ -255,51 +236,50 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 					|| highlightsCollection.highlights.media.length === 0
 					|| gameIsInFuture)
 				{
-					renderables = [
-						<div key={0} className="no-data">No highlights are available for this game.</div>
-					];
+					renderables = <React.Fragment>
+						<div className="no-data">No highlights are available for this game.</div>
+					</React.Fragment>;
 				}
 				else
 				{
-					renderables = [
-						<Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores} key={0}/>
-					];
+					renderables = <React.Fragment>
+						<Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores}/>
+					</React.Fragment>;
 
 				}
 				break;
 			case GameDetailTabs.BoxScore:
 				if (!boxScoreData || gameIsInFuture)
 				{
-					renderables = [
-						<div key={0} className="no-data">No box score data is available for this game.</div>
-					];
+					renderables = <React.Fragment>
+						<div className="no-data">No box score data is available for this game.</div>
+					</React.Fragment>;
 				}
 				else
 				{
-					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores} key={0}/>,
-						<BoxScore boxScoreData={boxScoreData} key={1}/>
-					];
+					renderables = <React.Fragment>
+						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
+						<BoxScore boxScoreData={boxScoreData}/>
+					</React.Fragment>;
 				}
 				break;
 			case GameDetailTabs.PlayByPlay:
 				if (!boxScoreData || !gameSummary || !playByPlayData || gameIsInFuture)
 				{
-					renderables = [
-						<div key={0} className="no-data">No play-by-play data is available for this game.</div>
-					];
+					renderables = <React.Fragment>
+						<div className="no-data">No play-by-play data is available for this game.</div>
+					</React.Fragment>;
 				}
 				else
 				{
-					renderables = [
-						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores} key={0}/>,
+					renderables = <React.Fragment>
+						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
 						<PlayByPlay
-							key={1}
 							gameSummary={gameSummary}
 							inningsData={playByPlayData}
 							highlights={highlightsCollection}
 							allPlayers={allPlayers}/>
-					];
+					</React.Fragment>;
 				}
 				break;
 		}
@@ -311,6 +291,11 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		);
 	}
 
+	private classForTab(tab: GameDetailTabs)
+	{
+		return this.state.currentTab === tab ? "on" : ""
+	}
+
 	public render()
 	{
 		const gameSummary = this.state.gameSummary;
@@ -319,22 +304,26 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			return (<div/>);
 		}
 
-		const highlightsTabClass = this.state.currentTab === GameDetailTabs.Highlights ? "on" : "";
-		const playByPlayTabClass = this.state.currentTab === GameDetailTabs.PlayByPlay ? "on" : "";
-		const boxScoreTabClass = this.state.currentTab === GameDetailTabs.BoxScore ? "on" : "";
+		//const liveTabClass = this.classForTab(GameDetailTabs.Live);
+		const highlightsTabClass = this.classForTab(GameDetailTabs.Highlights);
+		const playByPlayTabClass = this.classForTab(GameDetailTabs.PlayByPlay);
+		const boxScoreTabClass = this.classForTab(GameDetailTabs.BoxScore);
 
 		return (
 			<div className={`game-detail-container`}>
 				<div className={`game-data-tab-container`}>
 					<div className={`tabs`}>
 						<div className={`tab-container`}>
-							<a href={`javascript:void(0)`} className={`tab ${highlightsTabClass}`} onClick={_ => this.setTabState(GameDetailTabs.Highlights)}>
+							{/*<a href={`javascript:void(0)`} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
+								<span>Live</span>
+							</a>*/}
+							<a href={`javascript:void(0)`} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
 								<span>Highlights</span>
 							</a>
-							<a href={`javascript:void(0)`} className={`tab ${playByPlayTabClass}`} onClick={_ => this.setTabState(GameDetailTabs.PlayByPlay)}>
+							<a href={`javascript:void(0)`} className={`tab ${playByPlayTabClass}`} onClick={() => this.setTabState(GameDetailTabs.PlayByPlay)}>
 								<span>Play by Play</span>
 							</a>
-							<a href={`javascript:void(0)`} className={`tab ${boxScoreTabClass}`} onClick={_ => this.setTabState(GameDetailTabs.BoxScore)}>
+							<a href={`javascript:void(0)`} className={`tab ${boxScoreTabClass}`} onClick={() => this.setTabState(GameDetailTabs.BoxScore)}>
 								<span>Box Score</span>
 							</a>
 						</div>

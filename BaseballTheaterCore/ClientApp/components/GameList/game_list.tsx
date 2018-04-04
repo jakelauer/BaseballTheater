@@ -3,7 +3,7 @@ import * as React from "react"
 import {RouteComponentProps} from "react-router";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
-import {GameSummaryCreator} from "../../MlbDataServer/game_summary_creator";
+import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer"
 import {App} from "../Base/app";
 import {Calendar} from "./calendar";
 import {GameSummary} from "./game_summary";
@@ -138,7 +138,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const games = this.state.gameSummaries;
 
 		this.sortGames(games);
-		
+
 		const gamesRendered = games.map((gameSummary, i) =>
 		{
 			const key = games.length + i;

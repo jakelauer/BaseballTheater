@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+﻿import React = require("react");
 import {RouteComponentProps} from "react-router";
 import {IHighlightSearchResult} from "../../MlbDataServer/Contracts";
 import {App} from "../Base/app";
@@ -63,7 +63,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 	{
 		App.startLoading();
 
-		fetch(`/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
+		fetch(`http://search.baseball.theater/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
 			.then((response: Response) => response.json())
 			.then(json => this.updateHighlights(json));
 

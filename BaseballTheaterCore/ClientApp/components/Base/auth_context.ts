@@ -1,4 +1,4 @@
-﻿import {PageData} from "../../Utility/page_data";
+﻿import {PageData} from "../../Utility/PageData";
 
 export interface IAuthContext
 {

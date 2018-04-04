@@ -1,5 +1,4 @@
-﻿import * as React from "react";
-import {IPitch} from "../../../MlbDataServer/Contracts";
+﻿import React = require("react");
 
 interface ISizes
 {
@@ -12,7 +11,14 @@ interface ISizes
 interface IPlayByPlayPitchesProps
 {
 	isSpringTraining: boolean;
-	pitches: IPitch[];
+	pitches: IPlayByPlayPitchData[];
+}
+
+export interface IPlayByPlayPitchData
+{
+	type: string;
+	x: number;
+	y: number;
 }
 
 export class PlayByPlayPitches extends React.Component<IPlayByPlayPitchesProps, any>
@@ -39,11 +45,8 @@ export class PlayByPlayPitches extends React.Component<IPlayByPlayPitchesProps, 
 				? springTraining
 				: regularSeason;
 
-			const pitchX = parseFloat(pitch.x);
-			const pitchY = parseFloat(pitch.y);
-
-			const leftPct = 1 - (pitchX / sizes.maxX) + sizes.xOffset;
-			const topPct = (pitchY / sizes.maxY) + sizes.yOffset;
+			const leftPct = 1 - (pitch.x / sizes.maxX) + sizes.xOffset;
+			const topPct = (pitch.y / sizes.maxY) + sizes.yOffset;
 
 			const style = {
 				left: `${leftPct * 100}%`,

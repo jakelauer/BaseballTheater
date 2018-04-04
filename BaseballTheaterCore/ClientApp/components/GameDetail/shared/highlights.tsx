@@ -1,6 +1,6 @@
-﻿import * as React from "react";
+﻿import React = require("react");
 import {IHighlight, IHighlightsCollection} from "../../../MlbDataServer/Contracts";
-import {DataUtility} from "../../../Utility/base";
+import {DataUtility} from "../../../Utility/Data";
 import {Highlight} from "../../shared/highlight";
 
 interface IHighlightsProps

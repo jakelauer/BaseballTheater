@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+﻿import React = require("react");
 import {IAtBat, IHighlight, IHighlightsCollection, IPitch, IPitcher, Keyword} from "../../../MlbDataServer/Contracts";
 import {Animate} from "../../../Utility/animate";
 import {HighlightUtility} from "../../shared/highlight_utility";

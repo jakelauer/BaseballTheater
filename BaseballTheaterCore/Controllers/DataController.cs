@@ -1,10 +1,12 @@
 ﻿using BaseballTheaterCore.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BaseballTheaterCore.Controllers
 {
     [Route("[controller]")]
     [Route("api/[controller]")]
+    [Produces("application/xml")]
     public class DataController : Controller
     {
         [HttpGet("[action]")]
@@ -12,7 +14,7 @@ namespace BaseballTheaterCore.Controllers
         {
             var feedList = feeds.Split(',');
 
-            var model = new NewsModel(feedList, favTeam);
+            var model = NewsModel.NewInstance(feedList, favTeam);
             model.PopulateModel();
 
             return model;
