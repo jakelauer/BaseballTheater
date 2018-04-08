@@ -5,8 +5,10 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="react-app">Loading...</div>
-
+<div class="login-container">
+    <img src="/images/logo-circle.png"/>
+    <a href="/Auth/Login" class="button">Patreon supporters - log in to access beta site</a>
+</div>
 
 <script>
     window.PAGE_DATA = @Html.Raw(JsonConvert.SerializeObject(ViewBag.PageData))

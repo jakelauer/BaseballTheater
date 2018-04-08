@@ -5,6 +5,6 @@ interface IConfig
 }
 
 export var Config: IConfig = {
-	loginEnabled: false,
+	loginEnabled: true,
 	liveDataEnabled: false
 };

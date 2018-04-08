@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BaseballTheaterCore.Controllers
 {
     [Route("api/[controller]")]
-    public class ProxyController : Controller
+    public class ProxyController : BtController
     {
         [HttpGet("[action]")]
         public ProxyModel Get(string mlbUrl, bool isJson = false)

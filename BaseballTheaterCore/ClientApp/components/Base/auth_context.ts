@@ -13,10 +13,10 @@ export class AuthContext implements IAuthContext
 
 	public initialize()
 	{
-		const pageData = PageData.getPageData<IAuthContext>("AuthContext");
+		const pageData = PageData.getPageData<boolean>("IsAuthenticated");
 		if (pageData)
 		{
-			this.IsAuthenticated = pageData.IsAuthenticated;
+			this.IsAuthenticated = pageData;
 		}
 	}
 }

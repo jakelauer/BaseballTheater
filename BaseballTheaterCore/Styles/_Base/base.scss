@@ -45,6 +45,17 @@ html, body
 	height: 100%;
 }
 
+body
+{
+	opacity: 0;
+	transition: opacity 0.25s;
+
+	&.loaded
+	{
+		opacity: 1;
+	}
+}
+
 #body-wrapper
 {
 	height: calc(100vh - #{$header-size});
@@ -643,6 +654,27 @@ footer
 	font-size: 1.5rem;
 	text-align: center;
 	padding: 2rem;
+}
+
+.login-container
+{
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+	img
+	{
+		width: 150px;
+		height: auto;
+	}
+
+	.button
+	{
+		margin-top: 2rem;
+	}
 }
 
 .r-mobile .app-mode

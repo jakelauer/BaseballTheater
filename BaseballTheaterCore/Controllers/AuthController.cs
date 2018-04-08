@@ -1,37 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using BaseballTheaterCore.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MlbDataEngine.Contracts;
-using Microsoft.AspNetCore.Http;
 
 namespace BaseballTheaterCore.Controllers
 {
     [Route("[controller]")]
-    public class AuthController : Controller
+    public class AuthController : BtController
     {
-        [HttpGet("[action]")]
-        public void Index(string code)
-        {
-            if (!string.IsNullOrWhiteSpace(code))
-            {
-                var options = new CookieOptions()
-                {
-                    Expires = DateTime.UtcNow.AddDays(14),
-                    HttpOnly = true,
-                    Secure = true
-                };
-
-                this.Response.Cookies.Append(AuthContext.PatreonAuthCookieName, code, options);
-            }
-        }
-
         [HttpGet("[action]")]
         public IActionResult Login(string returnUrl = "/")
         {
-            return Challenge(new AuthenticationProperties() {RedirectUri = returnUrl});
+            return Challenge(new AuthenticationProperties() {RedirectUri = returnUrl}, "Patreon");
+        }
+        
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task Logout()
+        {
+            // Sign the user out of the cookie authentication middleware (i.e. it will clear the local session cookie)
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            HttpContext.Response.Redirect("/");
         }
     }
 }
