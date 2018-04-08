@@ -7,7 +7,7 @@ namespace BaseballTheaterCore.Controllers
     [Route("[controller]")]
     [Route("api/[controller]")]
     [Produces("application/xml")]
-    public class DataController : Controller
+    public class DataController : BtController
     {
         [HttpGet("[action]")]
         public NewsModel News(string feeds = "", string favTeam = "")

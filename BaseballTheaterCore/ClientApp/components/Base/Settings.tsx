@@ -94,9 +94,10 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 
 	private updateSettings(settings: ISettings)
 	{
-		Cookies.set("hidescores", String(settings.hideScores));
-		Cookies.set("favoriteteam", settings.favoriteTeam);
-		Cookies.set("defaulttab", settings.defaultTab);
+		const expires = new Date("Fri, 31 Dec 9999 23:59:59 GMT");
+		Cookies.set("hidescores", String(settings.hideScores), {expires});
+		Cookies.set("favoriteteam", settings.favoriteTeam, {expires});
+		Cookies.set("defaulttab", settings.defaultTab, {expires});
 		App.Instance.settingsDispatcher.update({
 			hideScores: settings.hideScores,
 			favoriteTeam: settings.favoriteTeam,

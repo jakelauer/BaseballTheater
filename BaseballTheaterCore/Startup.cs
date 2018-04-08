@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -36,45 +37,25 @@ namespace BaseballTheaterCore
         {
             services
                 .Configure<GzipCompressionProviderOptions>(options =>
-                    options.Level = System.IO.Compression.CompressionLevel.Optimal)
-                .AddAuthentication(options =>
+                    options.Level = System.IO.Compression.CompressionLevel.Optimal);
+
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
                 {
-                    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = "Patreon";
+                    options.LoginPath = "/Auth/Login";
+                    options.LogoutPath = "/Auth/Signout";
                 })
-                .AddCookie()
-                .AddOAuth("Patreon", options =>
+                .AddPatreon(options =>
                 {
-                    options.ClientId = Configuration["Patreon:ClientId"];
-                    options.ClientSecret = Configuration["Patreon:ClientSecret"];
-                    options.CallbackPath = new PathString("/Auth");
+                    options.ClientId = Config.ClientId;
+                    options.SaveTokens = true;
+                    options.CallbackPath = "/Auth/Authorize";
+                    options.ClientSecret = Config.ClientSecret;
 
-                    options.AuthorizationEndpoint = "https://www.patreon.com/oauth2/authorize";
-                    options.TokenEndpoint = "https://www.patreon.com/api/oauth2/token";
-                    options.UserInformationEndpoint = "https://www.patreon.com/api/oauth2/api/current_user";
-/*
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    options.ClaimActions.MapJsonKey("urn:github:login", "login");
-                    options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
-                    options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");*/
-
-                    options.Events = new OAuthEvents
+                    options.Events = new OAuthEvents()
                     {
-                        OnCreatingTicket = async context =>
-                        {
-                            var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
-                            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-
-                            var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
-                            response.EnsureSuccessStatusCode();
-
-                            var user = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-                            context.RunClaimActions(user);
-                        }
+                        OnCreatingTicket = async context => { await this.MakeUserClaim(context); }
                     };
                 });
 
@@ -110,6 +91,47 @@ namespace BaseballTheaterCore
                     options.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
                 });
         }
+
+        private async Task MakeUserClaim(OAuthCreatingTicketContext context)
+        {
+            var endpoint = "https://www.patreon.com/api/oauth2/api/current_user"; //context.Options.UserInformationEndpoint override
+            var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await context.Backchannel.SendAsync(request, context.HttpContext.RequestAborted);
+            response.EnsureSuccessStatusCode();
+
+            // Extract the user info object
+            var userResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            // Add the Name Identifier claim
+            if (userResponse.GetValue("data") is JObject data)
+            {
+                var id = data.Value<string>("id");
+
+                context.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, id, ClaimValueTypes.String, context.Options.ClaimsIssuer));
+
+                if (data.GetValue("attributes") is JObject attributes)
+                {
+                    var email = attributes.Value<string>("email");
+                    context.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, email, ClaimValueTypes.String, context.Options.ClaimsIssuer));
+                }
+
+                if (userResponse.GetValue("included") is JObject included)
+                {
+                    if (included.First is JObject firstIncluded
+                        && firstIncluded.GetValue("relationships") is JObject relationships
+                        && relationships.GetValue("reward") is JObject reward
+                        && reward.GetValue("data") is JObject rewardData)
+                    {
+                        var rewardId = rewardData.Value<int>("id");
+                        context.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, rewardId.ToString(), ClaimValueTypes.Integer, context.Options.ClaimsIssuer));
+                    }
+                }
+            }
+        }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

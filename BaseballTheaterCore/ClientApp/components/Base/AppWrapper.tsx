@@ -77,8 +77,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		const isAuthenticated = AuthContext.Instance.IsAuthenticated;
 		if (!isAuthenticated)
 		{
-			const redirect = `${location.origin}/Auth`;
-			const patreonLogin = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008&redirect_uri=${redirect}`;
+			const patreonLogin = `/Auth/Login`;
 
 			return (
 				<a className={`login button`} href={patreonLogin}>
