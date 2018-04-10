@@ -2,7 +2,7 @@
 import {hubConnection} from "signalr-no-jquery";
 import {ISettings, SettingsDispatcher} from "../../DataStore/SettingsDispatcher";
 import {Distributor} from "../../Utility/subscribable";
-import {Config} from "../shared/config";
+import Config from "../Config/config";
 
 interface IAppProps
 {
@@ -45,7 +45,7 @@ export class App
 		return this._isLoadingCount > 0;
 	}
 
-	public get isAppMode()
+	public static get isAppMode()
 	{
 		return false;
 		//const queries = LinkHandler.parseQuery();

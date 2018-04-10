@@ -9,7 +9,7 @@ let routes = RoutesModule.routes;
 
 function renderApp()
 {
-	document.body.classList.add("loaded");
+	setTimeout(() => document.body.classList.add("loaded"), 100);
 	// This code starts up the React app when it runs in a browser. It sets up the routing
 	// configuration and injects the app into a DOM element.
 	const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href')!;

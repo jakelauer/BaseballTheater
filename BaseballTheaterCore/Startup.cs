@@ -12,8 +12,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +27,11 @@ namespace BaseballTheaterCore
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment currentEnvironment;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            currentEnvironment = env;
             Configuration = configuration;
         }
 
@@ -45,6 +50,7 @@ namespace BaseballTheaterCore
                 {
                     options.LoginPath = "/Auth/Login";
                     options.LogoutPath = "/Auth/Signout";
+                    options.ExpireTimeSpan = DateTime.UtcNow.AddYears(100) - DateTime.UtcNow;
                 })
                 .AddPatreon(options =>
                 {
@@ -90,11 +96,16 @@ namespace BaseballTheaterCore
                     options.InputFormatters.Add(new XmlSerializerInputFormatter());
                     options.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
                 });
+
+            if (!currentEnvironment.IsDevelopment())
+            {
+                services.Configure<MvcOptions>(options => { options.Filters.Add(new RequireHttpsAttribute()); });
+            }
         }
 
         private async Task MakeUserClaim(OAuthCreatingTicketContext context)
         {
-            var endpoint = "https://www.patreon.com/api/oauth2/api/current_user"; //context.Options.UserInformationEndpoint override
+            var endpoint = "https://www.patreon.com/api/oauth2/api/current_user?include=relationships,reward"; //context.Options.UserInformationEndpoint override
             var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -118,7 +129,7 @@ namespace BaseballTheaterCore
                     context.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, email, ClaimValueTypes.String, context.Options.ClaimsIssuer));
                 }
 
-                if (userResponse.GetValue("included") is JObject included)
+                if (userResponse.GetValue("included") is JArray included)
                 {
                     if (included.First is JObject firstIncluded
                         && firstIncluded.GetValue("relationships") is JObject relationships
@@ -126,7 +137,7 @@ namespace BaseballTheaterCore
                         && reward.GetValue("data") is JObject rewardData)
                     {
                         var rewardId = rewardData.Value<int>("id");
-                        context.Identity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, rewardId.ToString(), ClaimValueTypes.Integer, context.Options.ClaimsIssuer));
+                        context.Identity.AddClaim(new Claim("RewardId", rewardId.ToString()));
                     }
                 }
             }
@@ -148,6 +159,11 @@ namespace BaseballTheaterCore
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+
+                var options = new RewriteOptions()
+                    .AddRedirectToHttps();
+
+                app.UseRewriter(options);
             }
 
             app.UseStaticFiles();

@@ -5,7 +5,7 @@ const bundleOutputDir = './wwwroot/dist';
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function (env) {
-    const isDevBuild = !(env && env.prod);
+    const isDevBuild = false;// !(env && env.prod);
     return [{
         mode: isDevBuild ? "development" : "production",
         entry: {
@@ -58,11 +58,7 @@ module.exports = function (env) {
                 inject: false,
                 template: 'Views/Shared/_Layout.cshtml',
                 filename: '../../Views/Shared/_Layout_G.cshtml'
-            }),
-            /* new webpack.DllReferencePlugin({
-                 context: __dirname,
-                 manifest: require('./wwwroot/dist/vendor-manifest.json')
-             })*/
+            })
         ]
     }];
 };

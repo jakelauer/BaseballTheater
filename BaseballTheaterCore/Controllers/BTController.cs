@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using BaseballTheaterCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -18,7 +21,7 @@ namespace BaseballTheaterCore.Controllers
 		public override void OnActionExecuting(ActionExecutingContext context)
 		{
 			this.AddPageData("IsAuthenticated", User.Identity.IsAuthenticated);
-			//this.AddPageData("RewardPledge", User.Identity);
+			this.AddPageData("FeatureFlags", PledgesModel.GetRewardTierForUser(User));
 			
 			base.OnActionExecuting(context);
 		}

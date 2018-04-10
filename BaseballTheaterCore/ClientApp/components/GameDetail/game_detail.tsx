@@ -1,23 +1,23 @@
-﻿import {Moment} from "moment";
-import * as moment from "moment/moment"
-import React = require("react");
+﻿import * as moment from "moment/"
 import {RouteComponentProps} from "react-router";
-import {GameSummaryCreator, GameDetailCreator} from "../../MlbDataServer/MlbDataServer";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "../../MlbDataServer/Contracts";
+import {GameDetailCreator, GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
 import {Promises} from "../../Utility/promises";
 import {Subscription} from "../../Utility/subscribable";
 import {App, IGameUpdateDistributorPayload} from "../Base/app";
-import {Config} from "../shared/config";
+import {AuthContext} from "../Base/AuthContext";
+import Config from "../Config/config";
 import {BoxScore} from "./boxscore";
 import {GameDetailLive} from "./live/GameDetailLive";
 import {PlayByPlay} from "./play-by-play/play_by_play";
 import {Highlights} from "./shared/highlights";
 import {MiniBoxScore} from "./shared/miniboxscore";
+import React = require("react");
 
 export enum GameDetailTabs
 {
-	//Live,
+	Live,
 	Highlights,
 	PlayByPlay,
 	BoxScore
@@ -41,7 +41,7 @@ interface IGameDetailUrlParams
 
 export class GameDetail extends React.Component<RouteComponentProps<IGameDetailUrlParams>, IGameDetailState>
 {
-	private readonly date: Moment;
+	private readonly date: moment.Moment;
 	private readonly gamePk: string;
 	private liveSubscription: Subscription<IGameUpdateDistributorPayload>;
 	private settingsDispatcherKey: string;
@@ -56,7 +56,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		this.gamePk = this.props.match.params.gamePk;
 
 		let currentTab = GameDetailTabs.Highlights;
-		if (App.Instance.isAppMode)
+		if (App.isAppMode)
 		{
 			currentTab = GameDetailTabs.BoxScore;
 		}
@@ -224,11 +224,14 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		switch (currentTab)
 		{
-			/*case GameDetailTabs.Live:
-				renderables = <React.Fragment>
-					<GameDetailLive currentGame={gameSummary}/>
-				</React.Fragment>;
-				break;*/
+			case GameDetailTabs.Live:
+				if (AuthContext.Instance.Features.LiveData)
+				{
+					renderables = <React.Fragment>
+						<GameDetailLive currentGame={gameSummary}/>
+					</React.Fragment>;
+				}
+				break;
 			case GameDetailTabs.Highlights:
 				if (!highlightsCollection
 					|| !highlightsCollection.highlights
@@ -304,7 +307,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			return (<div/>);
 		}
 
-		//const liveTabClass = this.classForTab(GameDetailTabs.Live);
+		const liveTabClass = this.classForTab(GameDetailTabs.Live);
 		const highlightsTabClass = this.classForTab(GameDetailTabs.Highlights);
 		const playByPlayTabClass = this.classForTab(GameDetailTabs.PlayByPlay);
 		const boxScoreTabClass = this.classForTab(GameDetailTabs.BoxScore);
@@ -314,9 +317,12 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				<div className={`game-data-tab-container`}>
 					<div className={`tabs`}>
 						<div className={`tab-container`}>
-							{/*<a href={`javascript:void(0)`} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
-								<span>Live</span>
-							</a>*/}
+							{
+								AuthContext.Instance.Features.LiveData &&
+								<a href={`javascript:void(0)`} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
+									<span>Live</span>
+								</a>
+							}
 							<a href={`javascript:void(0)`} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
 								<span>Highlights</span>
 							</a>

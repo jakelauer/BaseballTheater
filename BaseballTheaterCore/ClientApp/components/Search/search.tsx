@@ -63,7 +63,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 	{
 		App.startLoading();
 
-		fetch(`http://search.baseball.theater/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
+		fetch(`https://search.baseball.theater/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
 			.then((response: Response) => response.json())
 			.then(json => this.updateHighlights(json));
 
