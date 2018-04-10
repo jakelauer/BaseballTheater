@@ -12,6 +12,7 @@
       "es2017"
     ],
     "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "sourceMap": true,
     "strict": false,

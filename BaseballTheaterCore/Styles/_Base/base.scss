@@ -646,7 +646,13 @@ footer
 	{
 		background: darken($color-accent, 10%);
 		text-decoration: none;
+		color: $color-basic-background;
 	}
+}
+
+a.button
+{
+	cursor: pointer;
 }
 
 .no-data

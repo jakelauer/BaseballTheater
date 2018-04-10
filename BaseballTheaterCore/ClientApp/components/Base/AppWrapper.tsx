@@ -2,11 +2,11 @@
 import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Responsive} from "../../Utility/responsive";
+import Config from "../Config/config";
 import {Search} from "../Search/search";
-import {Config} from "../shared/config";
 import {Modal} from "antd";
 import {App} from "./app";
-import {AuthContext} from "./auth_context";
+import {AuthContext} from "./AuthContext";
 import {SearchBox} from "./SearchBox";
 import {SettingsContainer} from "./Settings";
 import {SettingsButton} from "./SettingsButton";
@@ -87,7 +87,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		}
 
 		return (
-			<a href={`/Auth/Logout`}>Log Out</a>
+			<a className={`login button`} href={`/Auth/Logout`}>Log Out</a>
 		);
 	}
 

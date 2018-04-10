@@ -105,13 +105,10 @@ namespace MlbDataMux
 			var allJson = JsonConvert.SerializeObject(this.TempList);
 			var filename = this.Date.ToString("yyyyMMdd") + ".json";
 			var filePath = @"C:/highlightdata/" + filename;
-
-			if (!File.Exists(filePath))
+			
+			using (var sw = File.CreateText(filePath))
 			{
-				using (var sw = File.CreateText(filePath))
-				{
-					sw.Write(allJson);
-				}
+				sw.Write(allJson);
 			}
 		}
 

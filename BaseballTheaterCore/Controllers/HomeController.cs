@@ -11,11 +11,13 @@ namespace BaseballTheaterCore.Controllers
 {
     public class HomeController : BtController
     {
+        private bool RequiresLogin => Request.Host.Host.Contains("beta") || Request.Host.Host.Contains(".local");
+        
         public IActionResult Index()
         {
             var view = "Index";
 
-            if (Request.Host.Host.Contains("beta") && !User.Identity.IsAuthenticated)
+            if (this.RequiresLogin && !User.Identity.IsAuthenticated)
             {
                 view = "Login";
             }
