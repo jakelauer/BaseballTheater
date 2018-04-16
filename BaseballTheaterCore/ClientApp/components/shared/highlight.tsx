@@ -1,4 +1,5 @@
 ﻿import {Link} from "react-router-dom";
+import {Card} from "antd";
 import {IHighlight, IHighlightSearchResult, Teams} from "../../MlbDataServer/Contracts";
 import React = require("react");
 import {HighlightUtility, IHighlightDisplay} from "./highlight_utility";
@@ -69,8 +70,25 @@ export class Highlight extends React.Component<IHighlightProps, any>
 				{dateString} (View game)
 			</Link>
 			: null;
+			
+			const cover = <a href={displayProps.videoUrl} target={`_blank`}>
+				<div className={`thumb`} style={thumbStyle} />
+			</a>;
 
 		return (
+			<div className={`highlight`}>
+				<Card
+					cover={cover}
+					actions={links}
+				>
+					<Card.Meta
+						title={displayProps.headline}
+					/>
+				</Card>
+			</div>
+		);
+
+		/*return (
 			<div className={`highlight`}>
 				<div className={`video-info`}>
 					<a href={displayProps.videoUrl} target={`_blank`}>
@@ -85,6 +103,6 @@ export class Highlight extends React.Component<IHighlightProps, any>
 					{links}
 				</div>
 			</div>
-		);
+		);*/
 	}
 }

@@ -228,6 +228,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				if (AuthContext.Instance.Features.LiveData)
 				{
 					renderables = <React.Fragment>
+						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
 						<GameDetailLive currentGame={gameSummary}/>
 					</React.Fragment>;
 				}
@@ -239,24 +240,18 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 					|| highlightsCollection.highlights.media.length === 0
 					|| gameIsInFuture)
 				{
-					renderables = <React.Fragment>
-						<div className="no-data">No highlights are available for this game.</div>
-					</React.Fragment>;
+					renderables = <div className="no-data">No highlights are available for this game.</div>;
 				}
 				else
 				{
-					renderables = <React.Fragment>
-						<Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores}/>
-					</React.Fragment>;
+					renderables = <Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores}/>;
 
 				}
 				break;
 			case GameDetailTabs.BoxScore:
 				if (!boxScoreData || gameIsInFuture)
 				{
-					renderables = <React.Fragment>
-						<div className="no-data">No box score data is available for this game.</div>
-					</React.Fragment>;
+					renderables = <div className="no-data">No box score data is available for this game.</div>;
 				}
 				else
 				{
@@ -269,9 +264,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			case GameDetailTabs.PlayByPlay:
 				if (!boxScoreData || !gameSummary || !playByPlayData || gameIsInFuture)
 				{
-					renderables = <React.Fragment>
-						<div className="no-data">No play-by-play data is available for this game.</div>
-					</React.Fragment>;
+					renderables = <div className="no-data">No play-by-play data is available for this game.</div>;
 				}
 				else
 				{

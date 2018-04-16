@@ -1,4 +1,5 @@
 ﻿import {PageData} from "../../Utility/PageData";
+import Config, {Environments} from "../Config/config";
 import {FeatureFlags} from "../Config/FeatureFlags";
 
 export interface IAuthContext
@@ -34,10 +35,10 @@ export class AuthContext implements IAuthContext
 		}
 
 		const featuresPageData = PageData.getPageData<FeatureFlags>("FeatureFlags");
-		if (featuresPageData)
+		if (featuresPageData !== null && featuresPageData !== undefined)
 		{
 			this.Features.Beta = !!(featuresPageData & FeatureFlags.Beta);
-			this.Features.LiveData = !!(featuresPageData & FeatureFlags.LiveData);
+			this.Features.LiveData = !!(featuresPageData & FeatureFlags.LiveData) || Config.Environment === Environments.Local;
 			this.Features.TeamSchedule = !!(featuresPageData & FeatureFlags.TeamSchedule);
 		}
 	}
