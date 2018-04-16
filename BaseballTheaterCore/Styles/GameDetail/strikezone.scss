@@ -1,0 +1,100 @@
+.strikezone
+{
+	display: flex;
+	width: 100%;
+	max-width: 500px;
+	position: relative;
+	margin-bottom: 3rem;
+	align-items: center;
+	justify-content: center;
+	background: url("/images/strikezone.png") center center no-repeat;
+	background-size: cover;
+
+	.r-large &
+	{
+		max-width: 300px;
+	}
+
+	.r-medium &
+	{
+		max-width: 500px;
+	}
+
+	.force-square
+	{
+		width: 100%;
+		padding-bottom: 100%;
+	}
+
+	.actual-strikezone
+	{
+		position: absolute;
+		width: 23%;
+		height: 33%;
+		border: 1px solid black;
+	}
+
+	.pitch
+	{
+		position: absolute;
+		transform: translateX(-50%) translateY(-50%);
+
+		.pitch-count
+		{
+			width: 25px;
+			height: 25px;
+			line-height: 25px;
+			font-size: 0.8rem;
+		}
+	}
+}
+
+.pitch
+{
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 0.5rem;
+
+	.pitch-count
+	{
+		$circle-size: 30px;
+
+		width: $circle-size;
+		height: $circle-size;
+		border-radius: 50%;
+		color: white;
+		text-align: center;
+		line-height: $circle-size;
+		background: #CCC;
+		margin-right: 1rem;
+	}
+
+	&[data-type="B"] .pitch-count
+	{
+		background: $color-ball;
+	}
+
+	&[data-type="S"] .pitch-count
+	{
+		background: $color-strike;
+	}
+
+	&[data-type="X"] .pitch-count
+	{
+		background: #0082ff;
+	}
+
+	.pitch-description
+	{
+		flex: 1;
+		max-width: 200px;
+		display: flex;
+		align-items: center;
+	}
+
+	.pitch-details
+	{
+		flex: 1;
+		align-items: center;
+	}
+}
