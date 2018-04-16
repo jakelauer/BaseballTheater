@@ -6,41 +6,75 @@ interface IEnvironmentOverride<T>
 	prod?: T;
 }
 
+export enum Environments
+{
+	Local,
+	Beta,
+	Prod
+}
+
+const configs: { [key: string]: IEnvironmentOverride<any> } = {
+	"loginEnabled": {
+		defaultValue: false,
+		local: true,
+		beta: true
+	},
+	"liveDataEnabled": {
+		defaultValue: false,
+		local: true,
+		beta: true
+	}
+};
+
 export default class Config
 {
-	private static getValueForEnvironment<T>(setting: IEnvironmentOverride<T>)
+	public static get Environment()
 	{
 		const isLocal = location.host.indexOf(".local") > -1;
 		const isBeta = location.host.indexOf("beta.") > -1;
-		const isProd = location.host.indexOf(".theater") > -1;
 
+		let e = Environments.Prod;
+
+		if (isLocal)
+		{
+			e = Environments.Local
+		}
+
+		if (isBeta)
+		{
+			e = Environments.Beta
+		}
+
+		return e;
+	}
+
+	private static getValueForEnvironment<T>(setting: IEnvironmentOverride<T>, ifNotFound: T)
+	{
 		let value = setting.defaultValue;
-		if (isLocal && "local" in setting) value = setting.local;
-		if (isBeta && "beta" in setting) value = setting.beta;
-		if (isProd && "prod" in setting) value = setting.prod;
+		
+		switch (this.Environment)
+		{
+			case Environments.Local:
+				value = setting.local;
+				break;
+			case Environments.Beta:
+				value = setting.beta;
+				break;
+			case Environments.Prod:
+				value = setting.prod;
+				break;
+		}
 
 		return value;
 	}
-	
-	private static _loginEnabled: IEnvironmentOverride<boolean> = {
-		defaultValue: false,
-		local: true,
-		beta: true
-	};
 
 	public static get loginEnabled()
 	{
-		return this.getValueForEnvironment(this._loginEnabled);
+		return this.getValueForEnvironment(configs["loginEnabled"], false);
 	}
-
-	private static _liveDataEnabled: IEnvironmentOverride<boolean> = {
-		defaultValue: false,
-		local: true,
-		beta: true
-	};
 
 	public static get liveDataEnabled()
 	{
-		return this.getValueForEnvironment(this._liveDataEnabled);
+		return this.getValueForEnvironment(configs["liveDataEnabled"], false);
 	}
 }

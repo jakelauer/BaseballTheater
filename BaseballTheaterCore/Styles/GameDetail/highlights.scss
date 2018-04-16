@@ -67,6 +67,16 @@
 			max-width: 50%;
 		}
 
+		.thumb
+		{
+			position: relative;
+			width: 100%;
+			height: 12rem;
+			margin-right: 1rem;
+			background: $color-basic-accent no-repeat center 25%;
+			background-size: cover;
+		}
+
 		.video-info
 		{
 			display: flex;
@@ -78,17 +88,6 @@
 				text-decoration: none !important;
 				flex: 1 0;
 				flex-wrap: wrap;
-
-				.thumb
-				{
-					position: relative;
-					width: 100%;
-					height: 12rem;
-					margin-right: 1rem;
-					border-radius: 5px;
-					background: $color-basic-accent no-repeat center 25%;
-					background-size: cover;
-				}
 
 				h2
 				{

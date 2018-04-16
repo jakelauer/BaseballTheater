@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballTheater", "BaseballTheater\BaseballTheater.csproj", "{542EDDD7-AFE1-4867-8C24-9D210FDE5AA2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Populator", "Populator\Populator.csproj", "{95CF7312-7F53-42BE-AE41-51C8229A0E16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MlbDataMux", "MlbDataMux\MlbDataMux.csproj", "{56889FB2-3890-4A88-A415-9CE40DC053CE}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{542EDDD7-AFE1-4867-8C24-9D210FDE5AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{542EDDD7-AFE1-4867-8C24-9D210FDE5AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{542EDDD7-AFE1-4867-8C24-9D210FDE5AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{542EDDD7-AFE1-4867-8C24-9D210FDE5AA2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95CF7312-7F53-42BE-AE41-51C8229A0E16}.Release|Any CPU.ActiveCfg = Release|Any CPU

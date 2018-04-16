@@ -6,6 +6,7 @@ import {App} from "../../Base/app";
 import {IPlayByPlayPitchData, PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
 import {GameCount} from "./GameCount";
 import {PlayerStatsCard} from "./PlayerStatsCard";
+import {Row, Col} from "antd";
 
 interface IGameDetailLiveProps
 {
@@ -98,7 +99,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 			y: event.pitchData.coordinates.y,
 			type: event.details.call.code
 		}));
-		
+
 		return pitchData;
 	}
 
@@ -114,12 +115,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 
 			rendered = (
 				<div className={`current-play`}>
-					<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
-					<div className={`count`}>
-						<GameCount data={currentPlay.count}/>
-					</div>
-					<div className={`result`}>{currentPlay.result.description}</div>
-					<PlayByPlayPitches isSpringTraining={this.props.currentGame.isSpringTraining} pitches={pitchArray}/>
 				</div>
 			);
 		}
@@ -134,8 +129,29 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 			return null;
 		}
 
-		return <div className={`live-wrapper`}>
+		const currentPlay = this.state.game.liveData.plays.currentPlay;
+		if (!currentPlay)
+		{
+			return null;
+		}
+		
+		const pitcher = this.getPlayerById(currentPlay.matchup.pitcher.id);
+		const batter = this.getPlayerById(currentPlay.matchup.batter.id);
+		const pitchArray = this.getPitchDataForPlay(currentPlay);
+
+		return <Row>
+			<Col span={6}>
+				<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
+			</Col>
+			<Col span={12}>
+				<div className={`count`}>
+					<GameCount data={currentPlay.count}/>
+				</div>
+				<div className={`result`}>{currentPlay.result.description}</div>
+				<PlayByPlayPitches isSpringTraining={this.props.currentGame.isSpringTraining} pitches={pitchArray}/>
+			</Col>
+			<Col span={6}></Col>
 			{this.renderCurrentPlay()}
-		</div>;
+		</Row>;
 	}
 }
