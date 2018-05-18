@@ -1,11 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const bundleOutputDir = './wwwroot/dist';
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function (env) {
-    const isDevBuild = false;// !(env && env.prod);
+    const isDevBuild = !(env && env.prod);
     return [{
         mode: isDevBuild ? "development" : "production",
         entry: {
@@ -16,7 +15,7 @@ module.exports = function (env) {
             filename: "[name].bundle.js",
             publicPath: 'dist/'
         },
-        devtool: isDevBuild ? 'source-map' : "eval",
+        devtool: "cheap-module-source-map",
         resolve: {
             extensions: ['.js', '.json', '.ts', '.tsx'],
         },
@@ -27,7 +26,7 @@ module.exports = function (env) {
                     loader: 'source-map-loader'
                 },
                 {
-                    test: /\.tsx?$/,
+                    test: /\.(tsx|ts)?$/,
                     use: 'ts-loader',
                     exclude: /node_modules/
                 },
@@ -53,7 +52,6 @@ module.exports = function (env) {
             }
         },
         plugins: [
-            new CheckerPlugin(),
             new HtmlWebpackPlugin({
                 inject: false,
                 template: 'Views/Shared/_Layout.cshtml',

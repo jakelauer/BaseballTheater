@@ -23,7 +23,9 @@ function renderApp()
 	);
 }
 
-renderApp();
+// setTimeout(() => renderApp(), 250);
+
+window.onload = () => renderApp();
 
 if (module.hot) {
 	module.hot.accept('./routes', () => {

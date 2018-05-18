@@ -609,6 +609,21 @@ footer
 	{
 		font-size: 2rem;
 	}
+	
+	.favorite-team
+	{
+		position: relative;
+		float: left;
+		top: 0;
+		width: 0.75rem;
+		color: white;
+		height: 4rem;
+		line-height: 1.75rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: 4px solid gold;
+	}
 }
 
 .mobile-only

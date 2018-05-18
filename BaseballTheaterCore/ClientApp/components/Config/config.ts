@@ -16,7 +16,7 @@ export enum Environments
 const configs: { [key: string]: IEnvironmentOverride<any> } = {
 	"loginEnabled": {
 		defaultValue: false,
-		local: true,
+		local: false,
 		beta: true
 	},
 	"liveDataEnabled": {

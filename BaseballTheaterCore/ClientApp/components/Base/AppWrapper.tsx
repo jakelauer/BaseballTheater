@@ -32,7 +32,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 			isLoading: false,
 			isSettingsModalOpen: false,
 			settings: {
-				favoriteTeam: "",
+				favoriteTeam: [""],
 				defaultTab: "",
 				hideScores: false
 			}

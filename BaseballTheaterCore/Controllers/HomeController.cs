@@ -11,7 +11,7 @@ namespace BaseballTheaterCore.Controllers
 {
     public class HomeController : BtController
     {
-        private bool RequiresLogin => Request.Host.Host.Contains("beta") || Request.Host.Host.Contains(".local");
+        private bool RequiresLogin => Request.Host.Host.Contains("beta");// || Request.Host.Host.Contains(".local");
         
         public IActionResult Index()
         {
