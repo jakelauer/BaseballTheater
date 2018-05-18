@@ -1,6 +1,7 @@
 ﻿import * as moment from "moment-timezone"
 import * as React from "react"
 import {Link} from "react-router-dom";
+import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryData} from "../../MlbDataServer/Contracts";
 import {Subscription} from "../../Utility/subscribable";
 import {App, ILoadingPayload} from "../Base/app";
@@ -14,7 +15,8 @@ interface GameSummaryProps
 
 interface IGameSummaryState
 {
-	visible: boolean
+	visible: boolean,
+	settings: ISettings,
 }
 
 enum HomeAway
@@ -27,13 +29,15 @@ enum HomeAway
 export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryState>
 {
 	private loadingSubscription: Subscription<ILoadingPayload>;
+	private settingsDispatcherKey: string;
 
 	constructor(props: GameSummaryProps)
 	{
 		super(props);
 
 		this.state = {
-			visible: false
+			visible: false,
+			settings: App.Instance.settingsDispatcher.state
 		};
 	}
 
@@ -53,11 +57,16 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 				visible: false
 			})
 		);
+
+		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
+			settings: payload
+		}))
 	}
 
 	public componentWillUnmount()
 	{
 		App.Instance.loadingDistributor.unsubscribe(this.loadingSubscription);
+		App.Instance.settingsDispatcher.deregister(this.settingsDispatcherKey);
 	}
 
 	public componentWillReceiveProps(newProps: Readonly<GameSummaryProps>)
@@ -111,9 +120,16 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 			linescoreRuns = teamType === HomeAway.Away ? game.linescore.r.away : game.linescore.r.home;
 		}
 
+		const isFavoriteTeam = this.state.settings.favoriteTeam.indexOf(fileCode) > -1;
+		const favClass = this.state.settings.favoriteTeam.indexOf(fileCode) > -1 ? "is-favorite" : "";
+
 		return (
 			<div className={`team-row ${homeAwayClass} ${winnerClass}`}>
-				<div className={`team-info`}>
+				<div className={`team-info ${favClass}`}>
+					{isFavoriteTeam &&
+						<div className={`favorite-team`}>
+						</div>
+					}
 					<div className={`team-city team-color ${fileCode}`}>{teamCity}</div>
 					<div className={`team-name team-color ${fileCode}`}>{teamName}</div>
 				</div>

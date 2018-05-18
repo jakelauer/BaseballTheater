@@ -3,6 +3,7 @@ import * as Cookies from "js-cookie";
 import React = require("react");
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Teams} from "../../MlbDataServer/Contracts";
+import Config from "../Config/config";
 import {GameDetailTabs} from "../GameDetail/game_detail";
 import {App} from "./app";
 
@@ -29,12 +30,19 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 
 		options.splice(0, 0, <Select.Option value={"-1"} key={999}>None</Select.Option>);
 
-		return <Select style={{width: 200}} defaultValue={this.props.settings.favoriteTeam || "-1"} onChange={(v: string) => this.setFavoriteTeam(v)}>{options}</Select>
+		return (
+			<Select style={{width: 200}}
+					mode={`multiple`}
+					defaultValue={this.props.settings.favoriteTeam || "-1"}
+					onChange={(v: string[]) => SettingsContainer.setFavoriteTeam(v)}>
+				{options}
+			</Select>
+		);
 	}
 
 	private tabNameFromTab(tab: GameDetailTabs)
 	{
-		let tabName = GameDetailTabs[tab];
+		let tabName: string = tab;
 		switch (tab)
 		{
 			case GameDetailTabs.BoxScore:
@@ -51,58 +59,52 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 
 	private renderDefaultTabDropdown()
 	{
-		const allKeys = Object.keys(GameDetailTabs);
-		const tabKeys = allKeys.slice(0, allKeys.length / 2);
+		let tabKeys = Object.keys(GameDetailTabs).filter(a => isNaN(Number(a)));
+
+		if (!Config.liveDataEnabled)
+		{
+			tabKeys = tabKeys.filter(a => a !== GameDetailTabs[GameDetailTabs.Live]);
+		}
+
 		const options = tabKeys.map((tabKeyString, i) =>
 		{
-			const tabKey = parseInt(tabKeyString) as GameDetailTabs;
+			const tabKey = tabKeyString as GameDetailTabs;
 			const tabName = this.tabNameFromTab(tabKey);
 			return <Select.Option value={tabKeyString} key={i}>{tabName}</Select.Option>
 		});
 
-		return <Select style={{width: 200}} defaultValue={this.props.settings.defaultTab || "0"} onChange={(v: string) => this.setDefaultTab(v)}>
+		const defaultValue = this.props.settings.defaultTab || GameDetailTabs.Highlights;
+		const defaultValueString = GameDetailTabs[defaultValue];
+
+		return <Select style={{width: 200}} defaultValue={defaultValueString} onChange={(v: string) => SettingsContainer.setDefaultTab(v)}>
 			{options}
 		</Select>;
 	}
 
-	private setFavoriteTeam(value: string)
+	private static setFavoriteTeam(value: string[])
 	{
 		this.updateSettings({
-			favoriteTeam: value,
-			hideScores: this.props.settings.hideScores,
-			defaultTab: this.props.settings.defaultTab
+			favoriteTeam: value
 		})
 	}
 
-	private setHideScores(checked: boolean)
+	private static setHideScores(checked: boolean)
 	{
 		this.updateSettings({
-			favoriteTeam: this.props.settings.favoriteTeam,
 			hideScores: checked,
-			defaultTab: this.props.settings.defaultTab
 		})
 	}
 
-	private setDefaultTab(value: string)
+	private static setDefaultTab(value: string)
 	{
 		this.updateSettings({
-			favoriteTeam: this.props.settings.favoriteTeam,
 			defaultTab: value,
-			hideScores: this.props.settings.hideScores
 		})
 	}
 
-	private updateSettings(settings: ISettings)
+	private static updateSettings(settings: Partial<ISettings>)
 	{
-		const expires = new Date("Fri, 31 Dec 9999 23:59:59 GMT");
-		Cookies.set("hidescores", String(settings.hideScores), {expires});
-		Cookies.set("favoriteteam", settings.favoriteTeam, {expires});
-		Cookies.set("defaulttab", settings.defaultTab, {expires});
-		App.Instance.settingsDispatcher.update({
-			hideScores: settings.hideScores,
-			favoriteTeam: settings.favoriteTeam,
-			defaultTab: settings.defaultTab
-		})
+		App.setSettingsCookie(settings);
 	}
 
 	public render()
@@ -125,7 +127,7 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 					label={"Hide Scores"}
 					description={"When checked, scores and game data will be hidden to prevent spoilers. Box scores will still show data."}>
 
-					<Switch checked={this.props.settings.hideScores} onChange={v => this.setHideScores(v)}/>
+					<Switch checked={this.props.settings.hideScores} onChange={v => SettingsContainer.setHideScores(v)}/>
 				</SettingDisplay>
 
 			</div>

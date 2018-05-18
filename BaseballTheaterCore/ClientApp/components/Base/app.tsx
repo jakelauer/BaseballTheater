@@ -30,11 +30,64 @@ export class App
 {
 	public static Instance = new App();
 
-	public settingsDispatcher = new SettingsDispatcher({
-		defaultTab: Cookies.get("defaulttab") || "",
-		favoriteTeam: Cookies.get("favoriteteam") || "",
-		hideScores: Cookies.get("hidescores") === "true"
-	});
+	private static get favoriteTeamFromCookie()
+	{
+		const cookieFav = Cookies.get("favoriteteam");
+		let favArray = [""];
+		if (cookieFav)
+		{
+			try
+			{
+				favArray = JSON.parse(Cookies.get("favoriteteam"));
+				;
+			}
+			catch (e)
+			{
+				favArray = [cookieFav];
+			}
+		}
+
+		return favArray;
+	}
+
+	private static getSettingsFromCookie(): ISettings
+	{
+		let defaultSettings: ISettings ={
+			defaultTab: null,
+			favoriteTeam: [],
+			hideScores: false
+		};
+		
+		const cookie = Cookies.get("settings");
+		if (cookie)
+		{
+			return JSON.parse(cookie) as ISettings;
+		}
+
+		return defaultSettings;
+	}
+
+	public static setSettingsCookie(settings: Partial<ISettings>)
+	{
+		const existingSettings = this.getSettingsFromCookie();
+
+		let defaultSettings: ISettings ={
+			defaultTab: null,
+			favoriteTeam: [],
+			hideScores: false
+		};
+		
+		const finalSettings = Object.assign(defaultSettings, existingSettings, settings);
+
+		const expires = new Date("Fri, 31 Dec 9999 23:59:59 GMT");
+		Cookies.set("settings", JSON.stringify(finalSettings), {expires});
+
+		App.Instance.settingsDispatcher.update(finalSettings);
+		
+		return finalSettings;
+	}
+
+	public settingsDispatcher = new SettingsDispatcher(App.getSettingsFromCookie());
 	public loadingDistributor = new Distributor<ILoadingPayload>();
 	public gameUpdateDistributor = new Distributor<IGameUpdateDistributorPayload>();
 

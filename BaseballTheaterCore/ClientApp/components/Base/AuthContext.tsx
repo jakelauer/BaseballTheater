@@ -11,7 +11,6 @@ export interface IAuthContext
 export interface IFeatures
 {
 	Beta: boolean;
-	LiveData: boolean;
 	TeamSchedule: boolean;
 }
 
@@ -20,7 +19,6 @@ export class AuthContext implements IAuthContext
 	public IsAuthenticated: boolean;
 	public Features: IFeatures = {
 		Beta: false, 
-		LiveData: false,
 		TeamSchedule: false
 	};
 
@@ -38,7 +36,6 @@ export class AuthContext implements IAuthContext
 		if (featuresPageData !== null && featuresPageData !== undefined)
 		{
 			this.Features.Beta = !!(featuresPageData & FeatureFlags.Beta);
-			this.Features.LiveData = !!(featuresPageData & FeatureFlags.LiveData) || Config.Environment === Environments.Local;
 			this.Features.TeamSchedule = !!(featuresPageData & FeatureFlags.TeamSchedule);
 		}
 	}

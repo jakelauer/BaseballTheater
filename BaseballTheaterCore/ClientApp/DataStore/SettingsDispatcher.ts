@@ -2,7 +2,7 @@
 
 export interface ISettings
 {
-	favoriteTeam: string;
+	favoriteTeam: string[];
 	defaultTab: string;
 	hideScores: boolean;
 }

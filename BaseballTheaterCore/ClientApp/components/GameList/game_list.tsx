@@ -121,8 +121,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const favoriteTeam = this.state.settings.favoriteTeam;
 		games.sort((a, b) =>
 		{
-			const aIsFavorite = (a.home_file_code === favoriteTeam || a.away_file_code === favoriteTeam) ? -1 : 0;
-			const bIsFavorite = (b.home_file_code === favoriteTeam || b.away_file_code === favoriteTeam) ? -1 : 0;
+			const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
+			const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
 			const favoriteReturn = aIsFavorite - bIsFavorite;
 
 			const startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;

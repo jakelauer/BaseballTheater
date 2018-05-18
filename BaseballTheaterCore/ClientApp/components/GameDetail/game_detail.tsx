@@ -1,5 +1,6 @@
 ﻿import * as moment from "moment/"
 import {RouteComponentProps} from "react-router";
+import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "../../MlbDataServer/Contracts";
 import {GameDetailCreator, GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
@@ -17,10 +18,10 @@ import React = require("react");
 
 export enum GameDetailTabs
 {
-	Live,
-	Highlights,
-	PlayByPlay,
-	BoxScore
+	Live = "Live",
+	Highlights = "Highlights",
+	PlayByPlay = "PlayByPlay",
+	BoxScore = "BoxScore"
 }
 
 interface IGameDetailState
@@ -37,6 +38,7 @@ interface IGameDetailUrlParams
 {
 	date: string;
 	gamePk: string;
+	tab?: string;
 }
 
 export class GameDetail extends React.Component<RouteComponentProps<IGameDetailUrlParams>, IGameDetailState>
@@ -60,6 +62,10 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		{
 			currentTab = GameDetailTabs.BoxScore;
 		}
+		else if (this.props.match.params.tab)
+		{
+			currentTab = GameDetailTabs[this.props.match.params.tab];
+		}
 
 		this.state = {
 			boxScore: null,
@@ -75,16 +81,22 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	{
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload =>
 		{
-			const defaultTab = parseInt(payload.defaultTab);
+			const defaultTab = payload.defaultTab;
 
-			if (!isNaN(defaultTab))
+			if (defaultTab)
 			{
 				this.setState({
-					currentTab: parseInt(payload.defaultTab),
+					currentTab: GameDetailTabs[payload.defaultTab],
 					settings: payload
 				});
 			}
 		});
+	}
+
+	private getTabUrl(tab: GameDetailTabs)
+	{
+		const game = this.state.gameSummary;
+		return `/game/${game.urlDate}/${game.game_pk}/${tab}`;
 	}
 
 	public componentDidMount()
@@ -225,7 +237,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		switch (currentTab)
 		{
 			case GameDetailTabs.Live:
-				if (AuthContext.Instance.Features.LiveData)
+				if (Config.liveDataEnabled)
 				{
 					renderables = <React.Fragment>
 						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
@@ -311,20 +323,23 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 					<div className={`tabs`}>
 						<div className={`tab-container`}>
 							{
-								AuthContext.Instance.Features.LiveData &&
-								<a href={`javascript:void(0)`} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
+								Config.liveDataEnabled &&
+								<Link to={this.getTabUrl(GameDetailTabs.Live)} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
 									<span>Live</span>
-								</a>
+								</Link>
 							}
-							<a href={`javascript:void(0)`} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
+							
+							<Link to={this.getTabUrl(GameDetailTabs.Highlights)} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
 								<span>Highlights</span>
-							</a>
-							<a href={`javascript:void(0)`} className={`tab ${playByPlayTabClass}`} onClick={() => this.setTabState(GameDetailTabs.PlayByPlay)}>
+							</Link>
+							
+							<Link to={this.getTabUrl(GameDetailTabs.PlayByPlay)} className={`tab ${playByPlayTabClass}`} onClick={() => this.setTabState(GameDetailTabs.PlayByPlay)}>
 								<span>Play by Play</span>
-							</a>
-							<a href={`javascript:void(0)`} className={`tab ${boxScoreTabClass}`} onClick={() => this.setTabState(GameDetailTabs.BoxScore)}>
+							</Link>
+							
+							<Link to={this.getTabUrl(GameDetailTabs.BoxScore)} className={`tab ${boxScoreTabClass}`} onClick={() => this.setTabState(GameDetailTabs.BoxScore)}>
 								<span>Box Score</span>
-							</a>
+							</Link>
 						</div>
 					</div>
 					<div className={`tab-contents`}>
