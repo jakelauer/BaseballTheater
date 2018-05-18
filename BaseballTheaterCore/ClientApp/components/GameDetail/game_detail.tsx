@@ -83,7 +83,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		{
 			const defaultTab = payload.defaultTab;
 
-			if (defaultTab)
+			if (defaultTab && !this.props.match.params.tab)
 			{
 				this.setState({
 					currentTab: GameDetailTabs[payload.defaultTab],
