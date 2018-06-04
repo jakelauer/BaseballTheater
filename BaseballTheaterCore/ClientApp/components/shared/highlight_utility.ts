@@ -1,6 +1,6 @@
-﻿import {IHighlight, IHighlightSearchResult, IThumb} from "../../MlbDataServer/Contracts";
+﻿import {Utility} from "@Utility/index";
+import {IHighlight, IHighlightSearchResult, IThumb} from "../../MlbDataServer/Contracts";
 import * as moment from "moment"
-import {DataUtility} from "../../Utility/Data";
 
 enum HighlightThumbQuality
 {
@@ -88,7 +88,7 @@ export class HighlightUtility
 	public static getLinks(highlight: IHighlight): ILink[]
 	{
 		const qkRegex = /(\d{4}k?\.)/i;
-		const links = DataUtility.forceArray(highlight.url);
+		const links = Utility.Data.forceArray(highlight.url);
 		let q1200k: ILink | null = null;
 		let hasK = false;
 		const dateBefore2013 = moment(highlight.date).year() < 2013;

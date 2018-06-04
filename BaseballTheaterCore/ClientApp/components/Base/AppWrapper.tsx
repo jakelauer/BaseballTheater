@@ -1,7 +1,7 @@
-﻿import * as PropTypes from "prop-types";
+﻿import {Utility} from "@Utility/index";
+import * as PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
-import {Responsive} from "../../Utility/responsive";
 import Config from "../Config/config";
 import {Search} from "../Search/search";
 import {Modal} from "antd";
@@ -45,7 +45,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 
 	public componentWillMount()
 	{
-		Responsive.Instance.initialize();
+		Utility.Responsive.initialize();
 		AuthContext.Instance.initialize();
 		App.Instance.initialize();
 

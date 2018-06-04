@@ -1,10 +1,11 @@
 import React = require("react");
-import {GameData, GameSummaryData, LiveData, LiveGamePlay, Player, PlayerListResponse, PlayerWithStats} from "../../../MlbDataServer/Contracts";
-import {LiveGameCreator} from "../../../MlbDataServer/MlbDataServer"
-import {Timer} from "../../../Utility/Timer";
+import {GameData, GameSummaryData, LiveData, Player, PlayerListResponse, PlayerWithStats} from "@MlbDataServer/Contracts";
+import {LiveGameCreator} from "@MlbDataServer/MlbDataServer"
+import {Utility} from "@Utility/index";
 import {App} from "../../Base/app";
-import {IPlayByPlayPitchData, PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
+import {PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
 import {GameCount} from "./GameCount";
+import {LiveInnings} from "./LiveInnings";
 import {PlayerStatsCard} from "./PlayerStatsCard";
 import {Row, Col} from "antd";
 
@@ -40,13 +41,13 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 
 		if (this.timerId === 0)
 		{
-			this.timerId = Timer.interval(() => this.updateLiveData(), 5000);
+			this.timerId = Utility.Timer.interval(() => this.updateLiveData(), 5000);
 		}
 	}
 
 	componentWillUnmount()
 	{
-		Timer.cancel(this.timerId);
+		Utility.Timer.cancel(this.timerId);
 	}
 
 	private static getPlayerIdsFromGame(gameData: GameData)
@@ -60,7 +61,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		if (this.props.currentGame.isFinal)
 		{
 			console.log("Game is over, stopping automatic updates");
-			Timer.cancel(this.timerId);
+			Utility.Timer.cancel(this.timerId);
 		}
 
 		console.log("Updating live data...");
@@ -90,19 +91,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		return null;
 	}
 
-	private getPitchDataForPlay(play: LiveGamePlay)
-	{
-		const pitchEvents = play.playEvents.filter(a => a.isPitch);
-		const pitchData: IPlayByPlayPitchData[] = [];
-		pitchEvents.forEach(event => pitchData.push({
-			x: event.pitchData.coordinates.x,
-			y: event.pitchData.coordinates.y,
-			type: event.details.call.code
-		}));
-
-		return pitchData;
-	}
-
 	private renderCurrentPlay()
 	{
 		let rendered = <div/>;
@@ -111,7 +99,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		{
 			const pitcher = this.getPlayerById(currentPlay.matchup.pitcher.id);
 			const batter = this.getPlayerById(currentPlay.matchup.batter.id);
-			const pitchArray = this.getPitchDataForPlay(currentPlay);
 
 			rendered = (
 				<div className={`current-play`}>
@@ -134,24 +121,32 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		{
 			return null;
 		}
-		
+
 		const pitcher = this.getPlayerById(currentPlay.matchup.pitcher.id);
 		const batter = this.getPlayerById(currentPlay.matchup.batter.id);
-		const pitchArray = this.getPitchDataForPlay(currentPlay);
+		const pitchArray = Utility.Mlb.getPitchDataForPlay(currentPlay);
+		const isSpringTraining = this.props.currentGame.isSpringTraining;
 
-		return <Row>
-			<Col span={6}>
-				<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
-			</Col>
-			<Col span={12}>
-				<div className={`count`}>
-					<GameCount data={currentPlay.count}/>
-				</div>
-				<div className={`result`}>{currentPlay.result.description}</div>
-				<PlayByPlayPitches isSpringTraining={this.props.currentGame.isSpringTraining} pitches={pitchArray}/>
-			</Col>
-			<Col span={6}></Col>
-			{this.renderCurrentPlay()}
-		</Row>;
+		const plays = this.state.game.liveData.plays;
+
+		return <React.Fragment>
+			<Row>
+				<Col span={6}>
+					<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
+				</Col>
+				<Col span={12}>
+					<div className={`count`}>
+						<GameCount data={currentPlay.count}/>
+					</div>
+					<div className={`result`}>{currentPlay.result.description}</div>
+					<PlayByPlayPitches isSpringTraining={isSpringTraining} pitches={pitchArray}/>
+				</Col>
+				<Col span={6}></Col>
+				{this.renderCurrentPlay()}
+			</Row>
+			<Row>
+				<LiveInnings plays={plays} isSpringTraining={isSpringTraining}/>
+			</Row>
+		</React.Fragment>;
 	}
 }

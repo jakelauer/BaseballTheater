@@ -1,5 +1,5 @@
-﻿import {LiveGamePlayCount} from "../../../MlbDataServer/Contracts";
-import {ISinglePropWrapper} from "../../../Utility/SharedProps";
+﻿import {LiveGamePlayCount} from "@MlbDataServer/Contracts";
+import {ISinglePropWrapper} from "@Utility/Internal/InternalPropsUtility";
 import React = require("react");
 
 export class GameCount extends React.Component<ISinglePropWrapper<LiveGamePlayCount>, any>

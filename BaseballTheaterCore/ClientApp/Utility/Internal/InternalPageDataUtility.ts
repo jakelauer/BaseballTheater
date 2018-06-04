@@ -1,4 +1,4 @@
-﻿export class PageData
+﻿export class InternalPageDataUtility
 {
 	private static DATA_OBJ_NAME = "PAGE_DATA";
 

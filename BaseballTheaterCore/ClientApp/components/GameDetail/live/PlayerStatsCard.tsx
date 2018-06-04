@@ -1,6 +1,6 @@
 import React = require("react");
-import {PlayerWithStats} from "../../../MlbDataServer/Contracts";
-import {ISinglePropWrapper} from "../../../Utility/SharedProps";
+import {PlayerWithStats} from "@MlbDataServer/Contracts";
+import {ISinglePropWrapper} from "@Utility/Internal/InternalPropsUtility";
 
 export class PlayerStatsCard extends React.Component<ISinglePropWrapper<PlayerWithStats | null>, any>
 {

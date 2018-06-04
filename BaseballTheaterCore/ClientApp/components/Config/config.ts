@@ -17,7 +17,7 @@ const configs: { [key: string]: IEnvironmentOverride<any> } = {
 	"loginEnabled": {
 		defaultValue: false,
 		local: false,
-		beta: true
+		beta: false
 	},
 	"liveDataEnabled": {
 		defaultValue: false,
@@ -30,7 +30,7 @@ export default class Config
 {
 	public static get Environment()
 	{
-		const isLocal = location.host.indexOf(".local") > -1;
+		const isLocal = location.host.indexOf(".local") > -1 || location.host.indexOf("localhost") > -1;
 		const isBeta = location.host.indexOf("beta.") > -1;
 
 		let e = Environments.Prod;

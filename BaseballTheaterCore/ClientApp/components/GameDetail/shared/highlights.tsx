@@ -1,6 +1,6 @@
 ﻿import React = require("react");
+import {Utility} from "@Utility/index";
 import {IHighlight, IHighlightsCollection} from "../../../MlbDataServer/Contracts";
-import {DataUtility} from "../../../Utility/Data";
 import {Highlight} from "../../shared/highlight";
 
 interface IHighlightsProps
@@ -47,7 +47,7 @@ export class Highlights extends React.Component<IHighlightsProps, IHighlightsSta
 				highlight.isPlaying = false;
 			}
 
-			highlights = DataUtility.forceArray(highlightsCollection.highlights.media);
+			highlights = Utility.Data.forceArray(highlightsCollection.highlights.media);
 			highlights.sort((a, b) =>
 			{
 				const aIsRecap = a.recap ? -1 : 0;
