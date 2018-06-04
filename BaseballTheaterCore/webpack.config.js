@@ -48,6 +48,21 @@ module.exports = function (env) {
                         }
                     }]
                 },
+	            {
+		            test: /\.(less)/,
+		            use: [{
+			            loader: "style-loader"
+		            }, {
+			            loader: "css-loader", options: {
+				            sourceMap: true
+			            }
+		            }, {
+			            loader: "less-loader", options: {
+				            sourceMap: true,
+				            javascriptEnabled: true // required for the Ant less files
+			            }
+		            }]
+	            },
             ]
         },
         optimization: {

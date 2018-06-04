@@ -1,3 +1,9 @@
+.strikezone-wrapper
+{
+	overflow: hidden;
+	position: relative;
+}
+
 .strikezone
 {
 	display: flex;
@@ -38,6 +44,7 @@
 	.pitch
 	{
 		position: absolute;
+		width: auto;
 		transform: translateX(-50%) translateY(-50%);
 
 		.pitch-count
@@ -53,6 +60,7 @@
 .pitch
 {
 	display: flex;
+	width: 100%;
 	flex-wrap: wrap;
 	margin-bottom: 0.5rem;
 

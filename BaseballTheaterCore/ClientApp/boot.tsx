@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from "react-dom";
 import {AppContainer} from "react-hot-loader";
 import {BrowserRouter} from "react-router-dom";
-import 'antd/dist/antd.css'
+import "../Styles/ant-theme.less";
 import '../Styles/all.scss'
 import * as RoutesModule from './routes';
 let routes = RoutesModule.routes;

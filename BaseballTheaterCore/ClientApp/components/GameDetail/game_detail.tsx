@@ -240,7 +240,8 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				{
 					renderables = <React.Fragment>
 						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
-						<GameDetailLive currentGame={gameSummary}/>
+						<GameDetailLive currentGame={gameSummary}
+										highlights={highlightsCollection}/>
 					</React.Fragment>;
 				}
 				break;

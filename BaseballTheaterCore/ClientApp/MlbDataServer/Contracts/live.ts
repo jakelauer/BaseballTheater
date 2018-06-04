@@ -162,6 +162,7 @@ export interface LiveGamePlayEvent
 	startTime: string;
 	endTime: string;
 	isPitch: boolean;
+	playId: string;
 	type: string;
 }
 
