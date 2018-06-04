@@ -39,8 +39,7 @@ export class PlayByPlayPitches extends React.Component<IPlayByPlayPitchesProps, 
 			xOffset: -0.13
 		};
 
-		const pitchesRendered = this.props.pitches.map((pitch, i) =>
-		{
+		const pitchesRendered = this.props.pitches.map((pitch, i) => {
 			const sizes = this.props.isSpringTraining
 				? springTraining
 				: regularSeason;
@@ -52,7 +51,7 @@ export class PlayByPlayPitches extends React.Component<IPlayByPlayPitchesProps, 
 				left: `${leftPct * 100}%`,
 				top: `${topPct * 100}%`,
 				zIndex: i + 1
-			}
+			};
 
 			return (
 				<div className={`pitch`} style={style} key={i} data-type={pitch.type}>
@@ -62,10 +61,12 @@ export class PlayByPlayPitches extends React.Component<IPlayByPlayPitchesProps, 
 		});
 
 		return (
-			<div className={`strikezone`}>
-				<div className={`force-square`}></div>
-				{pitchesRendered}
-				<div className={`actual-strikezone`}></div>
+			<div className={`strikezone-wrapper`}>
+				<div className={`strikezone`}>
+					<div className={`force-square`}></div>
+					{pitchesRendered}
+					<div className={`actual-strikezone`}></div>
+				</div>
 			</div>
 		);
 	}

@@ -1,5 +1,5 @@
 import React = require("react");
-import {GameData, GameSummaryData, LiveData, Player, PlayerListResponse, PlayerWithStats} from "@MlbDataServer/Contracts";
+import {GameData, GameSummaryData, IHighlightsCollection, LiveData, Player, PlayerListResponse, PlayerWithStats} from "@MlbDataServer/Contracts";
 import {LiveGameCreator} from "@MlbDataServer/MlbDataServer"
 import {Utility} from "@Utility/index";
 import {App} from "../../Base/app";
@@ -7,11 +7,12 @@ import {PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
 import {GameCount} from "./GameCount";
 import {LiveInnings} from "./LiveInnings";
 import {PlayerStatsCard} from "./PlayerStatsCard";
-import {Row, Col} from "antd";
+import {Row, Col, List} from "antd";
 
 interface IGameDetailLiveProps
 {
 	currentGame: GameSummaryData;
+	highlights: IHighlightsCollection | null;
 }
 
 interface IGameDetailLiveState
@@ -91,23 +92,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		return null;
 	}
 
-	private renderCurrentPlay()
-	{
-		let rendered = <div/>;
-		const currentPlay = this.state.game.liveData.plays.currentPlay;
-		if (currentPlay)
-		{
-			const pitcher = this.getPlayerById(currentPlay.matchup.pitcher.id);
-			const batter = this.getPlayerById(currentPlay.matchup.batter.id);
-
-			rendered = (
-				<div className={`current-play`}>
-				</div>
-			);
-		}
-		return rendered;
-	}
-
 	public render()
 	{
 		const data = this.state.game;
@@ -127,26 +111,25 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		const pitchArray = Utility.Mlb.getPitchDataForPlay(currentPlay);
 		const isSpringTraining = this.props.currentGame.isSpringTraining;
 
-		const plays = this.state.game.liveData.plays;
+		const pitchDescs = currentPlay.playEvents
+			.filter(a => a.isPitch);
 
-		return <React.Fragment>
-			<Row>
+		return <Row>
 				<Col span={6}>
 					<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
+					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"current"} highlights={this.props.highlights}/>
 				</Col>
-				<Col span={12}>
+				<Col span={8} offset={2}>
 					<div className={`count`}>
 						<GameCount data={currentPlay.count}/>
 					</div>
-					<div className={`result`}>{currentPlay.result.description}</div>
 					<PlayByPlayPitches isSpringTraining={isSpringTraining} pitches={pitchArray}/>
+					<List split={false} dataSource={pitchDescs} renderItem={pitch => Utility.Mlb.renderPitch(pitch, pitchDescs.indexOf(pitch))}/>
 				</Col>
-				<Col span={6}></Col>
-				{this.renderCurrentPlay()}
-			</Row>
-			<Row>
-				<LiveInnings plays={plays} isSpringTraining={isSpringTraining}/>
-			</Row>
-		</React.Fragment>;
+				<Col span={6} offset={2}>
+					<h2>Innings</h2>
+					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"all"} highlights={this.props.highlights}/>
+				</Col>
+			</Row>;
 	}
 }
