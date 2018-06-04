@@ -26,21 +26,6 @@ export class Highlight extends React.Component<IHighlightProps, any>
 		return isSearchResult ? asSearchResult : null;
 	}
 
-	private renderTitle(displayProps: IHighlightDisplay | null)
-	{
-		if (!displayProps)
-		{
-			return <div/>;
-		}
-
-		const teamCode = Teams.TeamIdList[parseInt(displayProps.teamId)] || "";
-		return (
-			<div className={`highlight-title`}>
-				<span className={`team`}>{teamCode.toUpperCase()}</span>
-				<span className={`title`}>{displayProps.headline}</span>
-			</div>);
-	}
-
 	private getGameLink()
 	{
 		const dateString = moment(this.highlight.date).format("YYYYMMDD");
@@ -61,19 +46,25 @@ export class Highlight extends React.Component<IHighlightProps, any>
 
 		const links = displayProps.links.map((link, i) =>
 		{
-			return <a href={link.url} target="_blank" key={i}>{link.label}</a>;
+			return <a href={link.url} target="_blank" key={i} rel={"noreferrer"}>{link.label}</a>;
 		});
+
+		const cover = <a href={displayProps.videoUrl} target={`_blank`} rel={"noreferrer"}>
+			<div className={`thumb`} style={thumbStyle}/>
+		</a>;
 
 		const dateString = moment(this.highlight.date).format("MMM D, YYYY");
 		const dateRendered = this.props.renderDate
 			? <Link className={`date`} to={this.getGameLink()}>
-				{dateString} (View game)
+				{dateString}
 			</Link>
 			: null;
 			
-			const cover = <a href={displayProps.videoUrl} target={`_blank`}>
-				<div className={`thumb`} style={thumbStyle} />
-			</a>;
+		const title = <React.Fragment>
+			{displayProps.headline}
+			<br/>
+			{dateRendered}
+		</React.Fragment>;
 
 		return (
 			<div className={`highlight`}>
@@ -82,27 +73,10 @@ export class Highlight extends React.Component<IHighlightProps, any>
 					actions={links}
 				>
 					<Card.Meta
-						title={displayProps.headline}
+						title={title}
 					/>
 				</Card>
 			</div>
 		);
-
-		/*return (
-			<div className={`highlight`}>
-				<div className={`video-info`}>
-					<a href={displayProps.videoUrl} target={`_blank`}>
-						<div className={`thumb`} style={thumbStyle}>
-
-						</div>
-						<h2>{this.renderTitle(displayProps)}</h2>
-					</a>
-				</div>
-				{dateRendered}
-				<div className={`links`}>
-					{links}
-				</div>
-			</div>
-		);*/
 	}
 }

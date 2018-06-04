@@ -311,6 +311,9 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		{
 			return (<div/>);
 		}
+		
+		const date = this.state.gameSummary.dateObj.format("MMM Do, YYYY");
+		document.title = `${date} - ${this.state.boxScore.home_fname} @ ${this.state.boxScore.away_fname} - Baseball Theater`;
 
 		const liveTabClass = this.classForTab(GameDetailTabs.Live);
 		const highlightsTabClass = this.classForTab(GameDetailTabs.Highlights);

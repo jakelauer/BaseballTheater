@@ -132,7 +132,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 				<tr className={`player-item pitcher-item`} key={i}>
 					<td className={`player-name`}>
 						{pitcher.note &&
-						<span className={`note`} dangerouslySetInnerHTML={{__html: pitcher.note}}></span>
+							<span className={`note`} dangerouslySetInnerHTML={{__html: pitcher.note}}></span>
 						}
 						{this.renderPlayerLink(pitcher)} ({pitcher.pos})
 					</td>

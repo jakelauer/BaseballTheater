@@ -138,7 +138,9 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const games = this.state.gameSummaries;
 
 		this.sortGames(games);
-
+		
+		document.title = `Baseball Theater`;
+		
 		const gamesRendered = games.map((gameSummary, i) =>
 		{
 			const key = games.length + i;

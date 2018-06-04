@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es6",
     "lib": [
       "es5",
       "esnext",

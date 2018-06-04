@@ -102,13 +102,6 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		this.setState({
 			isExpanded: !this.state.isExpanded
 		});
-
-		const el = e.currentTarget;
-		const top = el.getBoundingClientRect().top;
-		const totalTop = top + window.scrollY;
-		const header = document.getElementsByTagName("header")[0];
-		const height = header.getBoundingClientRect().height || 0;
-		Animate.scrollTop(totalTop - height);
 	}
 
 	public render()
