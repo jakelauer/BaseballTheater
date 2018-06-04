@@ -5,6 +5,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es6",
+    "paths": {
+      "@MlbDataServer/*": ["./ClientApp/MlbDataServer/*"],
+      "@Utility/*": ["./ClientApp/Utility/*"]
+    },
     "lib": [
       "es5",
       "esnext",

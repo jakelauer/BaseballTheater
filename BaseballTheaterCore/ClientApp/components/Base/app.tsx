@@ -1,20 +1,8 @@
-﻿import * as Cookies from "js-cookie";
+﻿import {Distributor} from "@Utility/Subscribable";
+import * as Cookies from "js-cookie";
 import {hubConnection} from "signalr-no-jquery";
 import {ISettings, SettingsDispatcher} from "../../DataStore/SettingsDispatcher";
-import {Distributor} from "../../Utility/subscribable";
 import Config from "../Config/config";
-
-interface IAppProps
-{
-	isAppMode: boolean;
-}
-
-interface IAppState
-{
-	isLoading: boolean;
-	isSettingsModalOpen: boolean;
-	settings: ISettings;
-}
 
 export interface ILoadingPayload
 {

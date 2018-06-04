@@ -1,4 +1,4 @@
-export class DataUtility
+export class InternalDataUtility
 {
 	public static forceArray<T>(item: T | T[])
 	{

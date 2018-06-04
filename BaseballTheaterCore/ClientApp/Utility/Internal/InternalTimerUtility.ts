@@ -1,4 +1,4 @@
-﻿export class Timer
+﻿export class InternalTimerUtility
 {
 	private static timers: number[] = [];
 

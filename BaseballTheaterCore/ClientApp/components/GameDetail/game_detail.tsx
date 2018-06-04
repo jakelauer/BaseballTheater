@@ -1,13 +1,12 @@
-﻿import * as moment from "moment/"
+﻿import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "@MlbDataServer/Contracts";
+import {GameDetailCreator, GameSummaryCreator} from "@MlbDataServer/MlbDataServer";
+import {Utility} from "@Utility/index";
+import {Subscription} from "@Utility/Subscribable";
+import * as moment from "moment/"
 import {RouteComponentProps} from "react-router";
 import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
-import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "../../MlbDataServer/Contracts";
-import {GameDetailCreator, GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
-import {Promises} from "../../Utility/promises";
-import {Subscription} from "../../Utility/subscribable";
 import {App, IGameUpdateDistributorPayload} from "../Base/app";
-import {AuthContext} from "../Base/AuthContext";
 import Config from "../Config/config";
 import {BoxScore} from "./boxscore";
 import {GameDetailLive} from "./live/GameDetailLive";
@@ -171,7 +170,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				if (gameSummaryCollection.games && gameSummaryCollection.games.game)
 				{
 					const gameList = gameSummaryCollection.games.game;
-					for (var game of gameList)
+					for (const game of gameList)
 					{
 						if (game.game_pk === this.gamePk)
 						{
@@ -196,7 +195,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			const highlightsCollectionPromise = GameDetail.getHighlights(gameSummary);
 			const playByPlayPromise = GameDetail.getPlayByPlay(gameSummary, boxScore);
 
-			const rest = await Promises.all([highlightsCollectionPromise, playByPlayPromise]);
+			const rest = await Utility.Promises.all([highlightsCollectionPromise, playByPlayPromise]);
 			const highlightsCollection = (!(rest[0] instanceof Error))
 				? rest[0] as IHighlightsCollection
 				: console.error("Highlights failed to load", rest[0]) || null;

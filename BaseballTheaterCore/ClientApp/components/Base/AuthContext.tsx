@@ -1,5 +1,4 @@
-﻿import {PageData} from "../../Utility/PageData";
-import Config, {Environments} from "../Config/config";
+﻿import {Utility} from "@Utility/index";
 import {FeatureFlags} from "../Config/FeatureFlags";
 
 export interface IAuthContext
@@ -26,13 +25,13 @@ export class AuthContext implements IAuthContext
 
 	public initialize()
 	{
-		const authPageData = PageData.getPageData<boolean>("IsAuthenticated");
+		const authPageData = Utility.PageData.getPageData<boolean>("IsAuthenticated");
 		if (authPageData)
 		{
 			this.IsAuthenticated = authPageData;
 		}
 
-		const featuresPageData = PageData.getPageData<FeatureFlags>("FeatureFlags");
+		const featuresPageData = Utility.PageData.getPageData<FeatureFlags>("FeatureFlags");
 		if (featuresPageData !== null && featuresPageData !== undefined)
 		{
 			this.Features.Beta = !!(featuresPageData & FeatureFlags.Beta);

@@ -1,4 +1,4 @@
-﻿export class Animate
+﻿export class InternalAnimateUtility
 {
 	public static scrollTop(targetPx: number, durationMs: number = 250)
 	{

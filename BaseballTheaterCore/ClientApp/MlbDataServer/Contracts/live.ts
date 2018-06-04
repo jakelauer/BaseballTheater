@@ -109,6 +109,7 @@ export interface LiveGamePlays
 {
 	allPlays: LiveGamePlay[];
 	currentPlay: LiveGamePlay;
+	playsByInning: LiveGamePlayByInning[];
 	scoringPlays: number[];
 }
 
@@ -118,7 +119,24 @@ export interface LiveGamePlayByInning
 	endIndex: number;
 	top: number[];
 	bottom: number[];
-	hits
+	hits: AbstractHomeAway<LiveGamePlayHit>
+}
+
+export interface AbstractHomeAway<T>
+{
+	home: T;
+	away: T;
+}
+
+export interface LiveGamePlayHit
+{
+	batter: AbstractFullnameIdLink;
+	coordinates: XYCoordinates;
+	description: string;
+	inning: number;
+	pitcher: AbstractFullnameIdLink;
+	team: AbstractIdLinkName;
+	type: string;
 }
 
 export interface LiveGamePlay
@@ -169,6 +187,12 @@ export interface PitchBreaks
 	breakAngle: number;
 	breakLength: number;
 	breakY: number;
+}
+
+export interface XYCoordinates
+{
+	x: number;
+	y: number;
 }
 
 export interface PitchCoordinates

@@ -1,4 +1,4 @@
-﻿import {DataUtility} from "../../Utility/Data";
+﻿import {Utility} from "@Utility/index";
 import {IBatter} from "./batting";
 import {IPitcher} from "./pitching";
 import {BoxScoreData} from "./box_score";
@@ -121,7 +121,7 @@ type Next ="Y" | "N";
 
 		private process()
 		{
-			this.game.inning = DataUtility.forceArray(this.game.inning);
+			this.game.inning = Utility.Data.forceArray(this.game.inning);
 			if (this.game && this.game.inning && this.game.inning.length > 0)
 			{
 				const innings = this.game.inning;
@@ -143,7 +143,7 @@ type Next ="Y" | "N";
 
 		private processHalfInning(halfInning: IInningHalf)
 		{
-			halfInning.atbat = DataUtility.forceArray(halfInning.atbat);
+			halfInning.atbat = Utility.Data.forceArray(halfInning.atbat);
 			
 			if (halfInning.atbat && halfInning.atbat.length > 0)
 			{
@@ -157,13 +157,13 @@ type Next ="Y" | "N";
 
 					if (atBat.pitch)
 					{
-						atBat.pitch = DataUtility.forceArray(atBat.pitch);
+						atBat.pitch = Utility.Data.forceArray(atBat.pitch);
 
 						atBat.pitch.forEach(pitch =>
 						{
 							if (pitch)
 							{
-								pitch.pitch_type_detail = this.getPitchTypeDetail(pitch);
+								pitch.pitch_type_detail = Innings.getPitchTypeDetail(pitch);
 								pitch.x = parseFloat((pitch.x as any) as string);
 								pitch.y = parseFloat((pitch.y as any) as string);
 							}
@@ -173,7 +173,7 @@ type Next ="Y" | "N";
 			}
 		}
 
-		private getPitchTypeDetail(pitch: IPitch)
+		private static getPitchTypeDetail(pitch: IPitch)
 		{
 			let detail = "Unknown pitch";
 			if (pitch && pitch.pitch_type)

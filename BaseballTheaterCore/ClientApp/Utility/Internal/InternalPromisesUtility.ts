@@ -1,4 +1,4 @@
-﻿export class Promises
+﻿export class InternalPromisesUtility
 {
 	public static async all(promises: Promise<any>[])
 	{

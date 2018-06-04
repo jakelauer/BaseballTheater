@@ -1,6 +1,5 @@
 ﻿import React = require("react");
 import {IAtBat, IHighlight, IHighlightsCollection, IPitch, IPitcher, Keyword} from "../../../MlbDataServer/Contracts";
-import {Animate} from "../../../Utility/animate";
 import {HighlightUtility} from "../../shared/highlight_utility";
 import {PlayByPlayPitches} from "./play_by_play_pitches";
 
@@ -30,7 +29,7 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		};
 	}
 
-	private getSvIdsForPlay(play: IAtBat)
+	private static getSvIdsForPlay(play: IAtBat)
 	{
 		if (play.pitch)
 		{
@@ -43,7 +42,7 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 	private getHighlightForPlay(play: IAtBat): IHighlight | null
 	{
 		const guid = play.play_guid;
-		const svIds = this.getSvIdsForPlay(play);
+		const svIds = Batter.getSvIdsForPlay(play);
 		const hc = this.props.highlights;
 		let foundHighlight: IHighlight | null = null;
 		if (hc && hc.highlights && hc.highlights.media)
@@ -78,7 +77,7 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		return foundHighlight;
 	}
 
-	private renderPitch(pitch: IPitch, pitchIndex: number)
+	private static renderPitch(pitch: IPitch, pitchIndex: number)
 	{
 		let rendered = <div/>;
 
@@ -122,7 +121,7 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		{
 			pitches = batter.pitch.map((pitch, i) =>
 			{
-				return this.renderPitch(pitch, i);
+				return Batter.renderPitch(pitch, i);
 			});
 
 			strikezone = <PlayByPlayPitches pitches={batter.pitch} isSpringTraining={this.props.isSpringTraining}/>;

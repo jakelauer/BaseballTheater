@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const bundleOutputDir = './wwwroot/dist';
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = function (env) {
     const isDevBuild = !(env && env.prod);
@@ -18,6 +19,9 @@ module.exports = function (env) {
         devtool: "cheap-module-source-map",
         resolve: {
             extensions: ['.js', '.json', '.ts', '.tsx'],
+            plugins: [
+                new TsconfigPathsPlugin()
+            ]
         },
         module: {
             rules: [
