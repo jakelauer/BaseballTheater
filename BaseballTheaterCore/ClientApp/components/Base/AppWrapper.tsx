@@ -140,10 +140,8 @@ export class AppWrapper extends React.Component<{}, IAppState>
 
 						<div className={`shameless-plug`}>
 							<div>
-								<strong>Like the site?</strong> It costs money to run! Help me keep the site alive:
-							</div>
-							<div className={`patreon-button`}>
-								<a href="https://www.patreon.com/bePatron?u=5206592" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+								<strong>Like the site?</strong> <br/>
+								<a href="https://www.patreon.com/jakelauer/memberships" target="_blank">Become a patron to keep it alive!</a>
 							</div>
 						</div>
 					</div>

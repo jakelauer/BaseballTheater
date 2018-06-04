@@ -1,7 +1,4 @@
 ﻿import React = require("react");
-import {RouteComponentProps} from "react-router";
-import {withRouter} from 'react-router-dom';
-import {Search} from "../Search/search";
 
 interface ISearchBoxState
 {

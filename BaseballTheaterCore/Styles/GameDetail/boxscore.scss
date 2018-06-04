@@ -158,6 +158,7 @@
 			{
 				display: inline-block;
 				margin-top: 0;
+				margin-right: 0.25rem;
 				font-style: normal;
 			}
 
@@ -180,5 +181,11 @@
 		{
 			font-weight: bold;
 		}
+	}
+	
+	.batter-item .note
+	{
+		margin-left: 0.5rem;
+		margin-right: 0;
 	}
 }

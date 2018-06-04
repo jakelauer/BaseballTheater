@@ -10,12 +10,12 @@ interface ISearchState
 	highlights: IHighlightSearchResult[];
 }
 
-interface ISearchProps
+interface ISearchRouteParams
 {
 	query: string;
 }
 
-export class Search extends React.Component<RouteComponentProps<ISearchProps>, ISearchState>
+export class Search extends React.Component<RouteComponentProps<ISearchRouteParams>, ISearchState>
 {
 	public static readonly regex = /^\/search\/(.*)(\/|\?)?/i;
 	private readonly PER_PAGE = 20;
@@ -36,6 +36,14 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 		this.loadNextHighlightPage();
 	}
 
+	public componentWillUpdate(nextProps: Readonly<RouteComponentProps<ISearchRouteParams>>)
+	{
+		if (this.props.match.params.query !== nextProps.match.params.query)
+		{
+			this.reset(nextProps.match.params.query);
+		}
+	}
+
 	public static getQuery()
 	{
 		const matches = this.regex.exec(location.pathname);
@@ -46,7 +54,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 		return decodeURI(query);
 	}
 
-	private updateHighlights(highlights: IHighlightSearchResult[] | null)
+	private updateHighlights(highlights: IHighlightSearchResult[] | null, callback = () => {})
 	{
 		App.stopLoading();
 
@@ -56,6 +64,16 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 
 		this.setState({
 			highlights: setTo
+		}, callback);
+	}
+
+	private reset(newQuery: string)
+	{
+		this.updateHighlights(null, () => {
+			this.nextPage = 0;
+			this.setState({
+				query: newQuery
+			}, () => this.loadNextHighlightPage());
 		});
 	}
 
@@ -91,6 +109,8 @@ export class Search extends React.Component<RouteComponentProps<ISearchProps>, I
 		const loadMoreButton = shouldShowLoadMore
 			? this.renderLoadMoreButton()
 			: null;
+
+		document.title = `"${this.state.query}" Highlight Search - Baseball Theater`;
 
 		return (
 			<div className={`search-results highlights-container`}>
