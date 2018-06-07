@@ -148,9 +148,11 @@ class LiveInning extends React.Component<ILiveInningProps, {}>
 		{
 			return null;
 		}
+		
+		const activeKey = !play.about.isComplete ? playIndex.toString() : "";
 
 		return (
-			<Collapse bordered={false} key={playIndex}>
+			<Collapse bordered={false} key={playIndex} defaultActiveKey={[activeKey]}>
 				<Collapse.Panel header={header} key={playIndex.toString()} showArrow={!!play.result.description}>
 					<PlayByPlayPitches isSpringTraining={this.props.isSpringTraining} pitches={pitches}/>
 					<List dataSource={pitchDescs} renderItem={pitch => Utility.Mlb.renderPitch(pitch, pitchDescs.indexOf(pitch))}/>

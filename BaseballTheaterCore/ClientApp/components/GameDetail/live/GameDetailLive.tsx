@@ -114,22 +114,16 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		const pitchDescs = currentPlay.playEvents
 			.filter(a => a.isPitch);
 
-		return <Row>
-				<Col span={6}>
-					<PlayerStatsCard data={pitcher}/> vs <PlayerStatsCard data={batter}/>
+		return <React.Fragment>
+			<Row gutter={16}>
+				<Col span={12}>
 					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"current"} highlights={this.props.highlights}/>
 				</Col>
-				<Col span={8} offset={2}>
-					<div className={`count`}>
-						<GameCount data={currentPlay.count}/>
-					</div>
-					<PlayByPlayPitches isSpringTraining={isSpringTraining} pitches={pitchArray}/>
-					<List split={false} dataSource={pitchDescs} renderItem={pitch => Utility.Mlb.renderPitch(pitch, pitchDescs.indexOf(pitch))}/>
-				</Col>
-				<Col span={6} offset={2}>
-					<h2>Innings</h2>
+				<Col span={12}>
+					<h2>All Innings</h2>
 					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"all"} highlights={this.props.highlights}/>
 				</Col>
-			</Row>;
+			</Row>
+		</React.Fragment>;
 	}
 }
