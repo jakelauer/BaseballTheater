@@ -16,13 +16,14 @@
 		{
 			width: 16.667%;
 			position: fixed;
-			max-width: 200px;
+			max-width: 14vw;
 
 			.r-mobile &
 			{
 				position: relative;
 				display: flex;
 				width: 100%;
+				max-width: none;
 			}
 		}
 
@@ -113,6 +114,7 @@
 	{
 		flex: 8;
 		padding: 0 1rem;
+		max-width: 86vw;
 
 		.tab-content
 		{
@@ -127,6 +129,7 @@
 		.r-mobile &
 		{
 			height: 100%;
+			max-width: none;
 		}
 	}
 }

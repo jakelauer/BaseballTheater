@@ -1,5 +1,6 @@
 ﻿import {BoxScoreData, HomeAway, IPlayer} from "../../MlbDataServer/Contracts";
 import React = require("react");
+import {Utility} from "@Utility/index";
 
 interface IBoxScoreProps
 {
@@ -134,7 +135,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 						{pitcher.note &&
 							<span className={`note`} dangerouslySetInnerHTML={{__html: pitcher.note}}></span>
 						}
-						{this.renderPlayerLink(pitcher)} ({pitcher.pos})
+						{Utility.Mlb.renderPlayerLinkXml(pitcher)} ({pitcher.pos})
 					</td>
 					<td className={`stat`} data-statid="ip">{this.getIP(pitcher.out)}</td>
 					<td className={`stat`} data-statid="h">{pitcher.h}</td>
@@ -173,7 +174,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 						{batter.note &&
 						<span className={`note`} dangerouslySetInnerHTML={{__html: batter.note}}></span>
 						}
-						{this.renderPlayerLink(batter)} ({batter.pos})
+						{Utility.Mlb.renderPlayerLinkXml(batter)} ({batter.pos})
 					</td>
 					<td className={`stat`} data-statid="ab">{batter.ab}</td>
 					<td className={`stat`} data-statid="r">{batter.r}</td>
@@ -189,13 +190,5 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 		});
 
 		return batterRows;
-	}
-
-	private renderPlayerLink(player: IPlayer)
-	{
-		const urlName = encodeURIComponent(player.name_display_first_last.replace(/[^a-z]/gi, "-").toLowerCase());
-		const playerLink = `http://m.mlb.com/player/${player.id}/${urlName}`;
-
-		return (<a href={playerLink} target={`_blank`}>{player.name}</a>);
 	}
 }

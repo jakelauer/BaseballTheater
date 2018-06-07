@@ -30,6 +30,12 @@ interface ILiveInningProps
 	highlights: IHighlightsCollection | null;
 }
 
+interface ILiveInningState
+{
+	currentPlayIndex: string;
+	openInnings: string[];
+}
+
 export class LiveInnings extends React.Component<ILiveInningsProps, ILiveInningsState>
 {
 	constructor(props: ILiveInningsProps)
@@ -79,8 +85,50 @@ export class LiveInnings extends React.Component<ILiveInningsProps, ILiveInnings
 	}
 }
 
-class LiveInning extends React.Component<ILiveInningProps, {}>
+class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 {
+	constructor(props: ILiveInningProps)
+	{
+		super(props);
+
+		let currentPlay = "0";
+		if (props.data 
+			&& props.data.plays 
+			&& props.data.plays.currentPlay
+			&& props.data.plays.currentPlay.about)
+		{
+			currentPlay = String(props.data.plays.currentPlay.about.atBatIndex);
+		}
+
+		this.state = {
+			currentPlayIndex: currentPlay,
+			openInnings: [currentPlay]
+		};
+	}
+
+	public componentWillReceiveProps(nextProps: ILiveInningProps)
+	{
+		const existingCurrentPlay = this.state.currentPlayIndex;
+		let newInnings = [...this.state.openInnings];
+		
+		if (nextProps.data
+			&& nextProps.data.plays
+			&& nextProps.data.plays.currentPlay
+			&& nextProps.data.plays.currentPlay.about)
+		{
+			const newCurrentPlay = String(nextProps.data.plays.currentPlay.about.atBatIndex);
+			if (existingCurrentPlay !== newCurrentPlay && newInnings.indexOf(existingCurrentPlay) > -1)
+			{
+				newInnings.splice(newInnings.indexOf(existingCurrentPlay), 1);
+				newInnings.push(newCurrentPlay);
+			}
+		}
+
+		this.setState({
+			openInnings: newInnings
+		});
+	}
+
 	private getHighlightForPlay(play: LiveGamePlay): IHighlight | null
 	{
 		const svIds = play.playEvents.map(a => a.playId);
@@ -117,23 +165,49 @@ class LiveInning extends React.Component<ILiveInningProps, {}>
 		return foundHighlight;
 	}
 
+	private updateCollapseForPlay(key: string[], playIndex: number)
+	{
+		const playIndexString = String(playIndex);
+		const isOpen = key.indexOf(playIndexString) > -1;
+		let newInnings = [...this.state.openInnings];
+
+		if (isOpen)
+		{
+			newInnings.push(playIndexString);
+		}
+		else
+		{
+			newInnings.splice(newInnings.indexOf(playIndexString), 1);
+		}
+
+		this.setState({
+			openInnings: newInnings
+		});
+	}
+
 	private renderPlay(playIndex: number)
 	{
 		const play = this.props.data.plays.allPlays[playIndex];
 		const pitches = Utility.Mlb.getPitchDataForPlay(play);
 
-		const pitchDescs = play.playEvents
+		const pitchDescs = [...play.playEvents]
+			.reverse()
 			.filter(a => a.isPitch);
 
 		const matchingHighlight = this.getHighlightForPlay(play);
 		const highlightHref = matchingHighlight && HighlightUtility.getDefaultUrl(matchingHighlight);
 		const highlightClickable = matchingHighlight
-			? <Button type="primary" shape="circle"  href={highlightHref} htmlType={"a"} size={"small"} style={{marginRight: "0.5rem"}} target="_blank" onClick={e => { e.stopPropagation(); }}>
-				<Icon type="caret-right" />
+			? <Button type="primary" shape="circle" href={highlightHref} htmlType={"a"} size={"small"} style={{marginRight: "0.5rem"}} target="_blank" onClick={e => {
+				e.stopPropagation();
+			}}>
+				<Icon type="caret-right"/>
 			</Button>
 			: null;
 
-		let headerText: React.ReactNode = play.result.description || `${play.matchup.batter.fullName} batting against ${play.matchup.pitcher.fullName}`;
+
+		const batterLink = Utility.Mlb.renderPlayerLink(play.matchup.batter);
+		const pitcherLink = Utility.Mlb.renderPlayerLink(play.matchup.pitcher);
+		let headerText: React.ReactNode = play.result.description || <span>{batterLink} batting against {pitcherLink}</span>;
 		if (play.about.isScoringPlay)
 		{
 			headerText = <strong>{headerText}</strong>;
@@ -148,14 +222,20 @@ class LiveInning extends React.Component<ILiveInningProps, {}>
 		{
 			return null;
 		}
-		
-		const activeKey = !play.about.isComplete ? playIndex.toString() : "";
+
+		//const activeKey = !play.about.isComplete ? playIndex.toString() : null;
+
+		const playIndexString = String(playIndex);
+		const activeKey = this.state.openInnings.indexOf(playIndexString) > -1 ? playIndexString : null;
+		const activeArray = [activeKey];
 
 		return (
-			<Collapse bordered={false} key={playIndex} defaultActiveKey={[activeKey]}>
-				<Collapse.Panel header={header} key={playIndex.toString()} showArrow={!!play.result.description}>
-					<PlayByPlayPitches isSpringTraining={this.props.isSpringTraining} pitches={pitches}/>
-					<List dataSource={pitchDescs} renderItem={pitch => Utility.Mlb.renderPitch(pitch, pitchDescs.indexOf(pitch))}/>
+			<Collapse bordered={false} key={playIndex} activeKey={activeArray} onChange={(key: string[]) => this.updateCollapseForPlay(key, playIndex)}>
+				<Collapse.Panel header={header} key={playIndex.toString()} showArrow={!!play.result.description} forceRender={true}>
+					<div className={`pitch-data-wrapper`}>
+						<PlayByPlayPitches isSpringTraining={this.props.isSpringTraining} pitches={pitches}/>
+						<List dataSource={pitchDescs} renderItem={pitch => Utility.Mlb.renderPitch(pitch, pitchDescs.length - pitchDescs.indexOf(pitch) - 1)}/>
+					</div>
 				</Collapse.Panel>
 			</Collapse>
 		);
@@ -175,15 +255,25 @@ class LiveInning extends React.Component<ILiveInningProps, {}>
 		const bottomPlays = bottomPlayIndices.map(playIndex => this.renderPlay(playIndex));
 		const topPlays = topPlayIndices.map(playIndex => this.renderPlay(playIndex));
 
-		const topRendered = <React.Fragment>
-			<h3 style={{marginTop: "2rem"}}>Top {this.props.inningIndex + 1}</h3>
+		let topRendered = <React.Fragment key={0}>
+			<h3>Top {this.props.inningIndex + 1}</h3>
 			{topPlays}
 		</React.Fragment>;
 
-		const bottomRendered = <React.Fragment>
-			<h3 style={{marginTop: "2rem"}}>Bottom {this.props.inningIndex + 1}</h3>
+		if (!topPlays || topPlays.length === 0)
+		{
+			topRendered = null;
+		}
+
+		let bottomRendered = <React.Fragment key={1}>
+			<h3>Bottom {this.props.inningIndex + 1}</h3>
 			{bottomPlays}
 		</React.Fragment>;
+
+		if (!bottomPlays || bottomPlays.length === 0)
+		{
+			bottomRendered = null;
+		}
 
 		let rendered = [topRendered, bottomRendered];
 		if (this.props.showInnings === "current")
@@ -193,7 +283,9 @@ class LiveInning extends React.Component<ILiveInningProps, {}>
 		}
 
 		return (
-			rendered
+			<div className={`live-innings`}>
+				{rendered}
+			</div>
 		);
 	}
 }

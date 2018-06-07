@@ -17,10 +17,11 @@ const configs: { [key: string]: IEnvironmentOverride<any> } = {
 	"loginEnabled": {
 		defaultValue: false,
 		local: false,
-		beta: false
+		beta: true
 	},
 	"liveDataEnabled": {
-		defaultValue: false,
+		defaultValue: true,
+		prod: true,
 		local: true,
 		beta: true
 	}

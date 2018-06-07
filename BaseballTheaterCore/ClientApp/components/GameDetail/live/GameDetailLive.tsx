@@ -1,13 +1,10 @@
 import React = require("react");
 import {GameData, GameSummaryData, IHighlightsCollection, LiveData, Player, PlayerListResponse, PlayerWithStats} from "@MlbDataServer/Contracts";
-import {LiveGameCreator} from "@MlbDataServer/MlbDataServer"
+import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
 import {App} from "../../Base/app";
-import {PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
-import {GameCount} from "./GameCount";
 import {LiveInnings} from "./LiveInnings";
-import {PlayerStatsCard} from "./PlayerStatsCard";
-import {Row, Col, List} from "antd";
+import {Col, Row} from "antd";
 
 interface IGameDetailLiveProps
 {
@@ -35,9 +32,10 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		}
 	}
 
-	componentDidMount()
+	public componentDidMount()
 	{
 		App.startLoading();
+		
 		this.updateLiveData();
 
 		if (this.timerId === 0)
@@ -46,7 +44,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		}
 	}
 
-	componentWillUnmount()
+	public componentWillUnmount()
 	{
 		Utility.Timer.cancel(this.timerId);
 	}
@@ -82,16 +80,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		App.stopLoading();
 	}
 
-	private getPlayerById(playerId: number): PlayerWithStats | null
-	{
-		if (this.state.players)
-		{
-			return this.state.players.people.find(a => a.id === playerId);
-		}
-
-		return null;
-	}
-
 	public render()
 	{
 		const data = this.state.game;
@@ -106,20 +94,21 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 			return null;
 		}
 
-		const pitcher = this.getPlayerById(currentPlay.matchup.pitcher.id);
-		const batter = this.getPlayerById(currentPlay.matchup.batter.id);
-		const pitchArray = Utility.Mlb.getPitchDataForPlay(currentPlay);
 		const isSpringTraining = this.props.currentGame.isSpringTraining;
-
-		const pitchDescs = currentPlay.playEvents
-			.filter(a => a.isPitch);
-
+		const isFinal = Utility.Mlb.gameIsFinal(this.state.game.gameData.status.statusCode);
+		
+		const allInningsCols = isFinal ? 24 : 8;
+		
 		return <React.Fragment>
-			<Row gutter={16}>
-				<Col span={12}>
+			<Row gutter={16} type={"flex"}>
+				
+				{!isFinal &&
+				<Col md={24} lg={16} className={`current-inning`}>
 					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"current"} highlights={this.props.highlights}/>
 				</Col>
-				<Col span={12}>
+				}
+				
+				<Col md={24} lg={allInningsCols} className={`all-innings`}>
 					<h2>All Innings</h2>
 					<LiveInnings data={this.state.game.liveData} isSpringTraining={isSpringTraining} showInnings={"all"} highlights={this.props.highlights}/>
 				</Col>
