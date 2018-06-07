@@ -16,6 +16,7 @@
 		{
 			width: 16.667%;
 			position: fixed;
+			max-width: 200px;
 
 			.r-mobile &
 			{
@@ -110,7 +111,7 @@
 
 	.tab-contents
 	{
-		flex: 5;
+		flex: 8;
 		padding: 0 1rem;
 
 		.tab-content
