@@ -19,7 +19,6 @@ export enum GameDetailTabs
 {
 	Live = "Live",
 	Highlights = "Highlights",
-	PlayByPlay = "PlayByPlay",
 	BoxScore = "BoxScore"
 }
 
@@ -28,7 +27,6 @@ interface IGameDetailState
 	gameSummary: GameSummaryData | null;
 	boxScore: BoxScoreData | null;
 	highlightsCollection: IHighlightsCollection | null;
-	playByPlay: IInningsContainer | null;
 	currentTab: GameDetailTabs;
 	settings: ISettings | null;
 }
@@ -70,7 +68,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			boxScore: null,
 			highlightsCollection: null,
 			gameSummary: null,
-			playByPlay: null,
 			currentTab,
 			settings: App.Instance.settingsDispatcher.state
 		}
@@ -80,12 +77,23 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	{
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload =>
 		{
-			const defaultTab = payload.defaultTab;
+			let defaultTab = payload.defaultTab;
+			if (defaultTab === "PlayByPlay")
+			{
+				defaultTab = GameDetailTabs[GameDetailTabs.Live];
+				App.Instance.settingsDispatcher.update({
+					defaultTab
+				});
+
+				App.setSettingsCookie({
+					defaultTab
+				})
+			}
 
 			if (defaultTab && !this.props.match.params.tab)
 			{
 				this.setState({
-					currentTab: GameDetailTabs[payload.defaultTab],
+					currentTab: GameDetailTabs[defaultTab],
 					settings: payload
 				});
 			}
@@ -119,12 +127,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
 		return await gameDetailCreator.getBoxscore();
-	}
-
-	private static async getPlayByPlay(currentGame: GameSummaryData, boxScore: BoxScoreData): Promise<Innings>
-	{
-		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		return await gameDetailCreator.getInnings(boxScore);
 	}
 
 	private setTabState(currentTab: GameDetailTabs)
@@ -193,22 +195,13 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			const gameSummary = await this.getCurrentGame();
 			const boxScore = await GameDetail.getBoxScore(gameSummary);
 			const highlightsCollectionPromise = GameDetail.getHighlights(gameSummary);
-			const playByPlayPromise = GameDetail.getPlayByPlay(gameSummary, boxScore);
 
-			const rest = await Utility.Promises.all([highlightsCollectionPromise, playByPlayPromise]);
-			const highlightsCollection = (!(rest[0] instanceof Error))
-				? rest[0] as IHighlightsCollection
-				: console.error("Highlights failed to load", rest[0]) || null;
-
-			const playByPlay = (!(rest[1] instanceof Error))
-				? rest[1] as Innings
-				: console.error("Play by play data failed to load", rest[1]) || null;
+			const highlightsCollection = await highlightsCollectionPromise;
 
 			this.setState({
 				gameSummary,
 				boxScore,
 				highlightsCollection,
-				playByPlay
 			});
 
 			App.stopLoading();
@@ -225,9 +218,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	{
 		const boxScoreData = this.state.boxScore;
 		const highlightsCollection = this.state.highlightsCollection;
-		const playByPlayData = this.state.playByPlay;
 		const gameSummary = this.state.gameSummary;
-		const allPlayers = boxScoreData ? boxScoreData.allPlayers : new Map();
 
 		const gameIsInFuture = gameSummary && gameSummary.dateObj.isSameOrAfter(moment());
 
@@ -273,23 +264,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 					</React.Fragment>;
 				}
 				break;
-			case GameDetailTabs.PlayByPlay:
-				if (!boxScoreData || !gameSummary || !playByPlayData || gameIsInFuture)
-				{
-					renderables = <div className="no-data">No play-by-play data is available for this game.</div>;
-				}
-				else
-				{
-					renderables = <React.Fragment>
-						<MiniBoxScore boxScoreData={boxScoreData} hideScores={this.state.settings.hideScores}/>
-						<PlayByPlay
-							gameSummary={gameSummary}
-							inningsData={playByPlayData}
-							highlights={highlightsCollection}
-							allPlayers={allPlayers}/>
-					</React.Fragment>;
-				}
-				break;
 		}
 
 		return (
@@ -317,7 +291,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		const liveTabClass = this.classForTab(GameDetailTabs.Live);
 		const highlightsTabClass = this.classForTab(GameDetailTabs.Highlights);
-		const playByPlayTabClass = this.classForTab(GameDetailTabs.PlayByPlay);
 		const boxScoreTabClass = this.classForTab(GameDetailTabs.BoxScore);
 
 		return (
@@ -328,16 +301,12 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 							{
 								Config.liveDataEnabled &&
 								<Link to={this.getTabUrl(GameDetailTabs.Live)} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
-									<span>Live</span>
+									<span>Pitch-by-pitch</span>
 								</Link>
 							}
 							
 							<Link to={this.getTabUrl(GameDetailTabs.Highlights)} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
 								<span>Highlights</span>
-							</Link>
-							
-							<Link to={this.getTabUrl(GameDetailTabs.PlayByPlay)} className={`tab ${playByPlayTabClass}`} onClick={() => this.setTabState(GameDetailTabs.PlayByPlay)}>
-								<span>Play by Play</span>
 							</Link>
 							
 							<Link to={this.getTabUrl(GameDetailTabs.BoxScore)} className={`tab ${boxScoreTabClass}`} onClick={() => this.setTabState(GameDetailTabs.BoxScore)}>

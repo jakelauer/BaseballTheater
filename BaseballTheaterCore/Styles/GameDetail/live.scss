@@ -1,6 +1,6 @@
 @import "../_Base/vars";
 
-.live-wrapper
+[data-tab="Live"]
 {
 	.count
 	{
@@ -8,7 +8,7 @@
 		{
 			display: flex;
 		}
-		
+
 		.ball, .strike
 		{
 			width: 1rem;
@@ -25,6 +25,41 @@
 		.strike.on
 		{
 			background: $color-strike;
+		}
+	}
+
+	.live-innings
+	{
+		h3
+		{
+			margin-top: 2rem;
+		}
+
+		.pitch-data-wrapper
+		{
+			margin: auto;
+			max-width: 500px;
+		}
+	}
+
+	.current-inning
+	{
+		.live-innings
+		{
+			h3
+			{
+				margin-top: 0;
+			}
+		}
+	}
+
+	.all-innings
+	{
+		.r-medium &
+		{
+			margin-top: 3rem;
+			border-top: 2rem solid #EEEEEE;
+			padding-top: 1rem;
 		}
 	}
 }

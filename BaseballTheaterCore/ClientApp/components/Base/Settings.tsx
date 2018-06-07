@@ -49,8 +49,8 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 				tabName = "Box Score";
 				break;
 
-			case GameDetailTabs.PlayByPlay:
-				tabName = "Play By Play";
+			case GameDetailTabs.Live:
+				tabName = "Pitch-by-pitch";
 				break;
 		}
 

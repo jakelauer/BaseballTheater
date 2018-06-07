@@ -178,9 +178,17 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 			return `${game.status.status} (${game.status.reason})`;
 		}
 
-		return game.status.inning_state
-			? `${game.status.inning_state} ${game.status.inning}`
-			: this.getStatusTime();
+		if (game.status.inning_state)
+		{
+			if (game.status.inning)
+			{
+				return `${game.status.inning_state} ${game.status.inning}`;
+			}
+
+			return game.status.status;
+		}
+
+		return this.getStatusTime();
 	}
 
 	private getWinner(): HomeAway

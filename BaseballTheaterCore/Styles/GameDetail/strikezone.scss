@@ -17,16 +17,6 @@
 	background: url("/images/strikezone.png") center center no-repeat;
 	background-size: cover;
 
-	.r-large &
-	{
-		max-width: 300px;
-	}
-
-	.r-medium &
-	{
-		max-width: 500px;
-	}
-
 	.force-square
 	{
 		width: 100%;
@@ -52,6 +42,7 @@
 			width: 25px;
 			height: 25px;
 			line-height: 25px;
+			margin-right: 0;
 			font-size: 0.8rem;
 		}
 	}
@@ -62,11 +53,11 @@
 	display: flex;
 	width: 100%;
 	flex-wrap: wrap;
-	margin-bottom: 0.5rem;
+	margin: 0.25rem 0;
 
 	.pitch-count
 	{
-		$circle-size: 30px;
+		$circle-size: 1.5rem;
 
 		width: $circle-size;
 		height: $circle-size;
