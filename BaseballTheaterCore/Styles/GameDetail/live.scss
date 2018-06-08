@@ -51,15 +51,155 @@
 				margin-top: 0;
 			}
 		}
+		
+		.r-mobile &
+		{
+			width: 100%;
+		}
 	}
 
 	.all-innings
 	{
 		.r-medium &
 		{
+			background: white;
 			margin-top: 3rem;
 			border-top: 2rem solid #EEEEEE;
 			padding-top: 1rem;
+		}
+	}
+
+	.current-inning + .all-innings
+	{
+		background: #F8F8F8;
+		padding: 1rem !important;
+	}
+
+	.game-field-column
+	{
+		.r-medium &
+		{
+			order: 2;
+			width: 100%;
+		}
+	}
+
+	.boxscore-column
+	{
+		.r-mobile &
+		{
+			width: 100%;
+		}
+	}
+
+	.game-field-status
+	{
+		display: flex;
+		width: 100%;
+		padding: 1rem;
+		justify-content: center;
+
+		.inning-status
+		{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			.inning
+			{
+				color: black;
+			}
+
+			.inning-arrow.on
+			{
+				color: $color-accent;
+			}
+
+			.inning-arrow:not(.on)
+			{
+				color: lightgray;
+			}
+		}
+
+		.field
+		{
+			position: relative;
+			width: 3rem;
+			height: 3rem;
+			min-width: 3rem;
+			margin: 0 4rem 0 2rem;
+			transform: rotateZ(45deg);
+			transform-origin: 33% 100%;
+
+			.field-base
+			{
+				position: absolute;
+				width: 1.25rem;
+				height: 1.25rem;
+				background: lightgray;
+
+				&.base-third
+				{
+					bottom: 0;
+					left: 0;
+				}
+
+				&.base-first
+				{
+					right: 0;
+					top: 0;
+				}
+
+				&.on
+				{
+					background: $color-base-on;
+				}
+			}
+		}
+
+		.dots
+		{
+			display: flex;
+			flex-direction: column;
+
+			.dot-container
+			{
+				display: flex;
+				margin: 0.125rem 0;
+				align-items: center;
+
+				span
+				{
+					font-weight: bold;
+					width: 1rem;
+					height: 1.5rem;
+				}
+			}
+
+			.dot-item
+			{
+				margin: 0 0.25rem;
+				width: 1rem;
+				height: 1rem;
+				border-radius: 50%;
+				background: lightgray;
+			}
+
+			.ball.on
+			{
+				background: $color-ball;
+			}
+
+			.strike.on
+			{
+				background: $color-strike;
+			}
+
+			.out.on
+			{
+				background: $color-strike;
+			}
 		}
 	}
 }

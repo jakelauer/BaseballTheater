@@ -1,9 +1,9 @@
-﻿import {BoxScoreData, ILinescoreInning} from "../../../MlbDataServer/Contracts";
+﻿import {LiveData} from "@MlbDataServer/Contracts";
 import React = require("react");
 
 interface IBoxScoreProps
 {
-	boxScoreData: BoxScoreData | null;
+	game: LiveData;
 	hideScores: boolean;
 }
 
@@ -11,13 +11,13 @@ export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
 {
 	private renderTeamTable()
 	{
-		const boxScoreData = this.props.boxScoreData;
-		if (boxScoreData)
+		const game = this.props.game;
+		if (game)
 		{
-			const awayTeamName = boxScoreData.away_sname;
-			const homeTeamName = boxScoreData.home_sname;
-			const awayTeamCode = boxScoreData.away_team_code;
-			const homeTeamCode = boxScoreData.home_team_code;
+			const awayTeamName = game.gameData.teams.away.name;
+			const homeTeamName = game.gameData.teams.home.name;
+			const awayTeamCode = game.gameData.teams.away.teamCode;
+			const homeTeamCode = game.gameData.teams.home.teamCode;
 
 			return (
 				<table>
@@ -49,12 +49,13 @@ export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
 
 	private renderInningsTable()
 	{
-		if (this.props.boxScoreData && this.props.boxScoreData.linescore)
+		if (this.props.game && this.props.game.liveData && this.props.game.liveData.linescore)
 		{
-			const linescore = this.props.boxScoreData.linescore;
-			const startingInning = linescore.startingInning;
+			const linescore = this.props.game.liveData.linescore;
+			const startingInning = linescore.innings.length - 9;
 
-			const innings: (ILinescoreInning | null)[] = [...linescore.inning_line_score];
+			const innings = linescore.innings;
+			
 			if (innings.length < 9)
 			{
 				const inningsLength = innings.length;
@@ -77,7 +78,7 @@ export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
 				if (i >= startingInning)
 				{
 					return inning
-						? <td key={i} className={`single-val`}>{this.linescoreItem(inning.away)}</td>
+						? <td key={i} className={`single-val`}>{this.linescoreItem(inning.away.runs)}</td>
 						: <td key={i} className={`single-val`}>-</td>;
 				}
 			});
@@ -87,7 +88,7 @@ export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
 				if (i >= startingInning)
 				{
 					return inning
-						? <td key={i} className={`single-val`}>{this.linescoreItem(inning.home)}</td>
+						? <td key={i} className={`single-val`}>{this.linescoreItem(inning.home.runs)}</td>
 						: <td key={i} className={`single-val`}>-</td>;
 				}
 			});
@@ -105,16 +106,16 @@ export class MiniBoxScore extends React.Component<IBoxScoreProps, any>
 					<tr className={`away`}>
 						{awayInnings}
 
-						<td className={`single-val r`}>{this.linescoreItem(linescore.away.r)}</td>
-						<td className={`single-val h`}>{this.linescoreItem(linescore.away.h)}</td>
-						<td className={`single-val e`}>{this.linescoreItem(linescore.away.e)}</td>
+						<td className={`single-val r`}>{this.linescoreItem(linescore.teams.away.runs)}</td>
+						<td className={`single-val h`}>{this.linescoreItem(linescore.teams.away.hits)}</td>
+						<td className={`single-val e`}>{this.linescoreItem(linescore.teams.away.errors)}</td>
 					</tr>
 					<tr className={`home`}>
 						{homeInnings}
 
-						<td className={`single-val r`}>{this.linescoreItem(linescore.home.r)}</td>
-						<td className={`single-val h`}>{this.linescoreItem(linescore.home.h)}</td>
-						<td className={`single-val e`}>{this.linescoreItem(linescore.home.e)}</td>
+						<td className={`single-val r`}>{this.linescoreItem(linescore.teams.home.runs)}</td>
+						<td className={`single-val h`}>{this.linescoreItem(linescore.teams.home.hits)}</td>
+						<td className={`single-val e`}>{this.linescoreItem(linescore.teams.home.errors)}</td>
 					</tr>
 					</tbody>
 				</table>
