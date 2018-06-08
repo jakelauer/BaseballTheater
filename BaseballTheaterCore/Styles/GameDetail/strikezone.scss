@@ -8,10 +8,10 @@
 {
 	display: flex;
 	width: 100%;
-	max-width: 500px;
+	max-width: 400px;
 	position: relative;
 	margin-bottom: 3rem;
-	margin-top: -100px;
+	margin-top: -50px;
 	align-items: center;
 	justify-content: center;
 	background: url("/images/strikezone.png") center center no-repeat;
@@ -94,7 +94,12 @@
 
 	.pitch-details
 	{
-		flex: 1;
+		flex: 2;
 		align-items: center;
 	}
+}
+
+.pitch.special-event{
+	font-size: 0.9rem;
+	font-style: italic;
 }

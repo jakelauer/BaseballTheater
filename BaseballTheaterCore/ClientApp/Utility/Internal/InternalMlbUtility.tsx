@@ -1,6 +1,6 @@
 ﻿import * as React from "react";
-import {List} from "antd";
-import {IPlayer, LiveGamePlay, LiveGamePlayEvent} from "@MlbDataServer/Contracts";
+import {Icon, List} from "antd";
+import {GameData, IPlayer, LiveGamePlay, LiveGamePlayEvent, Player} from "@MlbDataServer/Contracts";
 import {IPlayByPlayPitchData} from "../../components/GameDetail/play-by-play/play_by_play_pitches";
 import {AbstractFullnameIdLink} from "@MlbDataServer/Contracts/live";
 
@@ -19,16 +19,27 @@ export class InternalMlbUtility
 		return pitchData;
 	}
 
-	public static renderPitch(pitch: LiveGamePlayEvent, pitchIndex: number)
+	public static renderPitch(play: LiveGamePlayEvent)
 	{
-		return <List.Item>
-			<div className={`pitch`} key={pitchIndex} data-type={pitch.details.call.code}>
-				<div className={`pitch-count`}>{pitchIndex + 1}</div>
-				<div className={`pitch-description`}>{pitch.details.call.description}</div>
+		return <List.Item key={play.index}>
+			{play.isPitch &&
+			<div className={`pitch`} data-type={play.details.call.code}>
+				<div className={`pitch-count`}>{play.pitchNumber}</div>
+				<div className={`pitch-description`}>{play.details.call.description}</div>
 				<div className={`pitch-details`}>
-					{pitch.pitchData.startSpeed} MPH {pitch.details.type.description}
+					{play.pitchData.startSpeed} MPH {play.details.type.description}
 				</div>
 			</div>
+			}
+
+			{!play.isPitch &&
+			<div className={`pitch special-event`} key={play.index}>
+				<div className={`pitch-count`}>
+					<Icon type="info" />
+				</div>
+				 {play.details.description}
+			</div>
+			}
 		</List.Item>;
 	};
 
@@ -59,5 +70,11 @@ export class InternalMlbUtility
 		}
 		
 		return true;
+	}
+
+	public static getPlayerIdsFromGame(gameData: GameData)
+	{
+		const playerList = Object.values(gameData.players) as Player[];
+		return playerList.map(a => a.id);
 	}
 }

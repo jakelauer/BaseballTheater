@@ -78,6 +78,7 @@ export interface LiveGameLinescore
 		inHole: AbstractFullnameIdLink;
 		first: AbstractFullnameIdLink;
 		second: AbstractFullnameIdLink;
+		third: AbstractFullnameIdLink;
 		pitcher: AbstractFullnameIdLink;
 	},
 	balls: number;
