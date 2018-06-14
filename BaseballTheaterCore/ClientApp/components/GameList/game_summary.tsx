@@ -15,7 +15,6 @@ interface GameSummaryProps
 
 interface IGameSummaryState
 {
-	visible: boolean,
 	settings: ISettings,
 }
 
@@ -28,7 +27,6 @@ enum HomeAway
 
 export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryState>
 {
-	private loadingSubscription: Subscription<ILoadingPayload>;
 	private settingsDispatcherKey: string;
 
 	constructor(props: GameSummaryProps)
@@ -36,28 +34,12 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 		super(props);
 
 		this.state = {
-			visible: false,
 			settings: App.Instance.settingsDispatcher.state
 		};
 	}
 
-	private show()
-	{
-		this.setState({
-			visible: true
-		})
-	}
-
 	public componentDidMount()
 	{
-		setTimeout(() => this.show(), this.props.index * 25);
-
-		this.loadingSubscription = App.Instance.loadingDistributor.subscribe(() =>
-			this.setState({
-				visible: false
-			})
-		);
-
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
 			settings: payload
 		}))
@@ -65,16 +47,7 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 
 	public componentWillUnmount()
 	{
-		App.Instance.loadingDistributor.unsubscribe(this.loadingSubscription);
 		App.Instance.settingsDispatcher.deregister(this.settingsDispatcherKey);
-	}
-
-	public componentWillReceiveProps(newProps: Readonly<GameSummaryProps>)
-	{
-		if (this.props.game.game_pk !== newProps.game.game_pk)
-		{
-			setTimeout(() => this.show(), this.props.index * 25);
-		}
 	}
 
 	public render()
@@ -82,11 +55,10 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 		const game = this.props.game;
 
 		const gameStatusClass = game.isFinal ? "final" : "";
-		const visibleClass = this.state.visible ? "on" : "";
 
 
 		return (
-			<div className={`game-summary-simple ${gameStatusClass} ${visibleClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
+			<div className={`game-summary-simple ${gameStatusClass}`} data-homecode={game.home_file_code} data-awaycode={game.away_file_code}>
 				<Link to={this.getGameLink()} className={`game-link`}>
 					<i className="material-icons">keyboard_arrow_right</i>
 				</Link>
@@ -185,7 +157,7 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 				return `${game.status.inning_state} ${game.status.inning}`;
 			}
 
-			return game.status.status;
+			return `${game.status.status} (${this.getStatusTime()})`;
 		}
 
 		return this.getStatusTime();
@@ -214,8 +186,8 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 	{
 		const game = this.props.game;
 
-		var time = game.dateObj.local().format("h:mm a");
-		var timeZone = moment.tz(0, moment.tz.guess()).zoneAbbr();
+		const time = game.dateObj.local().format("h:mm a");
+		const timeZone = moment.tz(0, moment.tz.guess()).zoneAbbr();
 
 		return `${time} ${timeZone}`;
 	}

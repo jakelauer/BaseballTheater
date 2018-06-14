@@ -11,6 +11,7 @@ import {SearchBox} from "./SearchBox";
 import {SettingsContainer} from "./Settings";
 import {SettingsButton} from "./SettingsButton";
 import React = require("react");
+import {ErrorBoundary} from "./ErrorBoundary";
 
 
 interface IAppState
@@ -36,7 +37,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 				defaultTab: "",
 				hideScores: false
 			}
-		}
+		};
 	}
 
 	static contextTypes = {
@@ -100,7 +101,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 
 	private performSearch(query: string)
 	{
-		this.context.router.history.push(`/Search/${query}`)
+		this.context.router.history.push(`/Search/${query}`);
 	}
 
 	public render()
@@ -130,7 +131,9 @@ export class AppWrapper extends React.Component<{}, IAppState>
 						<img src={`/images/ring.svg`}/>
 					</div>
 					<div id="body-content">
-						{this.props.children}
+						<ErrorBoundary>
+							{this.props.children}
+						</ErrorBoundary>
 					</div>
 
 					<div className={`footer`}>

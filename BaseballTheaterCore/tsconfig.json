@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "es2015",
     "paths": {
       "@MlbDataServer/*": ["./ClientApp/MlbDataServer/*"],
       "@Utility/*": ["./ClientApp/Utility/*"]

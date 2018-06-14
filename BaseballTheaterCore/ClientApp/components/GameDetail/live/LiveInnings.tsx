@@ -5,6 +5,7 @@ import {IHighlight, IHighlightsCollection, Keyword, LiveData, LiveGamePlay, Live
 import {PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
 import {RadioChangeEvent} from "antd/lib/radio";
 import {HighlightUtility} from "../../shared/highlight_utility";
+import {Link} from "react-router-dom";
 
 interface ILiveInningsProps
 {
@@ -110,18 +111,19 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 		super(props);
 
 		let currentPlay = "0";
-		if (props.game.liveData 
-			&& props.game.liveData.plays 
+		if (props.game.liveData
+			&& props.game.liveData.plays
 			&& props.game.liveData.plays.currentPlay
 			&& props.game.liveData.plays.currentPlay.about)
 		{
 			currentPlay = String(props.game.liveData.plays.currentPlay.about.atBatIndex);
 		}
-		
+
 		let openInnings = [];
-		if (this.props.showInnings === "current"){
+		if (this.props.showInnings === "current")
+		{
 			openInnings = [currentPlay];
-		} 
+		}
 
 		this.state = {
 			currentPlayIndex: currentPlay,
@@ -133,7 +135,7 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 	{
 		const existingCurrentPlay = this.state.currentPlayIndex;
 		let newInnings = [...this.state.openInnings];
-		
+
 		if (nextProps.game.liveData
 			&& nextProps.game.liveData.plays
 			&& nextProps.game.liveData.plays.currentPlay
@@ -219,18 +221,18 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 		const matchingHighlight = this.getHighlightForPlay(play);
 		const highlightHref = matchingHighlight && HighlightUtility.getDefaultUrl(matchingHighlight);
 		const highlightClickable = matchingHighlight
-			? <Button type="primary" shape="circle" href={highlightHref} htmlType={"a"} size={"small"} style={{marginRight: "0.5rem"}} target="_blank" onClick={e => {
-				e.stopPropagation();
-			}}>
-				<Icon type="caret-right"/>
-			</Button>
+			? <a href={highlightHref} target="_blank" onClick={e => e.stopPropagation()}>
+				<Button type="primary" shape="circle" size={"small"} style={{marginRight: "0.5rem"}}>
+					<Icon type="caret-right"/>
+				</Button>
+			</a>
 			: null;
 
 
 		const batterLink = Utility.Mlb.renderPlayerLink(play.matchup.batter);
 		const pitcherLink = Utility.Mlb.renderPlayerLink(play.matchup.pitcher);
 		let headerText: React.ReactNode = play.result.description || <span>{batterLink} batting against {pitcherLink}</span>;
-		
+
 		if (play.about.isScoringPlay)
 		{
 			headerText = <strong>{headerText}</strong>;
@@ -251,7 +253,7 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 		const gameIsFinal = Utility.Mlb.gameIsFinal(this.props.game.gameData.status.statusCode);
 		const playIndexString = String(playIndex);
 		const activeKey = this.state.openInnings.indexOf(playIndexString) > -1
-			? playIndexString 
+			? playIndexString
 			: null;
 		const activeArray = [activeKey];
 
