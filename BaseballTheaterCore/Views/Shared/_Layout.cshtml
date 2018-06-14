@@ -5,27 +5,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Baseball Theater</title>
-    <base href="~/"/>
 
-    @Html.Partial("_favicons")
-    <meta name="theme-color" content="#9e1414">
-    <meta name="Description" content="@description"/>
 
-    <meta name="google" content="notranslate">
-    <meta http-equiv="Content-Language" content="en">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23730353-4"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-23730353-4');
+	</script>
+
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Baseball Theater</title>
+	<base href="~/" />
+
+	@Html.Partial("_favicons")
+	<meta name="theme-color" content="#9e1414">
+	<meta name="Description" content="@description" />
+
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
 	<link rel="manifest" href="/manifest.json">
 
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <environment exclude="Development">
-    </environment>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<environment exclude="Development">
+	</environment>
 
-    <style>
-        body:not(.loaded) { opacity: 0; }
-    </style>
+	<style>
+		body:not(.loaded) {
+			opacity: 0;
+		}
+	</style>
 </head>
 <body>
 @RenderBody()

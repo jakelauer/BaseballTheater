@@ -5,7 +5,12 @@ import {BrowserRouter} from "react-router-dom";
 import "../Styles/ant-theme.less";
 import '../Styles/all.scss'
 import * as RoutesModule from './routes';
+import ReactGA from 'react-ga';
+
 let routes = RoutesModule.routes;
+
+
+ReactGA.initialize('UA-23730353-4');
 
 function renderApp()
 {
