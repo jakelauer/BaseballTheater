@@ -151,8 +151,8 @@
 	background: #fff;
 	font-family: "bebas", sans-serif;
 	border-left: 0 solid red;
-	opacity: 0;
-	transform: translateX(-25px);
+	opacity: 1;
+	transform: translateX(0);
 	transform-origin: center 0;
 
 	&:hover
@@ -167,12 +167,6 @@
 			opacity: 1;
 			transform: translateX(0);
 		}
-	}
-
-	&.on
-	{
-		transform: translateX(0);
-		opacity: 1;
 	}
 
 	.game-link

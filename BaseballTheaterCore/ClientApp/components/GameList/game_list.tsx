@@ -1,9 +1,9 @@
-﻿import * as moment from "moment/moment"
-import * as React from "react"
+﻿import * as moment from "moment/moment";
+import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
-import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer"
+import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
 import {App} from "../Base/app";
 import {Calendar} from "./calendar";
 import {GameSummary} from "./game_summary";
@@ -53,22 +53,22 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 	{
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
 			settings: payload
-		}))
+		}));
 	}
 
-	private getUrlForDate(newDate: moment.Moment)
+	private static getUrlForDate(newDate: moment.Moment)
 	{
 		return `/gameday/${newDate.format("YYYYMMDD")}`;
 	}
 
-	private updateDate = (newDate: moment.Moment) =>
-	{
-		const newUrl = this.getUrlForDate(newDate);
+	private updateDate = (newDate: moment.Moment) => {
+		const newUrl = GameList.getUrlForDate(newDate);
 
 		this.props.history.push(newUrl);
 
 		this.setState({
-			date: newDate
+			date: newDate,
+			gameSummaries: []
 		}, () => this.loadGamesForCurrentDate());
 	};
 
@@ -80,11 +80,9 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const openingDay2017 = moment(nextOpeningDay, "YYYYMMDD");
 		const today = moment();
 
-		const date = today.isAfter(openingDay2017)
+		return today.isAfter(openingDay2017)
 			? today
 			: moment(lastEndingDay, "YYYYMMDD");
-
-		return date;
 	}
 
 	public componentDidMount()
@@ -99,10 +97,10 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 	private loadGamesForCurrentDate()
 	{
 		App.startLoading();
+
 		const summaries = GameSummaryCreator.getSummaryCollection(this.state.date);
 
-		summaries.then((gameSummaryCollection: GameSummaryCollection) =>
-		{
+		summaries.then((gameSummaryCollection: GameSummaryCollection) => {
 			if (gameSummaryCollection && gameSummaryCollection.games)
 			{
 				const games = gameSummaryCollection.games.game;
@@ -119,15 +117,18 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 	private sortGames(games: GameSummaryData[])
 	{
 		const favoriteTeam = this.state.settings.favoriteTeam;
-		games.sort((a, b) =>
-		{
+		games.sort((a, b) => {
 			const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
 			const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
 			const favoriteReturn = aIsFavorite - bIsFavorite;
 
-			const startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal) ? -1 : 1;
+			const startTimeReturn = a.dateObjLocal.isBefore(b.dateObjLocal)
+				? -1
+				: a.dateObjLocal.isAfter(b.dateObjLocal)
+					? 1
+					: 0;
 
-			const finalReturn = a.isFinal ? 1 : -1;
+			const finalReturn = a.isFinal ? 1 : 0;
 
 			return favoriteReturn || finalReturn || startTimeReturn;
 		});
@@ -138,16 +139,15 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const games = this.state.gameSummaries;
 
 		this.sortGames(games);
-		
+
 		document.title = `Baseball Theater`;
-		
-		const gamesRendered = games.map((gameSummary, i) =>
-		{
+
+		const gamesRendered = games.map((gameSummary, i) => {
 			const key = games.length + i;
 			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
 
-		const noGames = this.state.gameSummaries.length === 0
+		const noGames = this.state.gameSummaries.length === 0 && !App.isLoading
 			? <div className={`no-data`}>No games found for this date.</div>
 			: null;
 
