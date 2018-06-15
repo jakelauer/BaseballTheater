@@ -1,10 +1,9 @@
 import React = require("react");
-import {GameData, GameSummaryData, IHighlightsCollection, LiveData, Player, PlayerListResponse, PlayerWithStats} from "@MlbDataServer/Contracts";
+import {IHighlightsCollection, LiveData, PlayerListResponse} from "@MlbDataServer/Contracts";
 import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
-import {App} from "../../Base/app";
-import {LiveInnings} from "./LiveInnings";
 import {Col, Row} from "antd";
+import {LiveInnings} from "./LiveInnings";
 
 interface IGameDetailLiveProps
 {
@@ -20,15 +19,7 @@ interface IGameDetailLiveState
 
 export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameDetailLiveState>
 {
-	private get isFinal()
-	{
-		let final = false;
-		if (this.props.game)
-		{
-			final = Utility.Mlb.gameIsFinal(this.props.game.gameData.status.statusCode);
-		}
-		return final;
-	}
+	private wakeLockRequest: any;
 
 	constructor(props: IGameDetailLiveProps)
 	{
@@ -39,11 +30,36 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		};
 	}
 
+	public componentDidMount()
+	{
+		try
+		{
+			const navAny = (navigator as any);
+			navAny.getWakeLock("screen").then(wakeLock =>
+			{
+				this.wakeLockRequest = wakeLock.createRequest();
+			});
+		}
+		catch (e)
+		{
+			console.info("Wake Lock error: ", e);
+		}
+	}
+
+	public componentWillUnmount()
+	{
+		if (this.wakeLockRequest)
+		{
+			this.wakeLockRequest.cancel();
+		}
+	}
+
 	public async componentWillReceiveProps(nextProps: IGameDetailLiveProps)
 	{
 		const lgc = new LiveGameCreator();
 		const playerIds = Utility.Mlb.getPlayerIdsFromGame(nextProps.game.gameData);
-		lgc.getPlayers(playerIds).then(players => {
+		lgc.getPlayers(playerIds).then(players =>
+		{
 			this.setState({
 				players
 			});

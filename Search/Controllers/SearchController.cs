@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MlbDataEngine.Contracts;
+using MlbDataEngine.Engine;
 
 namespace Search.Controllers
 {
@@ -8,9 +10,11 @@ namespace Search.Controllers
 	public class SearchController : Controller
 	{
 		[HttpGet("[action]")]
-		public IEnumerable<HighlightSearchResult> Highlights(string query, int page, int perpage)
+		public IEnumerable<HighlightSearchResult> Highlights(string query, int page, int perpage, string gameIds = null)
 		{
-			return MlbDataEngine.Engine.Search.SearchHighlights(query, page, perpage);
+			var searchQuery = new SearchQuery(query, gameIds);
+			
+			return MlbDataEngine.Engine.Search.SearchHighlights(searchQuery, page, perpage);
 		}
 	}
 }

@@ -1,9 +1,12 @@
-﻿import * as moment from "moment/moment";
+﻿import {Button} from "antd";
+import * as moment from "moment/moment";
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
+import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
 import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
+import {routes} from "../../routes";
 import {App} from "../Base/app";
 import {Calendar} from "./calendar";
 import {GameSummary} from "./game_summary";
@@ -61,7 +64,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		return `/gameday/${newDate.format("YYYYMMDD")}`;
 	}
 
-	private updateDate = (newDate: moment.Moment) => {
+	private updateDate = (newDate: moment.Moment) =>
+	{
 		const newUrl = GameList.getUrlForDate(newDate);
 
 		this.props.history.push(newUrl);
@@ -100,7 +104,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 		const summaries = GameSummaryCreator.getSummaryCollection(this.state.date);
 
-		summaries.then((gameSummaryCollection: GameSummaryCollection) => {
+		summaries.then((gameSummaryCollection: GameSummaryCollection) =>
+		{
 			if (gameSummaryCollection && gameSummaryCollection.games)
 			{
 				const games = gameSummaryCollection.games.game;
@@ -117,7 +122,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 	private sortGames(games: GameSummaryData[])
 	{
 		const favoriteTeam = this.state.settings.favoriteTeam;
-		games.sort((a, b) => {
+		games.sort((a, b) =>
+		{
 			const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
 			const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
 			const favoriteReturn = aIsFavorite - bIsFavorite;
@@ -134,6 +140,33 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		});
 	}
 
+	private renderSpecialHighlightLinks()
+	{
+		const games = this.state.gameSummaries;
+		if (!games.some(a => a.isFinal))
+		{
+			return null;
+		}
+
+		const gameIds = this.state.gameSummaries.map(a => a.game_pk.toString()).join(",");
+
+		return (
+			<div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+				<span style={{marginRight: "1rem"}}>Highlight Shortcuts:</span>
+				<Button.Group style={{}}>
+					<Button type="primary" onClick={() => this.linkTo(`/search/recap/${gameIds}`)}>Recaps</Button>
+					<Button type="primary" onClick={() => this.linkTo(`/search/condensed/${gameIds}`)}>Condensed Games</Button>
+					<Button type="primary" onClick={() => this.linkTo(`/search/must c/${gameIds}`)}>Must C clips</Button>
+				</Button.Group>
+			</div>
+		);
+	}
+
+	private linkTo(href: string)
+	{
+		this.props.history.push(href);
+	}
+
 	public render()
 	{
 		const games = this.state.gameSummaries;
@@ -142,7 +175,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 		document.title = `Baseball Theater`;
 
-		const gamesRendered = games.map((gameSummary, i) => {
+		const gamesRendered = games.map((gameSummary, i) =>
+		{
 			const key = games.length + i;
 			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
@@ -158,6 +192,8 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 				<div className={`settings`}>
 					<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
 				</div>
+
+				{this.renderSpecialHighlightLinks()}
 
 				<div className={`game-list`}>
 					{gamesRendered}

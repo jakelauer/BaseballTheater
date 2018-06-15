@@ -1,7 +1,8 @@
-﻿import {BoxScoreData, GameSummaryData, IHighlightsCollection, IInningsContainer, Innings, LiveData} from "@MlbDataServer/Contracts";
+﻿import {BoxScoreData, GameSummaryData, IHighlightsCollection, LiveData} from "@MlbDataServer/Contracts";
 import {GameDetailCreator, GameSummaryCreator, LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
 import {Subscription} from "@Utility/Subscribable";
+import {Col, Row} from "antd";
 import * as moment from "moment/";
 import {RouteComponentProps} from "react-router";
 import {Link} from "react-router-dom";
@@ -10,12 +11,11 @@ import {App, IGameUpdateDistributorPayload} from "../Base/app";
 import Config from "../Config/config";
 import {BoxScore} from "./boxscore";
 import {GameDetailLive} from "./live/GameDetailLive";
+import {GameFieldStatus} from "./live/GameFieldStatus";
 import {PlayByPlay} from "./play-by-play/play_by_play";
 import {Highlights} from "./shared/highlights";
 import {MiniBoxScore} from "./shared/miniboxscore";
 import React = require("react");
-import {Col, Row} from "antd";
-import { GameFieldStatus } from "./live/GameFieldStatus";
 
 export enum GameDetailTabs
 {
@@ -251,10 +251,10 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				{
 					renderables = <React.Fragment>
 						<Row type={"flex"}>
-							<Col className={`game-field-column`} md={24} lg={10} xl={6}>
+							<Col className={`game-field-column`} md={24} lg={10} xl={8}>
 								<GameFieldStatus game={this.state.game}/>
 							</Col>
-							<Col className={`boxscore-column`} md={24} lg={14} xl={18}>
+							<Col className={`boxscore-column`} md={24} lg={14} xl={16}>
 								<MiniBoxScore game={this.state.game} hideScores={this.state.settings.hideScores}/>
 							</Col>
 						</Row>	
