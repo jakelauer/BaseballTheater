@@ -1,15 +1,15 @@
-﻿import {Button} from "antd";
+﻿import { Button, Icon } from "antd";
 import * as moment from "moment/moment";
 import * as React from "react";
-import {RouteComponentProps} from "react-router";
-import {Link} from "react-router-dom";
-import {ISettings} from "../../DataStore/SettingsDispatcher";
-import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
-import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
-import {routes} from "../../routes";
-import {App} from "../Base/app";
-import {Calendar} from "./calendar";
-import {GameSummary} from "./game_summary";
+import { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
+import { ISettings } from "../../DataStore/SettingsDispatcher";
+import { GameSummaryCollection, GameSummaryData } from "../../MlbDataServer/Contracts";
+import { GameSummaryCreator } from "../../MlbDataServer/MlbDataServer";
+import { routes } from "../../routes";
+import { App } from "../Base/app";
+import { Calendar } from "./calendar";
+import { GameSummary } from "./game_summary";
 
 interface IGameListState
 {
@@ -151,20 +151,20 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const gameIds = this.state.gameSummaries.map(a => a.game_pk.toString()).join(",");
 
 		return (
-			<div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
-				<span style={{marginRight: "1rem"}}>Highlight Shortcuts:</span>
+			<div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
 				<Button.Group style={{}}>
-					<Button type="primary" onClick={() => this.linkTo(`/search/recap/${gameIds}`)}>Recaps</Button>
-					<Button type="primary" onClick={() => this.linkTo(`/search/condensed/${gameIds}`)}>Condensed Games</Button>
-					<Button type="primary" onClick={() => this.linkTo(`/search/must c/${gameIds}`)}>Must C clips</Button>
+					<Button>
+						<Link to={`/search/recap/${gameIds}`}><Icon type="play-circle" /> Recaps</Link>
+					</Button>
+					<Button>
+						<Link to={`/search/condensed/${gameIds}`}><Icon type="play-circle" /> Condensed Games</Link>
+					</Button>
+					<Button>
+						<Link to={`/search/must c/${gameIds}`}><Icon type="play-circle" /> Must C clips</Link>
+					</Button>
 				</Button.Group>
 			</div>
 		);
-	}
-
-	private linkTo(href: string)
-	{
-		this.props.history.push(href);
 	}
 
 	public render()
@@ -178,7 +178,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const gamesRendered = games.map((gameSummary, i) =>
 		{
 			const key = games.length + i;
-			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
+			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores} />;
 		});
 
 		const noGames = this.state.gameSummaries.length === 0 && !App.isLoading
@@ -190,7 +190,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		return (
 			<div className={`game-list-container ${navigatingClass}`}>
 				<div className={`settings`}>
-					<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
+					<Calendar initialDate={this.state.date} onDateChange={this.updateDate} />
 				</div>
 
 				{this.renderSpecialHighlightLinks()}

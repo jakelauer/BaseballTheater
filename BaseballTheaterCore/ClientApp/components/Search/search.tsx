@@ -52,6 +52,11 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		}
 	}
 
+	public componentWillUnmount()
+	{
+		App.stopLoading();
+	}
+
 	public static getQuery()
 	{
 		const matches = this.regex.exec(location.pathname);
