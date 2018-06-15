@@ -1,4 +1,5 @@
 ﻿import React = require("react");
+import * as moment from "moment";
 import {RouteComponentProps} from "react-router";
 import {IHighlightSearchResult} from "../../MlbDataServer/Contracts";
 import {App} from "../Base/app";
@@ -6,12 +7,14 @@ import {Highlight} from "../shared/highlight";
 
 interface ISearchState
 {
+	gameIds: string[];
 	query: string;
 	highlights: IHighlightSearchResult[];
 }
 
 interface ISearchRouteParams
 {
+	gameIds: string;
 	query: string;
 }
 
@@ -26,6 +29,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		super(props);
 
 		this.state = {
+			gameIds: this.props.match.params.gameIds ? this.props.match.params.gameIds.split(",") : [],
 			query: this.props.match.params.query,
 			highlights: []
 		}
@@ -38,9 +42,13 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 
 	public componentWillUpdate(nextProps: Readonly<RouteComponentProps<ISearchRouteParams>>)
 	{
-		if (this.props.match.params.query !== nextProps.match.params.query)
+		const params = this.props.match.params;
+		const nextParams = nextProps.match.params;
+		
+		if (params.query !== nextParams.query
+		|| params.gameIds !== nextParams.gameIds)
 		{
-			this.reset(nextProps.match.params.query);
+			this.reset(nextParams.query, nextParams.gameIds);
 		}
 	}
 
@@ -48,7 +56,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 	{
 		const matches = this.regex.exec(location.pathname);
 		const query = matches != null && matches.length > 0
-			? matches[1]
+			? matches[1].split("/")[0]
 			: "";
 
 		return decodeURI(query);
@@ -67,12 +75,13 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		}, callback);
 	}
 
-	private reset(newQuery: string)
+	private reset(newQuery: string, newGameIds: string)
 	{
 		this.updateHighlights(null, () => {
 			this.nextPage = 0;
 			this.setState({
-				query: newQuery
+				query: newQuery,
+				gameIds: newGameIds ? newGameIds.split(",") : []
 			}, () => this.loadNextHighlightPage());
 		});
 	}
@@ -81,7 +90,9 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 	{
 		App.startLoading();
 
-		fetch(`https://search.baseball.theater/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}`)
+		const gameIdsQuery = this.state.gameIds.length > 0 ? `&gameIds=${this.state.gameIds.join(",")}` : "";
+		
+		fetch(`https://search.baseball.theater/api/Search/Highlights/?query=${this.state.query}&page=${this.nextPage}&perpage=${this.PER_PAGE}${gameIdsQuery}`)
 			.then((response: Response) => response.json())
 			.then(json => this.updateHighlights(json));
 
@@ -114,9 +125,14 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 
 		return (
 			<div className={`search-results highlights-container`}>
+				{highlightsRendered.length > 0 &&
 				<div className={`all-highlights`}>
 					{highlightsRendered}
 				</div>
+				}
+				{!highlightsRendered || highlightsRendered.length === 0 &&
+					<h3 style={{textAlign: "center"}}>No highlights found for your search.</h3>
+				}
 
 				{loadMoreButton}
 			</div>

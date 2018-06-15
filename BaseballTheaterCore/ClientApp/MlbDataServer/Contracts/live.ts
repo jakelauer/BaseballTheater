@@ -46,6 +46,7 @@ export interface LiveGameBoxscoreOfficial
 export interface BoxscoreTeam extends AbstractIdLinkName
 {
 	team: AbstractIdLinkName;
+	players: PlayerWithBoxScoreStats[];
 }
 
 export interface LiveGameLinescore
@@ -395,6 +396,11 @@ export interface PlayerListResponse
 export interface PlayerWithStats extends Player
 {
 	stats: PlayerStats[];
+}
+
+export interface PlayerWithBoxScoreStats extends Player
+{
+	stats: any;
 }
 
 export interface PlayerStats

@@ -17,15 +17,15 @@
 			background: gray;
 		}
 
-		.ball.on
-		{
-			background: $color-ball;
-		}
+			.ball.on
+			{
+				background: $color-ball;
+			}
 
-		.strike.on
-		{
-			background: $color-strike;
-		}
+			.strike.on
+			{
+				background: $color-strike;
+			}
 	}
 
 	.live-innings
@@ -51,7 +51,7 @@
 				margin-top: 0;
 			}
 		}
-		
+
 		.r-mobile &
 		{
 			width: 100%;
@@ -95,9 +95,27 @@
 	.game-field-status
 	{
 		display: flex;
+		flex-wrap: wrap;
 		width: 100%;
 		padding: 1rem;
-		justify-content: center;
+		justify-content: flex-start;
+
+		.r-medium &
+		{
+			justify-content: center;
+		}
+
+		.player-status
+		{
+			margin-top: 0.5rem;
+			font-weight: bold;
+			width: 100%;
+
+			.r-medium &
+			{
+				text-align: center;
+			}
+		}
 
 		.inning-status
 		{

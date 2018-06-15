@@ -13,7 +13,6 @@ import {SettingsButton} from "./SettingsButton";
 import React = require("react");
 import {ErrorBoundary} from "./ErrorBoundary";
 
-
 interface IAppState
 {
 	isLoading: boolean;
@@ -68,7 +67,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		});
 	}
 
-	private renderLoginButton()
+	private static renderLoginButton()
 	{
 		if (!Config.loginEnabled)
 		{
@@ -122,7 +121,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 						<div className={`right`}>
 							<SearchBox query={search} onPerformSearch={query => this.performSearch(query)}/>
 							<SettingsButton onSettingsClicked={() => this.toggleSettingsModal(true)}/>
-							{this.renderLoginButton()}
+							{AppWrapper.renderLoginButton()}
 						</div>
 					</div>
 				</header>

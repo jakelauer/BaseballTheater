@@ -95,38 +95,6 @@ export class App
 
 	public initialize()
 	{
-		this.registerHub();
-	}
-
-	private registerHub()
-	{
-		if (!Config.liveDataEnabled)
-		{
-			return null;
-		}
-
-		const connection = hubConnection("/signalr", {useDefaultPath: false});
-		const hubProxy = connection.createHubProxy('liveGameHub');
-
-		hubProxy.on('receive', (gameIds: number[]) =>
-		{
-			console.log("Received gameIds update", gameIds);
-
-			this.gameUpdateDistributor.distribute({
-				gameIds
-			});
-		});
-
-		connection.start({jsonp: true})
-			.done(function ()
-			{
-				console.log('Now connected, connection ID=' + connection.id);
-			})
-			.fail(function ()
-			{
-				console.log('Could not connect');
-			});
-
 	}
 
 	public static startLoading()

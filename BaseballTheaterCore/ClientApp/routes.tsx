@@ -12,6 +12,6 @@ export const routes = <AppWrapper>
 		<Route exact path='/' component={GameList}/>
 		<Route path="/gameday/:date" component={GameList}/>
 		<Route path="/game/:date/:gamePk/:tab?" component={GameDetail}/>
-		<Route path="/search/:query" component={Search}/>
+		<Route path="/search/:query/:gameIds?" component={Search}/>
 	</AnalyticsListener>
 </AppWrapper>;

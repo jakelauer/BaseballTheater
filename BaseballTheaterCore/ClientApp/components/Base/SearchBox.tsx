@@ -13,8 +13,6 @@ interface ISearchBoxProps
 
 export class SearchBox extends React.Component<ISearchBoxProps, ISearchBoxState>
 {
-	private timer: number = 0;
-
 	constructor(props: ISearchBoxProps)
 	{
 		super(props);
@@ -31,29 +29,34 @@ export class SearchBox extends React.Component<ISearchBoxProps, ISearchBoxState>
 		})
 	}
 
-	private onChange(e: React.ChangeEvent<HTMLInputElement>)
-	{
-		clearTimeout(this.timer);
-
-		const value = (e.target as HTMLInputElement).value;
-		this.setState({
-			currentValue: value
-		});
-		this.timer = window.setTimeout(() => this.performSearch(value), 500);
-	}
-
-
 	private performSearch(query: string)
 	{
 		//LinkHandler.pushState(`/Search/${encodeURI(query)}`);
 		this.props.onPerformSearch(query);
 	}
 
+	private onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+	{
+		const value = (e.target as HTMLInputElement).value;
+		this.setState({
+			currentValue: value
+		});
+	}
+
+	private onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) =>
+	{
+		const value = (event.target as HTMLInputElement).value;
+		if (event.which === 13)
+		{
+			this.performSearch(value);
+		}
+	};
+
 	public render()
 	{
 		return (
 			<div className={`search`}>
-				<input type="text" required onChange={e => this.onChange(e)} value={this.state.currentValue}/>
+				<input type="text" required onChange={this.onChange} value={this.state.currentValue} onKeyUp={this.onKeyUp}/>
 				<div className={`label`}>
 					<i className={`material-icons`}>search</i> <span>Search highlights</span>
 				</div>
