@@ -1,4 +1,4 @@
-﻿import {BoxScoreData, IBoxScoreContainer, IGameCenter, IGameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "./Contracts";
+﻿import {BoxScoreData, HighlightsCollection, IBoxScoreContainer, IGameCenter, IGameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "./Contracts";
 import Internal_DataLoader from "./Utils/Internal_DataLoader";
 
 export default class Internal_GameDetailCreator
@@ -28,8 +28,10 @@ export default class Internal_GameDetailCreator
 
 	public async getHighlights()
 	{
-		const highlightsCollection = await Internal_DataLoader.loadXml<IHighlightsCollection>(this.highlightsUrl, "highlightsCollection");
+		const highlightsCollectionData = await Internal_DataLoader.loadXml<IHighlightsCollection>(this.highlightsUrl, "highlightsCollection");
 
+		const highlightsCollection = new HighlightsCollection(highlightsCollectionData);
+		
 		return highlightsCollection;
 	}
 
