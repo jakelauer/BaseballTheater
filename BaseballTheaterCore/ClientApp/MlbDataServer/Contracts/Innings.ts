@@ -1,7 +1,7 @@
 ﻿import {Utility} from "@Utility/index";
 import {IBatter} from "./batting";
 import {IPitcher} from "./pitching";
-import {BoxScoreData} from "./box_score";
+import {BoxScoreData} from "./BoxScore";
 
 type Next ="Y" | "N";
 

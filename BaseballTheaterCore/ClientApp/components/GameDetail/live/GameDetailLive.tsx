@@ -4,6 +4,7 @@ import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
 import {Col, Row} from "antd";
 import {LiveInnings} from "./LiveInnings";
+import {ErrorBoundary} from "../../Base/ErrorBoundary";
 
 interface IGameDetailLiveProps
 {
@@ -35,8 +36,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		try
 		{
 			const navAny = (navigator as any);
-			navAny.getWakeLock("screen").then(wakeLock =>
-			{
+			navAny.getWakeLock("screen").then(wakeLock => {
 				this.wakeLockRequest = wakeLock.createRequest();
 			});
 		}
@@ -58,8 +58,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 	{
 		const lgc = new LiveGameCreator();
 		const playerIds = Utility.Mlb.getPlayerIdsFromGame(nextProps.game.gameData);
-		lgc.getPlayers(playerIds).then(players =>
-		{
+		lgc.getPlayers(playerIds).then(players => {
 			this.setState({
 				players
 			});
@@ -85,8 +84,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 
 		const allInningsCols = isFinal ? 24 : 8;
 
-		return <React.Fragment>
-
+		return <ErrorBoundary>
 			<Row gutter={16} type={"flex"}>
 
 				{!isFinal &&
@@ -109,6 +107,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 						highlights={this.props.highlights}/>
 				</Col>
 			</Row>
-		</React.Fragment>;
+		</ErrorBoundary>;
 	}
 }

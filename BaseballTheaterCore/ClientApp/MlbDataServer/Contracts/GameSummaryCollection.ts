@@ -1,4 +1,4 @@
-﻿import {GameSummaryData, IGameSummaryData} from "./game_summary";
+﻿import {GameSummaryData, IGameSummaryData} from "./GameSummary";
 
 export interface IGameSummaryCollection
 {

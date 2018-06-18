@@ -99,7 +99,7 @@ export class App
 
 	public static startLoading()
 	{
-		this._isLoadingCount++;
+		this._isLoadingCount = Math.max(1, this._isLoadingCount + 1);
 		App.Instance.loadingDistributor.distribute({
 			isLoading: this.isLoading
 		});
@@ -107,7 +107,7 @@ export class App
 
 	public static stopLoading()
 	{
-		this._isLoadingCount--;
+		this._isLoadingCount = Math.max(0, this._isLoadingCount - 1);
 		App.Instance.loadingDistributor.distribute({
 			isLoading: this.isLoading
 		});

@@ -16,6 +16,7 @@ import {PlayByPlay} from "./play-by-play/play_by_play";
 import {Highlights} from "./shared/highlights";
 import {MiniBoxScore} from "./shared/miniboxscore";
 import React = require("react");
+import {ErrorBoundary} from "../Base/ErrorBoundary";
 
 export enum GameDetailTabs
 {
@@ -205,10 +206,8 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 			App.stopLoading();
 		}
-		catch (e)
+		finally
 		{
-			console.log(e);
-
 			App.stopLoading();
 		}
 	}
@@ -297,7 +296,9 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		return (
 			<div className={`tab-content on`} data-tab={currentTab}>
+				<ErrorBoundary>
 				{renderables}
+				</ErrorBoundary>
 			</div>
 		);
 	}

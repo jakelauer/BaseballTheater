@@ -1,15 +1,16 @@
-﻿import { Button, Icon } from "antd";
+﻿import {Button, Icon} from "antd";
 import * as moment from "moment/moment";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
-import { Link } from "react-router-dom";
-import { ISettings } from "../../DataStore/SettingsDispatcher";
-import { GameSummaryCollection, GameSummaryData } from "../../MlbDataServer/Contracts";
-import { GameSummaryCreator } from "../../MlbDataServer/MlbDataServer";
-import { routes } from "../../routes";
-import { App } from "../Base/app";
-import { Calendar } from "./calendar";
-import { GameSummary } from "./game_summary";
+import {RouteComponentProps} from "react-router";
+import {Link} from "react-router-dom";
+import {ISettings} from "../../DataStore/SettingsDispatcher";
+import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contracts";
+import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
+import {routes} from "../../routes";
+import {App} from "../Base/app";
+import {Calendar} from "./calendar";
+import {GameSummary} from "./game_summary";
+import {ErrorBoundary} from "../Base/ErrorBoundary";
 
 interface IGameListState
 {
@@ -64,8 +65,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		return `/gameday/${newDate.format("YYYYMMDD")}`;
 	}
 
-	private updateDate = (newDate: moment.Moment) =>
-	{
+	private updateDate = (newDate: moment.Moment) => {
 		const newUrl = GameList.getUrlForDate(newDate);
 
 		this.props.history.push(newUrl);
@@ -104,8 +104,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 		const summaries = GameSummaryCreator.getSummaryCollection(this.state.date);
 
-		summaries.then((gameSummaryCollection: GameSummaryCollection) =>
-		{
+		summaries.then((gameSummaryCollection: GameSummaryCollection) => {
 			if (gameSummaryCollection && gameSummaryCollection.games)
 			{
 				const games = gameSummaryCollection.games.game;
@@ -122,8 +121,7 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 	private sortGames(games: GameSummaryData[])
 	{
 		const favoriteTeam = this.state.settings.favoriteTeam;
-		games.sort((a, b) =>
-		{
+		games.sort((a, b) => {
 			const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
 			const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
 			const favoriteReturn = aIsFavorite - bIsFavorite;
@@ -151,16 +149,16 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		const gameIds = this.state.gameSummaries.map(a => a.game_pk.toString()).join(",");
 
 		return (
-			<div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+			<div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
 				<Button.Group style={{}}>
 					<Button>
-						<Link to={`/search/recap/${gameIds}`}><Icon type="play-circle" /> Recaps</Link>
+						<Link to={`/search/recap/${gameIds}`}><Icon type="play-circle"/> Recaps</Link>
 					</Button>
 					<Button>
-						<Link to={`/search/condensed/${gameIds}`}><Icon type="play-circle" /> Condensed Games</Link>
+						<Link to={`/search/condensed/${gameIds}`}><Icon type="play-circle"/> Condensed Games</Link>
 					</Button>
 					<Button>
-						<Link to={`/search/must c/${gameIds}`}><Icon type="play-circle" /> Must C clips</Link>
+						<Link to={`/search/must c/${gameIds}`}><Icon type="play-circle"/> Must C clips</Link>
 					</Button>
 				</Button.Group>
 			</div>
@@ -175,10 +173,9 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 
 		document.title = `Baseball Theater`;
 
-		const gamesRendered = games.map((gameSummary, i) =>
-		{
+		const gamesRendered = games.map((gameSummary, i) => {
 			const key = games.length + i;
-			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores} />;
+			return <GameSummary game={gameSummary} index={key} key={key} hideScores={this.state.settings.hideScores}/>;
 		});
 
 		const noGames = this.state.gameSummaries.length === 0 && !App.isLoading
@@ -190,14 +187,16 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		return (
 			<div className={`game-list-container ${navigatingClass}`}>
 				<div className={`settings`}>
-					<Calendar initialDate={this.state.date} onDateChange={this.updateDate} />
+					<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
 				</div>
 
 				{this.renderSpecialHighlightLinks()}
 
-				<div className={`game-list`}>
-					{gamesRendered}
-				</div>
+				<ErrorBoundary>
+					<div className={`game-list`}>
+						{gamesRendered}
+					</div>
+				</ErrorBoundary>
 
 				{noGames}
 			</div>

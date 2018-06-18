@@ -36,19 +36,19 @@ export class GameFieldStatus extends React.Component<IGameFieldStatusProps, {}>
 		const bottomInningOn = !isTopInning ? "on" : "";
 
 
-		const pitcherStats = Utility.Mlb.getStatsForPlayerId(defense.pitcher.id, this.props.game);
-		const batterStats = Utility.Mlb.getStatsForPlayerId(offense.batter.id, this.props.game);
 
 		let battingStats = null;
 		let pitchingStats = null;
 
-		if (pitcherStats)
+		if (defense.pitcher)
 		{
+			const pitcherStats = Utility.Mlb.getStatsForPlayerId(defense.pitcher.id, this.props.game);
 			pitchingStats = pitcherStats.stats.pitching;
 		}
 
-		if (batterStats)
+		if (offense.batter)
 		{
+			const batterStats = Utility.Mlb.getStatsForPlayerId(offense.batter.id, this.props.game);
 			battingStats = batterStats.stats.batting;
 		}
 
