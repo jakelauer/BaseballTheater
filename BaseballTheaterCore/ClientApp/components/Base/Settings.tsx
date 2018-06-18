@@ -1,10 +1,9 @@
 import {Select, Switch} from "antd";
-import * as Cookies from "js-cookie";
-import React = require("react");
+import * as React from "react";
+import {GameDetailTabs} from "../GameDetail/GameDetail";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
-import {Teams} from "../../MlbDataServer/Contracts";
+import {Teams} from "@MlbDataServer/Contracts";
 import Config from "../Config/config";
-import {GameDetailTabs} from "../GameDetail/game_detail";
 import {App} from "./app";
 
 interface ISettingsContainerProps

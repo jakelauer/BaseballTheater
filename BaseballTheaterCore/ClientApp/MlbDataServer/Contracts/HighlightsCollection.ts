@@ -17,8 +17,11 @@ export class HighlightsCollection implements IHighlightsCollection
 	
 	constructor(private hcData: IHighlightsCollection)
 	{
-		this.highlights = this.hcData.highlights;
-		
-		this.highlights.media = Utility.Data.forceArray(this.hcData.highlights.media);
+		if (this.hcData && this.hcData.highlights && this.hcData.highlights.media)
+		{
+			this.highlights = this.hcData.highlights;
+
+			this.highlights.media = Utility.Data.forceArray(this.hcData.highlights.media);
+		}
 	}
 }

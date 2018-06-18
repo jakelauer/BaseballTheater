@@ -52,11 +52,6 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		}
 	}
 
-	public componentWillUnmount()
-	{
-		App.stopLoading();
-	}
-
 	public static getQuery()
 	{
 		const matches = this.regex.exec(location.pathname);
@@ -135,7 +130,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 					{highlightsRendered}
 				</div>
 				}
-				{!highlightsRendered || highlightsRendered.length === 0 &&
+				{!highlightsRendered || highlightsRendered.length === 0 && !App.isLoading &&
 					<h3 style={{textAlign: "center"}}>No highlights found for your search.</h3>
 				}
 
