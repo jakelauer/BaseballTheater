@@ -162,9 +162,7 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 		let foundHighlight: IHighlight | null = null;
 		if (hc && hc.highlights && hc.highlights.media)
 		{
-			const highlights = hc.highlights.media instanceof Array
-				? hc.highlights.media
-				: [(hc.highlights.media as any) as IHighlight];
+			const highlights = hc.highlights.media;
 
 			const matching = highlights.find(highlight => {
 				let found = false;
@@ -250,7 +248,6 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 
 		//const activeKey = !play.about.isComplete ? playIndex.toString() : null;
 
-		const gameIsFinal = Utility.Mlb.gameIsFinal(this.props.game.gameData.status.statusCode);
 		const playIndexString = String(playIndex);
 		const activeKey = this.state.openInnings.indexOf(playIndexString) > -1
 			? playIndexString

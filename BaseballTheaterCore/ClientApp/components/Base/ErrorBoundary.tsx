@@ -1,6 +1,7 @@
-﻿import {RouteComponentProps, withRouter} from "react-router";
-import {Alert, Collapse} from "antd";
+﻿import { RouteComponentProps, withRouter } from "react-router";
+import { Alert, Row, Col } from "antd";
 import * as React from "react";
+import Config, { Environments } from "../Config/config";
 
 interface IErrorBoundaryState
 {
@@ -48,22 +49,39 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 	{
 		if (this.state.hasError)
 		{
-			return <React.Fragment>
-				<Alert
-					message="Error"
-					description="Uh oh, something went wrong! If you see this, please email a screenshot to baseball.theater@gmail.com"
-					type="error"
-					showIcon
-				/>
-				<Collapse defaultActiveKey={["0"]}>
-					<Collapse.Panel key="0" header={`Show error details`}>
+			const desc = <Row>
+				<Col span={12}>
+					<div>
+						Uh oh, something went wrong! If you see this, please email a screenshot to baseball.theater@gmail.com.
+						<br />
+						<br />
+						<h2>Info:</h2>
+					</div>
+					<pre style={{ whiteSpace: "pre-wrap" }}>
+						URL: {location.href}<br/>
+						Timestamp: {(new Date()).toISOString()}<br />
+						Browser: {navigator.userAgent}<br />
+						Platform: {navigator.platform}<br />
+
+					</pre>
+				</Col>
+				{Config.Environment === Environments.Local &&
+					<Col span={12}>
 						{this.state.error.toString()}
-						<br /><br />
 						<pre style={{ whiteSpace: "pre-line" }}>
 							{this.state.errorInfo.componentStack}
 						</pre>
-					</Collapse.Panel>
-				</Collapse>
+					</Col>
+				}
+			</Row>;
+
+			return <React.Fragment>
+				<Alert
+					message="Error"
+					description={desc}
+					type="error"
+					showIcon
+				/>
 			</React.Fragment>;
 		}
 

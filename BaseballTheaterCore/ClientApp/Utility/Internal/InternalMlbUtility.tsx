@@ -21,13 +21,17 @@ export class InternalMlbUtility
 
 	public static renderPitch(play: LiveGamePlayEvent)
 	{
+		const detailDesc = play && play.details && play.details.description;
+		const callDesc = play && play.details && play.details.call && play.details.call.description;
+		const typeDesc = play && play.details && play.details.type && play.details.type.description;
+		
 		return <List.Item key={play.index}>
 			{play.isPitch &&
 			<div className={`pitch`} data-type={play.details.call.code}>
 				<div className={`pitch-count`}>{play.pitchNumber}</div>
-				<div className={`pitch-description`}>{play.details.call.description}</div>
+				<div className={`pitch-description`}>{callDesc}</div>
 				<div className={`pitch-details`}>
-					{play.pitchData.startSpeed} MPH {play.details.type.description}
+					{play.pitchData.startSpeed} MPH {typeDesc}
 				</div>
 			</div>
 			}
@@ -37,7 +41,7 @@ export class InternalMlbUtility
 				<div className={`pitch-count`}>
 					<Icon type="info" />
 				</div>
-				 {play.details.description}
+				 {detailDesc}
 			</div>
 			}
 		</List.Item>;

@@ -47,9 +47,7 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		let foundHighlight: IHighlight | null = null;
 		if (hc && hc.highlights && hc.highlights.media)
 		{
-			const highlights = hc.highlights.media instanceof Array
-				? hc.highlights.media
-				: [(hc.highlights.media as any) as IHighlight];
+			const highlights = hc.highlights.media;
 
 			const matching = highlights.find(highlight =>
 			{
