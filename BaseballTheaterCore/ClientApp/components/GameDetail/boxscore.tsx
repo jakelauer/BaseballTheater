@@ -25,9 +25,9 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 	{
 		const boxScore = this.props.boxScoreData;
 
-		if (!boxScore)
+		if (!boxScore || !boxScore.batting_away || !boxScore.batting_home)
 		{
-			return <div/>;
+			return null;
 		}
 
 		return (
@@ -41,7 +41,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 							{this.renderBatterStats(HomeAway.Away)}
 							</tbody>
 						</table>
-						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.note)}></div>
+						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.note)}/>
 						<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_away.text_data)}/>
 						<table className={`player-list pitchers`}>
 							<tbody>
@@ -49,7 +49,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 							{this.renderPitcherStats(HomeAway.Away)}
 							</tbody>
 						</table>
-						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_away.note)}></div>
+						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_away.note)}/>
 					</div>
 					<div className={`team home`}>
 						<h2 className={`mobile-only`}>{boxScore.home_fname}</h2>
@@ -59,7 +59,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 							{this.renderBatterStats(HomeAway.Home)}
 							</tbody>
 						</table>
-						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.note)}></div>
+						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.note)}/>
 						<div className={`text-data`} dangerouslySetInnerHTML={this.markup(boxScore.batting_home.text_data)}/>
 						<table className={`player-list pitchers`}>
 							<tbody>
@@ -67,7 +67,7 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 							{this.renderPitcherStats(HomeAway.Home)}
 							</tbody>
 						</table>
-						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_home.note)}></div>
+						<div className={`note`} dangerouslySetInnerHTML={this.markup(boxScore.pitching_home.note)}/>
 					</div>
 				</div>
 				<div className={`game-notes`}>
@@ -118,22 +118,21 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 	{
 		const boxScore = this.props.boxScoreData;
 
-		if (!boxScore)
+		if (!boxScore || !boxScore.batting_away || !boxScore.batting_home)
 		{
-			return <div/>;
+			return null;
 		}
 
 		const pitchers = teamType === HomeAway.Away
 			? boxScore.pitching_away.pitcher
 			: boxScore.pitching_home.pitcher;
 
-		const pitcherRows = pitchers.map((pitcher, i) =>
-		{
+		const pitcherRows = pitchers.map((pitcher, i) => {
 			return (
 				<tr className={`player-item pitcher-item`} key={i}>
 					<td className={`player-name`}>
 						{pitcher.note &&
-							<span className={`note`} dangerouslySetInnerHTML={{__html: pitcher.note}}></span>
+						<span className={`note`} dangerouslySetInnerHTML={{__html: pitcher.note}}></span>
 						}
 						{Utility.Mlb.renderPlayerLinkXml(pitcher)} ({pitcher.pos})
 					</td>
@@ -157,22 +156,21 @@ export class BoxScore extends React.Component<IBoxScoreProps, any>
 	{
 		const boxScore = this.props.boxScoreData;
 
-		if (!boxScore)
+		if (!boxScore || !boxScore.batting_away || !boxScore.batting_home)
 		{
-			return <div/>;
+			return null;
 		}
 
 		const batters = teamType === HomeAway.Away
 			? boxScore.batting_away.batter
 			: boxScore.batting_home.batter;
 
-		const batterRows = batters.map((batter, i) =>
-		{
+		const batterRows = batters.map((batter, i) => {
 			return (
 				<tr className={`player-item batter-item`} key={i}>
 					<td className={`player-name`}>
 						{batter.note &&
-						<span className={`note`} dangerouslySetInnerHTML={{__html: batter.note}}></span>
+						<span className={`note`} dangerouslySetInnerHTML={{__html: batter.note}}/>
 						}
 						{Utility.Mlb.renderPlayerLinkXml(batter)} ({batter.pos})
 					</td>

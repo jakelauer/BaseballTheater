@@ -38,8 +38,9 @@ export class InternalResponsiveUtility
 		window.addEventListener("resize", () => this.determineMq());
 	};
 
-	private static determineMq()
+	public static determineMq()
 	{
+		const matchingClasses = [];
 		const html = document.getElementsByTagName("html")[0];
 		for (let mediaQuery of this.mediaQueries)
 		{
@@ -47,11 +48,14 @@ export class InternalResponsiveUtility
 			if (mediaQuery.test())
 			{
 				html.classList.add(stringClass);
+				matchingClasses.push(stringClass);
 			}
 			else
 			{
 				html.classList.remove(stringClass);
 			}
 		}
+		
+		return matchingClasses;
 	};
 }

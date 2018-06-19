@@ -53,7 +53,13 @@ export default class Internal_GameDetailCreator
 	{
 		const boxScoreObj = await Internal_DataLoader.loadXml<IBoxScoreContainer>(this.boxScoreUrl, "boxScore");
 
-		return new BoxScoreData(boxScoreObj);
+		let boxScore: BoxScoreData = null;
+		if (boxScoreObj)
+		{
+			boxScore = new BoxScoreData(boxScoreObj);
+		}
+		
+		return boxScore;
 	}
 
 	/**
