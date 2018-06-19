@@ -1,7 +1,10 @@
-﻿import { RouteComponentProps, withRouter } from "react-router";
-import { Alert, Row, Col } from "antd";
+﻿import {RouteComponentProps, withRouter} from "react-router";
+import {Alert, Row, Col, Button} from "antd";
 import * as React from "react";
-import Config, { Environments } from "../Config/config";
+import Config, {Environments} from "../Config/config";
+import {Utility} from "@Utility/index";
+import Responsive = Utility.Responsive;
+import {App} from "./app";
 
 interface IErrorBoundaryState
 {
@@ -14,6 +17,8 @@ interface IErrorBoundaryState
  *  * If a child component errors out, it will display a message with error details */
 class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IErrorBoundaryState>
 {
+	private static EmailLineBreak = "%0D%0A";
+
 	constructor(props: RouteComponentProps<{}>)
 	{
 		super(props);
@@ -27,14 +32,13 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 
 	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo)
 	{
-		this.setState({ hasError: true, error, errorInfo });
+		this.setState({hasError: true, error, errorInfo});
 
 		console.error(error, errorInfo);
 
 		// When the error shows up, we still want people to be able to navigate after it.
 		// So, we will listen to one history change and remove the error state at that point.
-		const unregisterCallback = this.props.history.listen((location) =>
-		{
+		const unregisterCallback = this.props.history.listen((location) => {
 			unregisterCallback();
 
 			this.setState({
@@ -45,39 +49,49 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 		});
 	}
 
+	private generateReportLines(joinWith: string)
+	{
+		return [
+			`URL: ${location.href}`,
+			`Timestamp: ${(new Date()).toISOString()}`,
+			`Browser: ${navigator.userAgent}`,
+			`Platform: ${navigator.platform}`,
+			`Responsive Size: ${Responsive.determineMq().join(", ")}`,
+			`Error: ${this.state.error.stack}`,
+			`Settings: ${JSON.stringify(App.Instance.settingsDispatcher.state)}`
+		].join(joinWith);
+	}
+
 	public render()
 	{
 		if (this.state.hasError)
 		{
-			const desc = <Row>
-				<Col span={12}>
+			const desc = <Row gutter={16}>
+				<Col span={24}>
 					<div>
-						Uh oh, something went wrong! If you see this, please email a screenshot to baseball.theater@gmail.com.
-						<br />
-						<br />
-						<h2>Info:</h2>
+						<br/>
+						<Button type={"primary"} size={"large"}>
+							<a href={`mailto:baseball.theater@gmail.com?subject=Baseball.Theater%20Error&body=${this.generateReportLines(ErrorBoundaryInternal.EmailLineBreak)}`}>Please click here to send an error report</a>
+						</Button>
 					</div>
-					<pre style={{ whiteSpace: "pre-wrap" }}>
-						URL: {location.href}<br/>
-						Timestamp: {(new Date()).toISOString()}<br />
-						Browser: {navigator.userAgent}<br />
-						Platform: {navigator.platform}<br />
-
+					<pre style={{fontSize: "11px", marginTop: "3rem"}}>
+						{this.generateReportLines("\n")}
 					</pre>
 				</Col>
 				{Config.Environment === Environments.Local &&
-					<Col span={12}>
-						{this.state.error.toString()}
-						<pre style={{ whiteSpace: "pre-line" }}>
-							{this.state.errorInfo.componentStack}
-						</pre>
-					</Col>
+				<Col span={24} style={{marginTop: "3rem"}}>
+					{this.state.error.toString()}
+					<pre style={{whiteSpace: "pre-line"}}>
+						{this.state.errorInfo.componentStack}
+					</pre>
+				</Col>
 				}
 			</Row>;
 
 			return <React.Fragment>
 				<Alert
-					message="Error"
+					style={{margin: 16}}
+					message="Uh oh, something went wrong! Click the button below to send a detailed error report to baseball.theater@gmail.com."
 					description={desc}
 					type="error"
 					showIcon
