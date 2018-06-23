@@ -58,7 +58,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 	{
 		const lgc = new LiveGameCreator();
 		const playerIds = Utility.Mlb.getPlayerIdsFromGame(nextProps.game.gameData);
-		lgc.getPlayers(playerIds).then(players => {
+		Internal_LiveGameCreator.getPlayers(playerIds).then(players => {
 			this.setState({
 				players
 			});
