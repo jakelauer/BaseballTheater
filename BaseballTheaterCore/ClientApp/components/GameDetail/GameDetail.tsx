@@ -17,6 +17,7 @@ import {Highlights} from "./shared/highlights";
 import {MiniBoxScore} from "./shared/miniboxscore";
 import React = require("react");
 import {ErrorBoundary} from "../Base/ErrorBoundary";
+import {ITabContainerTab, TabContainer} from "../shared/TabContainer";
 
 export enum GameDetailTabs
 {
@@ -31,7 +32,7 @@ interface IGameDetailState
 	gameSummary: GameSummaryData | null;
 	boxScore: BoxScoreData | null;
 	highlightsCollection: IHighlightsCollection | null;
-	currentTab: GameDetailTabs;
+	defaultTab: GameDetailTabs;
 	settings: ISettings | null;
 }
 
@@ -69,14 +70,14 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		this.gamePk = this.props.match.params.gamePk;
 
-		let currentTab = GameDetailTabs.Highlights;
+		let defaultTab = GameDetailTabs.Highlights;
 		if (App.isAppMode)
 		{
-			currentTab = GameDetailTabs.BoxScore;
+			defaultTab = GameDetailTabs.BoxScore;
 		}
 		else if (this.props.match.params.tab)
 		{
-			currentTab = GameDetailTabs[this.props.match.params.tab];
+			defaultTab = GameDetailTabs[this.props.match.params.tab];
 		}
 
 		this.state = {
@@ -84,7 +85,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			boxScore: null,
 			highlightsCollection: null,
 			gameSummary: null,
-			currentTab,
+			defaultTab,
 			settings: App.Instance.settingsDispatcher.state
 		};
 	}
@@ -108,7 +109,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			if (defaultTab && !this.props.match.params.tab)
 			{
 				this.setState({
-					currentTab: GameDetailTabs[defaultTab],
+					defaultTab: GameDetailTabs[defaultTab],
 					settings: payload
 				});
 			}
@@ -141,13 +142,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	{
 		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
 		return await gameDetailCreator.getBoxscore();
-	}
-
-	private setTabState(currentTab: GameDetailTabs)
-	{
-		this.setState({
-			currentTab
-		});
 	}
 
 	private unsubscribeToLiveData()
@@ -233,7 +227,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		App.stopLoading();
 	}
 
-	private renderCurrentTab(currentTab: GameDetailTabs | null)
+	private renderTabContent(currentTab: GameDetailTabs | null)
 	{
 		const boxScoreData = this.state.boxScore;
 		const highlightsCollection = this.state.highlightsCollection;
@@ -303,11 +297,6 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		);
 	}
 
-	private classForTab(tab: GameDetailTabs)
-	{
-		return this.state.currentTab === tab ? "on" : "";
-	}
-
 	public render()
 	{
 		const gameSummary = this.state.gameSummary;
@@ -322,35 +311,30 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			document.title = `${date} - ${this.state.game.gameData.teams.away.name} @ ${this.state.game.gameData.teams.home.name} - Baseball Theater`;
 		}
 		
-		const liveTabClass = this.classForTab(GameDetailTabs.Live);
-		const highlightsTabClass = this.classForTab(GameDetailTabs.Highlights);
-		const boxScoreTabClass = this.classForTab(GameDetailTabs.BoxScore);
-
+		const tabs: ITabContainerTab[] = [
+			{
+				key: GameDetailTabs.Live,
+				label: "Pitch-by-pitch",
+				link: this.getTabUrl(GameDetailTabs.Live),
+				render: () => this.renderTabContent(GameDetailTabs.Live)
+			},
+			{
+				key: GameDetailTabs.Highlights,
+				label: "Highlights",
+				link: this.getTabUrl(GameDetailTabs.Highlights),
+				render: () => this.renderTabContent(GameDetailTabs.Highlights)
+			},
+			{
+				key: GameDetailTabs.BoxScore,
+				label: "Box Score",
+				link: this.getTabUrl(GameDetailTabs.BoxScore),
+				render: () => this.renderTabContent(GameDetailTabs.BoxScore)
+			}
+		];
+		
 		return (
 			<div className={`game-detail-container`}>
-				<div className={`game-data-tab-container`}>
-					<div className={`tabs`}>
-						<div className={`tab-container`}>
-							{
-								Config.liveDataEnabled &&
-								<Link to={this.getTabUrl(GameDetailTabs.Live)} className={`tab ${liveTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Live)}>
-									<span>Pitch-by-pitch</span>
-								</Link>
-							}
-
-							<Link to={this.getTabUrl(GameDetailTabs.Highlights)} className={`tab ${highlightsTabClass}`} onClick={() => this.setTabState(GameDetailTabs.Highlights)}>
-								<span>Highlights</span>
-							</Link>
-
-							<Link to={this.getTabUrl(GameDetailTabs.BoxScore)} className={`tab ${boxScoreTabClass}`} onClick={() => this.setTabState(GameDetailTabs.BoxScore)}>
-								<span>Box Score</span>
-							</Link>
-						</div>
-					</div>
-					<div className={`tab-contents`}>
-						{this.renderCurrentTab(this.state.currentTab)}
-					</div>
-				</div>
+				<TabContainer tabs={tabs} defaultActiveTabKey={this.state.defaultTab} />
 			</div>
 		);
 	}

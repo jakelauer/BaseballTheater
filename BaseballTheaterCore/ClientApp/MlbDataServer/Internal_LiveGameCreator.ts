@@ -1,7 +1,7 @@
 ﻿import {LiveData, PlayerListResponse} from "./Contracts";
 import Internal_DataLoader from "./Utils/Internal_DataLoader";
 import * as moment from "moment/moment";
-import {ISchedule} from "@MlbDataServer/Contracts/TeamSchedule";
+import {ISchedule, ITeamDetails} from "@MlbDataServer/Contracts/TeamSchedule";
 
 export default class Internal_LiveGameCreator
 {
@@ -35,9 +35,15 @@ export default class Internal_LiveGameCreator
 		const now = moment();
 		const dateString = now.format("YYYY-MM-DD");
 		const season = now.year();
-		
-		const url = `https://statsapi.mlb.com/api/v1/teams/112?hydrate=previousSchedule(date=${dateString},season=${season},limit=162,gameType=%5BE,S,R,A,F,D,L,W%5D,team,linescore(matchup,runners),decisions,person,stats,seriesStatus(useOverride=true)),nextSchedule(date=${dateString},season=${season},limit=162,gameType=%5BE,S,R,A,F,D,L,W%5D,team,linescore(matchup,runners),decisions,person,stats,seriesStatus(useOverride=true))&language=en`;
-		
-		return await Internal_DataLoader.loadJson<ISchedule>(url,  "schedule" + teamId);
+
+		const url = `https://statsapi.mlb.com/api/v1/teams/112?hydrate=previousSchedule(date=${dateString},season=${season},limit=162,team,linescore(matchup,runners),decisions,person,stats,seriesStatus(useOverride=true)),nextSchedule(date=${dateString},season=${season},limit=162,team,linescore(matchup,runners),decisions,person,stats,seriesStatus(useOverride=true))`;
+
+		return await Internal_DataLoader.loadJson<ISchedule>(url, "schedule" + teamId);
+	}
+
+	public async getTeamDetails(teamId: number)
+	{
+		const url = `https://statsapi.mlb.com/api/v1/teams/${teamId}`;
+		return await Internal_DataLoader.loadJson<ITeamDetails>(url, "teamdetails" + teamId);
 	}
 }

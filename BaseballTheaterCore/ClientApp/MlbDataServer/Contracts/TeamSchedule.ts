@@ -5,6 +5,11 @@ export interface ISchedule
 	teams: IScheduleTeamSchedule[];
 }
 
+export interface ITeamDetails
+{
+	teams: IScheduleTeam[];
+}
+
 export interface IScheduleTeamSchedule extends IScheduleTeam
 {
 	nextGameSchedule: IScheduleGameList;
