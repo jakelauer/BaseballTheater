@@ -20,8 +20,6 @@ interface IGameDetailLiveState
 
 export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameDetailLiveState>
 {
-	private wakeLockRequest: any;
-
 	constructor(props: IGameDetailLiveProps)
 	{
 		super(props);
@@ -31,34 +29,11 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 		};
 	}
 
-	public componentDidMount()
-	{
-		try
-		{
-			const navAny = (navigator as any);
-			navAny.getWakeLock("screen").then(wakeLock => {
-				this.wakeLockRequest = wakeLock.createRequest();
-			});
-		}
-		catch (e)
-		{
-			console.info("Wake Lock error: ", e);
-		}
-	}
-
-	public componentWillUnmount()
-	{
-		if (this.wakeLockRequest)
-		{
-			this.wakeLockRequest.cancel();
-		}
-	}
-
 	public async componentWillReceiveProps(nextProps: IGameDetailLiveProps)
 	{
 		const lgc = new LiveGameCreator();
 		const playerIds = Utility.Mlb.getPlayerIdsFromGame(nextProps.game.gameData);
-		Internal_LiveGameCreator.getPlayers(playerIds).then(players => {
+		lgc.getPlayers(playerIds).then(players => {
 			this.setState({
 				players
 			});
@@ -89,7 +64,6 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 
 				{!isFinal &&
 				<Col md={24} lg={16} className={`current-inning`}>
-
 					<LiveInnings
 						game={this.props.game}
 						isSpringTraining={isSpringTraining}
