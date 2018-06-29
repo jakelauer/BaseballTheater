@@ -1,5 +1,5 @@
-﻿import * as moment from "moment-timezone"
-import * as React from "react"
+﻿import * as moment from "moment-timezone";
+import * as React from "react";
 import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {App} from "../Base/app";
@@ -9,6 +9,7 @@ import {Utility} from "@Utility/index";
 interface GameSummaryProps
 {
 	game: IScheduleGame;
+	includeDate?: boolean;
 	hideScores: boolean;
 }
 
@@ -41,7 +42,7 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 	{
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
 			settings: payload
-		}))
+		}));
 	}
 
 	public componentWillUnmount()
@@ -54,10 +55,13 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 		const game = this.props.game;
 
 		const gameStatusClass = Utility.Mlb.gameIsFinal(this.props.game.status.statusCode) ? "final" : "";
-
+		const gameDate = moment(game.gameDate);
 
 		return (
 			<div className={`game-summary-simple ${gameStatusClass}`} data-homecode={game.teams.home.team.fileCode} data-awaycode={game.teams.away.team.fileCode}>
+				{this.props.includeDate &&
+				<div className={`date`}>{gameDate.format("MMM Do")}</div>
+				}
 				<Link to={this.getGameLink()} className={`game-link`}>
 					<i className="material-icons">keyboard_arrow_right</i>
 				</Link>
@@ -88,7 +92,7 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 
 		if (game.linescore)
 		{
-			linescoreRuns = teamType === HomeAway.Away 
+			linescoreRuns = teamType === HomeAway.Away
 				? game.linescore.teams.away.runs
 				: game.linescore.teams.home.runs;
 		}
@@ -100,8 +104,8 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 			<div className={`team-row ${homeAwayClass} ${winnerClass}`}>
 				<div className={`team-info ${favClass}`}>
 					{isFavoriteTeam &&
-						<div className={`favorite-team`}>
-						</div>
+					<div className={`favorite-team`}>
+					</div>
 					}
 					<div className={`team-city team-color ${fileCode}`}>{teamCity}</div>
 					<div className={`team-name team-color ${fileCode}`}>{teamName}</div>
@@ -148,10 +152,10 @@ export class GameSummary extends React.Component<GameSummaryProps, IGameSummaryS
 	private getWinner(): HomeAway
 	{
 		const game = this.props.game;
-		
-		return game.teams.home.isWinner 
+
+		return game.teams.home.isWinner
 			? HomeAway.Home
-			: game.teams.away.isWinner 
+			: game.teams.away.isWinner
 				? HomeAway.Away
 				: HomeAway.None;
 	}

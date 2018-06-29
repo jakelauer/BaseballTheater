@@ -1,11 +1,13 @@
 import * as React from "react";
 import {ITeams, Teams} from "@MlbDataServer/Contracts";
 import {RouteComponentProps} from "react-router";
-import {ISchedule, IScheduleDate} from "@MlbDataServer/Contracts/TeamSchedule";
+import {ISchedule, IScheduleDate, IScheduleTeam, ITeamDetails} from "@MlbDataServer/Contracts/TeamSchedule";
 import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {App} from "../Base/app";
 import {GameSummary} from "./GameSummary";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
+import {TabContainer} from "../shared/TabContainer";
+import moment = require("moment");
 
 interface ITeamPageRouteParams
 {
@@ -15,19 +17,21 @@ interface ITeamPageRouteParams
 interface ITeamPageState
 {
 	schedule: ISchedule;
+	teamDetails: IScheduleTeam;
 	settings: ISettings;
 }
 
 export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRouteParams>, ITeamPageState>
 {
 	private settingsDispatcherKey: string;
-	
+
 	constructor(props: RouteComponentProps<ITeamPageRouteParams>)
 	{
 		super(props);
 
 		this.state = {
 			schedule: null,
+			teamDetails: null,
 			settings: App.Instance.settingsDispatcher.state
 		};
 	}
@@ -46,38 +50,81 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 
 		App.startLoading();
 
+		const teamCode = this.props.match.params.team;
+
 		const lgc = new LiveGameCreator();
-		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[this.props.match.params.team]);
+		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[teamCode]);
+		const teamDetails = await lgc.getTeamDetails(Teams.TeamIdList[teamCode]);
 
 		this.setState({
-			schedule
+			schedule,
+			teamDetails: teamDetails.teams[0]
 		});
-		
+
 		App.stopLoading();
+	}
+
+	private renderGames()
+	{
+
+	}
+
+	private renderTabContent(tabKey: string)
+	{
+		const teamCode = this.props.match.params.team;
+
+		switch (tabKey)
+		{
+			case "schedule":
+				let pastGamesForTeams: IScheduleDate[] = [];
+				let futureGamesForTeams: IScheduleDate[] = [];
+				const schedule = this.state.schedule;
+				if (schedule && schedule.teams && schedule.teams.length > 0)
+				{
+					const matchingTeam = schedule.teams.find(a => a.fileCode === teamCode);
+					if (matchingTeam)
+					{
+						pastGamesForTeams = matchingTeam.previousGameSchedule.dates;
+						futureGamesForTeams = matchingTeam.nextGameSchedule.dates;
+					}
+				}
+
+				const dates = [...pastGamesForTeams, ...futureGamesForTeams];
+				
+				const datesForMonth = dates.filter(a => moment(a.date).month() == 5);
+
+				const gameSummaries = datesForMonth.map(date => {
+					return date.games.map(game => <GameSummary game={game} hideScores={this.state.settings.hideScores} includeDate={true}/>);
+				});
+				
+				return <div className={`game-list`}>{gameSummaries}</div>;
+		}
+	}
+
+	private getTabLink(tab: string)
+	{
+		return `/team/${this.props.match.params.team}/${tab}`;
 	}
 
 	public render()
 	{
-		const teamCode = this.props.match.params.team;
-
-		let pastGamesForTeams: IScheduleDate[] = [];
-		let futureGamesForTeams: IScheduleDate[] = [];
-
-		const schedule = this.state.schedule;
-		if (schedule && schedule.teams && schedule.teams.length > 0)
+		if (!this.state.teamDetails)
 		{
-			const matchingTeam = schedule.teams.find(a => a.fileCode === teamCode);
-			if (matchingTeam)
-			{
-				pastGamesForTeams = matchingTeam.previousGameSchedule.dates;
-				futureGamesForTeams = matchingTeam.nextGameSchedule.dates;
-			}
+			return null;
 		}
-		
-		const allGames = [...pastGamesForTeams, ...futureGamesForTeams];
 
-		return allGames.map(date => {
-			return date.games.map(game => <GameSummary game={game} hideScores={this.state.settings.hideScores}/>);
-		});
+		return (
+			<div className={`team-page`}>
+				<h1>{this.state.teamDetails.name}</h1>
+				<TabContainer tabs={[
+					{
+						key: "schedule",
+						label: "Schedule",
+						link: this.getTabLink("schedule"),
+						render: () => this.renderTabContent("schedule")
+					}
+				]}/>
+			</div>
+		);
 	}
 }

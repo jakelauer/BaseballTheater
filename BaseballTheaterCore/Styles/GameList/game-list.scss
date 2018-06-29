@@ -58,6 +58,11 @@
 	}
 }
 
+.team-page .game-list .final
+{
+	opacity: 0.5;
+}
+
 .flex
 {
 	display: flex;
@@ -192,6 +197,11 @@
 			transition: 0.5s;
 			transform: translateX(-50px);
 		}
+	}
+	
+	.date
+	{
+		text-align: right;
 	}
 
 	.team-row
