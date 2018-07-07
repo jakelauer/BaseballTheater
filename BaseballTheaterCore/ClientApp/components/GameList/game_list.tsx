@@ -8,7 +8,7 @@ import {GameSummaryCollection, GameSummaryData} from "../../MlbDataServer/Contra
 import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
 import {routes} from "../../routes";
 import {App} from "../Base/app";
-import {Calendar} from "./calendar";
+import {Calendar, CalendarTypes} from "./calendar";
 import {GameSummary} from "./game_summary";
 import {ErrorBoundary} from "../Base/ErrorBoundary";
 
@@ -187,7 +187,10 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 		return (
 			<div className={`game-list-container ${navigatingClass}`}>
 				<div className={`settings`}>
-					<Calendar initialDate={this.state.date} onDateChange={this.updateDate}/>
+					<Calendar 
+						type={CalendarTypes.Day}
+						initialDate={this.state.date} 
+						onDateChange={this.updateDate}/>
 				</div>
 
 				{this.renderSpecialHighlightLinks()}
