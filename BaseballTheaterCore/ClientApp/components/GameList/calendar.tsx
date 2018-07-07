@@ -1,9 +1,18 @@
 ﻿import {DatePicker, Icon} from 'antd';
-import * as moment from "moment/moment"
-import * as React from "react"
+import * as moment from "moment/moment";
+import * as React from "react";
+
+const {MonthPicker} = DatePicker;
+
+export enum CalendarTypes
+{
+	Day,
+	Month
+}
 
 interface ICalendarProps
 {
+	type: CalendarTypes;
 	initialDate: moment.Moment;
 	onDateChange: (newDate: moment.Moment) => void;
 }
@@ -24,11 +33,20 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		};
 	}
 
-	private getDateforChangeDelta(deltaDays: number)
+	private getDateForDeltaDays(deltaDays: number)
 	{
 		const date = this.state.date;
 		const newDate = moment(date);
 		newDate.add(deltaDays, "d");
+
+		return newDate;
+	}
+
+	private getDateForDeltaMonths(deltaMonths: number)
+	{
+		const date = this.state.date;
+		const newDate = moment(date);
+		newDate.add(deltaMonths, "M");
 
 		return newDate;
 	}
@@ -41,11 +59,13 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		}, () => this.props.onDateChange(newDate));
 	}
 
-	private changeDateDelta(e: React.MouseEvent<HTMLAnchorElement>, deltaDays: number)
+	private changeDateDelta(e: React.MouseEvent<HTMLAnchorElement>, delta: number)
 	{
 		e.preventDefault();
 
-		const newDate = this.getDateforChangeDelta(deltaDays);
+		const newDate = this.props.type === CalendarTypes.Day
+			? this.getDateForDeltaDays(delta)
+			: this.getDateForDeltaMonths(delta);
 
 		this.changeDate(newDate);
 	}
@@ -58,17 +78,22 @@ export class Calendar extends React.Component<ICalendarProps, ICalendarState>
 		return (
 			<div className={`day-nav`}>
 				<a className={`prev`} onClick={onClickPrev} href={`javascript:void(0)`}>
-					<Icon type="left" />
+					<Icon type="left"/>
 				</a>
-				{/*<input type={`text`} id={`calendarpicker`} value={friendlyDate} size={inputSize} readOnly/>*/}
-					<DatePicker value={this.state.date}
-								format={"MMM DD, YYYY"}
-								onChange={(date: moment.Moment) => this.changeDate(date)}
-								allowClear={false}/>
-
-
+				{this.props.type === CalendarTypes.Day &&
+				<DatePicker value={this.state.date}
+							format={"MMM DD, YYYY"}
+							onChange={(date: moment.Moment) => this.changeDate(date)}
+							allowClear={false}/>
+				}
+				{this.props.type === CalendarTypes.Month &&
+				<MonthPicker
+					value={this.state.date}
+					onChange={(date: moment.Moment) => this.changeDate(date)}
+					placeholder="Select month"/>
+				}
 				<a className={`next`} onClick={onClickNext} href={`javascript:void(0)`}>
-					<Icon type="right" />
+					<Icon type="right"/>
 				</a>
 			</div>
 		);

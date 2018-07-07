@@ -8,6 +8,8 @@ import {GameSummary} from "./GameSummary";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {TabContainer} from "../shared/TabContainer";
 import moment = require("moment");
+import {Calendar, CalendarTypes} from "../GameList/calendar";
+import {Alert} from "antd";
 
 interface ITeamPageRouteParams
 {
@@ -19,6 +21,7 @@ interface ITeamPageState
 	schedule: ISchedule;
 	teamDetails: IScheduleTeam;
 	settings: ISettings;
+	monthDate: moment.Moment;
 }
 
 export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRouteParams>, ITeamPageState>
@@ -32,7 +35,8 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 		this.state = {
 			schedule: null,
 			teamDetails: null,
-			settings: App.Instance.settingsDispatcher.state
+			settings: App.Instance.settingsDispatcher.state,
+			monthDate: moment()
 		};
 	}
 
@@ -90,14 +94,36 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 				}
 
 				const dates = [...pastGamesForTeams, ...futureGamesForTeams];
-				
-				const datesForMonth = dates.filter(a => moment(a.date).month() == 5);
 
-				const gameSummaries = datesForMonth.map(date => {
+				const datesForMonth = dates.filter(a => moment(a.date).month() == this.state.monthDate.month());
+
+				let gameSummaries: React.ReactNode[] = datesForMonth.map(date => {
 					return date.games.map(game => <GameSummary game={game} hideScores={this.state.settings.hideScores} includeDate={true}/>);
 				});
-				
-				return <div className={`game-list`}>{gameSummaries}</div>;
+
+				if (gameSummaries.length === 0)
+				{
+					gameSummaries.push(
+						<Alert
+							message="No games this month"
+							type="info"
+							showIcon
+						/>
+					);
+				}
+
+				return (
+					<React.Fragment>
+						<Calendar
+							type={CalendarTypes.Month}
+							initialDate={moment()}
+							onDateChange={(monthDate: moment.Moment) => this.setState({monthDate})}/>
+
+						<div className={`game-list`}>
+							{gameSummaries}
+						</div>
+					</React.Fragment>
+				);
 		}
 	}
 

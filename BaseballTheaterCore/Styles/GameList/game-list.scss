@@ -94,16 +94,27 @@
 {
 	margin: 1rem 0;
 
-	.day-nav
+	.tools
 	{
-		justify-content: flex-start;
-		font-size: 1.5rem;
-		flex: 1 0;
-		display: flex;
+		align-items: center;
 		justify-content: center;
+		text-align: center;
 	}
 
-	.day-nav a
+	.tools .hide-scores
+	{
+		margin-left: 20px;
+	}
+}
+
+.day-nav
+{
+	font-size: 1.5rem;
+	flex: 1 0;
+	display: flex;
+	justify-content: center;
+	
+	a
 	{
 		margin: 0 10px;
 		color: $color-accent;
@@ -124,20 +135,9 @@
 
 		i
 		{
-			font-size: 2.5rem;
+			font-size: 2rem;
+			margin-top: 1px;
 		}
-	}
-
-	.tools
-	{
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-	}
-
-	.tools .hide-scores
-	{
-		margin-left: 20px;
 	}
 }
 
@@ -153,7 +153,7 @@
 	transition: 0.25s;
 	text-decoration: none;
 	color: black;
-	background: #fff;
+	background: #FFFFFF;
 	font-family: "bebas", sans-serif;
 	border-left: 0 solid red;
 	opacity: 1;
@@ -198,7 +198,7 @@
 			transform: translateX(-50px);
 		}
 	}
-	
+
 	.date
 	{
 		text-align: right;
@@ -214,7 +214,7 @@
 
 		&.away-team
 		{
-			border-bottom: 1px solid #333;
+			border-bottom: 1px solid #333333;
 		}
 
 		&.home-team
