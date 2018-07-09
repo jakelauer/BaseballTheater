@@ -9,7 +9,7 @@ import {GameSummaryCreator} from "../../MlbDataServer/MlbDataServer";
 import {routes} from "../../routes";
 import {App} from "../Base/app";
 import {Calendar, CalendarTypes} from "./calendar";
-import {GameSummary} from "./game_summary";
+import {GameSummary} from "./GameSummary";
 import {ErrorBoundary} from "../Base/ErrorBoundary";
 
 interface IGameListState

@@ -268,3 +268,69 @@
 		font-size: 1.5rem;
 	}
 }
+
+.game-list-table
+{
+	display: table;
+	width: 100%;
+	margin-top: 2rem;
+}
+
+.game-summary-row
+{
+	display: table-row;
+	width: 100%;
+	color: black;
+	
+	&:hover
+	{
+		text-decoration: none;
+		background: #EEEEEE;
+		color: black;
+	}
+	
+	> *
+	{
+		display: table-cell;
+		padding: 0.25rem 0.5rem;
+		white-space: nowrap;
+	}
+	
+	.win-loss
+	{
+		display: inline-block;
+		width: 1rem;
+		margin-right: 0.5rem;
+		text-align: center;
+		font-weight: bold;
+		
+		&.win
+		{
+			color: #07910E;
+		}
+		
+		&.loss
+		{
+			color: #8E0002;
+		}
+	}
+	
+	.opponent-name
+	{
+		.r-mobile & .city
+		{
+			display: none;
+		}
+	}
+	
+	.score
+	{
+		width: 5rem;
+		text-align: left;
+	}
+	
+	.inning-status
+	{
+		min-width: 7rem;
+	}
+}

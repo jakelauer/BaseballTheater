@@ -28,11 +28,7 @@ export class TabContainer extends React.Component<ITabContainerProps, ITabContai
 	{
 		super(props);
 
-		let activeTabKey = props.defaultActiveTabKey;
-		if (activeTabKey === undefined)
-		{
-			activeTabKey = props.tabs.length > 0 ? props.tabs[0].key : null;
-		}
+		const activeTabKey = this.getTabKey(props);
 
 		this.state = {
 			activeTabKey
@@ -44,6 +40,26 @@ export class TabContainer extends React.Component<ITabContainerProps, ITabContai
 		this.setState({
 			activeTabKey: tab.key
 		});
+	}
+
+	public componentWillReceiveProps(nextProps: ITabContainerProps)
+	{
+		const activeTabKey = this.getTabKey(nextProps);
+		
+		this.setState({
+			activeTabKey
+		});
+	}
+
+	private getTabKey(props: ITabContainerProps)
+	{
+		let activeTabKey = props.defaultActiveTabKey;
+		if (activeTabKey === undefined)
+		{
+			activeTabKey = props.tabs.length > 0 ? props.tabs[0].key : null;
+		}
+
+		return activeTabKey;
 	}
 
 	private renderCurrentTabContent()

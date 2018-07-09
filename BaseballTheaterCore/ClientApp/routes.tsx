@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Route} from "react-router";
 import {AppWrapper} from "./components/Base/AppWrapper";
-import {GameList} from "./components/GameList/game_list";
+import {GameList} from "./components/GameList/GameList";
 import {Search} from "./components/Search/search";
 import {AnalyticsListener} from "./components/Base/AnalyticsListener";
 import {GameDetail} from "./components/GameDetail/GameDetail";
