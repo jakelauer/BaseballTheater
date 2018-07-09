@@ -178,7 +178,7 @@ header
 
 		.menu-item
 		{
-			padding: 0 1rem;
+			padding: 0 2rem;
 			height: 100%;
 			display: flex;
 			align-items: center;
@@ -195,6 +195,7 @@ header
 			&:hover .sub-menu
 			{
 				opacity: 1;
+				pointer-events: auto;
 			}
 
 			.team-menu-list
@@ -216,12 +217,18 @@ header
 					}
 				}
 			}
+			
+			.r-mobile &
+			{
+				padding: 0 1rem;
+			}
 		}
 
 		.sub-menu
 		{
 			position: fixed;
 			display: flex;
+			pointer-events: none;
 			max-height: 50vh;
 			overflow: auto;
 			background: white;
