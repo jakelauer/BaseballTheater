@@ -70,22 +70,12 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		this.gamePk = this.props.match.params.gamePk;
 
-		let defaultTab = GameDetailTabs.Highlights;
-		if (App.isAppMode)
-		{
-			defaultTab = GameDetailTabs.BoxScore;
-		}
-		else if (this.props.match.params.tab)
-		{
-			defaultTab = GameDetailTabs[this.props.match.params.tab];
-		}
-
 		this.state = {
 			game: null,
 			boxScore: null,
 			highlightsCollection: null,
 			gameSummary: null,
-			defaultTab,
+			defaultTab: this.getDefaultTab(this.props),
 			settings: App.Instance.settingsDispatcher.state
 		};
 	}
@@ -114,6 +104,33 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				});
 			}
 		});
+	}
+
+	public componentWillReceiveProps(nextProps: RouteComponentProps<IGameDetailUrlParams>)
+	{
+		this.setTab(nextProps);
+	}
+
+	private setTab(props: RouteComponentProps<IGameDetailUrlParams>)
+	{
+		this.setState({
+			defaultTab: this.getDefaultTab(props)
+		})
+	}
+	
+	private getDefaultTab(props: RouteComponentProps<IGameDetailUrlParams>): GameDetailTabs
+	{
+		let defaultTab = GameDetailTabs.Highlights;
+		if (App.isAppMode)
+		{
+			defaultTab = GameDetailTabs.BoxScore;
+		}
+		else if (this.props.match.params.tab)
+		{
+			defaultTab = GameDetailTabs[props.match.params.tab];
+		}
+		
+		return defaultTab;
 	}
 
 	private getTabUrl(tab: GameDetailTabs)
@@ -250,8 +267,8 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 							<Col className={`boxscore-column`} md={24} lg={14} xl={16}>
 								<MiniBoxScore game={this.state.game} hideScores={this.state.settings.hideScores}/>
 							</Col>
-						</Row>	
-						
+						</Row>
+
 						<GameDetailLive game={this.state.game}
 										isSpringTraining={gameSummary.isSpringTraining}
 										highlights={highlightsCollection}/>
@@ -291,7 +308,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		return (
 			<div className={`tab-content on`} data-tab={currentTab}>
 				<ErrorBoundary>
-				{renderables}
+					{renderables}
 				</ErrorBoundary>
 			</div>
 		);
@@ -310,7 +327,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			const date = this.state.gameSummary.dateObj.format("MMM Do, YYYY");
 			document.title = `${date} - ${this.state.game.gameData.teams.away.name} @ ${this.state.game.gameData.teams.home.name} - Baseball Theater`;
 		}
-		
+
 		const tabs: ITabContainerTab[] = [
 			{
 				key: GameDetailTabs.Live,
@@ -331,10 +348,10 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				render: () => this.renderTabContent(GameDetailTabs.BoxScore)
 			}
 		];
-		
+
 		return (
 			<div className={`game-detail-container`}>
-				<TabContainer tabs={tabs} defaultActiveTabKey={this.state.defaultTab} />
+				<TabContainer tabs={tabs} defaultActiveTabKey={this.state.defaultTab}/>
 			</div>
 		);
 	}

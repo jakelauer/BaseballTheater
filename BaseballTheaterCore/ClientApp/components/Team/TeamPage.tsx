@@ -4,12 +4,13 @@ import {RouteComponentProps} from "react-router";
 import {ISchedule, IScheduleDate, IScheduleTeam, ITeamDetails} from "@MlbDataServer/Contracts/TeamSchedule";
 import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {App} from "../Base/app";
-import {GameSummary} from "./GameSummary";
+import {GameSummaryRow} from "./GameSummaryRow";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {TabContainer} from "../shared/TabContainer";
 import moment = require("moment");
-import {Calendar, CalendarTypes} from "../GameList/calendar";
+import {Calendar, CalendarTypes} from "../GameList/Calendar";
 import {Alert} from "antd";
+import {AuthWrapper} from "../shared/AuthWrapper";
 
 interface ITeamPageRouteParams
 {
@@ -42,22 +43,21 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 
 	public componentDidMount()
 	{
-		this.getData();
+		this.getData(this.state.monthDate);
 
 		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => this.setState({
 			settings: payload
 		}));
 	}
 
-	private async getData()
+	private async getData(date: moment.Moment)
 	{
-
 		App.startLoading();
 
 		const teamCode = this.props.match.params.team;
 
 		const lgc = new LiveGameCreator();
-		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[teamCode]);
+		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[teamCode], date.year());
 		const teamDetails = await lgc.getTeamDetails(Teams.TeamIdList[teamCode]);
 
 		this.setState({
@@ -68,9 +68,18 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 		App.stopLoading();
 	}
 
-	private renderGames()
+	public componentWillUpdate(nextProps: RouteComponentProps<ITeamPageRouteParams>, nextState: ITeamPageState)
 	{
+		console.log(nextState);
 
+		if (nextState.monthDate.year() !== this.state.monthDate.year())
+		{
+			this.setState({
+				schedule: null
+			});
+
+			this.getData(nextState.monthDate);
+		}
 	}
 
 	private renderTabContent(tabKey: string)
@@ -88,8 +97,15 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 					const matchingTeam = schedule.teams.find(a => a.fileCode === teamCode);
 					if (matchingTeam)
 					{
-						pastGamesForTeams = matchingTeam.previousGameSchedule.dates;
-						futureGamesForTeams = matchingTeam.nextGameSchedule.dates;
+						if (matchingTeam.previousGameSchedule)
+						{
+							pastGamesForTeams = matchingTeam.previousGameSchedule.dates || [];
+						}
+
+						if (matchingTeam.nextGameSchedule)
+						{
+							futureGamesForTeams = matchingTeam.nextGameSchedule.dates || [];
+						}
 					}
 				}
 
@@ -98,10 +114,10 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 				const datesForMonth = dates.filter(a => moment(a.date).month() == this.state.monthDate.month());
 
 				let gameSummaries: React.ReactNode[] = datesForMonth.map(date => {
-					return date.games.map(game => <GameSummary game={game} hideScores={this.state.settings.hideScores} includeDate={true}/>);
+					return date.games.map(game => <GameSummaryRow game={game} hideScores={this.state.settings.hideScores} focusedTeamCode={teamCode}/>);
 				});
 
-				if (gameSummaries.length === 0)
+				if (gameSummaries.length === 0 && !App.isLoading)
 				{
 					gameSummaries.push(
 						<Alert
@@ -119,7 +135,7 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 							initialDate={moment()}
 							onDateChange={(monthDate: moment.Moment) => this.setState({monthDate})}/>
 
-						<div className={`game-list`}>
+						<div className={`game-list-table`}>
 							{gameSummaries}
 						</div>
 					</React.Fragment>
@@ -140,17 +156,19 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 		}
 
 		return (
-			<div className={`team-page`}>
-				<h1>{this.state.teamDetails.name}</h1>
-				<TabContainer tabs={[
-					{
-						key: "schedule",
-						label: "Schedule",
-						link: this.getTabLink("schedule"),
-						render: () => this.renderTabContent("schedule")
-					}
-				]}/>
-			</div>
+			<AuthWrapper>
+				<div className={`team-page`}>
+					<h1>{this.state.teamDetails.name}</h1>
+					<TabContainer tabs={[
+						{
+							key: "schedule",
+							label: "Schedule",
+							link: this.getTabLink("schedule"),
+							render: () => this.renderTabContent("schedule")
+						}
+					]}/>
+				</div>
+			</AuthWrapper>
 		);
 	}
 }

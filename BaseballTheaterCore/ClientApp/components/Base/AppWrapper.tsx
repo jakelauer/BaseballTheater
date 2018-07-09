@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import {ISettings} from "../../DataStore/SettingsDispatcher";
 import Config from "../Config/config";
 import {Search} from "../Search/search";
-import {Modal} from "antd";
+import {Icon, Modal} from "antd";
 import {App} from "./app";
 import {AuthContext} from "./AuthContext";
 import {SearchBox} from "./SearchBox";
@@ -12,6 +12,7 @@ import {SettingsContainer} from "./Settings";
 import {SettingsButton} from "./SettingsButton";
 import React = require("react");
 import {ErrorBoundary} from "./ErrorBoundary";
+import {ITeams, Teams} from "@MlbDataServer/Contracts";
 
 interface IAppState
 {
@@ -67,7 +68,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		});
 	}
 
-	private static renderLoginButton()
+	public static renderLoginButton()
 	{
 		if (!Config.loginEnabled)
 		{
@@ -103,6 +104,21 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		this.context.router.history.push(`/Search/${query}`);
 	}
 
+	private renderTeams(label: string,  teamCodes: (keyof ITeams)[])
+	{
+		const teamLinks = teamCodes.map(team => {
+			const teamName = Teams.TeamList[team];
+			return <div>
+				<Link to={`/team/${team}`}>{teamName}</Link>
+			</div>;
+		});
+		
+		return <div className={`team-menu-list`}>
+			<div className={`team-menu-list-label`}>{label}</div>
+			<div className={`team-menu-list-contents`}>{teamLinks}</div>
+		</div>;
+	}
+
 	public render()
 	{
 		const loadingClass = this.state.isLoading ? "loading" : "";
@@ -117,6 +133,20 @@ export class AppWrapper extends React.Component<{}, IAppState>
 							<span className={`logo-circle`}/>
 							<span className={`logo-text`}>Baseball Theater</span>
 						</Link>
+
+						<div className={`menu`}>
+							<div className={`menu-item`}>
+								<div className={`label`}>Teams <Icon type="down" /></div>
+								<div className={`sub-menu`}>
+									{this.renderTeams("AL East", ["bal", "bos", "nyy", "tb", "tor"])}
+									{this.renderTeams("AL Central", ["cws", "cle", "det", "kc", "min"])}
+									{this.renderTeams("AL West", ["hou", "laa", "oak", "sea", "tex"])}
+									{this.renderTeams("NL East", ["atl", "mia", "nym", "phi", "was"])}
+									{this.renderTeams("NL Central", ["chc", "cin", "mil", "pit", "stl"])}
+									{this.renderTeams("NL West", ["ari", "col", "la", "sd", "sf"])}
+								</div>
+							</div>
+						</div>
 
 						<div className={`right`}>
 							<SearchBox query={search} onPerformSearch={query => this.performSearch(query)}/>

@@ -5,6 +5,7 @@ import {ISettings} from "../../DataStore/SettingsDispatcher";
 import {Teams} from "@MlbDataServer/Contracts";
 import Config from "../Config/config";
 import {App} from "./app";
+import {AppWrapper} from "./AppWrapper";
 
 interface ISettingsContainerProps
 {
@@ -110,6 +111,9 @@ export class SettingsContainer extends React.Component<ISettingsContainerProps, 
 	{
 		return (
 			<div className={`settings-container`}>
+
+				{AppWrapper.renderLoginButton()}
+				
 				<SettingDisplay
 					label={"Favorite Team"}
 					description={"Set your favorite team to sort their games to the top in the games list"}>
