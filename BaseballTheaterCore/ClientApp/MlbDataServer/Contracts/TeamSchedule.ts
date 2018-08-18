@@ -1,4 +1,4 @@
-import {AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore} from "@MlbDataServer/Contracts/Live";
+import {AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore, Player} from "@MlbDataServer/Contracts/Live";
 
 export interface ISchedule
 {
@@ -47,6 +47,13 @@ export interface IScheduleGame
 	gamesInSeries: number;
 	seriesGameNumber: number;
 	seriesDescription: string;
+	decisions: IScheduleGameDecisions;
+}
+
+export interface IScheduleGameDecisions
+{
+	winner: Player;
+	loser: Player;
 }
 
 export interface IScheduleTeamItem

@@ -89,6 +89,7 @@ export class TabContainer extends React.Component<ITabContainerProps, ITabContai
 			<div className={`tab-container-wrapper`}>
 				<div className={`tabs`}>
 					<div className={`tab-container`}>
+						{this.props.children}
 						{tabsRendered}
 					</div>
 				</div>

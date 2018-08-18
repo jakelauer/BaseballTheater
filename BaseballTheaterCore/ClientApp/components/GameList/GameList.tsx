@@ -155,10 +155,13 @@ export class GameList extends React.Component<RouteComponentProps<IGameListRoute
 						<Link to={`/search/recap/${gameIds}`}><Icon type="play-circle"/> Recaps</Link>
 					</Button>
 					<Button>
-						<Link to={`/search/condensed/${gameIds}`}><Icon type="play-circle"/> Condensed Games</Link>
+						<Link to={`/search/condensed/${gameIds}`}><Icon type="play-circle"/> Condensed</Link>
 					</Button>
 					<Button>
-						<Link to={`/search/must c/${gameIds}`}><Icon type="play-circle"/> Must C clips</Link>
+						<Link to={`/search/must c/${gameIds}`}><Icon type="play-circle"/> Must C</Link>
+					</Button>
+					<Button>
+						<Link to={`/search/statcast/${gameIds}`}><Icon type="play-circle"/> Statcast</Link>
 					</Button>
 				</Button.Group>
 			</div>

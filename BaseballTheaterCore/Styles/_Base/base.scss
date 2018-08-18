@@ -176,23 +176,46 @@ header
 		display: flex;
 		align-items: center;
 
+		.not-authed-message
+		{
+			width: 100%;
+			padding-top: 0.5rem;
+
+			a
+			{
+				color: $color-accent;
+				padding: 0.5rem 1rem;
+				background: #EEEEEE;
+			}
+		}
+
+		@at-root
+		{
+			.authenticated .not-authed-message
+			{
+				display: none;
+			}
+		}
+
 		.menu-item
 		{
 			padding: 0 2rem;
 			height: 100%;
 			display: flex;
 			align-items: center;
+			cursor: default;
 
 			i
 			{
 				font-size: 0.8em;
 			}
-			
-			.label{
+
+			.label
+			{
 				white-space: nowrap;
 			}
 
-			&:hover .sub-menu
+			&.active .sub-menu
 			{
 				opacity: 1;
 				pointer-events: auto;
@@ -203,10 +226,10 @@ header
 				text-align: left;
 				padding: 1rem 3rem;
 				width: percentage(1/3);
-				
+
 				.r-mobile &
 				{
-					border-bottom: 1px solid #EEE;
+					border-bottom: 1px solid #EEEEEE;
 					width: 100%;
 
 					.team-menu-list-label,
@@ -217,7 +240,7 @@ header
 					}
 				}
 			}
-			
+
 			.r-mobile &
 			{
 				padding: 0 1rem;
@@ -236,10 +259,9 @@ header
 			left: 0;
 			width: 100vw;
 			flex-wrap: wrap;
-			box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+			box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
 			padding-bottom: 1rem;
 			opacity: 0;
-			transition: 0.5s;
 		}
 	}
 
@@ -303,7 +325,6 @@ header
 			text-align: left;
 			left: 100%;
 			margin-left: -50%;
-			transition: 0.25s;
 			display: flex;
 			font-size: 1rem;
 			align-items: center;
@@ -400,7 +421,7 @@ header
 			}
 		}
 	}
-	
+
 	html:not(.r-mobile) &
 	{
 		.login.button

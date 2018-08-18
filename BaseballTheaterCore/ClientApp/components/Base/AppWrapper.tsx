@@ -13,6 +13,7 @@ import {SettingsButton} from "./SettingsButton";
 import React = require("react");
 import {ErrorBoundary} from "./ErrorBoundary";
 import {ITeams, Teams} from "@MlbDataServer/Contracts";
+import {MenuItem} from "./MenuItem";
 
 interface IAppState
 {
@@ -104,7 +105,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		this.context.router.history.push(`/Search/${query}`);
 	}
 
-	private renderTeams(label: string,  teamCodes: (keyof ITeams)[])
+	private renderTeams(label: string, teamCodes: (keyof ITeams)[])
 	{
 		const teamLinks = teamCodes.map(team => {
 			const teamName = Teams.TeamList[team];
@@ -112,7 +113,7 @@ export class AppWrapper extends React.Component<{}, IAppState>
 				<Link to={`/team/${team}`}>{teamName}</Link>
 			</div>;
 		});
-		
+
 		return <div className={`team-menu-list`}>
 			<div className={`team-menu-list-label`}>{label}</div>
 			<div className={`team-menu-list-contents`}>{teamLinks}</div>
@@ -124,9 +125,12 @@ export class AppWrapper extends React.Component<{}, IAppState>
 		const loadingClass = this.state.isLoading ? "loading" : "";
 		const appModeClass = "";//this.props.isAppMode ? "app-mode" : "";
 		const search = Search.getQuery();
+		const authClass = AuthContext.Instance.IsAuthenticated
+			? "authenticated"
+			: "not-authenticated";
 
 		return (
-			<div className={`app-container ${appModeClass}`}>
+			<div className={`app-container ${appModeClass} ${authClass}`}>
 				<header>
 					<div className={`header-content`}>
 						<Link className={`logo-link`} to={`/`}>
@@ -135,17 +139,19 @@ export class AppWrapper extends React.Component<{}, IAppState>
 						</Link>
 
 						<div className={`menu`}>
-							<div className={`menu-item`}>
-								<div className={`label`}>Teams <Icon type="down" /></div>
-								<div className={`sub-menu`}>
-									{this.renderTeams("AL East", ["bal", "bos", "nyy", "tb", "tor"])}
-									{this.renderTeams("AL Central", ["cws", "cle", "det", "kc", "min"])}
-									{this.renderTeams("AL West", ["hou", "laa", "oak", "sea", "tex"])}
-									{this.renderTeams("NL East", ["atl", "mia", "nym", "phi", "was"])}
-									{this.renderTeams("NL Central", ["chc", "cin", "mil", "pit", "stl"])}
-									{this.renderTeams("NL West", ["ari", "col", "la", "sd", "sf"])}
+							<MenuItem label={<span>Teams &nbsp;<i className="fab fa-patreon"/></span>}>
+								<div className={`not-authed-message`}>
+									<a href={`/Auth/Login`}>
+										<i className="fab fa-patreon"/> This featured reserved for Patreon subscribers
+									</a>
 								</div>
-							</div>
+								{this.renderTeams("AL East", ["bal", "bos", "nyy", "tb", "tor"])}
+								{this.renderTeams("AL Central", ["cws", "cle", "det", "kc", "min"])}
+								{this.renderTeams("AL West", ["hou", "laa", "oak", "sea", "tex"])}
+								{this.renderTeams("NL East", ["atl", "mia", "nym", "phi", "was"])}
+								{this.renderTeams("NL Central", ["chc", "cin", "mil", "pit", "stl"])}
+								{this.renderTeams("NL West", ["ari", "col", "la", "sd", "sf"])}
+							</MenuItem>
 						</div>
 
 						<div className={`right`}>

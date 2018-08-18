@@ -6,6 +6,7 @@
 	bos: string;
 	chc: string;
 	cws: string;
+	chw: string;
 	cin: string;
 	cle: string;
 	col: string;
@@ -41,6 +42,7 @@ export class Teams
 		bos: "Boston Red Sox",
 		chc: "Chicago Cubs",
 		cws: "Chicago White Sox",
+		chw: "Chicago White Sox",
 		cin: "Cincinnati Reds",
 		cle: "Cleveland Indians",
 		col: "Colorado Rockies",
@@ -126,6 +128,7 @@ export class Teams
 		"phi": 143,
 		"atl": 144,
 		"chw": 145,
+		"cws": 145,
 		"mia": 146,
 		"nyy": 147,
 		"mil": 158,
