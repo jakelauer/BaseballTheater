@@ -1,5 +1,5 @@
-﻿import * as X2JS from "x2js"
-import "abortcontroller-polyfill/dist/polyfill-patch-fetch"
+﻿import * as X2JS from "x2js";
+import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
 
 interface ProxyModel<T>
 {
@@ -25,8 +25,7 @@ export default class Internal_DataLoader
 			delete this.requests[uniqueRequestType];
 		}
 
-		const promise = new Promise((resolve: (value: any) => void, reject: (error: any) => void) =>
-		{
+		const promise = new Promise((resolve: (value: any) => void, reject: (error: any) => void) => {
 			const controller = new AbortController();
 			const signal = controller.signal;
 			const request = new Request(proxyUrl, {signal});
@@ -34,8 +33,7 @@ export default class Internal_DataLoader
 			fetch(request)
 				.then((response: Response) => response.json())
 				.then((myJson: any) => resolve(myJson))
-				.catch((error: any) =>
-				{
+				.catch((error: any) => {
 					if (error.statusText === "abort")
 					{
 						return;
@@ -50,8 +48,7 @@ export default class Internal_DataLoader
 			}
 		});
 
-		promise.then(() =>
-		{
+		promise.then(() => {
 			delete this.requests[uniqueRequestType];
 		});
 
@@ -63,6 +60,10 @@ export default class Internal_DataLoader
 		const result = await this.load<T>(url, true, uniqueRequestType);
 		if (typeof result.data === "string")
 		{
+			if (result.data.length === 0)
+			{
+				return null;
+			}
 			return JSON.parse(result.data) as T;
 		}
 
@@ -83,7 +84,7 @@ export default class Internal_DataLoader
 			objResult = result;
 		}
 
-		return this.xmlToJson(objResult.data as string) as T
+		return this.xmlToJson(objResult.data as string) as T;
 	}
 
 	private static xmlToJson(xmlString: string)
@@ -91,14 +92,12 @@ export default class Internal_DataLoader
 		const x = new X2JS({
 			attributePrefix: ""
 		});
-		const json = x.xml2js(xmlString);
-		return json;
+		return x.xml2js(xmlString);
 	}
 
 	private static transformUrl(url: string, isJson: boolean)
 	{
 		const encodedUrl = encodeURIComponent(url);
-		const proxyUrl = `/api/Proxy/Get?mlbUrl=${encodedUrl}&isJson=${isJson}`;
-		return proxyUrl;
+		return `/api/Proxy/Get?mlbUrl=${encodedUrl}&isJson=${isJson}`;
 	}
 }

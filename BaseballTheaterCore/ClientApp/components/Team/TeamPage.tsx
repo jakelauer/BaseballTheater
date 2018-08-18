@@ -23,6 +23,7 @@ interface ITeamPageState
 	teamDetails: IScheduleTeam;
 	settings: ISettings;
 	monthDate: moment.Moment;
+	loadAttempted: boolean;
 }
 
 export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRouteParams>, ITeamPageState>
@@ -37,7 +38,8 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 			schedule: null,
 			teamDetails: null,
 			settings: App.Instance.settingsDispatcher.state,
-			monthDate: moment()
+			monthDate: moment(),
+			loadAttempted: false
 		};
 	}
 
@@ -60,11 +62,21 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[teamCode], date.year());
 		const teamDetails = await lgc.getTeamDetails(Teams.TeamIdList[teamCode]);
 
-		this.setState({
-			schedule,
-			teamDetails: teamDetails.teams[0]
-		});
-
+		if (schedule != null && teamDetails!.teams != null)
+		{
+			this.setState({
+				schedule,
+				teamDetails: teamDetails.teams[0],
+				loadAttempted: true
+			});
+		}
+		else
+		{
+			this.setState({
+				loadAttempted: true
+			});
+		}
+		
 		App.stopLoading();
 	}
 
@@ -114,7 +126,8 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 				const datesForMonth = dates.filter(a => moment(a.date).month() == this.state.monthDate.month());
 
 				let gameSummaries: React.ReactNode[] = datesForMonth.map(date => {
-					return date.games.map(game => <GameSummaryRow game={game} hideScores={this.state.settings.hideScores} focusedTeamCode={teamCode}/>);
+					return date.games.map(game => 
+						<GameSummaryRow game={game} hideScores={this.state.settings.hideScores} focusedTeamCode={teamCode}/>);
 				});
 
 				if (gameSummaries.length === 0 && !App.isLoading)
@@ -136,6 +149,15 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 							onDateChange={(monthDate: moment.Moment) => this.setState({monthDate})}/>
 
 						<div className={`game-list-table`}>
+							<div className={`game-summary-row labels`}>
+								<div>Date</div>
+								<div>Team</div>
+								<div className={`winner`}>Winner</div>
+								<div className={`loser`}>Loser</div>
+								<div>Record</div>
+								<div>Score</div>
+								<div>Status</div>
+							</div>
 							{gameSummaries}
 						</div>
 					</React.Fragment>
@@ -152,13 +174,17 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 	{
 		if (!this.state.teamDetails)
 		{
+			if (this.state.loadAttempted)
+			{
+				throw `No team data found for ${this.props.match.params.team}`;
+			}
+			
 			return null;
 		}
 
 		return (
 			<AuthWrapper>
 				<div className={`team-page`}>
-					<h1>{this.state.teamDetails.name}</h1>
 					<TabContainer tabs={[
 						{
 							key: "schedule",
@@ -166,7 +192,9 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 							link: this.getTabLink("schedule"),
 							render: () => this.renderTabContent("schedule")
 						}
-					]}/>
+					]}>
+						<h1>{this.state.teamDetails.name}</h1>
+					</TabContainer>
 				</div>
 			</AuthWrapper>
 		);

@@ -70,26 +70,38 @@ export class GameSummaryRow extends React.Component<GameSummaryRowProps, IGameSu
 
 		const focusedTeam = game.teams.home.team.fileCode === this.props.focusedTeamCode ? game.teams.home : game.teams.away;
 		const focusedTeamWon = winner.team.fileCode === focusedTeam.team.fileCode;
-		
+
 		const winClass = focusedTeamWon ? "win" : "loss";
 		const winLoss = focusedTeamWon ? "W" : "L";
 
 		return (
-			<Link className={`game-summary-row ${gameStatusClass}`} to={this.getGameLink()}>
-				<div className={`date`}>{gameDate.format("M/D")}</div>
+			<div className={`game-summary-row ${gameStatusClass}`}>
+				<Link to={this.getGameLink()} className={`date`}>
+					{gameDate.format("M/D")}
+				</Link>
 
 				{this.renderOpponent()}
 
-				{isFinal &&
-				<div className={`record`}>
-					{focusedTeam.leagueRecord.wins} - {focusedTeam.leagueRecord.losses}
-				</div>
-				}
 
-				{!isStarted &&
-				<div className={`probables`}>
+				<div className={`winner`}>
+					{game.decisions &&
+					<span>W: {Utility.Mlb.renderPlayerLink(game.decisions.winner)}</span>
+					}
 				</div>
-				}
+
+				<div className={`loser`}>
+					{game.decisions &&
+					<span>L: {Utility.Mlb.renderPlayerLink(game.decisions.loser)}</span>
+					}
+				</div>
+
+				<div className={`record`}>
+					{isFinal &&
+					<React.Fragment>
+						{focusedTeam.leagueRecord.wins} - {focusedTeam.leagueRecord.losses}
+					</React.Fragment>
+					}
+				</div>
 
 				<div className={`score`}>
 					{isStarted &&
@@ -105,7 +117,7 @@ export class GameSummaryRow extends React.Component<GameSummaryRowProps, IGameSu
 				<div className={`inning-status`}>
 					<span>{this.getCurrentInning()}</span>
 				</div>
-			</Link>
+			</div>
 		);
 	}
 
@@ -117,14 +129,20 @@ export class GameSummaryRow extends React.Component<GameSummaryRowProps, IGameSu
 			? HomeAway.Away
 			: HomeAway.Home;
 
-		const teamCity = teamType === HomeAway.Away ? game.teams.away.team.locationName : game.teams.home.team.locationName;
-		const teamName = teamType === HomeAway.Away ? game.teams.away.team.teamName : game.teams.home.team.teamName;
+		const teamName = teamType === HomeAway.Away
+			? game.teams.away.team.name
+			: game.teams.home.team.name;
+
+		const teamCode = teamType === HomeAway.Away
+			? game.teams.away.team.fileCode
+			: game.teams.home.team.fileCode;
+
 		const vsType = teamType === HomeAway.Home ? "@" : "vs";
 
 		return (
 			<React.Fragment>
 				<div className={`opponent-name`}>
-					{vsType} <span className="city">{teamCity}</span> {teamName}
+					{vsType} <Link to={`/team/${teamCode}`}>{teamName}</Link>
 				</div>
 			</React.Fragment>
 		);

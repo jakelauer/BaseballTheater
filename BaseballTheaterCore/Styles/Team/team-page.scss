@@ -4,6 +4,15 @@
 	{
 		padding: 1rem;
 		font-family: "bebas", sans-serif;
-		font-size: 3rem;
+		font-size: 2rem;
+	}
+	
+	.r-mobile &
+	{
+		.winner,
+		.loser
+		{
+			display: none;
+		}
 	}
 }

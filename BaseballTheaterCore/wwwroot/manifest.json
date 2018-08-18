@@ -1,0 +1,21 @@
+﻿{
+  "short_name": "BT",
+  "name": "Baseball Theater",
+  "icons": [
+			{
+				"src": "/images/logo-circle.png",
+				"type": "image/png",
+				"sizes": "192x192"
+			},
+    {
+      "src": "/images/logo-circle.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "background_color": "#FFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ce0f0f"
+}

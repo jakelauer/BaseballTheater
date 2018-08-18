@@ -15,7 +15,7 @@ export enum Environments
 
 const configs: { [key: string]: IEnvironmentOverride<any> } = {
 	"loginEnabled": {
-		defaultValue: false,
+		defaultValue: true,
 		local: true,
 		beta: true
 	},
@@ -51,18 +51,18 @@ export default class Config
 
 	private static getValueForEnvironment<T>(setting: IEnvironmentOverride<T>, ifNotFound: T)
 	{
-		let value = setting.defaultValue;
+		let value = setting !== undefined ? setting.defaultValue : ifNotFound;
 		
 		switch (this.Environment)
 		{
 			case Environments.Local:
-				value = setting.local;
+				if (setting.prod !== undefined) value = setting.local;
 				break;
 			case Environments.Beta:
-				value = setting.beta;
+				if (setting.prod !== undefined) value = setting.beta;
 				break;
 			case Environments.Prod:
-				value = setting.prod;
+				if (setting.prod !== undefined) value = setting.prod;
 				break;
 		}
 
