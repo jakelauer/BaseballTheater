@@ -58,9 +58,8 @@ export class TeamPage extends React.Component<RouteComponentProps<ITeamPageRoute
 
 		const teamCode = this.props.match.params.team;
 
-		const lgc = new LiveGameCreator();
-		const schedule = await lgc.getTeamSchedule(Teams.TeamIdList[teamCode], date.year());
-		const teamDetails = await lgc.getTeamDetails(Teams.TeamIdList[teamCode]);
+		const schedule = await LiveGameCreator.getTeamSchedule(Teams.TeamIdList[teamCode], date.year());
+		const teamDetails = await LiveGameCreator.getTeamDetails(Teams.TeamIdList[teamCode]);
 
 		if (schedule != null && teamDetails!.teams != null)
 		{

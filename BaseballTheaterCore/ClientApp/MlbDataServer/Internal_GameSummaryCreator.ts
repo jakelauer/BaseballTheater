@@ -1,6 +1,7 @@
 ﻿import {GameSummaryCollection} from "./Contracts";
-import {Moment} from "moment/moment"
+import {Moment} from "moment/moment";
 import Internal_DataLoader from "./Utils/Internal_DataLoader";
+import Internal_DataLoaderNode from "@MlbDataServer/Utils/Internal_DataLoaderNode";
 
 export default class Internal_GameSummaryCreator
 {
@@ -17,12 +18,27 @@ export default class Internal_GameSummaryCreator
 
 	public static async getSummaryCollection(date: Moment)
 	{
-		const url = this.buildUrl(date);
+		return new Promise<GameSummaryCollection>((resolve, reject) => {
+			const url = this.buildUrl(date);
 
-		const gameSummaryCollectionData = await Internal_DataLoader.loadXml<GameSummaryCollection>(url, "gameSummaryCollection");
+			const gameSummaryCollectionDataPromise = Internal_DataLoader.loadXml<GameSummaryCollection>(url, "gameSummaryCollection");
 
-		const gameSummaryCollection = new GameSummaryCollection(gameSummaryCollectionData);
+			gameSummaryCollectionDataPromise.then(data => {
+				resolve(new GameSummaryCollection(data));
+			}).catch(error => reject(error));
+		});
+	}
 
-		return gameSummaryCollection;
+	public static async getSummaryCollectionNode(date: Moment)
+	{
+		return new Promise<GameSummaryCollection>((resolve, reject) => {
+			const url = this.buildUrl(date);
+
+			const gameSummaryCollectionDataPromise = Internal_DataLoaderNode.loadXml<GameSummaryCollection>(url, "gameSummaryCollection");
+
+			gameSummaryCollectionDataPromise.then(data => {
+				resolve(new GameSummaryCollection(data));
+			}).catch(error => reject(error));
+		});
 	}
 }
