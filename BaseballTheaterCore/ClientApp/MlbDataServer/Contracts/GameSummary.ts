@@ -1,6 +1,7 @@
 ﻿import {IGameStatus, ISummaryLinescore, Linescore} from "./linescore";
 import {IHighlight} from "./highlight";
 import * as moment from "moment"
+const momentTz = require("moment-timezone");
 
 interface HighlightContainer
 {
@@ -146,9 +147,9 @@ export class GameSummaryData implements IGameSummaryData
 		const fmt = "YYYY/MM/DD hh:mm";
 		const zone = "America/New_York";
 
-		const timeEstRaw = moment.tz(input, fmt, zone);
+		const timeEstRaw = momentTz(input, fmt, zone);
 		const hoursToAdd = Number(timeEstRaw.format("hh")) >= 12 ? 0 : 12;
-		const timeEst = moment.tz(input, fmt, zone).add(hoursToAdd, "hours");
+		const timeEst = momentTz(input, fmt, zone).add(hoursToAdd, "hours");
 
 		this.id = data.id;
 		this.game_pk = data.game_pk;

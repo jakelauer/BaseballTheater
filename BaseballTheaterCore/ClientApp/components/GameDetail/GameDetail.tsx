@@ -233,9 +233,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 		console.log("Updating live data...");
 
-		const lgc = new LiveGameCreator();
-
-		const game = await lgc.getLiveGame(this.props.match.params.gamePk);
+		const game = await LiveGameCreator.getLiveGame(this.props.match.params.gamePk);
 
 		this.setState({
 			game

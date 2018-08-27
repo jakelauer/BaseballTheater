@@ -1,10 +1,10 @@
 ﻿export class InternalPromisesUtility
 {
-	public static async all(promises: Promise<any>[])
+	public static async all<T>(promises: Promise<T | Error>[])
 	{
-		const p = new Promise<(any | Error)[]>((resolve, reject) =>
+		const p = new Promise<(T | Error)[]>((resolve, reject) =>
 		{
-			const results: (any | Error)[] = [];
+			const results: (T | Error)[] = [];
 			let count = 0;
 			promises.forEach((promise, idx) =>
 			{
