@@ -45,11 +45,10 @@ export class GameChecker
 
 	private async getAndCheckGameSummaryData()
 	{
-		console.log(`Checking game summaries for ${moment()}`);
-
 		try
 		{
-			const gamesPromise = GameSummaryCreator.getSummaryCollectionNode(moment());
+			const today = moment().add(-8, "hours");
+			const gamesPromise = GameSummaryCreator.getSummaryCollectionNode(today);
 
 			gamesPromise.then(gamesForToday => {
 				if (gamesForToday && gamesForToday.games && gamesForToday.games.game)
