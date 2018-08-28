@@ -1,6 +1,6 @@
 ﻿import * as React from "react";
 import {Icon, List} from "antd";
-import {GameData, IPlayer, LiveGamePlay, LiveGamePlayEvent, Player} from "@MlbDataServer/Contracts";
+import {BoxScorePlayer, GameData, IPlayer, LiveGamePlay, LiveGamePlayEvent, Player} from "@MlbDataServer/Contracts";
 import {IPlayByPlayPitchData} from "../../components/GameDetail/play-by-play/play_by_play_pitches";
 import {AbstractFullnameIdLink, LiveData, PlayerWithStats, PlayerWithBoxScoreStats} from "@MlbDataServer/Contracts/live";
 
@@ -82,7 +82,7 @@ export class InternalMlbUtility
 		return playerList.map(a => a.id);
 	}
 
-	public static getStatsForPlayerId(playerId: number | string, liveData: LiveData): PlayerWithBoxScoreStats
+	public static getStatsForPlayerId(playerId: number | string, liveData: LiveData): BoxScorePlayer
 	{
 		const allPlayerStats = { ...liveData.liveData.boxscore.teams.away.players, ...liveData.liveData.boxscore.teams.home.players };
 		return allPlayerStats[playerId] || allPlayerStats[`ID${playerId}`];

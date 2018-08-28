@@ -46,7 +46,46 @@ export interface LiveGameBoxscoreOfficial
 export interface BoxscoreTeam extends AbstractIdLinkName
 {
 	team: AbstractIdLinkName;
-	players: PlayerWithBoxScoreStats[];
+	players: BoxScorePlayer[];
+	batters: number[];
+	pitchers: number[];
+	bench: number[];
+	bullpen: number[];
+	teamStats: {
+		batting: any;
+		fielding: any;
+		pitching: any;
+	}
+}
+
+export interface BoxScorePlayer
+{
+	allPositions: AbstractAbbreviationCodeNameType[];
+	gameStatus: {
+		isCurrentBatter: boolean;
+		isCurrentPitcher: boolean;
+		isOnBench: boolean;
+		isSubstitute: boolean;
+	};
+	jerseyNumber: string;
+	parentTeamId: number;
+	person: AbstractFullnameIdLink;
+	position: AbstractAbbreviationCodeNameType;
+	seasonStats: {
+		batting: any;
+		fielding: any;
+		pitching: any;
+	};
+	stats: any;
+	status: CodeDescription;
+}
+
+interface AbstractAbbreviationCodeNameType
+{
+	abbreviation: string;
+	code: string;
+	name: string;
+	type: string;
 }
 
 export interface LiveGameLinescore
