@@ -15,6 +15,7 @@
     "@types/react-router": "4.0.12",
     "@types/react-router-dom": "4.0.5",
     "@types/signalr-no-jquery": "0.1.0",
+    "@types/snoowrap": "^1.16.0",
     "@types/webpack-env": "1.13.0",
     "@types/node": "10.9.2",
     "@types/node-fetch": "^2.1.2",

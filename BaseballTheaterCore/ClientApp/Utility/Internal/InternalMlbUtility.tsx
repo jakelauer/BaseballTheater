@@ -70,7 +70,8 @@ export class InternalMlbUtility
 			return gameStatusCode.startsWith("F")
 				|| gameStatusCode.startsWith("C")
 				|| gameStatusCode === "DR"
-				|| gameStatusCode === "O";
+				|| gameStatusCode === "O"
+				|| gameStatusCode === "UR";
 		}
 		
 		return true;
