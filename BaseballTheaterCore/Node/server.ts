@@ -1,9 +1,6 @@
 ﻿import * as http from "http";
 import {NoHitterChecker} from "./Checkers/NoHitterChecker";
 import {GameChecker} from "./GameChecker";
-import moment = require("moment");
-import {Utility} from "@Utility/index";
-import {CustomStorage} from "./CustomStorage";
 import {RedditAccess} from "./RedditAccess";
 
 const hostname = '127.0.0.1';
@@ -26,4 +23,3 @@ RedditAccess.Instance.initialize();
 GameChecker.Instance.addDetailCheck((game) => NoHitterChecker.check(game));
 
 GameChecker.Instance.start();
-
