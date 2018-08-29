@@ -76,7 +76,11 @@ export interface BoxScorePlayer
 		fielding: any;
 		pitching: any;
 	};
-	stats: any;
+	stats: {
+		batting: any;
+		fielding: any;
+		pitching: any;
+	};
 	status: CodeDescription;
 }
 
