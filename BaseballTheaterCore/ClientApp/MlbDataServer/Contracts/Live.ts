@@ -160,7 +160,7 @@ export interface LiveGamePlayByInning
 	endIndex: number;
 	top: number[];
 	bottom: number[];
-	hits: AbstractHomeAway<LiveGamePlayHit>
+	hits: AbstractHomeAway<LiveGamePlayHit[]>
 }
 
 export interface AbstractHomeAway<T>
