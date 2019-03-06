@@ -1,4 +1,4 @@
-﻿import {BoxScoreData, GameSummaryData, IHighlightsCollection, LiveData} from "@MlbDataServer/Contracts";
+﻿import {BoxScoreData, GameSummaryData, LiveData} from "@MlbDataServer/Contracts";
 import {GameDetailCreator, GameSummaryCreator, LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
 import {Subscription} from "@Utility/Subscribable";
@@ -31,7 +31,7 @@ interface IGameDetailState
 	game: LiveData;
 	gameSummary: GameSummaryData | null;
 	boxScore: BoxScoreData | null;
-	highlightsCollection: IHighlightsCollection | null;
+	gameMedia: GameMedia;
 	defaultTab: GameDetailTabs;
 	settings: ISettings | null;
 }
@@ -73,7 +73,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		this.state = {
 			game: null,
 			boxScore: null,
-			highlightsCollection: null,
+			gameMedia: null,
 			gameSummary: null,
 			defaultTab: this.getDefaultTab(this.props),
 			settings: App.Instance.settingsDispatcher.state
@@ -82,7 +82,8 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 	public componentWillMount()
 	{
-		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload => {
+		this.settingsDispatcherKey = App.Instance.settingsDispatcher.register(payload =>
+		{
 			let defaultTab = payload.defaultTab;
 			if (defaultTab === "PlayByPlay")
 			{
@@ -117,7 +118,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			defaultTab: this.getDefaultTab(props)
 		})
 	}
-	
+
 	private getDefaultTab(props: RouteComponentProps<IGameDetailUrlParams>): GameDetailTabs
 	{
 		let defaultTab = GameDetailTabs.Highlights;
@@ -129,7 +130,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		{
 			defaultTab = GameDetailTabs[props.match.params.tab];
 		}
-		
+
 		return defaultTab;
 	}
 
@@ -149,10 +150,9 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		this.unsubscribeToLiveData();
 	}
 
-	private static async getHighlights(currentGame: GameSummaryData): Promise<IHighlightsCollection>
+	private static async getHighlights(currentGame: GameSummaryData): Promise<GameMedia>
 	{
-		const gameDetailCreator = new GameDetailCreator(currentGame.game_data_directory, false);
-		return await gameDetailCreator.getHighlights();
+		return await LiveGameCreator.getGameMedia(currentGame.game_pk);
 	}
 
 	private static async getBoxScore(currentGame: GameSummaryData): Promise<BoxScoreData>
@@ -171,10 +171,12 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 	private getCurrentGame(): Promise<GameSummaryData>
 	{
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve, reject) =>
+		{
 			const summaries = GameSummaryCreator.getSummaryCollection(this.date);
 
-			summaries.then((gameSummaryCollection) => {
+			summaries.then((gameSummaryCollection) =>
+			{
 				if (gameSummaryCollection.games && gameSummaryCollection.games.game)
 				{
 					const gameList = gameSummaryCollection.games.game;
@@ -200,7 +202,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		{
 			const gameSummary = await this.getCurrentGame();
 			const boxScore = await GameDetail.getBoxScore(gameSummary);
-			const highlightsCollection = await GameDetail.getHighlights(gameSummary);
+			const gameMedia = await GameDetail.getHighlights(gameSummary);
 
 			await this.updateLiveData();
 
@@ -212,7 +214,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 			this.setState({
 				gameSummary,
 				boxScore,
-				highlightsCollection,
+				gameMedia,
 			});
 
 			App.stopLoading();
@@ -234,9 +236,11 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 		console.log("Updating live data...");
 
 		const game = await LiveGameCreator.getLiveGame(this.props.match.params.gamePk);
+		const gameMedia = await LiveGameCreator.getGameMedia(this.props.match.params.gamePk);
 
 		this.setState({
-			game
+			game,
+			gameMedia
 		});
 
 		App.stopLoading();
@@ -245,7 +249,7 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 	private renderTabContent(currentTab: GameDetailTabs | null)
 	{
 		const boxScoreData = this.state.boxScore;
-		const highlightsCollection = this.state.highlightsCollection;
+		const gameMedia = this.state.gameMedia;
 		const gameSummary = this.state.gameSummary;
 
 		const gameIsInFuture = gameSummary && gameSummary.dateObj.isSameOrAfter(moment());
@@ -269,22 +273,22 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 
 						<GameDetailLive game={this.state.game}
 										isSpringTraining={gameSummary.isSpringTraining}
-										highlights={highlightsCollection}/>
+										gameMedia={gameMedia}/>
 					</React.Fragment>;
 				}
 				break;
 			case GameDetailTabs.Highlights:
-				if (!highlightsCollection
-					|| !highlightsCollection.highlights
-					|| !highlightsCollection.highlights.media
-					|| highlightsCollection.highlights.media.length === 0
+				if (!gameMedia
+					|| !gameMedia.highlights
+					|| !gameMedia.highlights.highlights
+					|| gameMedia.highlights.highlights.items.length === 0
 					|| gameIsInFuture)
 				{
 					renderables = <div className="no-data">No highlights are available for this game.</div>;
 				}
 				else
 				{
-					renderables = <Highlights highlightsCollection={highlightsCollection} hideScores={this.state.settings.hideScores}/>;
+					renderables = <Highlights gameMedia={gameMedia} hideScores={this.state.settings.hideScores}/>;
 
 				}
 				break;

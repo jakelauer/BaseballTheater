@@ -1,7 +1,7 @@
 import {Utility} from "@Utility/index";
 import {Button, Collapse, Icon, List, Radio} from "antd";
 import * as React from "react";
-import {IHighlight, IHighlightsCollection, Keyword, LiveData, LiveGamePlay, LiveGamePlayByInning} from "@MlbDataServer/Contracts";
+import {Keyword, LiveData, LiveGamePlay, LiveGamePlayByInning} from "@MlbDataServer/Contracts";
 import {PlayByPlayPitches} from "../play-by-play/play_by_play_pitches";
 import {RadioChangeEvent} from "antd/lib/radio";
 import {HighlightUtility} from "../../shared/highlight_utility";
@@ -12,7 +12,7 @@ interface ILiveInningsProps
 	showInnings: "all" | "current";
 	game: LiveData;
 	isSpringTraining: boolean;
-	highlights: IHighlightsCollection | null;
+	gameMedia: GameMedia | null;
 }
 
 interface ILiveInningsState
@@ -93,7 +93,7 @@ export class LiveInnings extends React.Component<ILiveInningsProps, ILiveInnings
 				</Radio.Group>
 				}
 				<LiveInning
-					highlights={this.props.highlights}
+					gameMedia={this.props.gameMedia}
 					showInnings={this.props.showInnings}
 					game={this.props.game}
 					playsForInning={currentInning}
@@ -154,27 +154,21 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 		});
 	}
 
-	private getHighlightForPlay(play: LiveGamePlay): IHighlight | null
+	private getHighlightForPlay(play: LiveGamePlay): MediaItem | null
 	{
 		const svIds = play.playEvents.map(a => a.playId);
 
-		const hc = this.props.highlights;
-		let foundHighlight: IHighlight | null = null;
-		if (hc && hc.highlights && hc.highlights.media)
+		const hc = this.props.gameMedia.highlights;
+		let foundHighlight: MediaItem | null = null;
+		if (hc && hc.highlights && hc.highlights.items)
 		{
-			const highlights = hc.highlights.media;
+			const highlights = hc.highlights.items;
 
 			const matching = highlights.find(highlight => {
 				let found = false;
-				if (highlight.keywords && highlight.keywords.keyword)
+				if (highlight.keywordsAll)
 				{
-					const keywords = highlight.keywords.keyword instanceof Array
-						? highlight.keywords.keyword
-						: ([highlight.keywords.keyword] as any) as Keyword[];
-
-					keywords.forEach(keyword => {
-						found = found || (keyword.type === "sv_id" && (svIds.indexOf(keyword.value) > -1));
-					});
+					found = highlight.keywordsAll.some(keyword => keyword.type === "sv_id" && svIds.indexOf(keyword.value) > -1);
 				}
 				return found;
 			});
@@ -217,7 +211,8 @@ class LiveInning extends React.Component<ILiveInningProps, ILiveInningState>
 			.reverse();
 
 		const matchingHighlight = this.getHighlightForPlay(play);
-		const highlightHref = matchingHighlight && HighlightUtility.getDefaultUrl(matchingHighlight);
+		const display = HighlightUtility.getDisplayProps(matchingHighlight, false);
+		const highlightHref = matchingHighlight && display.videoUrl;
 		const highlightClickable = matchingHighlight
 			? <a href={highlightHref} target="_blank" onClick={e => e.stopPropagation()}>
 				<Button type="primary" shape="circle" size={"small"} style={{marginRight: "0.5rem"}}>

@@ -1,11 +1,10 @@
 ﻿import {IGameStatus, ISummaryLinescore, Linescore} from "./linescore";
-import {IHighlight} from "./highlight";
 import * as moment from "moment"
 const momentTz = require("moment-timezone");
 
 interface HighlightContainer
 {
-	media: IHighlight[];
+	media: MediaItem[];
 }
 
 interface IProbablePitcher
@@ -92,7 +91,7 @@ export class GameSummaryData implements IGameSummaryData
 	public dateObjEst: moment.Moment;
 	public home_probable_pitcher: IProbablePitcher;
 	public away_probable_pitcher: IProbablePitcher;
-	public topPlayHighlights: IHighlight[];
+	public topPlayHighlights: MediaItem[];
 	public highlights: HighlightContainer;
 
 	public get isFinal()

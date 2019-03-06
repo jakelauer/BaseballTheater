@@ -1,6 +1,5 @@
 ﻿import {Link} from "react-router-dom";
 import {Card} from "antd";
-import {IHighlight, IHighlightSearchResult, Teams} from "../../MlbDataServer/Contracts";
 import React = require("react");
 import {HighlightUtility, IHighlightDisplay} from "./highlight_utility";
 import * as moment from "moment"
@@ -8,7 +7,7 @@ import * as moment from "moment"
 interface IHighlightProps
 {
 	renderDate: boolean;
-	highlight: IHighlight | IHighlightSearchResult;
+	highlight: MediaItem;
 	hideScores: boolean;
 }
 
@@ -16,12 +15,13 @@ export class Highlight extends React.Component<IHighlightProps, any>
 {
 	private get highlight()
 	{
-		return (this.props.highlight as IHighlightSearchResult).highlight || (this.props.highlight as IHighlight);
+		//return (this.props.highlight as IHighlightSearchResult).highlight || (this.props.highlight as IHighlight);
+		return this.props.highlight;
 	}
 
-	private get searchResult(): IHighlightSearchResult | null
+	private get searchResult(): any | null
 	{
-		const asSearchResult = (this.props.highlight as IHighlightSearchResult);
+		const asSearchResult = null; //(this.props.highlight as IHighlightSearchResult);
 		const isSearchResult = !!asSearchResult.highlight;
 		return isSearchResult ? asSearchResult : null;
 	}
@@ -35,7 +35,7 @@ export class Highlight extends React.Component<IHighlightProps, any>
 
 	public render()
 	{
-		const displayProps = HighlightUtility.getDisplayProps(this.highlight, this.props.hideScores, this.searchResult);
+		const displayProps = HighlightUtility.getDisplayProps(this.highlight, this.props.hideScores); //, this.searchResult);
 
 		if (!displayProps)
 		{

@@ -6,6 +6,19 @@ interface GameMedia
 	highlights: GameMediaHighlightsWrapper;
 	summary: any;
 	gameNotes: any;
+	media: GameMediaMedia;
+}
+
+interface GameMediaMedia
+{
+	enhancedGame: boolean;
+	epg: GameMediaMediaEpg[]
+}
+
+interface GameMediaMediaEpg
+{
+	items: MediaItem[];
+	title: string;
 }
 
 interface GameMediaHighlightsWrapper
@@ -87,7 +100,7 @@ interface ArticleImage
 {
 	title: string;
 	altText: string;
-	cuts: { [dimensions: string]: ArticleImageOfSize };
+	cuts: ArticleImageOfSize[];
 }
 
 interface ArticleImageOfSize

@@ -1,12 +1,12 @@
 ﻿import React = require("react");
-import {IAtBat, IHighlight, IHighlightsCollection, IPitch, IPitcher, Keyword} from "../../../MlbDataServer/Contracts";
+import {IAtBat, IPitch, IPitcher, Keyword} from "../../../MlbDataServer/Contracts";
 import {HighlightUtility} from "../../shared/highlight_utility";
 import {PlayByPlayPitches} from "./play_by_play_pitches";
 
 interface IBatterProps
 {
 	isSpringTraining: boolean;
-	highlights: IHighlightsCollection | null;
+	gameMedia: GameMedia | null;
 	batter: IAtBat | null,
 	batterIndex: number,
 	oldPitcher: IPitcher | null,
@@ -39,28 +39,24 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 		return [];
 	}
 
-	private getHighlightForPlay(play: IAtBat): IHighlight | null
+	private getHighlightForPlay(play: IAtBat): MediaItem | null
 	{
 		const guid = play.play_guid;
 		const svIds = Batter.getSvIdsForPlay(play);
-		const hc = this.props.highlights;
-		let foundHighlight: IHighlight | null = null;
-		if (hc && hc.highlights && hc.highlights.media)
+		const hc = this.props.gameMedia.highlights;
+		let foundHighlight: MediaItem | null = null;
+		if (hc && hc.highlights && hc.highlights.items)
 		{
-			const highlights = hc.highlights.media;
+			const highlights = hc.highlights.items;
 
 			const matching = highlights.find(highlight =>
 			{
 				let found = false;
-				if (highlight.keywords && highlight.keywords.keyword)
+				if (highlight.keywordsAll)
 				{
-					const keywords = highlight.keywords.keyword instanceof Array
-						? highlight.keywords.keyword
-						: ([highlight.keywords.keyword] as any) as Keyword[];
-
-					keywords.forEach(keyword =>
+					highlight.keywordsAll.forEach(keyword =>
 					{
-						found = found || (keyword.type === "sv_id" && (keyword.value === guid || svIds.indexOf(keyword.value) > -1));
+						found = highlight.keywordsAll.some(keyword => keyword.type === "sv_id" && svIds.indexOf(keyword.value) > -1);
 					});
 				}
 				return found;
@@ -127,7 +123,8 @@ export class Batter extends React.Component<IBatterProps, IBatterState>
 
 		const expandedClass = this.state.isExpanded ? "expanded" : "";
 		const relatedHighlight = this.getHighlightForPlay(batter);
-		const highlightHref = relatedHighlight ? HighlightUtility.getDefaultUrl(relatedHighlight) : "";
+		const display = HighlightUtility.getDisplayProps(relatedHighlight, false);
+		const highlightHref = display.videoUrl;
 		const hasHighlight = highlightHref.trim() !== "" ? "has-highlight" : "";
 		const pitcherChanged = (!oldPitcher) || (newPitcher && oldPitcher.id !== newPitcher.id);
 

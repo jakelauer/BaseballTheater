@@ -1,4 +1,4 @@
-﻿import {GameSummaryData, IAtBat, IBatter, IHighlightsCollection, IInning, IInningHalf, IInningsContainer, IPitcher} from "../../../MlbDataServer/Contracts";
+﻿import {GameSummaryData, IAtBat, IBatter, IInning, IInningHalf, IInningsContainer, IPitcher} from "../../../MlbDataServer/Contracts";
 import React = require("react");
 import {Batter} from "./batter";
 
@@ -9,7 +9,7 @@ interface IPlayByPlayProps
 	gameSummary: GameSummaryData | null;
 	inningsData: IInningsContainer | null;
 	allPlayers: Map<string, IBatter | IPitcher>;
-	highlights: IHighlightsCollection | null;
+	gameMedia: GameMedia | null;
 }
 
 export class PlayByPlay extends React.Component<IPlayByPlayProps, any>
@@ -33,7 +33,7 @@ export class PlayByPlay extends React.Component<IPlayByPlayProps, any>
 				const rendered =
 					<Batter
 						key={i}
-						highlights={this.props.highlights}
+						gameMedia={this.props.gameMedia}
 						isSpringTraining={isSpringTraining}
 						batter={batter}
 						batterIndex={i}
