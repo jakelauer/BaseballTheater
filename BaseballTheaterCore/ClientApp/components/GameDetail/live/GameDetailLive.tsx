@@ -1,5 +1,5 @@
 import React = require("react");
-import {IHighlightsCollection, LiveData, PlayerListResponse} from "@MlbDataServer/Contracts";
+import {LiveData, PlayerListResponse} from "@MlbDataServer/Contracts";
 import {LiveGameCreator} from "@MlbDataServer/MlbDataServer";
 import {Utility} from "@Utility/index";
 import {Col, Row} from "antd";
@@ -10,7 +10,7 @@ interface IGameDetailLiveProps
 {
 	game: LiveData;
 	isSpringTraining: boolean;
-	highlights: IHighlightsCollection | null;
+	gameMedia: GameMedia | null;
 }
 
 interface IGameDetailLiveState
@@ -67,7 +67,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 						game={this.props.game}
 						isSpringTraining={isSpringTraining}
 						showInnings={"current"}
-						highlights={this.props.highlights}/>
+						gameMedia={this.props.gameMedia}/>
 				</Col>
 				}
 
@@ -77,7 +77,7 @@ export class GameDetailLive extends React.Component<IGameDetailLiveProps, IGameD
 						game={this.props.game}
 						isSpringTraining={isSpringTraining}
 						showInnings={"all"}
-						highlights={this.props.highlights}/>
+						gameMedia={this.props.gameMedia}/>
 				</Col>
 			</Row>
 		</ErrorBoundary>;

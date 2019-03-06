@@ -1,7 +1,6 @@
 ﻿import React = require("react");
 import * as moment from "moment";
 import {RouteComponentProps} from "react-router";
-import {IHighlightSearchResult} from "../../MlbDataServer/Contracts";
 import {App} from "../Base/app";
 import {Highlight} from "../shared/highlight";
 
@@ -9,7 +8,7 @@ interface ISearchState
 {
 	gameIds: string[];
 	query: string;
-	highlights: IHighlightSearchResult[];
+	highlights: MediaItem[];
 }
 
 interface ISearchRouteParams
@@ -62,12 +61,12 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		return decodeURI(query);
 	}
 
-	private updateHighlights(highlights: IHighlightSearchResult[] | null, callback = () => {})
+	private updateHighlights(highlights: MediaItem[] | null, callback = () => {})
 	{
 		App.stopLoading();
 
 		const setTo = highlights === null
-			? [] as IHighlightSearchResult[]
+			? [] as MediaItem[]
 			: [...this.state.highlights, ...highlights];
 
 		this.setState({
@@ -111,7 +110,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 	public render()
 	{
 		const highlightsRendered = this.state.highlights.map(searchResult =>
-			<Highlight hideScores={false} key={searchResult.highlight.id} renderDate={true} highlight={searchResult}/>);
+			<Highlight hideScores={false} key={searchResult.guid} renderDate={true} highlight={searchResult}/>);
 
 		const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
 			&& this.state.highlights.length > 0

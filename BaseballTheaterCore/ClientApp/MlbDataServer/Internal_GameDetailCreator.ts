@@ -1,4 +1,4 @@
-﻿import {BoxScoreData, HighlightsCollection, IBoxScoreContainer, IGameCenter, IGameSummaryData, IHighlightsCollection, IInningsContainer, Innings} from "./Contracts";
+﻿import {BoxScoreData, IBoxScoreContainer, IGameCenter, IGameSummaryData, IInningsContainer, Innings} from "./Contracts";
 import Internal_DataLoader from "./Utils/Internal_DataLoader";
 
 export default class Internal_GameDetailCreator
@@ -25,16 +25,7 @@ export default class Internal_GameDetailCreator
 		this.boxScoreUrl = this.directoryUrl + "/boxscore.xml";
 		this.inningsUrl = this.directoryUrl + "/inning/inning_all.xml";
 	}
-
-	public async getHighlights()
-	{
-		const highlightsCollectionData = await Internal_DataLoader.loadXml<IHighlightsCollection>(this.highlightsUrl, "highlightsCollection");
-
-		const highlightsCollection = new HighlightsCollection(highlightsCollectionData);
-		
-		return highlightsCollection;
-	}
-
+	
 	public async getGameCenter()
 	{
 		const gameCenterObj = await Internal_DataLoader.loadXml<IGameCenter>(this.gameCenterUrl, "gameCenter");
