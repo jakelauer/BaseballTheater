@@ -354,6 +354,11 @@ header
 			}
 		}
 
+        &.disabled input
+            {
+            pointer-events: none;
+        }
+
 		input
 		{
 			flex: auto;

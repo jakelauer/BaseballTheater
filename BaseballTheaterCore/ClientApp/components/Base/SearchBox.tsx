@@ -7,8 +7,11 @@ interface ISearchBoxState
 
 interface ISearchBoxProps
 {
+    disabled?: boolean;
 	query: string;
-	onPerformSearch: (newQuery: string) => void;
+    onPerformSearch: (newQuery: string) => void;
+    onMouseEnter?: () => void;
+    onMouseOut?: () => void;
 }
 
 export class SearchBox extends React.Component<ISearchBoxProps, ISearchBoxState>
@@ -53,9 +56,11 @@ export class SearchBox extends React.Component<ISearchBoxProps, ISearchBoxState>
 	};
 
 	public render()
-	{
+    {
+        const disabledClass = this.props.disabled ? "disabled" : "";
+
 		return (
-			<div className={`search`}>
+            <div className={`search ${disabledClass}`} onMouseOver={this.props.onMouseEnter} onMouseOut={this.props.onMouseOut}>
 				<input type="text" required onChange={this.onChange} value={this.state.currentValue} onKeyUp={this.onKeyUp}/>
 				<div className={`label`}>
 					<i className={`material-icons`}>search</i> <span>Search highlights</span>

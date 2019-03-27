@@ -67,50 +67,6 @@ export class Highlights extends React.Component<IHighlightsProps, IHighlightsSta
 		}
 	}
 
-	// private process()
-	// {
-	// 	const highlightsCollection = this.props.highlightsCollection;
-	//
-	// 	if (highlightsCollection && highlightsCollection.highlights && highlightsCollection.highlights.media)
-	// 	{
-	// 		let highlights: IHighlight[];
-	// 		let allHighlights: IHighlight[];
-	// 		let specialHighlights: IHighlight[];
-	//
-	// 		for (let highlight of highlightsCollection.highlights.media)
-	// 		{
-	// 			highlight.isPlaying = false;
-	// 		}
-	//
-	// 		highlights = Utility.Data.forceArray(highlightsCollection.highlights.media);
-	// 		highlights.sort((a, b) =>
-	// 		{
-	// 			const aIsRecap = a.recap ? -1 : 0;
-	// 			const bIsRecap = b.recap ? -1 : 0;
-	// 			const aIsCondensed = a.condensed ? -1 : 0;
-	// 			const bIsCondensed = b.condensed ? -1 : 0;
-	// 			const idOrder = a.id - b.id;
-	//
-	// 			return (aIsRecap - bIsRecap) || (aIsCondensed - bIsCondensed) || idOrder;
-	// 		});
-	//
-	// 		specialHighlights = highlights.filter((highlight) =>
-	// 		{
-	// 			return highlight.recap || highlight.condensed;
-	// 		});
-	//
-	// 		allHighlights = highlights.filter(highlight =>
-	// 		{
-	// 			return !highlight.recap && !highlight.condensed;
-	// 		});
-	//
-	// 		this.setState({
-	// 			allHighlights,
-	// 			specialHighlights
-	// 		});
-	// 	}
-	// }
-
 	public render()
 	{
 		const allHighlights = this.state.allHighlights;
