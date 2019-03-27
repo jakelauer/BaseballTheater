@@ -1,0 +1,59 @@
+@{
+    var description = ViewBag.Description ?? "Video highlights for all baseball games!";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23730353-4"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-23730353-4');
+	</script>
+
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Baseball Theater</title>
+	<base href="~/" />
+
+	@Html.Partial("_favicons")
+	<meta name="theme-color" content="#9e1414">
+	<meta name="Description" content="@description" />
+
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
+	<link rel="manifest" href="/manifest.json">
+
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+
+	<environment exclude="Development">
+	</environment>
+
+	<style>
+		body:not(.loaded) {
+			opacity: 0;
+		}
+	</style>
+</head>
+<body>
+@RenderBody()
+
+@RenderSection("scripts", required: false)
+
+<script src="dist/vendors~main.bundle.js" asp-append-version="true"></script>
+
+<script src="dist/main.bundle.js" asp-append-version="true"></script>
+
+
+</body>
+</html>

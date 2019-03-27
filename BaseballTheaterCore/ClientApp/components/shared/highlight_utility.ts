@@ -51,16 +51,26 @@ export class HighlightUtility
 			condensed: false
 		};
 
-		if (highlight)
-		{
-			const images = highlight.image.cuts;
-			displayProps.thumb = images.find(a => a.aspectRatio === "16:9" && a.width < 1000 && a.width > 500).src;
+		if (highlight && highlight.playbacks)
+        {
+            if (highlight.image && highlight.image.cuts) {
+                const images = highlight.image.cuts;
+                const img = images.find(a => a.aspectRatio === "16:9" && a.width < 1000 && a.width > 500)
+                    || images.find(a => a.aspectRatio === "16:9")
+                    || images[0];
+
+                displayProps.thumb = img.src;
+            }
+
 			displayProps.links = highlight.playbacks.filter(a => a.name.includes("FLASH")).map(item => ({
 				url: item.url,
 				label: item.name.match(/[0-9]+K/gi)[0]
-			}));
-			displayProps.videoUrl = highlight.playbacks.find(a => a.url.includes("1800K")).url
-				|| highlight.playbacks.find(a => a.url.includes("mp4")).url;
+            }));
+
+            const matchingVideo = highlight.playbacks.find(a => a.url.includes("1800K"))
+                || highlight.playbacks.find(a => a.url.includes("mp4"));
+
+            displayProps.videoUrl = matchingVideo.url;
 
 			const isRecap = HighlightUtility.isRecap(highlight);
 			const isCondensed = HighlightUtility.isCondensed(highlight);
