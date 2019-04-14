@@ -281,8 +281,8 @@ export class GameDetail extends React.Component<RouteComponentProps<IGameDetailU
 				if (!gameMedia
 					|| !gameMedia.highlights
 					|| !gameMedia.highlights.highlights
-					|| gameMedia.highlights.highlights.items.length === 0
-					|| gameIsInFuture)
+					|| gameMedia.highlights.highlights.items.length === 0)
+				//	|| gameIsInFuture)
 				{
 					renderables = <div className="no-data">No highlights are available for this game.</div>;
 				}

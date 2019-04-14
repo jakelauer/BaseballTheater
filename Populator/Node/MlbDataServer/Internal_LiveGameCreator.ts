@@ -25,14 +25,7 @@ export default class Internal_LiveGameCreator
 		const mediaUrl = `https://statsapi.mlb.com/api/v1/game/${gameId}/content?language=en`;
 
 		return await Internal_DataLoader.loadJson<GameMedia>(mediaUrl, "media");
-    }
-
-    public static async getGameMediaNode(gameId: number | string)
-    {
-        const mediaUrl = `https://statsapi.mlb.com/api/v1/game/${gameId}/content?language=en`;
-
-        return await Internal_DataLoaderNode.loadJson<GameMedia>(mediaUrl, "media");
-    }
+	}
 
 	public static async getPlayers(playerIds: number[], year: number = -1)
 	{

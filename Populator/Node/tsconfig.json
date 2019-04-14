@@ -1,0 +1,29 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2018",
+    "paths": {
+      "@MlbDataServer/*": ["./ClientApp/MlbDataServer/*"],
+      "@Utility/*": ["./ClientApp/Utility/*"]
+    },
+    "lib": [
+      "es5",
+      "esnext",
+      "dom",
+      "es2017"
+    ],
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "strict": false,
+    "types": ["webpack-env", "node"]
+  },
+  "exclude": [
+      "bin",
+      "node_modules"
+  ]
+}

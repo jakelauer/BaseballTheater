@@ -10,7 +10,7 @@ namespace Search.Controllers
 	public class SearchController : Controller
 	{
 		[HttpGet("[action]")]
-		public IEnumerable<HighlightSearchResult> Highlights(string query, int page, int perpage, string gameIds = null)
+		public IEnumerable<HighlightSearchResultJson> Highlights(string query, int page, int perpage, string gameIds = null)
 		{
 			var searchQuery = new SearchQuery(query, gameIds);
 			

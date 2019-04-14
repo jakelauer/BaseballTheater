@@ -3,11 +3,12 @@ import {Card} from "antd";
 import React = require("react");
 import {HighlightUtility, IHighlightDisplay} from "./highlight_utility";
 import * as moment from "moment"
+import { ISearchResult } from "../Search/search";
 
 interface IHighlightProps
 {
 	renderDate: boolean;
-	highlight: MediaItem;
+	highlight: MediaItem | ISearchResult;
 	hideScores: boolean;
 }
 
@@ -15,13 +16,12 @@ export class Highlight extends React.Component<IHighlightProps, any>
 {
 	private get highlight()
 	{
-		//return (this.props.highlight as IHighlightSearchResult).highlight || (this.props.highlight as IHighlight);
-		return this.props.highlight;
+		return (this.props.highlight as ISearchResult).highlight || (this.props.highlight as MediaItem);
 	}
 
 	private get searchResult(): any | null
 	{
-		const asSearchResult = null; //(this.props.highlight as IHighlightSearchResult);
+		const asSearchResult = this.props.highlight as ISearchResult;
 		const isSearchResult = !!asSearchResult.highlight;
 		return isSearchResult ? asSearchResult : null;
 	}
