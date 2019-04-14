@@ -10,6 +10,12 @@ namespace MlbDataEngine.Contracts
 		public HighlightThumbnails Thumbnails { get; set; }
 		public long GameId { get; set; }
 	}
+
+	public class HighlightSearchResultJson
+	{
+		public HighlightJson highlight { get; set; }
+		public string game_pk { get; set; }
+	}
 	
 	[Serializable]
 	public class HighlightThumbnails
@@ -27,10 +33,10 @@ namespace MlbDataEngine.Contracts
 						  ?? highlight.thumbnails.FirstOrDefault();
 
 				ht.Med = highlight.thumbnails.FirstOrDefault(a => a.EndsWith("49.jpg"))
-				         ?? ht.Low;
+						 ?? ht.Low;
 
 				ht.High = highlight.thumbnails.FirstOrDefault(a => a.EndsWith("48.jpg") || a.EndsWith("53.jpg"))
-				          ?? ht.Med;
+						  ?? ht.Med;
 
 			}
 			return ht;

@@ -49,6 +49,7 @@ namespace BaseballTheaterCore
 				})
 				.AddPatreon(options =>
 				{
+                    options.SaveTokens = true;
 					options.ClientId = Config.ClientId;
 					options.SaveTokens = true;
 					options.CallbackPath = "/Auth/Authorize";

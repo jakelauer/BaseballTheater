@@ -145,12 +145,9 @@ export class AppWrapper extends React.Component<{}, IAppState>
                         </div>
 
                         <div className={`right x`}>
-                            <Tooltip title={`Search disabled for now while I adjust to MLB's updated highlight data schema`} visible={this.state.searchTooltipVisible} placement={"bottomRight"}>
                                 <SearchBox query={search} onPerformSearch={query => this.performSearch(query)}
-                                    disabled={true}
                                     onMouseEnter={() => this.setState({ searchTooltipVisible: true })}
                                     onMouseOut={() => this.setState({ searchTooltipVisible: false })} />
-                            </Tooltip>
                             <SettingsButton onSettingsClicked={() => this.toggleSettingsModal(true)} />
                             {AppWrapper.renderLoginButton()}
                         </div>

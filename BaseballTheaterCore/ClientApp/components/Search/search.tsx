@@ -8,13 +8,18 @@ interface ISearchState
 {
 	gameIds: string[];
 	query: string;
-	highlights: MediaItem[];
+	highlights: ISearchResult[];
 }
 
 interface ISearchRouteParams
 {
 	gameIds: string;
 	query: string;
+}
+
+export interface ISearchResult {
+	highlight: MediaItem;
+	game_pk: string;
 }
 
 export class Search extends React.Component<RouteComponentProps<ISearchRouteParams>, ISearchState>
@@ -61,12 +66,12 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 		return decodeURI(query);
 	}
 
-	private updateHighlights(highlights: MediaItem[] | null, callback = () => {})
+	private updateHighlights(highlights: ISearchResult[] | null, callback = () => {})
 	{
 		App.stopLoading();
 
 		const setTo = highlights === null
-			? [] as MediaItem[]
+			? [] as ISearchResult[]
 			: [...this.state.highlights, ...highlights];
 
 		this.setState({
@@ -110,7 +115,7 @@ export class Search extends React.Component<RouteComponentProps<ISearchRoutePara
 	public render()
 	{
 		const highlightsRendered = this.state.highlights.map(searchResult =>
-			<Highlight hideScores={false} key={searchResult.guid} renderDate={true} highlight={searchResult}/>);
+			<Highlight hideScores={false} key={searchResult.highlight.guid} renderDate={true} highlight={searchResult.highlight}/>);
 
 		const shouldShowLoadMore = this.state.highlights.length % this.PER_PAGE === 0
 			&& this.state.highlights.length > 0

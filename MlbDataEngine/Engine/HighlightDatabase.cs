@@ -11,7 +11,7 @@ namespace MlbDataEngine.Engine
 	{
 		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		public static IEnumerable<HighlightSearchResult> AllHighlights { get; private set; }
+		public static IEnumerable<HighlightSearchResultJson> AllHighlights { get; private set; }
 		private static Timer HighlightTimer { get; set; }
 
 		public static void Initialize()
@@ -29,14 +29,14 @@ namespace MlbDataEngine.Engine
 		private static void LoadFiles()
 		{
 			HighlightTimer?.Dispose();
-			var allHighlights = new List<HighlightSearchResult>();
+			var allHighlights = new List<HighlightSearchResultJson>();
 
 			try
 			{
 				foreach (var file in Directory.EnumerateFiles(@"C:\highlightdata", "*.json"))
 				{
 					var contents = File.ReadAllText(file);
-					var highlightsInFile = JsonConvert.DeserializeObject<List<HighlightSearchResult>>(contents);
+					var highlightsInFile = JsonConvert.DeserializeObject<List<HighlightSearchResultJson>>(contents);
 					allHighlights.AddRange(highlightsInFile);
 				}
 			}

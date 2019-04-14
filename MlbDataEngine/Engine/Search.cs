@@ -7,29 +7,19 @@ namespace MlbDataEngine.Engine
 {
 	public static class Search
 	{
-		public static IEnumerable<HighlightSearchResult> SearchHighlights(SearchQuery query, int page, int recordsPerPage)
+		public static IEnumerable<HighlightSearchResultJson> SearchHighlights(SearchQuery query, int page, int recordsPerPage)
 		{
 			var words = query.Text.Split(' ');
 			var upperWords = words.Select(a => a.ToUpperInvariant());
 
 			if (HighlightDatabase.AllHighlights == null) 
-				return new List<HighlightSearchResult>();
+				return new List<HighlightSearchResultJson>();
 			
 			var matches = HighlightDatabase.AllHighlights.Where(highlightResult =>
 			{
-				if (highlightResult?.Highlight == null) return false;
+				if (highlightResult?.highlight == null) return false;
 
-				var checkAgainst = $"{highlightResult.Highlight.headline ?? ""} {highlightResult.Highlight.bigblurb ?? ""} {highlightResult.Highlight.blurb ?? ""}";
-
-				if (highlightResult.Highlight.team?.Name != null)
-				{
-					checkAgainst += " " + highlightResult.Highlight.team.Name + " ";
-				}
-
-				if (highlightResult.Highlight.players?.Names != null)
-				{
-					checkAgainst += " " + highlightResult.Highlight.players.Names + " ";
-				}
+				var checkAgainst = $"{highlightResult.highlight.headline ?? ""} {highlightResult.highlight.blurb ?? ""} {highlightResult.highlight.kicker ?? ""} {highlightResult.highlight.description ?? ""}";
 
 				checkAgainst = checkAgainst.ToUpperInvariant();
 
@@ -39,7 +29,7 @@ namespace MlbDataEngine.Engine
 
 				if (query.GameIds != null)
 				{
-					matched = matched && query.GameIds.Contains(highlightResult.GameId);
+					matched = matched && query.GameIds.Contains(highlightResult.game_pk);
 				}
 
 				return matched;
@@ -47,7 +37,7 @@ namespace MlbDataEngine.Engine
 			});
 
 			return matches
-				.OrderByDescending(a => a.Highlight.dateObj)
+				.OrderByDescending(a => DateTime.Parse(a.highlight.date))
 				.Skip(page * recordsPerPage)
 				.Take(recordsPerPage);
 
@@ -57,7 +47,7 @@ namespace MlbDataEngine.Engine
 	public class SearchQuery
 	{
 		public string Text { get; }
-		public IEnumerable<long> GameIds { get; }
+		public IEnumerable<string> GameIds { get; }
 
 		public SearchQuery(string text, string gameIdCsv = null)
 		{
@@ -65,7 +55,7 @@ namespace MlbDataEngine.Engine
 
 			if (gameIdCsv != null)
 			{
-				this.GameIds = gameIdCsv.Split(',').Select(a => Convert.ToInt64(a));
+				this.GameIds = gameIdCsv.Split(',').Select(a => a);
 			}
 		}
 	}
