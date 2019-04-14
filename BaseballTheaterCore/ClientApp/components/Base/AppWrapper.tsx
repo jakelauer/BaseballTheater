@@ -145,9 +145,9 @@ export class AppWrapper extends React.Component<{}, IAppState>
                         </div>
 
                         <div className={`right x`}>
-                                <SearchBox query={search} onPerformSearch={query => this.performSearch(query)}
-                                    onMouseEnter={() => this.setState({ searchTooltipVisible: true })}
-                                    onMouseOut={() => this.setState({ searchTooltipVisible: false })} />
+                            <SearchBox query={search} onPerformSearch={query => this.performSearch(query)}
+                                onMouseEnter={() => this.setState({ searchTooltipVisible: true })}
+                                onMouseOut={() => this.setState({ searchTooltipVisible: false })} />
                             <SettingsButton onSettingsClicked={() => this.toggleSettingsModal(true)} />
                             {AppWrapper.renderLoginButton()}
                         </div>
@@ -164,14 +164,25 @@ export class AppWrapper extends React.Component<{}, IAppState>
                     </div>
 
                     <div className={`footer`}>
-                        <span>Created by</span>&nbsp;
-						<a href="https://github.com/jakelauer" target={`_blank`}>Jake Lauer</a>
-                        &nbsp;(<a href="https://www.reddit.com/user/HelloControl_/" target={`_blank`}>HelloControl_</a>)
+                        <strong>
+                            <span>Created by</span>&nbsp;<a href="https://github.com/jakelauer" target={`_blank`}>Jake Lauer</a>&nbsp;(<a href="https://www.reddit.com/user/HelloControl_/" target={`_blank`}>HelloControl_</a>)
+                        </strong>
 
-						<div className={`shameless-plug`}>
+                        <div className={`shameless-plug`} style={{ border: "1px solid gray", borderRadius: 5, padding: "1rem 0" }}>
                             <div>
                                 <strong>Like the site?</strong> <br />
                                 <a href="https://www.patreon.com/jakelauer/memberships" target="_blank">Become a patron to keep it alive!</a>
+                            </div>
+                        </div>
+
+                        <div className={`sponsors`}>
+                            <h3>Patreon Sponsors</h3>
+                            <a href="https://storeporter.com" target="_blank">
+                                <img src="/images/backers/storeporter.png" width="300" />
+                            </a>
+
+                            <div style={{ marginTop: "1rem" }}>
+                                <a href="https://www.patreon.com/jakelauer/memberships" target="_blank">Become a sponsor and see your logo here</a>
                             </div>
                         </div>
                     </div>

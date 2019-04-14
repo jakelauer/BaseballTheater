@@ -354,10 +354,10 @@ header
 			}
 		}
 
-        &.disabled input
-            {
-            pointer-events: none;
-        }
+		&.disabled input
+			{
+			pointer-events: none;
+		}
 
 		input
 		{
@@ -818,4 +818,9 @@ a.button
 	{
 		display: none;
 	}
+}
+
+.sponsors{
+	margin-top: 3rem;
+	text-align: center;
 }
