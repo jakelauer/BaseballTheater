@@ -143,12 +143,12 @@ export class GameSummaryData implements IGameSummaryData
 		}
 
 
-		const fmt = "YYYY/MM/DD hh:mm";
+		const fmt = "YYYY/MM/DD h:mm";
 		const zone = "America/New_York";
 
-		const timeEstRaw = momentTz(input, fmt, zone);
+        const timeEstRaw = moment.tz(input, fmt, zone);
 		const hoursToAdd = Number(timeEstRaw.format("hh")) >= 12 ? 0 : 12;
-		const timeEst = momentTz(input, fmt, zone).add(hoursToAdd, "hours");
+        const timeEst = timeEstRaw.clone().add(hoursToAdd, "hours");
 
 		this.id = data.id;
 		this.game_pk = data.game_pk;
