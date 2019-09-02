@@ -1,0 +1,23 @@
+{
+  "name": "baseball-theater-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "node --nolazy --inspect=5001 server.js --runInBand",
+    "dev": "concurrently --kill-others \"yarn server\" \"yarn client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "abortcontroller-polyfill": "^1.3.0",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.26",
+    "x2js": "^3.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}
