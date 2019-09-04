@@ -1,11 +1,15 @@
 import {PlaybackEndpointMap} from "./playback-endpoints";
+import express from "express";
+import * as path from "path";
 
-const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(express.static(path.join(__dirname, 'client/build')));
+
 // console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const server = app.listen(port, () => console.log(`Listening on port ${port}`));
+server.setTimeout(10000);
 
 // create a GET route
 app.get("/express_backend", (req, res) => {
@@ -13,7 +17,7 @@ app.get("/express_backend", (req, res) => {
 });
 
 const playback = Object.keys(PlaybackEndpointMap).map(endpointPath => {
-  const callback = PlaybackEndpointMappointMap[endpointPath];
+  const callback = PlaybackEndpointMap[endpointPath];
 
   app.get(endpointPath, callback);
 });

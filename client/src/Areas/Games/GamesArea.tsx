@@ -1,9 +1,8 @@
 import * as React from "react";
-import {StatefulDatepicker} from "baseui/datepicker";
 import moment from "moment/moment";
 import {ScoreboardItem} from "./ScoreboardItem";
-import {IGameSummaryCollection} from "../../../../contract";
-import {GameSummaryCreator} from "../../../../engine/MlbDataServer";
+import {GameSummaryCreator} from "baseball-theater-engine";
+import { IGameSummaryCollection } from "baseball-theater-engine/contract";
 
 interface IGamesAreaProps
 {
@@ -34,7 +33,7 @@ export class GamesArea extends React.Component<Props, IGamesAreaState>
 	public componentDidMount(): void
 	{
 		const now = moment();
-		GameSummaryCreator.getSummaryCollection(now)
+			GameSummaryCreator.getSummaryCollection(now)
 			.then(data => this.setState({
 				games: data
 			}));
@@ -47,7 +46,6 @@ export class GamesArea extends React.Component<Props, IGamesAreaState>
 
 		return (
 			<div>
-				<StatefulDatepicker/>
 				{scoreboardItems}
 			</div>
 		);

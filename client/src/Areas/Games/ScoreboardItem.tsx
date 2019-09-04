@@ -1,5 +1,5 @@
 import * as React from "react";
-import {IGameSummaryData} from "../../../../contract";
+import { IGameSummaryData } from "baseball-theater-engine/contract";
 
 interface IScoreboardItemProps
 {
