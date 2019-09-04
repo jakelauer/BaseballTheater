@@ -1,64 +1,101 @@
 import React from 'react';
-import {Client as Styletron} from 'styletron-engine-atomic';
-import {Provider as StyletronProvider} from 'styletron-react';
-import {LightTheme, BaseProvider, styled} from 'baseui';
 import './App.css';
-import {FlexGrid, FlexGridItem} from "baseui/flex-grid";
-import {GamesArea} from "./Areas/Games/GamesArea";
+import {MediaItem} from "baseball-theater-engine/contract/media";
+import {VideoSearchResults} from 'baseball-theater-engine';
+import {Button, CircularProgress, Grid} from "@material-ui/core";
 
-export class App extends React.Component<{}, { data: string }>
+interface VideoSearch
 {
+	about: VideoSearchResults;
+	video: MediaItem;
+}
+
+export class App extends React.Component<{}, { data: VideoSearch[], search: string, loading: boolean }>
+{
+	private apiTimeout: number = null;
+
 	constructor(props: {})
 	{
 		super(props);
 
 		this.state = {
-			data: ""
+			search: "",
+			loading: false,
+			data: []
 		};
 	}
 
 	componentDidMount()
 	{
-		// Call our fetch function below once the component mounts
-		this.callBackendAPI()
-			.then(res => this.setState({data: res.express}))
-			.catch(err => console.log(err));
 	}
 
 	// Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from
-	// server.js
+	// server.ts
 	callBackendAPI = async () =>
 	{
-		const response = await fetch('/express_backend');
-		const body = await response.json();
+		clearTimeout(this.apiTimeout);
 
-		if (response.status !== 200) {
-			throw Error(body.message)
-		}
-		return body;
+		this.apiTimeout = window.setTimeout(async () =>
+		{
+			const response = await fetch(`/video/tag-search/${this.state.search}/1`);
+			const body = await response.json();
+
+			if (response.status !== 200) {
+				throw Error(body.message)
+			}
+
+			this.setState({
+				loading: false,
+				data: body.express
+			});
+		}, 500);
+	};
+
+	private searchTag = (tag: string) =>
+	{
+		this.setState({
+			search: tag,
+			data: [],
+			loading: true
+		}, () =>
+		{
+			// Call our fetch function below once the component mounts
+			this.callBackendAPI();
+		});
 	};
 
 	public render()
 	{
-        const engine = new Styletron();
+		const vids = this.state.data.map(item => (
+			<Grid item key={item.about.id}>
+				<a href={item.video.playbacks[0].url}>
+					<img src={item.about.image.cuts[0].src}/>
+					<br/>
+					<h2>{item.about.title}</h2>
+				</a>
+			</Grid>
+		));
 
-        return (
-			<StyletronProvider value={engine}>
-				<BaseProvider theme={LightTheme}>
-					<div className="App">
-						<FlexGrid>
-							<FlexGridItem>
-								Baseball Theater
-							</FlexGridItem>
-						</FlexGrid>
-						<FlexGrid>
-							<FlexGridItem>
-								<GamesArea/>
-							</FlexGridItem>
-						</FlexGrid>
-					</div>
-				</BaseProvider>
-			</StyletronProvider>
+		const loading = this.state.loading ?
+			<CircularProgress />
+			: null;
+
+		return (
+			<div className="App">
+				<Grid container>
+					<Grid item>
+						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("fastcast")}>FastCast</Button>
+						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("top-10-home-runs")}>Top 10 Home Runs</Button>
+						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("mlb-network")}>MLB Network</Button>
+					</Grid>
+				</Grid>
+				<Grid container>
+					{loading}
+				</Grid>
+				<Grid container>
+					{vids}
+				</Grid>
+			</div>
 		);
 	}
 }
