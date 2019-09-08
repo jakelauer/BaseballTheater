@@ -2,7 +2,10 @@ import React from 'react';
 import './App.css';
 import {MediaItem} from "baseball-theater-engine/contract/media";
 import {VideoSearchResults} from 'baseball-theater-engine';
-import {Button, CircularProgress, Grid} from "@material-ui/core";
+import {Button, CircularProgress, DialogContent, Grid} from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 interface VideoSearch
 {
@@ -10,7 +13,15 @@ interface VideoSearch
 	video: MediaItem;
 }
 
-export class App extends React.Component<{}, { data: VideoSearch[], search: string, loading: boolean }>
+interface IAppState
+{
+	data: VideoSearch[];
+	search: string;
+	loading: boolean;
+	error: string;
+}
+
+export class App extends React.Component<{}, IAppState>
 {
 	private apiTimeout: number = null;
 
@@ -19,6 +30,7 @@ export class App extends React.Component<{}, { data: VideoSearch[], search: stri
 		super(props);
 
 		this.state = {
+			error: "",
 			search: "",
 			loading: false,
 			data: []
@@ -37,17 +49,29 @@ export class App extends React.Component<{}, { data: VideoSearch[], search: stri
 
 		this.apiTimeout = window.setTimeout(async () =>
 		{
-			const response = await fetch(`/video/tag-search/${this.state.search}/1`);
+			const response = await fetch(`/video/tag-search/${this.state.search}/1`, {
+				headers: {
+					"x-app": "playback",
+					"x-api-key": "NER6GF4-B36417M-K3QWDMP-NRHSFC5"
+				}
+			});
 			const body = await response.json();
 
-			if (response.status !== 200) {
-				throw Error(body.message)
+			if (response.status === 200)
+			{
+				this.setState({
+					loading: false,
+					data: body.express
+				});
+			}
+			else
+			{
+				this.setState({
+					error: body.error,
+					loading: false
+				});
 			}
 
-			this.setState({
-				loading: false,
-				data: body.express
-			});
 		}, 500);
 	};
 
@@ -77,16 +101,19 @@ export class App extends React.Component<{}, { data: VideoSearch[], search: stri
 		));
 
 		const loading = this.state.loading ?
-			<CircularProgress />
+			<CircularProgress/>
 			: null;
 
 		return (
 			<div className="App">
 				<Grid container>
 					<Grid item>
-						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("fastcast")}>FastCast</Button>
-						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("top-10-home-runs")}>Top 10 Home Runs</Button>
-						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("mlb-network")}>MLB Network</Button>
+						<Button variant="contained" color={"primary"}
+						        onClick={() => this.searchTag("fastcast")}>FastCast</Button>
+						<Button variant="contained" color={"primary"}
+						        onClick={() => this.searchTag("top-10-home-runs")}>Top 10 Home Runs</Button>
+						<Button variant="contained" color={"primary"} onClick={() => this.searchTag("mlb-network")}>MLB
+							Network</Button>
 					</Grid>
 				</Grid>
 				<Grid container>
@@ -95,6 +122,14 @@ export class App extends React.Component<{}, { data: VideoSearch[], search: stri
 				<Grid container>
 					{vids}
 				</Grid>
+				<Dialog open={this.state.error !== ""} onClose={() => this.setState({error: ""})}>
+					<DialogTitle>Error</DialogTitle>
+					<DialogContent>
+						<DialogContentText>
+							{this.state.error}
+						</DialogContentText>
+					</DialogContent>
+				</Dialog>
 			</div>
 		);
 	}
