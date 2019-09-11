@@ -1,20 +1,25 @@
 import React from 'react';
 import styles from "./App.module.scss";
-import {CircularProgress, DialogContent, Grid} from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import {CircularProgress, DialogContentText, Grid} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
+import SportsBaseball from '@material-ui/icons/SportsBaseball';
+import {Equalizer, Menu, People, PlayCircleFilled} from "@material-ui/icons";
+import EventIcon from "@material-ui/icons/Event";
+import Drawer from "@material-ui/core/Drawer";
+import {Respond, RespondSizes} from "../Global/Respond/Respond";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import SportsBaseball from '@material-ui/icons/SportsBaseball';
 import ListItemText from "@material-ui/core/ListItemText";
-import {Equalizer, People, PlayCircleFilled} from "@material-ui/icons";
-import EventIcon from "@material-ui/icons/Event";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
 import {Link} from "react-router-dom";
+import {SiteRoutes} from "../Global/Routes/Routes";
 
 interface IAppState
 {
@@ -23,7 +28,6 @@ interface IAppState
 	loading: boolean;
 	error: string;
 }
-
 
 export class App extends React.Component<{}, IAppState>
 {
@@ -34,7 +38,7 @@ export class App extends React.Component<{}, IAppState>
 		super(props);
 
 		this.state = {
-			drawerOpen: true,
+			drawerOpen: false,
 			error: "",
 			search: "",
 			loading: false
@@ -66,57 +70,50 @@ export class App extends React.Component<{}, IAppState>
 			<CircularProgress/>
 			: null;
 
-		const isMobile = false;
+		const drawerContents = (
+			<React.Fragment>
+				<div className={styles.logo}>
+					Baseball Theater
+				</div>
+				<List component={"nav"}>
+					<MenuItem icon={<SportsBaseball/>} path={SiteRoutes.Games.resolve()}>
+						Games
+					</MenuItem>
+					<MenuItem icon={<PlayCircleFilled/>} path={SiteRoutes.FeaturedVideos.resolve()}>
+						Featured Videos
+					</MenuItem>
+					<MenuItem icon={<Equalizer/>} path={SiteRoutes.Standings.resolve()}>
+						Standings
+					</MenuItem>
+					<MenuItem icon={<EventIcon/>} path={SiteRoutes.Schedule.resolve()}>
+						Schedule
+					</MenuItem>
+					<MenuItem icon={<People/>} path={SiteRoutes.Teams.resolve()}>
+						Teams
+					</MenuItem>
+				</List>
+			</React.Fragment>
+		);
 
 		return (
 			<div className={styles.wrapper}>
-				<Drawer anchor={"left"} variant={"permanent"} open={this.state.drawerOpen}>
-					<div className={styles.logo}>
-						Baseball Theater
-					</div>
-					<List component={"nav"}>
-						<ListItem button color={"primary"}>
-							<ListItemIcon>
-								<SportsBaseball/>
-							</ListItemIcon>
-							<ListItemText>
-								Games
-							</ListItemText>
-						</ListItem>
-						<ListItem button color={"primary"}>
-							<ListItemIcon>
-								<PlayCircleFilled/>
-							</ListItemIcon>
-							<ListItemText>
-								Featured Videos
-							</ListItemText>
-						</ListItem>
-						<ListItem button color={"primary"}>
-							<ListItemIcon>
-								<Equalizer/>
-							</ListItemIcon>
-							<ListItemText>
-								Standings
-							</ListItemText>
-						</ListItem>
-						<ListItem button color={"primary"}>
-							<ListItemIcon>
-								<EventIcon/>
-							</ListItemIcon>
-							<ListItemText>
-								Schedule
-							</ListItemText>
-						</ListItem>
-						<ListItem button color={"primary"}>
-							<ListItemIcon>
-								<People/>
-							</ListItemIcon>
-							<ListItemText>
-								Teams
-							</ListItemText>
-						</ListItem>
-					</List>
-				</Drawer>
+				<Respond at={RespondSizes.small}>
+					<AppBar position="static" className={styles.appBar}>
+						<Toolbar>
+							<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" onClick={this.openDrawer}>
+								<Menu/>
+							</IconButton>
+						</Toolbar>
+					</AppBar>
+					<SwipeableDrawer onClose={this.closeDrawer} onOpen={this.openDrawer} open={this.state.drawerOpen}>
+						{drawerContents}
+					</SwipeableDrawer>
+				</Respond>
+				<Respond at={RespondSizes.small} hide={true}>
+					<Drawer anchor={"left"} variant={"permanent"} open={this.state.drawerOpen}>
+						{drawerContents}
+					</Drawer>
+				</Respond>
 				<Container>
 					<Grid container>
 						{loading}
@@ -138,3 +135,17 @@ export class App extends React.Component<{}, IAppState>
 }
 
 export default App;
+
+const MenuItem = (props: { icon: React.ReactElement; path: string; children?: React.ReactNode }) =>
+{
+	return (
+		<ListItem button color={"primary"} component={p => <Link {...p} to={props.path}/>}>
+			<ListItemIcon>
+				{props.icon}
+			</ListItemIcon>
+			<ListItemText>
+				{props.children}
+			</ListItemText>
+		</ListItem>
+	);
+};
