@@ -18,8 +18,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import {Link} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
+import GamesArea from "../Areas/Games/GamesArea";
 
 interface IAppState
 {
@@ -116,9 +117,7 @@ export class App extends React.Component<{}, IAppState>
 				</Respond>
 				<Container>
 					<Grid container>
-						{loading}
-					</Grid>
-					<Grid container>
+						<Route path={SiteRoutes.Games.path} component={GamesArea}/>
 					</Grid>
 				</Container>
 				<Dialog open={this.state.error !== ""} onClose={() => this.setState({error: ""})}>
@@ -139,7 +138,7 @@ export default App;
 const MenuItem = (props: { icon: React.ReactElement; path: string; children?: React.ReactNode }) =>
 {
 	return (
-		<ListItem button color={"primary"} component={p => <Link {...p} to={props.path}/>}>
+		<ListItem color={"primary"} component={p => <Link {...p} to={props.path}/>}>
 			<ListItemIcon>
 				{props.icon}
 			</ListItemIcon>

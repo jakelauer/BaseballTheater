@@ -25,8 +25,8 @@ export class SiteRoute<T extends object = {}>
 
 export class SiteRoutes
 {
-	public static Games = new SiteRoute<{ mmddyyyy?: string }>("/games/:mmddyyyy?", {
-		mmddyyyy: moment().format("MMDDYYYY")
+	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?", {
+		yyyymmdd: moment().format("YYYYMMDD")
 	});
 	public static Game = new SiteRoute<{ gameId: string }>("/games/:gameId");
 	public static Schedule = new SiteRoute<{ year: string; team?: string }>("/schedule/:year/:team?", {

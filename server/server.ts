@@ -3,6 +3,8 @@ import express from "express";
 import * as path from "path";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Utils} from "./utils";
+import {LocalEndpointMap} from "./Local/endpoints";
+import {MlbDataServer} from "baseball-theater-engine/dist";
 
 export type ExpressEndpointMap = { [key: string]: (req: Request, res: Response, next: NextFunction) => void; }
 
@@ -15,8 +17,10 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 server.setTimeout(10000);
 
+export const MLB = new MlbDataServer();
 
 const allEndpoints = {
+	...LocalEndpointMap,
 	...PlaybackEndpointMap
 };
 

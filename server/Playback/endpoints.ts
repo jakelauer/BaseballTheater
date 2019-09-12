@@ -1,12 +1,12 @@
-import {ExpressEndpointMap} from "../server";
-import {VideoLoader} from "baseball-theater-engine/dist/engine/internal_videoloader";
-
+import {ExpressEndpointMap, MLB} from "../server";
+import {VideoSearchWithMetadata} from "baseball-theater-engine/dist";
 
 export const PlaybackEndpointMap: ExpressEndpointMap = {
 	"/video/tag-search/:tag/:page": (req, res) =>
 	{
-		VideoLoader.VideoTagSearch(req.params.tag, req.params.page)
-			.then(data => {
+		MLB.VideoTagSearch(req.params.tag, parseInt(req.params.page))
+			.then((data: VideoSearchWithMetadata[]) =>
+			{
 				res.send({
 					express: data
 				});
