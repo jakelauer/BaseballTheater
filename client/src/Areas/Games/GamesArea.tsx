@@ -1,53 +1,34 @@
 import * as React from "react";
 import moment from "moment/moment";
-import {ScoreboardItem} from "./ScoreboardItem";
-import {GameSummaryCreator} from "baseball-theater-engine";
-import { IGameSummaryCollection } from "baseball-theater-engine/contract";
+import {RouteComponentProps, withRouter} from "react-router";
+import {GameList} from "./GameList";
 
-interface IGamesAreaProps
+interface IGamesAreaParams
 {
+	yyyymmdd: string;
 }
-
-interface DefaultProps
-{
-}
-
-type Props = IGamesAreaProps & DefaultProps;
 
 interface IGamesAreaState
 {
-	games: IGameSummaryCollection;
 }
 
-export class GamesArea extends React.Component<Props, IGamesAreaState>
+class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, IGamesAreaState>
 {
-	constructor(props: Props)
+	constructor(props: RouteComponentProps<IGamesAreaParams>)
 	{
 		super(props);
 
 		this.state = {
-			games: null
 		};
-	}
-
-	public componentDidMount(): void
-	{
-		const now = moment();
-			GameSummaryCreator.getSummaryCollection(now)
-			.then(data => this.setState({
-				games: data
-			}));
 	}
 
 	public render()
 	{
-		const games = this.state.games ? this.state.games.games.game : [];
-		const scoreboardItems = games.map(game => <ScoreboardItem game={game}/>);
-
+		const date = moment(this.props.match.params.yyyymmdd);
 		return (
-			<div>
-				{scoreboardItems}
-			</div>
+			<GameList day={date}/>
 		);
 	}
 }
+
+export default withRouter(GamesArea);

@@ -1,9 +1,7 @@
 import * as React from "react";
-import { IGameSummaryData } from "baseball-theater-engine/contract";
 
 interface IScoreboardItemProps
 {
-	game: IGameSummaryData;
 }
 
 interface DefaultProps
@@ -26,9 +24,7 @@ export class ScoreboardItem extends React.Component<Props, IScoreboardItemState>
 	public render()
 	{
 		return (
-			<div>
-				{this.props.game.away_team_name} // {this.props.game.home_team_name}
-			</div>
+			<span/>
 		);
 	}
 }
