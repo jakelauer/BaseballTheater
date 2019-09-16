@@ -1,8 +1,13 @@
 import * as React from "react";
 import moment from "moment/moment";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import {IScheduleGameList} from "baseball-theater-engine/dist/contract/teamschedule";
 import {CircularProgress} from "@material-ui/core";
+import {GameSummary} from "./Components/GameSummary";
+import styles from "./GameList.module.scss";
+import Grid from "@material-ui/core/Grid";
+import {Link} from "react-router-dom";
+import {SiteRoutes} from "../../Global/Routes/Routes";
+import {IScheduleGameList} from "baseball-theater-engine/dist/contract/teamschedule";
 
 interface IGameListProps
 {
@@ -18,6 +23,7 @@ type State = IGameListState;
 
 interface IGameListState
 {
+	loading: boolean;
 	scoreboard: IScheduleGameList;
 	isCurrent: boolean;
 }
@@ -29,6 +35,7 @@ export class GameList extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
+			loading: true,
 			scoreboard: null,
 			isCurrent: false
 		}
@@ -39,18 +46,20 @@ export class GameList extends React.Component<Props, State>
 		this.fetchSchedule();
 	}
 
-	public shouldComponentUpdate(nextProps: Readonly<Props>, nextState: Readonly<State>, nextContext: any): boolean
+	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
 	{
-		if (!nextProps.day.isSame(this.props.day))
+		if (!prevProps.day.isSame(this.props.day))
 		{
 			this.fetchSchedule();
 		}
-
-		return true;
 	}
 
 	private fetchSchedule()
 	{
+		this.setState({
+			loading: true
+		});
+
 		MlbClientDataFetcher.getScoreboard(this.props.day)
 			.then(data =>
 			{
@@ -58,7 +67,8 @@ export class GameList extends React.Component<Props, State>
 
 				this.setState({
 					scoreboard: data,
-					isCurrent
+					isCurrent,
+					loading: false
 				});
 			}, () =>
 			{
@@ -75,10 +85,24 @@ export class GameList extends React.Component<Props, State>
 		{
 			return <CircularProgress/>;
 		}
+
+		const gameSummaries = this.state.scoreboard.dates[0].games
+			.map(game => (
+				<Grid key={game.gamePk} item xs={12} sm={6} lg={4}>
+					<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk})} className={styles.gameLink}>
+						<GameSummary game={game}/>
+					</Link>
+				</Grid>
+			));
+
 		return (
-			<div>
-				{this.state.scoreboard.dates.length}
-			</div>
+			<Grid className={styles.gameSummaries} container spacing={3}>
+				{
+					this.state.loading
+						? <CircularProgress/>
+						: gameSummaries
+				}
+			</Grid>
 		);
 	}
 }

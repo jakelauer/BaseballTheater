@@ -15,9 +15,7 @@ export const LocalEndpointMap: ExpressEndpointMap = {
 			.then(response => response.json())
 			.then(json =>
 			{
-				res.send({
-					express: json
-				});
+				res.send(json);
 			});
 	}
 };

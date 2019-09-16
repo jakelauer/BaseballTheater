@@ -1,35 +1,70 @@
 @import "../styles/vars";
 
-.wrapper {
-    font-family: Roboto, sans-serif;
+.wrapper
+{
+	display: flex;
+	font-family: Roboto, sans-serif;
+
+	:global(.r-small) &
+	{
+		padding-top: 56px;
+		flex-direction: column;
+	}
 }
 
-.sidebar {
-    position: fixed;
-    width: 20vw;
+.sidebar
+{
+	position: fixed;
+	width: 20vw;
 }
 
-.appBar {
-  background: red;
+.appBar
+{
+	background: red;
 }
 
 .logo
 {
-    display: flex;
-    color: white;
-    font-size: 1.5rem;
-    font-family: "bebas", sans-serif;
-    align-items: center;
-    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
-    background: $color-accent;
+	display: flex;
+	color: white;
+	font-size: 1.5rem;
+	font-family: "bebas", sans-serif;
+	align-items: center;
+	padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+	background: $color-accent;
 
-    &:before{
-        content: "";
-        margin-right: 1rem;
-        display: block;
-        width: 2rem;
-        height: 2rem;
-        background: url("/assets/logo-circle.png") no-repeat center;
-        background-size: cover;
-    }
+	&:before
+	{
+		content: "";
+		margin-right: 1rem;
+		display: block;
+		width: 2rem;
+		height: 2rem;
+		background: url("/assets/logo-circle.png") no-repeat center;
+		background-size: cover;
+	}
+}
+
+.drawerPaper,
+.nav
+{
+	width: 15vw;
+	min-width: 250px;
+}
+
+:global(.r-small) .nav
+{
+	width: auto;
+}
+
+.main
+{
+	width: 85vw;
+	max-width: calc(100vw - 250px);
+
+	:global(.r-small) &
+	{
+		width: auto;
+		max-width: none;
+	}
 }

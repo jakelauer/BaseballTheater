@@ -1,0 +1,67 @@
+@import "../../../styles/teamcolors";
+
+.gameSummary
+{
+	position: relative;
+	padding: 3rem 1rem 1rem 1rem;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.teamRow
+{
+	display: flex;
+	width: 100%;
+
+	+ .teamRow
+	{
+		margin-top: 1rem;
+	}
+}
+
+.team
+{
+	flex: 5 0 auto;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.record
+{
+	font-size: 0.75em;
+	opacity: 0.5;
+}
+
+.status
+{
+	position: absolute;
+	display: flex;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: 0.5rem 1rem;
+	border-bottom: 1px solid rgba(black, 0.05);
+
+	.statusDetail
+	{
+		flex: 1 0;
+	}
+
+	.statusInfo
+	{
+		font-weight: bold;
+	}
+}
+
+.rhe
+{
+	display: flex;
+	flex: 2 0;
+
+	> div
+	{
+		padding: 0 0.5rem;
+		width: 1.5rem;
+		text-align: center;
+	}
+}

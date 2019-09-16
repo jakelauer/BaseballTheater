@@ -68,6 +68,15 @@ export class Respond extends React.Component<Props, IRespondState>
 			return matchMedia(`(max-width: ${pxWidth}px)`).matches;
 		}).map(key => RespondSizes[key]);
 
+		sizeKeyStrings
+			.forEach(key =>
+			{
+				const className = `r-${key}`;
+				const active = current.find(a => RespondSizes[key] === a);
+				active
+					? document.documentElement.classList.add(className)
+					: document.documentElement.classList.remove(className);
+			});
 
 		this.setState({
 			current
