@@ -1,0 +1,27 @@
+$team-colors: ('ana': #BA0021, 'az': #A71930, 'ari': #a71930, 'atl': #CE1141, 'bal': #DF4601, 'bos': #BD3039, 'chc': #CC3433, 'chn': #CC3433, 'chw': #000, 'cha': #000, 'cin': #C6011F, 'cle': #E31937, 'col': #333366, 'det': #0C2C56, 'mia': #FF6600, 'hou': #002D62, 'kc': #004687, 'la': #005596, 'lan': #005596, 'mil': #0A2351, 'min': #002B5C, 'nym': #FF5910, 'nyn': #FF5910, 'nyy': #1c2841, 'nya': #1c2841, 'oak': #003831, 'phi': #284898, 'pit': #FDB827, 'stl': #C41E3A, 'sd': #002D62, 'sf': #FD5A1E, 'sea': #0C2C56, 'tb': #092C5C, 'tex': #C0111F, 'tor': #134A8E, 'was': #AB0003);
+
+$team-colors-secondary: ('ana':#003263, 'az':#000, 'ari':#000, 'atl':#13274F, 'bal':#000, 'bos':#0D2B56, 'chc':#0E3386, 'chn':#0E3386, 'chw':#C4CED4, 'cha':#C4CED4, 'cin':#000, 'cle':#002B5C, 'col':#231F20, 'det':#0C2C56, 'hou':#EB6E1F, 'kc':#C09A5B, 'la':#005A9C, 'lan':#005A9C, 'mia':#0077C8, 'mil':#B6922E, 'min':#D31145, 'nym':#002D72, 'nyn':#002D72, 'nyy':#1c2841, 'nya':#1c2841, 'oak':#EFB21E, 'phi':#E81828, 'pit':#000000, 'stl':#000066, 'sd':#FEC325, 'sf':#000000, 'sea':#005C5C, 'tb':#8FBCE6, 'tex':#003278, 'tor':#1D2D5C, 'was':#11225B);
+
+$teams: az ari atl bal bos chc chn chw cha cin cle col det mia hou kc ana la lan mil min nym nyn nyy nya oak phi pit stl sdp sf sea tb tex tor was;
+
+.teamColorPrimary
+{
+	@each $team in $teams
+	{
+		&.#{$team}
+		{
+			color: map-get($team-colors, $team);
+		}
+	}
+}
+
+.teamBackgroundPrimary
+{
+	@each $team in $teams
+	{
+		&.#{$team}
+		{
+			background-color: map-get($team-colors, $team);
+		}
+	}
+}

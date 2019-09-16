@@ -23,12 +23,16 @@ export class SiteRoute<T extends object = {}>
 	}
 }
 
+export interface IGameParams
+{
+	gameId: string,
+	tab?: "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
+}
+
 export class SiteRoutes
 {
-	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?", {
-		yyyymmdd: moment().format("YYYYMMDD")
-	});
-	public static Game = new SiteRoute<{ gameId: string }>("/games/:gameId");
+	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?");
+	public static Game = new SiteRoute<IGameParams>("/game/:gameId/:tab?", {tab: "Highlights"});
 	public static Schedule = new SiteRoute<{ year: string; team?: string }>("/schedule/:year/:team?", {
 		year: moment().format("YYYY")
 	});

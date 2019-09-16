@@ -9,7 +9,7 @@ class MlbClientDataFetcherInternal extends MlbDataServer
 		super(url =>
 		{
 			const encodedUrl = encodeURIComponent(url);
-			return `/proxy/${encodedUrl}`;
+			return `/api/proxy/${encodedUrl}`;
 		});
 	}
 }

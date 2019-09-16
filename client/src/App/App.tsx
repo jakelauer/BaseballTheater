@@ -18,9 +18,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import {Link, Route} from "react-router-dom";
+import {Link, Redirect, Route, Switch} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import GamesArea from "../Areas/Games/GamesArea";
+import {GameArea} from "../Areas/Game/GameArea";
 
 interface IAppState
 {
@@ -98,28 +99,40 @@ export class App extends React.Component<{}, IAppState>
 
 		return (
 			<div className={styles.wrapper}>
-				<Respond at={RespondSizes.small}>
-					<AppBar position="static" className={styles.appBar}>
-						<Toolbar>
-							<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" onClick={this.openDrawer}>
-								<Menu/>
-							</IconButton>
-						</Toolbar>
-					</AppBar>
-					<SwipeableDrawer onClose={this.closeDrawer} onOpen={this.openDrawer} open={this.state.drawerOpen}>
-						{drawerContents}
-					</SwipeableDrawer>
-				</Respond>
-				<Respond at={RespondSizes.small} hide={true}>
-					<Drawer anchor={"left"} variant={"permanent"} open={this.state.drawerOpen}>
-						{drawerContents}
-					</Drawer>
-				</Respond>
-				<Container>
-					<Grid container>
-						<Route path={SiteRoutes.Games.path} component={GamesArea}/>
-					</Grid>
-				</Container>
+				<nav className={styles.nav}>
+					<Respond at={RespondSizes.small}>
+						<AppBar position="fixed" className={styles.appBar}>
+							<Toolbar>
+								<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" onClick={this.openDrawer}>
+									<Menu/>
+								</IconButton>
+							</Toolbar>
+						</AppBar>
+						<SwipeableDrawer onClose={this.closeDrawer} onOpen={this.openDrawer} open={this.state.drawerOpen}>
+							{drawerContents}
+						</SwipeableDrawer>
+					</Respond>
+					<Respond at={RespondSizes.small} hide={true}>
+						<Drawer anchor={"left"} variant={"persistent"} open={true} classes={{
+							paper: styles.drawerPaper
+						}}>
+							{drawerContents}
+						</Drawer>
+					</Respond>
+				</nav>
+				<main className={styles.main}>
+					<Container maxWidth={"xl"}>
+						<Grid container>
+							<Switch>
+								<Route path={SiteRoutes.Games.path} component={GamesArea}/>
+								<Route path={SiteRoutes.Game.path} component={GameArea}/>
+								<Route exact path={"/"}>
+									<Redirect to={SiteRoutes.Games.resolve()}/>
+								</Route>
+							</Switch>
+						</Grid>
+					</Container>
+				</main>
 				<Dialog open={this.state.error !== ""} onClose={() => this.setState({error: ""})}>
 					<DialogTitle>Error</DialogTitle>
 					<DialogContent>
@@ -138,7 +151,7 @@ export default App;
 const MenuItem = (props: { icon: React.ReactElement; path: string; children?: React.ReactNode }) =>
 {
 	return (
-		<ListItem color={"primary"} component={p => <Link {...p} to={props.path}/>}>
+		<ListItem button color={"primary"} component={p => <Link {...p} to={props.path}/>}>
 			<ListItemIcon>
 				{props.icon}
 			</ListItemIcon>

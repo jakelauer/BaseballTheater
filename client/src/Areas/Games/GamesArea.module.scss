@@ -1,0 +1,27 @@
+.wrapper
+{
+	width: 100%;
+}
+
+.date
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+
+	:global(.r-small) &
+	{
+		padding-top: 1rem;
+	}
+}
+
+.datePicker
+{
+	padding: 0 2rem;
+}
+
+.dateArrow
+{
+	margin: 1rem;
+}

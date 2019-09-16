@@ -2,6 +2,12 @@ import * as React from "react";
 import moment from "moment/moment";
 import {RouteComponentProps, withRouter} from "react-router";
 import {GameList} from "./GameList";
+import styles from "./GamesArea.module.scss";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/moment';
+import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
+import Fab from "@material-ui/core/Fab";
+import {SiteRoutes} from "../../Global/Routes/Routes";
 
 interface IGamesAreaParams
 {
@@ -22,11 +28,71 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 		};
 	}
 
+	public componentDidMount(): void
+	{
+	}
+
+	private onDateChange = (date: moment.Moment, value?: string) =>
+	{
+		this.props.history.push(SiteRoutes.Games.resolve({
+			yyyymmdd: date.format("YYYYMMDD")
+		}));
+	};
+
+	private nextDate = () =>
+	{
+		const nextDate = moment(this.props.match.params.yyyymmdd).add(1, "day");
+		this.props.history.push(SiteRoutes.Games.resolve({
+			yyyymmdd: nextDate.format("YYYYMMDD")
+		}));
+	};
+
+	private prevDate = () =>
+	{
+		const prevDate = moment(this.props.match.params.yyyymmdd).add(-1, "day");
+		this.props.history.push(SiteRoutes.Games.resolve({
+			yyyymmdd: prevDate.format("YYYYMMDD")
+		}));
+	};
+
 	public render()
 	{
-		const date = moment(this.props.match.params.yyyymmdd);
+		const date = moment(this.props.match.params.yyyymmdd || moment().format("YYYYMMDD"));
+
 		return (
-			<GameList day={date}/>
+			<div className={styles.wrapper}>
+				<div className={styles.date}>
+					<div>
+						<Fab size={"small"} color={"primary"} onClick={this.prevDate}>
+							<KeyboardArrowLeft/>
+						</Fab>
+					</div>
+					<div className={styles.datePicker}>
+						<MuiPickersUtilsProvider utils={DateFnsUtils}>
+							<KeyboardDatePicker
+								disableToolbar
+								variant="inline"
+								format="MM/DD/YYYY"
+								margin="normal"
+								id="date-picker-inline"
+								value={date}
+								onChange={this.onDateChange}
+								KeyboardButtonProps={{
+									'aria-label': 'change date',
+								}}
+							/>
+						</MuiPickersUtilsProvider>
+					</div>
+					<div>
+						<Fab size={"small"} color={"primary"} onClick={this.nextDate}>
+							<KeyboardArrowRight/>
+						</Fab>
+					</div>
+				</div>
+				<div className={styles.gameList}>
+					<GameList day={date}/>
+				</div>
+			</div>
 		);
 	}
 }
