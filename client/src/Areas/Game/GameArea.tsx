@@ -73,7 +73,7 @@ export class GameArea extends React.Component<Props, State>
 			case "BoxScore":
 				return <BoxScore/>;
 			case "Highlights":
-				return <Highlights gameIntercom={this.gameIntercom} gamePk={this.props.match.params.gameId}/>;
+				return <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId}/>;
 		}
 	}
 
