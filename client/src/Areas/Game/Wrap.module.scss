@@ -1,0 +1,31 @@
+@import "../../styles/vars";
+
+.wrapper
+{
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 2rem 2rem 5rem;
+}
+
+.progress
+{
+	margin: 0 auto;
+}
+
+.title
+{
+	margin-bottom: 3rem !important;
+}
+
+.wrap
+{
+	p
+	{
+		line-height: 2rem;
+	}
+
+	a
+	{
+		color: $color-accent;
+	}
+}

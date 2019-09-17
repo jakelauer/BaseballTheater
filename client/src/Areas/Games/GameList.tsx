@@ -44,6 +44,7 @@ export class GameList extends React.Component<Props, State>
 	public componentDidMount()
 	{
 		this.fetchSchedule();
+
 	}
 
 	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
@@ -99,7 +100,7 @@ export class GameList extends React.Component<Props, State>
 			<Grid className={styles.gameSummaries} container spacing={3}>
 				{
 					this.state.loading
-						? <CircularProgress/>
+						? <CircularProgress className={styles.progress}/>
 						: gameSummaries
 				}
 			</Grid>

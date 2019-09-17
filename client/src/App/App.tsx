@@ -28,7 +28,7 @@ interface IAppState
 	drawerOpen: boolean;
 	search: string;
 	loading: boolean;
-	error: string;
+	error: Error;
 }
 
 export class App extends React.Component<{}, IAppState>
@@ -41,7 +41,7 @@ export class App extends React.Component<{}, IAppState>
 
 		this.state = {
 			drawerOpen: false,
-			error: "",
+			error: undefined,
 			search: "",
 			loading: false
 		};
@@ -50,6 +50,13 @@ export class App extends React.Component<{}, IAppState>
 	componentDidMount()
 	{
 
+	}
+
+	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void
+	{
+		this.setState({
+			error
+		})
 	}
 
 	private closeDrawer = () =>
@@ -68,10 +75,6 @@ export class App extends React.Component<{}, IAppState>
 
 	public render()
 	{
-		const loading = this.state.loading ?
-			<CircularProgress/>
-			: null;
-
 		const drawerContents = (
 			<React.Fragment>
 				<div className={styles.logo}>
@@ -133,11 +136,11 @@ export class App extends React.Component<{}, IAppState>
 						</Grid>
 					</Container>
 				</main>
-				<Dialog open={this.state.error !== ""} onClose={() => this.setState({error: ""})}>
+				<Dialog open={this.state.error !== undefined} onClose={() => this.setState({error: undefined})}>
 					<DialogTitle>Error</DialogTitle>
 					<DialogContent>
 						<DialogContentText>
-							{this.state.error}
+							There was an error rendering the page :(
 						</DialogContentText>
 					</DialogContent>
 				</Dialog>
