@@ -48,7 +48,7 @@ export class Highlight extends React.Component<Props, State>
 	{
 		const matches = url.match(/([0-9]{3,5})k/gi);
 
-		return matches.length >= 1
+		return matches && matches.length >= 1
 			? matches[0]
 			: alt;
 	}

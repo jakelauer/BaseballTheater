@@ -4,6 +4,7 @@ import * as path from "path";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Utils} from "./utils";
 import {LocalEndpointMap} from "./Local/endpoints";
+import compression from "compression";
 
 export type ExpressEndpointMap = { [key: string]: (req: Request, res: Response, next: NextFunction) => void; }
 
@@ -12,6 +13,7 @@ const port = process.env.PORT || 5000;
 
 const clientFolder = path.join(process.cwd(), 'client');
 app.use(express.static(clientFolder));
+app.use(compression());
 console.log(clientFolder);
 
 const apiKeyEndpoints = {

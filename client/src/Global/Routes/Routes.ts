@@ -23,11 +23,13 @@ export class SiteRoute<T extends object = {}>
 	}
 }
 
+export type IGameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
 export interface IGameParams
 {
 	gameId: string,
-	tab?: "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
+	tab?: IGameTabs;
 }
+
 
 export class SiteRoutes
 {
