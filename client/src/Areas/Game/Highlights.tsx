@@ -1,15 +1,13 @@
 import * as React from "react";
-import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
 import {GameMedia} from "baseball-theater-engine/dist";
 import styles from "./Highlights.module.scss";
 import {Highlight} from "../../UI/Highlight";
 import {CircularProgress, Grid} from "@material-ui/core";
-import {GameIntercom} from "./Components/GameIntercom";
 
 interface IHighlightsProps
 {
 	gamePk: string;
-	gameIntercom: GameIntercom;
+	media: GameMedia;
 }
 
 interface DefaultProps
@@ -21,8 +19,6 @@ type State = IHighlightsState;
 
 interface IHighlightsState
 {
-	gameMedia: GameMedia;
-	loading: boolean;
 }
 
 export class Highlights extends React.Component<Props, State>
@@ -32,38 +28,15 @@ export class Highlights extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			gameMedia: null,
-			loading: true
 		};
-	}
-
-	public componentDidMount(): void
-	{
-		this.fetchData();
-
-		this.props.gameIntercom.listen(() => this.fetchData());
-	}
-
-	private fetchData()
-	{
-		this.setState({
-			loading: true
-		});
-
-		MlbClientDataFetcher.getGameMedia(this.props.gamePk)
-			.then(data => this.setState({
-					gameMedia: data,
-					loading: false
-				}
-			));
 	}
 
 	private get highlights()
 	{
-		return this.state.gameMedia
-			&& this.state.gameMedia.highlights
-			&& this.state.gameMedia.highlights.highlights
-			&& this.state.gameMedia.highlights.highlights.items
+		return this.props.media
+			&& this.props.media.highlights
+			&& this.props.media.highlights.highlights
+			&& this.props.media.highlights.highlights.items
 			|| [];
 	}
 
@@ -85,7 +58,7 @@ export class Highlights extends React.Component<Props, State>
 				</div>
 				<Grid container className={styles.rest} spacing={3}>
 					{
-						this.state.loading
+						!this.props.media
 							? <CircularProgress className={styles.progress}/>
 							: restRendered
 					}
