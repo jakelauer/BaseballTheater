@@ -1,5 +1,5 @@
 import pathToRegexp, {PathFunction} from "path-to-regexp";
-import {ITeams} from "baseball-theater-engine/dist";
+import {ITeams} from "baseball-theater-engine";
 import moment from "moment";
 
 export class SiteRoute<T extends object = {}>

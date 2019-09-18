@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "./App.module.scss";
-import {CircularProgress, DialogContentText, Grid} from "@material-ui/core";
+import {DialogContentText, Grid} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
@@ -22,6 +22,7 @@ import {Link, Redirect, Route, Switch} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import GamesArea from "../Areas/Games/GamesArea";
 import {GameArea} from "../Areas/Game/GameArea";
+import {CompilationTypes} from "baseball-theater-engine/contract";
 
 interface IAppState
 {
@@ -49,7 +50,15 @@ export class App extends React.Component<{}, IAppState>
 
 	componentDidMount()
 	{
-
+		const type: CompilationTypes = CompilationTypes.HomeRuns;
+		fetch(`/api/compilations?type=${type}`, {
+			headers: {
+				"x-app": "playback",
+				"x-api-key": "NER6GF4-B36417M-K3QWDMP-NRHSFC5"
+			}
+		})
+			.then(data => data.json())
+			.then(data => console.log(data));
 	}
 
 	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void

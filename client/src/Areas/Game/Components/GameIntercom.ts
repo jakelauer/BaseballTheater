@@ -1,7 +1,7 @@
 import {Intercom} from "../../../Global/Intercom/intercom";
 import moment from "moment";
 import {MlbClientDataFetcher} from "../../../Global/Mlb/MlbClientDataFetcher";
-import {GameMedia, LiveData} from "baseball-theater-engine/dist";
+import {GameMedia, LiveData} from "baseball-theater-engine";
 
 export interface IGameIntercomState
 {

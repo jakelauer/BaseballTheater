@@ -1,4 +1,4 @@
-import {MlbDataServer} from "baseball-theater-engine/dist";
+import {MlbDataServer} from "baseball-theater-engine";
 
 class MlbClientDataFetcherInternal extends MlbDataServer
 {

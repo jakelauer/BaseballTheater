@@ -1,7 +1,7 @@
 import * as React from "react";
-import {IScheduleGame, IScheduleGameStatus, IScheduleTeamItem} from "baseball-theater-engine/dist/contract/teamschedule";
+import {IScheduleGame, IScheduleGameStatus, IScheduleTeamItem} from "baseball-theater-engine/contract/teamschedule";
 import styles from "./GameSummary.module.scss";
-import {LiveGameLinescore} from "baseball-theater-engine/dist";
+import {LiveGameLinescore} from "baseball-theater-engine";
 import {Paper} from "@material-ui/core";
 import classNames from "classnames";
 import moment from "moment";

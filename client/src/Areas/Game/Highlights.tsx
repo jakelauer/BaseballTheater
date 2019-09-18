@@ -1,5 +1,5 @@
 import * as React from "react";
-import {GameMedia} from "baseball-theater-engine/dist";
+import {GameMedia} from "baseball-theater-engine";
 import styles from "./Highlights.module.scss";
 import {Highlight} from "../../UI/Highlight";
 import {CircularProgress, Grid} from "@material-ui/core";
