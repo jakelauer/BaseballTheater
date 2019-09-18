@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import {Request} from "express-serve-static-core";
+import {Response} from "express";
 
 interface IAppKeyJson
 {
@@ -33,5 +34,10 @@ export class Utils
 		}
 
 		return false;
+	}
+
+	public static send500(res: Response, error: Error)
+	{
+		res.status(500).json({error: error.toString()})
 	}
 }

@@ -7,7 +7,7 @@ import styles from "./GameList.module.scss";
 import Grid from "@material-ui/core/Grid";
 import {Link} from "react-router-dom";
 import {SiteRoutes} from "../../Global/Routes/Routes";
-import {IScheduleGameList} from "baseball-theater-engine/dist/contract/teamschedule";
+import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 
 interface IGameListProps
 {

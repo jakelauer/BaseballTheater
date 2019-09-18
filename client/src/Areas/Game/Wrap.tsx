@@ -1,6 +1,6 @@
 import * as React from "react";
 import {GameIntercom} from "./Components/GameIntercom";
-import {GameMedia} from "baseball-theater-engine/dist";
+import {GameMedia} from "baseball-theater-engine";
 import {CircularProgress, Typography} from "@material-ui/core";
 import styles from "./Wrap.module.scss";
 import marked from "marked";

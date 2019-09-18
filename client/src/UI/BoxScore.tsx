@@ -1,5 +1,5 @@
 import * as React from "react";
-import {LiveData} from "baseball-theater-engine/dist";
+import {LiveData} from "baseball-theater-engine";
 
 interface IBoxScoreProps
 {

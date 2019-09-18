@@ -1,8 +1,9 @@
-import {ExpressEndpointMap} from "../server";
 import {fetch} from "cross-fetch";
+import {Express} from "express";
 
-export const LocalEndpointMap: ExpressEndpointMap = {
-	"/proxy/:url": (req, res, next) =>
+export const RegisterLocalEndpoints = (app: Express) =>
+{
+	app.get("/api/proxy/:url", (req, res, next) =>
 	{
 		const url = req.params.url;
 		if (!url)
@@ -17,5 +18,5 @@ export const LocalEndpointMap: ExpressEndpointMap = {
 			{
 				res.send(json);
 			});
-	}
+	});
 };

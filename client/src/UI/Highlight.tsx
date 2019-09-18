@@ -1,5 +1,5 @@
 import * as React from "react";
-import {MediaItem} from "baseball-theater-engine/dist";
+import {MediaItem} from "baseball-theater-engine";
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@material-ui/core";
 import styles from "./Highlight.module.scss";
 import {Respond, RespondSizes} from "../Global/Respond/Respond";
