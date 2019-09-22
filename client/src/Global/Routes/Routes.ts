@@ -44,4 +44,5 @@ export class SiteRoutes
 	public static FeaturedVideos = new SiteRoute("/videos");
 	public static Teams = new SiteRoute("/teams");
 	public static Team = new SiteRoute<{ team: keyof ITeams }>("/team/:team");
+	public static ApiTest = new SiteRoute("/apitest");
 }

@@ -22,7 +22,7 @@ import {Link, Redirect, Route, Switch} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import GamesArea from "../Areas/Games/GamesArea";
 import {GameArea} from "../Areas/Game/GameArea";
-import {CompilationTypes} from "baseball-theater-engine/contract";
+import {ApiTestArea} from "../Areas/ApiTest/ApiTestArea";
 
 interface IAppState
 {
@@ -50,15 +50,6 @@ export class App extends React.Component<{}, IAppState>
 
 	componentDidMount()
 	{
-		const type: CompilationTypes = CompilationTypes.HomeRuns;
-		fetch(`/api/compilations?type=${type}`, {
-			headers: {
-				"x-app": "playback",
-				"x-api-key": "NER6GF4-B36417M-K3QWDMP-NRHSFC5"
-			}
-		})
-			.then(data => data.json())
-			.then(data => console.log(data));
 	}
 
 	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void
@@ -136,6 +127,7 @@ export class App extends React.Component<{}, IAppState>
 					<Container maxWidth={"xl"}>
 						<Grid container>
 							<Switch>
+								<Route path={SiteRoutes.ApiTest.path} component={ApiTestArea}/>
 								<Route path={SiteRoutes.Games.path} component={GamesArea}/>
 								<Route path={SiteRoutes.Game.path} component={GameArea}/>
 								<Route exact path={"/"}>

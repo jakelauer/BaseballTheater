@@ -11,6 +11,8 @@ interface IAppKeyJson
 
 export class Utils
 {
+	public static cachedValidApiKeys: IAppKeyJson[] = null;
+
 	/**
 	 * Determines whether the given API key matches the given app
 	 * @param {Request} request The request to the server
@@ -23,10 +25,13 @@ export class Utils
 
 		if (app && key)
 		{
-			const file = fs.readFileSync(path.resolve(__dirname, "./apikeys.json"), "utf8");
-			const json: IAppKeyJson[] = JSON.parse(file);
+			if (!Utils.cachedValidApiKeys)
+			{
+				const file = fs.readFileSync(path.resolve(process.cwd(), "./apikeys.json"), "utf8");
+				Utils.cachedValidApiKeys = JSON.parse(file);
+			}
 
-			const matchingApp = json.find(a => a.app === app);
+			const matchingApp = Utils.cachedValidApiKeys.find(a => a.app === app);
 			if (matchingApp)
 			{
 				return matchingApp.apiKey === key;

@@ -1,7 +1,8 @@
 import {fetch} from "cross-fetch";
 import {Express} from "express";
+import {NextFunction, Request, Response} from "express-serve-static-core";
 
-export const RegisterLocalEndpoints = (app: Express) =>
+export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 {
 	app.get("/api/proxy/:url", (req, res, next) =>
 	{
@@ -18,5 +19,10 @@ export const RegisterLocalEndpoints = (app: Express) =>
 			{
 				res.send(json);
 			});
+	});
+
+	app.get("*", (req: Request, res: Response, next: NextFunction) =>
+	{
+		res.sendFile("index.html", {root: clientFolder});
 	});
 };
