@@ -8,6 +8,7 @@ const entryPath = resolveApp("server.ts");
 module.exports = {
     entry: entryPath,
     target: "node",
+    mode: "production",
     module: {
         rules: [
             {
@@ -16,6 +17,9 @@ module.exports = {
                 exclude: /node_modules/
             }
         ]
+    },
+    optimization: {
+        minimize: false
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']

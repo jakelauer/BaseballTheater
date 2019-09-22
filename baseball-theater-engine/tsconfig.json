@@ -19,7 +19,7 @@
     "noEmit": false,
     "paths": {
       "@Utility": [
-        "./engine/utils"
+        "engine/utils"
       ]
     }
   }
