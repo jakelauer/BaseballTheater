@@ -8,8 +8,8 @@
     "client": "cd client && yarn start",
     "server": "node -r ts-node/register --inspect=5001 --nolazy server/server.ts --runInBand",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn client\"",
-    "buildserver": "cd server && webpack",
-    "build": "rmdir /s /q output && yarn buildserver && cd client && yarn build && cd ../ && yarn finalize",
+    "buildserver": "node server/scripts/build.js",
+    "build": "rmdir /s /q output && cd client && yarn build && cd ../ && yarn buildserver",
     "finalize": "node server/scripts/finalize.js"
   },
   "author": "",

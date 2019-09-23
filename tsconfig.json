@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "types": ["node"],
-    "lib": ["es6"],
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "es6"
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "removeComments": false,
@@ -10,17 +14,14 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "baseUrl": "server",
-    "paths": {
-      "*": [
-        "node_modules/*"
-      ]
-    }
+    "noEmit": false,
+    "baseUrl": "server"
   },
   "include": [
     "server"
   ],
   "exclude": [
-    "client"
+    "client",
+    "node_modules"
   ]
 }
