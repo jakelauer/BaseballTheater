@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const entryPath = resolveApp("server.ts");
+const entryPath = resolveApp("server/server.ts");
 
 module.exports = {
     entry: entryPath,
@@ -26,6 +26,6 @@ module.exports = {
     },
     output: {
         filename: 'server.js',
-        path: path.resolve(appDirectory, "../output")
+        path: path.resolve(appDirectory, "output")
     }
 };

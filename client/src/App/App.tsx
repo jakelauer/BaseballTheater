@@ -34,8 +34,6 @@ interface IAppState
 
 export class App extends React.Component<{}, IAppState>
 {
-	private apiTimeout: number = null;
-
 	constructor(props: {})
 	{
 		super(props);
@@ -46,10 +44,6 @@ export class App extends React.Component<{}, IAppState>
 			search: "",
 			loading: false
 		};
-	}
-
-	componentDidMount()
-	{
 	}
 
 	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void
