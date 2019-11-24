@@ -6,9 +6,9 @@
 	display: flex;
 	font-family: Roboto, sans-serif;
 
-	:global(.r-small) &
+	:global(.r-medium) &
 	{
-		padding-top: 56px;
+		padding-top: 64px;
 		flex-direction: column;
 	}
 }
@@ -53,7 +53,7 @@
 	min-width: 250px;
 }
 
-:global(.r-small) .nav
+:global(.r-medium) .nav
 {
 	width: auto;
 }
@@ -63,9 +63,15 @@
 	width: 85vw;
 	max-width: calc(100vw - 250px);
 
-	:global(.r-small) &
+	:global(.r-medium) &
 	{
 		width: auto;
 		max-width: none;
 	}
+}
+
+.indent
+{
+	padding-left: 2rem;
+
 }

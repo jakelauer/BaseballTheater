@@ -26,6 +26,6 @@ module.exports = {
     },
     output: {
         filename: 'server.js',
-        path: path.resolve(appDirectory, "output")
+        path: path.resolve(appDirectory, "output/server")
     }
 };

@@ -1,18 +1,21 @@
 import * as React from "react";
 import {MediaItem} from "baseball-theater-engine";
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@material-ui/core";
+import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography} from "@material-ui/core";
 import styles from "./Highlight.module.scss";
-import {Respond, RespondSizes} from "../Global/Respond/Respond";
+import {Respond} from "../Global/Respond/Respond";
 import classNames from "classnames";
+import Skeleton from "@material-ui/lab/Skeleton";
+import {RespondSizes} from "../Global/Respond/RespondIntercom";
 
 interface IHighlightProps
 {
-	media: MediaItem;
+	media?: MediaItem;
 	className?: string;
 }
 
 interface DefaultProps
 {
+	loading: boolean;
 }
 
 type Props = IHighlightProps & DefaultProps;
@@ -29,6 +32,10 @@ export class Highlight extends React.Component<Props, State>
 		super(props);
 	}
 
+	public static defaultProps: DefaultProps = {
+		loading: false
+	};
+
 	private get image()
 	{
 		const images = this.props.media.image.cuts;
@@ -40,8 +47,8 @@ export class Highlight extends React.Component<Props, State>
 
 	private get defaultVideo()
 	{
-		return this.props.media.playbacks
-			&& this.props.media.playbacks.filter(a => a.url.includes(".mp4"))[0];
+		return this.props.media?.playbacks?.filter(a => a.url.includes(".mp4"))[0]
+			|| undefined;
 	}
 
 	private getKLabel(url: string, alt: string)
@@ -55,47 +62,53 @@ export class Highlight extends React.Component<Props, State>
 
 	public render()
 	{
-		if (!this.props.media || !this.props.media.playbacks)
-		{
-			return null;
-		}
+		const {media, loading} = this.props;
 
-		const mp4s = this.props.media.playbacks.filter(a => a.url.includes(".mp4"));
+		const mp4s = media && media.playbacks && media.playbacks.filter(a => a.url.includes(".mp4")) || [];
 
 		const actions = (
 			<CardActions>
-				{mp4s.map(a => (
-					<a href={a.url} target={"_blank"}>
-						<Button size="small" color="primary">
-							{this.getKLabel(a.url, a.name)}
-						</Button>
-					</a>
-				))}
+				{mp4s && !loading
+					? mp4s.map(a => (
+						<a href={a.url} target={"_blank"}>
+							<Button size="small" color="primary">
+								{this.getKLabel(a.url, a.name)}
+							</Button>
+						</a>
+					))
+					: <Skeleton variant={"rect"} width={"100%"} height={30}/>
+				}
 			</CardActions>
 		);
 
 		return (
 			<Card className={classNames(this.props.className, styles.highlight)}>
-				<a href={this.defaultVideo.url} target={"_blank"}>
-					<CardMedia
-						className={styles.cardMedia}
-						image={this.image.src}
-						title={this.props.media.image.altText}
-					/>
-				</a>
+				{this.defaultVideo && !loading ?
+					<a href={this.defaultVideo.url} target={"_blank"}>
+						<CardMedia
+							className={styles.cardMedia}
+							image={this.image.src}
+							title={media.image.altText}
+						/>
+
+					</a>
+					: <Skeleton variant={"rect"} width={"100%"} height={150}/>
+				}
 				<div className={styles.meta}>
 					<CardActionArea className={styles.actionArea}>
 						<CardContent>
-							<a href={this.defaultVideo.url} target={"_blank"}>
-								<Typography gutterBottom variant="h5" component="h2" className={styles.title}>
-									{this.props.media.title}
-								</Typography>
-								<Respond at={RespondSizes.small} hide={true}>
-									<Typography variant="body2" color="textSecondary" component="p">
-										{this.props.media.description}
-									</Typography>
-								</Respond>
-							</a>
+							{!loading && this.defaultVideo &&
+                            <a href={this.defaultVideo.url} target={"_blank"}>
+                                <Typography gutterBottom variant="h5" component="h2" className={styles.title}>
+									{media.title}
+                                </Typography>
+                                <Respond at={RespondSizes.small} hide={true}>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+										{media.description}
+                                    </Typography>
+                                </Respond>
+                            </a>
+							}
 						</CardContent>
 					</CardActionArea>
 					<Respond at={RespondSizes.small} hide={false}>

@@ -57,7 +57,7 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 
 	public render()
 	{
-		const date = moment(this.props.match.params.yyyymmdd || moment().format("YYYYMMDD"));
+		const date = moment(this.props.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD"));
 
 		return (
 			<div className={styles.wrapper}>

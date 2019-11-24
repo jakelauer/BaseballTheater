@@ -1,17 +1,5 @@
 import * as React from "react";
-
-export enum RespondSizes
-{
-	pico = 320,
-	tiny = 600,
-	small = 800,
-	medium = 1000,
-	large = 1200,
-	huge = 1600,
-	hd = 1920
-}
-
-type RespondSizesKeys = keyof typeof RespondSizes;
+import RespondIntercom, {RespondSizes} from "./RespondIntercom";
 
 interface IRespondProps
 {
@@ -39,8 +27,6 @@ export class Respond extends React.Component<Props, IRespondState>
 		this.state = {
 			current: []
 		};
-
-		this.determineSize = this.determineSize.bind(this);
 	}
 
 	public static defaultProps: DefaultProps = {
@@ -49,38 +35,9 @@ export class Respond extends React.Component<Props, IRespondState>
 
 	public componentDidMount()
 	{
-		this.determineSize();
-
-		window.addEventListener("resize", this.determineSize);
-	}
-
-	public componentWillUnmount(): void
-	{
-		window.removeEventListener("resize", this.determineSize);
-	}
-
-	private determineSize()
-	{
-		const sizeKeyStrings = Object.keys(RespondSizes).filter(a => isNaN(parseInt(a))) as RespondSizesKeys[];
-		const current = sizeKeyStrings.filter(key =>
-		{
-			const pxWidth = RespondSizes[key];
-			return matchMedia(`(max-width: ${pxWidth}px)`).matches;
-		}).map(key => RespondSizes[key]);
-
-		sizeKeyStrings
-			.forEach(key =>
-			{
-				const className = `r-${key}`;
-				const active = current.find(a => RespondSizes[key] === a);
-				active
-					? document.documentElement.classList.add(className)
-					: document.documentElement.classList.remove(className);
-			});
-
-		this.setState({
-			current
-		});
+		RespondIntercom.listen(data => this.setState({
+			current: data.sizes
+		}));
 	}
 
 	public render()

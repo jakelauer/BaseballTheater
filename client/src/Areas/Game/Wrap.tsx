@@ -42,10 +42,7 @@ export class Wrap extends React.Component<Props, State>
 
 	public render()
 	{
-		if (!this.state.media
-			|| !this.state.media.editorial
-			|| !this.state.media.editorial.recap
-			|| !this.state.media.editorial.recap.mlb)
+		if (!this.state.media?.editorial?.recap?.mlb)
 		{
 			return <CircularProgress className={styles.progress}/>;
 		}

@@ -233,6 +233,7 @@ export interface PitchBreaks
 	breakAngle: number;
 	breakLength: number;
 	breakY: number;
+	spinRate: number;
 }
 
 export interface XYCoordinates
