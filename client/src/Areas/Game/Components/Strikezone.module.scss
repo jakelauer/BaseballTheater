@@ -1,0 +1,110 @@
+.wrapper
+{
+	overflow: hidden;
+	position: relative;
+}
+
+.zone
+{
+	display: flex;
+	width: 400px;
+	height: 400px;
+	margin-right: 50px;
+	position: relative;
+	margin-bottom: 3rem;
+	align-items: center;
+	justify-content: center;
+	background-size: cover;
+
+	:global(.r-medium) &
+	{
+		width: 100%;
+		height: 0;
+		padding-bottom: 100%;
+		max-width: none;
+	}
+
+	.forceSquare
+	{
+		width: 100%;
+		padding-bottom: 100%;
+	}
+
+	.zoneBox
+	{
+		position: absolute;
+		top: 25%;
+		width: 35%;
+		height: 50%;
+		border: 1px solid black;
+	}
+
+	.pitch
+	{
+		position: absolute;
+		width: auto;
+
+		.pitchCount
+		{
+			width: 25px;
+			height: 25px;
+			line-height: 25px;
+			margin-right: 0;
+			font-size: 0.8rem;
+		}
+	}
+}
+
+.pitch
+{
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+	transform: translateY(50%) translateX(-50%);
+
+	.pitchCount
+	{
+		$circle-size: 1.5rem;
+
+		width: $circle-size;
+		height: $circle-size;
+		border-radius: 50%;
+		color: white;
+		text-align: center;
+		line-height: $circle-size;
+		background: #CCC;
+		margin-right: 1rem;
+	}
+
+	&[data-type="B"] .pitchCount
+	{
+	}
+
+	&[data-type="S"] .pitchCount
+	{
+	}
+
+	&[data-type="X"] .pitch-count
+	{
+		background: #0082ff;
+	}
+
+	.pitchDescription
+	{
+		flex: 1;
+		max-width: 200px;
+		display: flex;
+		align-items: center;
+	}
+
+	.pitch-details
+	{
+		flex: 2;
+		align-items: center;
+	}
+}
+
+.pitch.specialEvent{
+	font-size: 0.9rem;
+	font-style: italic;
+}

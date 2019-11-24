@@ -9,7 +9,7 @@
     "server": "node -r ts-node/register --inspect=5001 --nolazy server/server.ts --runInBand",
     "dev": "concurrently --kill-others \"yarn server\" \"yarn client\"",
     "buildserver": "node server/scripts/build.js",
-    "build": "rmdir /s /q output && cd client && yarn build && cd ../ && yarn buildserver",
+    "build": "(if exist output rmdir /s /q output) && cd client && yarn build && cd ../ && yarn buildserver",
     "finalize": "node server/scripts/finalize.js"
   },
   "author": "",
@@ -26,7 +26,7 @@
     "mongodb": "^3.3.2",
     "simple-oauth2": "^2.5.0",
     "ts-node": "^8.3.0",
-    "typescript": "^3.6.2",
+    "typescript": "3.7.2",
     "uuid-apikey": "^1.4.4",
     "x2js": "^3.3.1"
   },
@@ -38,8 +38,8 @@
     "@types/simple-oauth2": "^2.2.1",
     "@types/swagger-jsdoc": "^3.0.2",
     "@types/swagger-ui-react": "^3.23.0",
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "2.6.1",
+    "@typescript-eslint/parser": "2.6.1",
     "concurrently": "^4.0.1",
     "eslint": "^6.3.0",
     "eslint-plugin-react": "^7.14.3",

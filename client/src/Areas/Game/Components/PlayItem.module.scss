@@ -1,0 +1,14 @@
+.playDetails
+{
+	margin-left: 2rem;
+}
+
+.pitches
+{
+	display: flex;
+
+	:global(.r-medium) &
+	{
+		flex-direction: column;
+	}
+}

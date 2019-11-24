@@ -14,7 +14,7 @@ const options = {
         },
     },
     // Path to the API docs
-    apis: [resolve("output/server.js")],
+    apis: [resolve("output/server/server.js")],
 };
 
 const buildSwagger = () => {

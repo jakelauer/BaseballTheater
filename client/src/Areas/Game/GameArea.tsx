@@ -3,7 +3,7 @@ import styles from "./GameArea.module.scss";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
-import {RouteComponentProps} from "react-router";
+import {RouteComponentProps, withRouter} from "react-router";
 import {IGameParams, IGameTabs, SiteRoutes} from "../../Global/Routes/Routes";
 import {Wrap} from "./Wrap";
 import {LiveGame} from "./LiveGame";
@@ -11,6 +11,7 @@ import {BoxScore} from "./BoxScore";
 import {Highlights} from "./Highlights";
 import {GameIntercom, IGameIntercomState} from "./Components/GameIntercom";
 import {Link} from "react-router-dom";
+import {CircularProgress} from "@material-ui/core";
 
 interface IGameAreaProps extends RouteComponentProps<IGameParams>
 {
@@ -29,7 +30,7 @@ interface IGameAreaState
 	gameData: IGameIntercomState;
 }
 
-export class GameArea extends React.Component<Props, State>
+class GameArea extends React.Component<Props, State>
 {
 	private readonly gameIntercom: GameIntercom;
 
@@ -64,12 +65,17 @@ export class GameArea extends React.Component<Props, State>
 
 	private renderTab()
 	{
+		if (!this.state.gameData)
+		{
+			return <CircularProgress />;
+		}
+
 		switch (this.props.match.params.tab)
 		{
 			case "Wrap":
 				return <Wrap gameIntercom={this.gameIntercom}/>;
 			case "LiveGame":
-				return <LiveGame/>;
+				return <LiveGame liveData={this.state.gameData.liveData}/>;
 			case "BoxScore":
 				return <BoxScore/>;
 			case "Highlights":
@@ -146,3 +152,5 @@ export class GameArea extends React.Component<Props, State>
 		);
 	}
 }
+
+export default withRouter(GameArea);

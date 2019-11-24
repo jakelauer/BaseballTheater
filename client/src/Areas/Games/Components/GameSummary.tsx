@@ -152,9 +152,11 @@ const Preview = (props: ITeamRowProps) =>
 {
 	return (
 		<TeamRow {...props}>
-			<div className={styles.preview}>
+			{props.team.probablePitcher &&
+            <div className={styles.preview}>
 				{props.team.probablePitcher.nameFirstLast}
-			</div>
+            </div>
+			}
 		</TeamRow>
 	);
 };

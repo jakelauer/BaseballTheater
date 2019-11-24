@@ -5,9 +5,10 @@ const config = require("../webpack.config");
 
 const compiler = webpack(config);
 compiler.run((err, stats) => {
-    if (stats) {
-        console.log(stats);
+    if (err) {
+        console.log(err);
     }
-    buildSwagger.buildSwagger();
     finalize.finalize();
+
+    buildSwagger.buildSwagger();
 });

@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import {Link} from "react-router-dom";
 import {SiteRoutes} from "../../Global/Routes/Routes";
 import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
+import {MlbUtils} from "baseball-theater-engine/mlbutils";
 
 interface IGameListProps
 {
@@ -86,6 +87,27 @@ export class GameList extends React.Component<Props, State>
 		{
 			return <CircularProgress/>;
 		}
+
+		const orderedGames = this.state.scoreboard.dates[0].games.sort((a, b) => {
+			//const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
+			//const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
+			//const favoriteReturn = aIsFavorite - bIsFavorite;
+
+			const favoriteReturn = 0;
+
+			const aTime = moment(a.gameDate);
+			const bTime = moment(b.gameDate);
+
+			const startTimeReturn = aTime.isBefore(bTime)
+				? -1
+				: aTime.isAfter(bTime)
+					? 1
+					: 0;
+
+			const finalReturn = MlbUtils.gameIsOver(a) ? 1 : 0;
+
+			return favoriteReturn || finalReturn || startTimeReturn;
+		});
 
 		const gameSummaries = this.state.scoreboard.dates[0].games
 			.map(game => (

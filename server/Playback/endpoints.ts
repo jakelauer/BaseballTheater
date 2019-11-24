@@ -1,4 +1,4 @@
-import {CompilationPlaylists, MlbDataServer, RecapTags, SinglePlayTags} from "../../baseball-theater-engine";
+import {CompilationPlaylists, MlbDataServer, NonPlayTags, RecapTags, SinglePlayTags} from "../../baseball-theater-engine";
 import {Express} from "express";
 import {PlaybackUtils} from "./PlaybackUtils";
 import moment from "moment";
@@ -40,7 +40,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 		const limit = PlaybackUtils.timeLimitFromDayCount(daysParam);
 
 		const MLB = new MlbDataServer();
-		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.VideoPlaylistSearch(type, page), limit)
+		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.videoPlaylistSearchNode(type, page), limit)
 			.then(data =>
 			{
 				const withDayResults = data.filter(r =>
@@ -87,7 +87,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 		const limit = PlaybackUtils.timeLimitFromDayCount(daysParam);
 
 		const MLB = new MlbDataServer();
-		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.VideoTagSearch(type, page), limit)
+		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.videoTagSearchNode(type, page), limit)
 			.then(data =>
 			{
 				const withDayResults = data.filter(r =>
@@ -134,7 +134,54 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 		const limit = PlaybackUtils.timeLimitFromDayCount(daysParam);
 
 		const MLB = new MlbDataServer();
-		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.VideoTagSearch(type, page), limit)
+		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.videoTagSearchNode(type, page), limit)
+			.then(data =>
+			{
+				const withDayResults = data.filter(r =>
+				{
+					return moment(r.metadata.date).isAfter(limit);
+				});
+
+				res.send(withDayResults);
+			});
+	});
+
+	/**
+	 * @swagger
+	 *
+	 * /api/nonplays:
+	 *  get:
+	 *      description: Returns videos that are not about gameplay
+	 *      parameters:
+	 *      - in: query
+	 *        name: type
+	 *        description: The type of play
+	 *        required: true
+	 *        schema:
+	 *          $ref: '#/definitions/SinglePlayTags'
+	 *      - in: query
+	 *        name: sinceDays
+	 *        description: The number of days ago to search (max 7)
+	 *        type: number
+	 *      - in: header
+	 *        name: x-api-key
+	 *        description: Your API Key
+	 *        type: string
+	 *      - in: header
+	 *        name: x-app
+	 *        description: Your app
+	 *        type: string
+	 */
+	app.get("/api/nonplays", (req, res) =>
+	{
+		PlaybackUtils.requireApiKey(req, res);
+
+		const type = req.query.type as NonPlayTags;
+		const daysParam = req.query.sinceDays || 1;
+		const limit = PlaybackUtils.timeLimitFromDayCount(daysParam);
+
+		const MLB = new MlbDataServer();
+		PlaybackUtils.getPagesUntilTimeLimit(page => MLB.videoTagSearchNode(type, page), limit)
 			.then(data =>
 			{
 				const withDayResults = data.filter(r =>

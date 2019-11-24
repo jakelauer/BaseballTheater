@@ -21,7 +21,7 @@ interface IApiTestAreaState
 	pre: any;
 }
 
-export class ApiTestArea extends React.Component<Props, State>
+export default class ApiTestArea extends React.Component<Props, State>
 {
 	constructor(props: Props)
 	{
