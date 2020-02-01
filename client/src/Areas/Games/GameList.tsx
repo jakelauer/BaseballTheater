@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import {SiteRoutes} from "../../Global/Routes/Routes";
 import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 import {MlbUtils} from "baseball-theater-engine/mlbutils";
+import {ContainerProgress} from "../../UI/ContainerProgress";
 
 interface IGameListProps
 {
@@ -85,7 +86,7 @@ export class GameList extends React.Component<Props, State>
 	{
 		if (!this.state.scoreboard)
 		{
-			return <CircularProgress/>;
+			return <ContainerProgress/>;
 		}
 
 		const orderedGames = this.state.scoreboard.dates[0].games.sort((a, b) => {

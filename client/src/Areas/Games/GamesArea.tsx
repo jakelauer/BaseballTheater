@@ -16,6 +16,7 @@ interface IGamesAreaParams
 
 interface IGamesAreaState
 {
+	dateString: string;
 }
 
 class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, IGamesAreaState>
@@ -25,23 +26,31 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 		super(props);
 
 		this.state = {
+			dateString: props.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD")
 		};
 	}
 
-	public componentDidMount(): void
+	public static getDerivedStateFromProps(p: RouteComponentProps<IGamesAreaParams>)
 	{
+		return {
+			dateString: p.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD")
+		};
 	}
 
 	private onDateChange = (date: moment.Moment, value?: string) =>
 	{
-		this.props.history.push(SiteRoutes.Games.resolve({
-			yyyymmdd: date.format("YYYYMMDD")
-		}));
+		if (date.isValid())
+		{
+			this.props.history.push(SiteRoutes.Games.resolve({
+				yyyymmdd: date.format("YYYYMMDD")
+			}));
+		}
 	};
 
 	private nextDate = () =>
 	{
-		const nextDate = moment(this.props.match.params.yyyymmdd).add(1, "day");
+		const nextDate = moment(this.state.dateString).add(1, "day");
+
 		this.props.history.push(SiteRoutes.Games.resolve({
 			yyyymmdd: nextDate.format("YYYYMMDD")
 		}));
@@ -49,7 +58,8 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 
 	private prevDate = () =>
 	{
-		const prevDate = moment(this.props.match.params.yyyymmdd).add(-1, "day");
+		const prevDate = moment(this.state.dateString).add(-1, "day");
+
 		this.props.history.push(SiteRoutes.Games.resolve({
 			yyyymmdd: prevDate.format("YYYYMMDD")
 		}));
@@ -57,7 +67,7 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 
 	public render()
 	{
-		const date = moment(this.props.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD"));
+		const date = moment(this.state.dateString);
 
 		return (
 			<div className={styles.wrapper}>

@@ -41,10 +41,12 @@ export class GameIntercom extends Intercom<IGameIntercomState>
 	private fetchLiveData()
 	{
 		MlbClientDataFetcher.getLiveGame(this.gamePk)
-			.then(data => this.onFetch(data));
+			.then(data => this.onFetch(data))
+			.catch(e => console.error(e));
 
 		MlbClientDataFetcher.getGameMedia(this.gamePk)
 			.then(data => this.onFetchMedia(data))
+			.catch(e => console.error(e));
 	}
 
 	private onFetch(data: LiveData)

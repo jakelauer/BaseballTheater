@@ -39,7 +39,7 @@ export class LiveGame extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			selectedInning: props.liveData ? props.liveData.liveData.linescore.innings.length - 1 : 1,
+			selectedInning: props.liveData ? props.liveData.liveData.linescore.innings.length : 1,
 			respond: {
 				sizes: []
 			}
@@ -120,7 +120,7 @@ export class LiveGame extends React.Component<Props, State>
 			const color = inning.num === this.state.selectedInning ? "primary" : undefined;
 			const variant = inning.num === this.state.selectedInning ? "contained" : undefined;
 
-			return <Tab label={`${inning.num}`} value={inning.num} />;
+			return <Tab label={`Inning ${inning.num}`} value={inning.num}/>;
 		});
 
 		const renderedHalfInnings = playsByInningKeys.map((k, i) =>

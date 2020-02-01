@@ -1,12 +1,10 @@
-import * as oauth2 from "simple-oauth2";
-import {OAuthClient} from "simple-oauth2";
 import * as fs from "fs";
 import * as path from "path";
 import {Request, Response} from "express";
-import {Utils} from "../utils";
 import fetch from "cross-fetch";
 import {Database} from "../DB/Database";
 import moment from "moment";
+import ClientOAuth2 from "client-oauth2";
 
 class _Auth
 {
@@ -14,7 +12,7 @@ class _Auth
 
 	private readonly id: string;
 	private readonly secret: string;
-	private client: OAuthClient;
+	private client: ClientOAuth2;
 
 	private constructor()
 	{
@@ -28,77 +26,40 @@ class _Auth
 		this.initialize();
 	}
 
-	private getRedirectUri(req: Request)
+	private getRedirectUri()
 	{
-		return `http://${req.headers.host}/auth/redirect`;
+		return `https://beta.baseball.theater/auth/redirect`;
 	}
 
 	public initialize()
 	{
-		this.client = oauth2.create({
-			client: {
-				id: this.id,
-				secret: this.secret
-			},
-			auth: {
-				authorizeHost: "https://www.patreon.com",
-				authorizePath: "/oauth2/authorize",
-				tokenHost: "https://www.patreon.com",
-				tokenPath: "/api/oauth2/token"
-			}
+		this.client = new ClientOAuth2({
+			clientId: this.id,
+			clientSecret: this.secret,
+			accessTokenUri: 'https://www.patreon.com/api/oauth2/token',
+			authorizationUri: 'https://www.patreon.com/oauth2/authorize',
+			redirectUri: this.getRedirectUri(),
+			scopes: ['notifications', 'gist']
 		})
 	}
 
 	public authorize(req: Request, res: Response)
 	{
-		const authUrl = this.client.authorizationCode.authorizeURL({
-			redirect_uri: this.getRedirectUri(req)
-		});
+		const uri = this.client.code.getUri();
 
-		res.redirect(authUrl);
-	}
-
-	private setToken(tokenToUse: oauth2.Token, res: Response)
-	{
-		const token = this.client.accessToken.create(tokenToUse);
-
-		res.cookie("token", token.token.access_token, {
-			expires: new Date(8640000000000000)
-		});
-
-		const expiresAt = moment(token.token.expires_at);
-		res.cookie("token_expiry", expiresAt.format(), {
-			expires: new Date(8640000000000000)
-		});
-
-		return token;
-	}
-
-	public async getToken(req: Request, res: Response)
-	{
-		try
-		{
-			const result = await this.client.authorizationCode.getToken({
-				code: req.query.code,
-				redirect_uri: this.getRedirectUri(req)
-			});
-
-			const token = this.setToken(result, res);
-
-			return token;
-		}
-		catch (e)
-		{
-			Utils.send500(res, e);
-		}
+		res.redirect(uri);
 	}
 
 	public async storeUserToken(req: Request, res: Response)
 	{
-		const token = await this.getToken(req, res);
+		const user = await this.client.code.getToken(req.originalUrl);
+		console.log(user); //=> { accessToken: '...', tokenType: 'bearer', ... }
+
+		const token = user.accessToken;
+
 		const profileInfo = await fetch("https://www.patreon.com/api/oauth2/api/current_user", {
 			headers: {
-				authorization: `Bearer ${token.token.access_token}`
+				authorization: `Bearer ${token}`
 			}
 		});
 
@@ -109,15 +70,29 @@ class _Auth
 			expires: new Date(8640000000000000)
 		});
 
-		await Database.users.updateOne({id: userId}, {
-			$set: {
-				id: userId,
-				refresh_token: token.token.refresh_token,
-				refresh_expiry: token.token.expires_at
-			}
-		}, {upsert: true});
+		res.cookie("token", token, {
+			expires: new Date(8640000000000000)
+		});
 
-		console.log(profileData);
+		const expiresAt = moment();
+		res.cookie("token_expiry", expiresAt.format(), {
+			expires: new Date(8640000000000000)
+		});
+
+		// Refresh the current users access token.
+		user.refresh().then(async function (updatedUser)
+		{
+			console.log(updatedUser !== user); //=> true
+			console.log(updatedUser.accessToken);
+
+			await Database.users.updateOne({id: userId}, {
+				$set: {
+					id: userId,
+					refresh_token: updatedUser.refreshToken,
+					refresh_expiry: "0"
+				}
+			}, {upsert: true});
+		});
 	}
 
 	public async getRefreshAuthStatus(req: Request, res: Response)
@@ -154,15 +129,13 @@ class _Auth
 			{
 				try
 				{
-					const tokenToUse = this.client.accessToken.create({
-						refresh_token: dbUser.refresh_token,
-						access_token: storedToken,
-						redirect_uri: this.getRedirectUri(req)
-					});
+					const tokenToUse = this.client.createToken(storedToken, dbUser.refresh_token);
 
 					const newToken = await tokenToUse.refresh();
 
-					this.setToken(newToken.token, res);
+					res.cookie("token", newToken, {
+						expires: new Date(8640000000000000)
+					});
 				}
 				catch (e)
 				{

@@ -9,6 +9,7 @@ module.exports = {
     entry: entryPath,
     target: "node",
     mode: "production",
+    devtool: "inline-source-map",
     module: {
         rules: [
             {

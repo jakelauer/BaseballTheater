@@ -23,8 +23,8 @@ export interface LiveGameData
 export interface LiveGameBoxscore
 {
 	teams: {
-		away: BoxscoreTeam;
-		home: BoxscoreTeam;
+		away: TeamBoxScore;
+		home: TeamBoxScore;
 	}
 	officials: LiveGameBoxscoreOfficial[];
 	info: LabelValue[];
@@ -43,19 +43,123 @@ export interface LiveGameBoxscoreOfficial
 	officialType: string;
 }
 
-export interface BoxscoreTeam extends AbstractIdLinkName
+export interface TeamBoxScore extends AbstractIdLinkName
 {
 	team: AbstractIdLinkName;
-	players: BoxScorePlayer[];
+	players: { [key: string]: BoxScorePlayer };
+	battingOrder: number[];
 	batters: number[];
 	pitchers: number[];
 	bench: number[];
+	info: BoxScoreInfo[];
+	note: BoxScoreInfoField[];
 	bullpen: number[];
 	teamStats: {
-		batting: any;
-		fielding: any;
-		pitching: any;
+		batting: BattingStats;
+		fielding: FieldingStats;
+		pitching: PitchingStats;
 	}
+}
+
+export interface BoxScoreInfoField
+{
+	label: string;
+	value: string;
+}
+
+export interface BoxScoreInfo
+{
+	title: string;
+	fieldList: BoxScoreInfoField[];
+}
+
+export interface PitchingStats
+{
+	airOuts: number;
+	atBats: number;
+	balks: number;
+	baseOnBalls: number;
+	battersFaced: number;
+	catchersInterference: number;
+	caughtStealing: number;
+	completeGames: number;
+	doubles: number;
+	earnedRuns: number;
+	era: string;
+	groundOuts: number;
+	groundOutsToAirouts: string;
+	hitBatsmen: number;
+	hits: number;
+	homeRuns: number;
+	homeRunsPer9: string;
+	inheritedRunners: number;
+	inheritedRunnersScored: number;
+	inningsPitched: string;
+	intentionalWalks: number;
+	outs: number;
+	pickoffs: number;
+	rbi: number;
+	runs: number;
+	note: string;
+	runsScoredPer9: string;
+	sacBunts: number;
+	sacFlies: number;
+	saveOpportunities: number;
+	shutouts: number;
+	stolenBasePercentage: string;
+	stolenBases: number;
+	strikeOuts: number;
+	triples: number;
+	whip: string;
+	wildPitches: number;
+}
+
+export interface FieldingStats
+{
+	assists: number;
+	caughtStealing: number;
+	chances: number;
+	note: string;
+	errors: number;
+	passedBall: number;
+	pickoffs: number;
+	putOuts: number;
+	stolenBasePercentage: string;
+	stolenBases: number;
+}
+
+export interface BattingStats
+{
+	atBats: number;
+	atBatsPerHomeRun: string;
+	avg: string;
+	baseOnBalls: number;
+	catchersInterference: number;
+	caughtStealing: number;
+	doubles: number;
+	flyOuts: number;
+	groundIntoDoublePlay: number;
+	groundIntoTriplePlay: number;
+	groundOuts: number;
+	hitByPitch: number;
+	hits: number;
+	note: string;
+	homeRuns: number;
+	intentionalWalks: number;
+	leftOnBase: number;
+	obp: string;
+	ops: string;
+	pickoffs: number;
+	rbi: number;
+	runs: number;
+	sacBunts: number;
+	sacFlies: number;
+	slg: string;
+	stolenBasePercentage: string;
+	stolenBases: number;
+	strikeOuts: number;
+	totalBases: number;
+	triples: number;
 }
 
 export interface BoxScorePlayer
@@ -72,14 +176,14 @@ export interface BoxScorePlayer
 	person: AbstractFullnameIdLink;
 	position: AbstractAbbreviationCodeNameType;
 	seasonStats: {
-		batting: any;
-		fielding: any;
-		pitching: any;
+		batting: BattingStats;
+		fielding: FieldingStats;
+		pitching: PitchingStats;
 	};
 	stats: {
-		batting: any;
-		fielding: any;
-		pitching: any;
+		batting: BattingStats;
+		fielding: FieldingStats;
+		pitching: PitchingStats;
 	};
 	status: CodeDescription;
 }

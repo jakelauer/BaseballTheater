@@ -5,8 +5,7 @@ import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
 import {StringUtils} from "../../Utility/StringUtils";
 import {Grid} from "@material-ui/core";
 import {Highlight} from "../../UI/Highlight";
-import Skeleton from '@material-ui/lab/Skeleton';
-import highlightStyles	from "../Game/Highlights.module.scss";
+import highlightStyles from "../Game/Highlights.module.scss";
 import styles from "./FeaturedVideoPage.module.scss";
 
 interface IFeaturedVideoPageParams
@@ -59,8 +58,10 @@ export class FeaturedVideoPage extends React.Component<Props, State>
 			loading: true
 		});
 
-		const tagString = this.props.match.params.tag as keyof typeof RecapTags;
+		const tagParam = this.props.match.params.tag || RecapTags.BestPerformer;
+		const tagString = tagParam as keyof typeof RecapTags;
 		const tag = RecapTags[tagString];
+
 		MlbClientDataFetcher.videoTagSearch(tag)
 			.then(videos =>
 			{

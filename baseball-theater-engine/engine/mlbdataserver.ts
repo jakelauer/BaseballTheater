@@ -3,6 +3,7 @@ import Internal_DataLoaderNode from "./utils/internal_dataloadernode";
 import {CompilationPlaylists, GameMedia, LiveData, MediaItem, PlayerListResponse, VideoSearchResults, VideoSearchWithMetadata} from "../contract";
 import moment from "moment";
 import {ISchedule, IScheduleGameList, ITeamDetails} from "../contract/teamschedule";
+import {Standings} from "../contract/standings";
 
 export class MlbDataServer
 {
@@ -78,10 +79,10 @@ export class MlbDataServer
 
 	public async getStandings(asOfDate: moment.Moment)
 	{
-		const date = asOfDate.format("yyyy-mm-dd");
+		const date = asOfDate.format("YYYY-MM-DD");
 		const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2019&date=${date}&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))`;
 
-		return await Internal_DataLoader.load<any>(
+		return await Internal_DataLoader.load<Standings>(
 			url,
 			"standings"
 		)

@@ -29,7 +29,7 @@ export class Wrap extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			media: props.gameIntercom.current.media
+			media: props.gameIntercom.state.media
 		}
 	}
 

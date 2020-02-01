@@ -4,6 +4,7 @@ import RespondIntercom, {RespondSizes} from "./RespondIntercom";
 interface IRespondProps
 {
 	at: RespondSizes;
+	ignoreIfUnmatched?: boolean;
 }
 
 interface DefaultProps
@@ -45,13 +46,19 @@ export class Respond extends React.Component<Props, IRespondState>
 		const {
 			at,
 			hide,
+			ignoreIfUnmatched,
 			children
 		} = this.props;
 
-		const shouldShow = (!hide && this.state.current.indexOf(at) > -1)
-			|| (hide && this.state.current.indexOf(at) === -1);
+		const matchedAt = this.state.current.indexOf(at) > -1;
 
-		return shouldShow ? children : null;
+		const shouldShow = (!matchedAt && ignoreIfUnmatched)
+			|| (!hide && matchedAt)
+			|| (hide && !matchedAt);
+
+		return shouldShow
+			? children
+			: null;
 
 	}
 }

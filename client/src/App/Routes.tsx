@@ -1,8 +1,8 @@
 import * as React from "react";
+import {ComponentType} from "react";
 import {Redirect, Route, Switch} from "react-router";
 import {SiteRoutes} from "../Global/Routes/Routes";
-import {Grid} from "@material-ui/core";
-import {ComponentType} from "react";
+import {ContainerProgress} from "../UI/ContainerProgress";
 
 interface IRoutesProps
 {
@@ -41,8 +41,17 @@ export class Routes extends React.Component<Props, State>
 				<Route path={SiteRoutes.Game.path}>
 					<Suspender importer={() => import("../Areas/Game/GameArea")}/>
 				</Route>
+				<Route path={SiteRoutes.Standings.path}>
+					<Suspender importer={() => import("../Areas/Standings/StandingsArea")}/>
+				</Route>
 				<Route path={SiteRoutes.FeaturedVideos.path}>
 					<Suspender importer={() => import("../Areas/FeaturedVideos/FeaturedVideosArea")}/>
+				</Route>
+				<Route path={SiteRoutes.Teams.path}>
+					<Suspender importer={() => import("../Areas/Teams/TeamsArea")}/>
+				</Route>
+				<Route path={SiteRoutes.Settings.path}>
+					<Suspender importer={() => import("../Areas/Settings/SettingsArea")}/>
 				</Route>
 				<Route exact path={"/"}>
 					<Redirect to={SiteRoutes.Games.resolve()}/>
@@ -57,7 +66,7 @@ const Suspender: React.FC<{ importer: () => Promise<{ default: ComponentType<any
 	const LazyComponent = React.lazy(importer);
 
 	return (
-		<React.Suspense fallback={<div>Loading...</div>}>
+		<React.Suspense fallback={<ContainerProgress/>}>
 			<LazyComponent/>
 		</React.Suspense>
 	);

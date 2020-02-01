@@ -4,7 +4,7 @@ import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
 import {RouteComponentProps, withRouter} from "react-router";
-import {IGameParams, IGameTabs, SiteRoutes} from "../../Global/Routes/Routes";
+import {GameTabs, IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
 import {Wrap} from "./Wrap";
 import {LiveGame} from "./LiveGame";
 import {BoxScore} from "./BoxScore";
@@ -42,7 +42,7 @@ class GameArea extends React.Component<Props, State>
 
 		this.state = {
 			tabValue: props.match.params.tab,
-			gameData: this.gameIntercom.current
+			gameData: this.gameIntercom.state
 		};
 	}
 
@@ -77,7 +77,7 @@ class GameArea extends React.Component<Props, State>
 			case "LiveGame":
 				return <LiveGame liveData={this.state.gameData.liveData}/>;
 			case "BoxScore":
-				return <BoxScore/>;
+				return <BoxScore liveData={this.state.gameData.liveData}/>;
 			case "Highlights":
 				return <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId}/>;
 		}
@@ -95,7 +95,7 @@ class GameArea extends React.Component<Props, State>
 		return !noWrap;
 	}
 
-	private getTab(tab: IGameTabs)
+	private getTab(tab: GameTabs)
 	{
 		const gameId = this.props.match.params.gameId;
 		return SiteRoutes.Game.resolve({gameId, tab});
@@ -119,33 +119,33 @@ class GameArea extends React.Component<Props, State>
 					showLabels
 					className={styles.root}
 				>
-					{this.hasWrap() &&
                     <BottomNavigationAction
-                        label="Wrap"
-                        icon={<LibraryBooks/>}
-                        value={"Wrap"}
-                        component={p => <Link {...p} to={wrapLink}/>}
+	                    label="Wrap"
+	                    disabled={!this.hasWrap()}
+	                    icon={<LibraryBooks/>}
+	                    value={"Wrap"}
+	                    component={p => <Link {...p} replace={true} to={wrapLink}/>}
                     />
-					}
+
 					<BottomNavigationAction
-						label="Live Game"
+						label="Play-by-play"
 						icon={<Update/>}
 						value={"LiveGame"}
-						component={p => <Link {...p} to={liveGameLink}/>}
+						component={p => <Link {...p} replace={true} to={liveGameLink}/>}
 					/>
 
 					<BottomNavigationAction
 						label="Box Score"
 						icon={<ListAlt/>}
 						value={"BoxScore"}
-						component={p => <Link {...p} to={boxScoreLink}/>}
+						component={p => <Link {...p} replace={true} to={boxScoreLink}/>}
 					/>
 
 					<BottomNavigationAction
 						label="Highlights"
 						icon={<PlayCircleOutline/>}
 						value={"Highlights"}
-						component={p => <Link {...p} to={highlightsLink}/>}
+						component={p => <Link {...p} replace={true} to={highlightsLink}/>}
 					/>
 				</BottomNavigation>
 			</div>

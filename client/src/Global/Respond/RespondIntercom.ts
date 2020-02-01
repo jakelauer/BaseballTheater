@@ -33,13 +33,14 @@ class RespondIntercom extends Intercom<RespondIntercomPayload>
 
 	private addListeners()
 	{
+		this.determineSize();
 		window.addEventListener("resize", this.determineSize);
 		window.addEventListener("load", this.determineSize);
 	}
 
 	public test(size: RespondSizes)
 	{
-		return this.current.sizes.indexOf(size) > -1;
+		return this.state.sizes.indexOf(size) > -1;
 	}
 
 	private readonly determineSize = () =>
@@ -49,7 +50,9 @@ class RespondIntercom extends Intercom<RespondIntercomPayload>
 		const current: RespondSizes[] = sizeKeyStrings.filter(key =>
 		{
 			const pxWidth = RespondSizes[key];
-			return matchMedia(`(max-width: ${pxWidth}px)`).matches;
+			const isMatch = matchMedia(`(max-width: ${pxWidth}px)`).matches;
+
+			return isMatch;
 		}).map(key => RespondSizes[key]);
 
 		sizeKeyStrings

@@ -1,6 +1,6 @@
 export class StringUtils
 {
-	public static splitCamelCaseToString(s: string)
+	public static splitCamelCaseToString(s: string = "")
 	{
 		return s.replace(/(?=([A-Z]){1}([a-z]){1})/g, " ");
 	}

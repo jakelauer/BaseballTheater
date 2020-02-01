@@ -5,9 +5,9 @@ import {Auth} from "./auth";
 
 export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 {
-	app.get("/api/proxy/:url", (req, res, next) =>
+	app.get("/api/proxy", (req, res, next) =>
 	{
-		const url = req.params.url;
+		const url = req.query.url;
 		if (!url)
 		{
 			throw new Error("URL not provided");
@@ -29,9 +29,16 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 
 	app.get("/auth/redirect", async (req, res) =>
 	{
-		await Auth.storeUserToken(req, res);
+		try
+		{
+			await Auth.storeUserToken(req, res);
+		}
+		catch (e)
+		{
+			throw e;
+		}
 
-		res.redirect("http://localhost:3000");
+		res.redirect("/");
 	});
 
 	app.get("/auth/status", async (req, res) =>
