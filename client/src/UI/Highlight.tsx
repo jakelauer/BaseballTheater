@@ -1,6 +1,6 @@
 import * as React from "react";
 import {MediaItem} from "baseball-theater-engine";
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@material-ui/core";
 import styles from "./Highlight.module.scss";
 import {Respond} from "../Global/Respond/Respond";
 import classNames from "classnames";
@@ -70,7 +70,7 @@ export class Highlight extends React.Component<Props, State>
 			<CardActions>
 				{mp4s && !loading
 					? mp4s.map(a => (
-						<a href={a.url} target={"_blank"}>
+						<a href={a.url} target={"_blank"} key={a.url}>
 							<Button size="small" color="primary">
 								{this.getKLabel(a.url, a.name)}
 							</Button>

@@ -1,0 +1,16 @@
+.bothTeams
+{
+	display: flex;
+	padding-left: 32px;
+
+	:global(.r-medium) &
+	{
+		display: block;
+	}
+
+	.team
+	{
+		flex: 1 0;
+		padding-right: 1rem;
+	}
+}

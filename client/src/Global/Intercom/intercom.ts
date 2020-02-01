@@ -33,9 +33,11 @@ export abstract class Intercom<TState extends {},
 		const listener = new IntercomListener(callback, params);
 
 		this._listeners.push(listener);
+
+		listener.callback(this._currentState);
 	}
 
-	public get current()
+	public get state()
 	{
 		return this._currentState;
 	}

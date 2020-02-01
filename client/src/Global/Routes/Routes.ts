@@ -23,11 +23,11 @@ export class SiteRoute<T extends object = {}>
 	}
 }
 
-export type IGameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
+export type GameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
 export interface IGameParams
 {
 	gameId: string,
-	tab?: IGameTabs;
+	tab?: GameTabs;
 }
 
 
@@ -45,4 +45,5 @@ export class SiteRoutes
 	public static Teams = new SiteRoute("/teams");
 	public static Team = new SiteRoute<{ team: keyof ITeams }>("/team/:team");
 	public static ApiTest = new SiteRoute("/apitest");
+	public static Settings = new SiteRoute("/settings");
 }

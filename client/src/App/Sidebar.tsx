@@ -1,19 +1,22 @@
-import React, {ComponentType} from 'react';
+import React from 'react';
 import styles from "./App.module.scss";
-import {Button, Collapse, DialogContentText, Grid} from "@material-ui/core";
 import List from "@material-ui/core/List";
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
-import {Equalizer, ExpandLess, ExpandMore, Menu, People, PlayCircleFilled} from "@material-ui/icons";
+import SettingsIcon from '@material-ui/icons/Settings';
+import {Equalizer, ExpandLess, ExpandMore, PlayCircleFilled} from "@material-ui/icons";
 import EventIcon from "@material-ui/icons/Event";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Link, Redirect, Route, Switch} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
-import {RecapTags} from "baseball-theater-engine";
-import {StringUtils} from "../Utility/StringUtils";
+import {Teams} from "baseball-theater-engine";
 import {AuthIntercom, IAuthContext} from "../Global/AuthIntercom";
 import cookies from "browser-cookies";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {Button} from "@material-ui/core";
+import Collapse from "@material-ui/core/Collapse";
+import SettingsIntercom, {ISettingsIntercomPayload} from "../Global/Settings/SettingsIntercom";
 
 interface ISidebarProps
 {
@@ -25,12 +28,22 @@ interface DefaultProps
 	onNavigate?: () => void;
 }
 
+const PatreonButton = withStyles({
+	root: {
+		backgroundColor: "#f96854",
+		"&:hover": {
+			backgroundColor: "#ff8777"
+		}
+	},
+})(Button);
+
 type Props = ISidebarProps & DefaultProps;
 type State = ISidebarState;
 
 interface ISidebarState
 {
 	videoTagsOpen: boolean;
+	settings: ISettingsIntercomPayload;
 }
 
 export class Sidebar extends React.Component<Props, State>
@@ -41,6 +54,7 @@ export class Sidebar extends React.Component<Props, State>
 
 		this.state = {
 			videoTagsOpen: false,
+			settings: SettingsIntercom.state
 		};
 	}
 
@@ -60,7 +74,7 @@ export class Sidebar extends React.Component<Props, State>
 	private get patreonUrl()
 	{
 		const clientId = "4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008";
-		const redirectUri = `${window.location.protocol}//${window.location.hostname}:5000/auth/redirect`;
+		const redirectUri = `${window.location.protocol}//${window.location.hostname}/auth/redirect`;
 		return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 	}
 
@@ -77,18 +91,6 @@ export class Sidebar extends React.Component<Props, State>
 	{
 		const {videoTagsOpen} = this.state;
 		const {authContext, onNavigate} = this.props;
-		// const videoTags = Object.keys(RecapTags).filter(a => isNaN(parseInt(a))) as (keyof typeof RecapTags)[];
-		// const videoTagsItems = videoTags.map(tag =>
-		// {
-		// 	const to = SiteRoutes.FeaturedVideos.resolve({tag});
-		// 	const niceTag = StringUtils.splitCamelCaseToString(tag);
-		//
-		// 	return (
-		// 		<ListItem onClick={onNavigate} button component={p => <Link {...p} to={to}/>}>
-		// 			<ListItemText className={styles.indent} primary={niceTag}/>
-		// 		</ListItem>
-		// 	);
-		// });
 
 		return (
 			<React.Fragment>
@@ -96,11 +98,21 @@ export class Sidebar extends React.Component<Props, State>
 					Baseball Theater
 				</div>
 				<List component={"nav"}>
-					<MenuItem onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Games.resolve()}>
+					<MenuItem onClick={onNavigate} icon={<EventIcon/>} path={SiteRoutes.Games.resolve()}>
 						Games
 					</MenuItem>
+					{this.state.settings.favoriteTeams.length === 0 &&
+                    <MenuItem onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Teams.resolve()}>
+                        Teams
+                    </MenuItem>
+					}
+					{this.state.settings.favoriteTeams.map(team => (
+						<MenuItem onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Team.resolve({team})}>
+							{Teams.TeamList[team]}
+						</MenuItem>
+					))}
 					<MenuItem icon={<PlayCircleFilled/>} end={videoTagsOpen ? <ExpandLess/> : <ExpandMore/>} onClick={this.onFeaturedVideosClick}>
-						Featured Videos
+						Highlights
 					</MenuItem>
 					<Collapse in={videoTagsOpen} timeout="auto">
 						<List component="div" disablePadding>
@@ -112,20 +124,19 @@ export class Sidebar extends React.Component<Props, State>
 					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve()}>
 						Standings
 					</MenuItem>
-					<MenuItem onClick={onNavigate} icon={<EventIcon/>} path={SiteRoutes.Schedule.resolve()}>
-						Schedule
-					</MenuItem>
-					<MenuItem onClick={onNavigate} icon={<People/>} path={SiteRoutes.Teams.resolve()}>
-						Teams
+					<MenuItem onClick={onNavigate} icon={<SettingsIcon/>} path={SiteRoutes.Settings.resolve()}>
+						Settings
 					</MenuItem>
 				</List>
 				{!authContext.authorized &&
-                <Button component={p => <a {...p} href={this.patreonUrl}/>}>
-                    Log in with Patreon
-                </Button>
+                <a className={styles.patreonButtonLink} href={this.patreonUrl}>
+                    <PatreonButton className={styles.patreonButton} style={{width: "100%"}}>
+                        Log in with Patreon
+                    </PatreonButton>
+                </a>
 				}
 				{authContext.authorized &&
-                <Button color={"primary"} onClick={this.logOut}>
+                <Button className={styles.patreonButton} onClick={this.logOut}>
                     Log out
                 </Button>
 				}

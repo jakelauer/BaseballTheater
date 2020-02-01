@@ -38,7 +38,7 @@ export class App extends React.Component<{}, IAppState>
 			error: undefined,
 			search: "",
 			loading: false,
-			authContext: AuthIntercom.current
+			authContext: AuthIntercom.state
 		};
 	}
 
@@ -98,7 +98,7 @@ export class App extends React.Component<{}, IAppState>
 						</Respond>
 					</nav>
 					<main className={styles.main}>
-						<Container maxWidth={"xl"}>
+						<Container maxWidth={"xl"} style={{position: "relative", paddingLeft: 0}}>
 							<Grid container>
 								<Routes/>
 							</Grid>
