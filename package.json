@@ -49,6 +49,7 @@
     "swagger-ui-react": "^3.23.11",
     "ts-loader": "^6.1.0",
     "webpack": "4.39.1",
-    "webpack-cli": "^3.3.8"
+    "webpack-cli": "^3.3.8",
+    "patreon": "^0.4.1"
   }
 }

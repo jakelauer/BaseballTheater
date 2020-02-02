@@ -2,6 +2,7 @@ import {fetch} from "cross-fetch";
 import {Express} from "express";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Auth} from "./auth";
+import {isProd} from "../config/config";
 
 export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 {
@@ -38,12 +39,19 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			throw e;
 		}
 
-		res.redirect("/");
+		const host = !isProd
+			? "http://localhost:3000"
+			: ``;
+
+		console.log(host);
+
+		res.redirect(host + "/");
 	});
 
 	app.get("/auth/status", async (req, res) =>
 	{
 		const result = await Auth.getRefreshAuthStatus(req, res);
+
 		res.send(result);
 	});
 

@@ -5,6 +5,8 @@ import {LiveGameLinescore} from "baseball-theater-engine";
 import {Paper} from "@material-ui/core";
 import classNames from "classnames";
 import moment from "moment";
+import {ISettingsIntercomPayload, SettingsIntercom} from "../../../Global/Settings/SettingsIntercom";
+import {MdFavorite} from "react-icons/all";
 
 interface IGameSummaryProps
 {
@@ -21,6 +23,7 @@ type State = IGameSummaryState;
 interface IGameSummaryState
 {
 	hovered: boolean;
+	settings: ISettingsIntercomPayload;
 }
 
 export class GameSummary extends React.Component<Props, State>
@@ -30,8 +33,16 @@ export class GameSummary extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			hovered: false
+			hovered: false,
+			settings: SettingsIntercom.state
 		};
+	}
+
+	public componentDidMount(): void
+	{
+		SettingsIntercom.listen(data => this.setState({
+			settings: data
+		}));
 	}
 
 	private onMouseEnter = () =>
@@ -64,6 +75,9 @@ export class GameSummary extends React.Component<Props, State>
 
 		const elevation = this.state.hovered ? 3 : 1;
 
+		const homeIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.home.team.fileCode) > -1;
+		const awayIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.away.team.fileCode) > -1;
+
 		return (
 			<Paper className={styles.gameSummary} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} elevation={elevation}>
 				{status &&
@@ -71,14 +85,14 @@ export class GameSummary extends React.Component<Props, State>
 				}
 				{linescore &&
                 <React.Fragment>
-                    <Score home={false} team={teams.away} linescore={linescore}/>
-                    <Score home={true} team={teams.home} linescore={linescore}/>
+                    <Score home={false} team={teams.away} isFavorite={awayIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
+                    <Score home={true} team={teams.home} isFavorite={homeIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
                 </React.Fragment>
 				}
 				{!linescore &&
                 <React.Fragment>
-                    <Preview home={false} team={teams.away}/>
-                    <Preview home={true} team={teams.home}/>
+                    <Preview home={false} isFavorite={awayIsFavorite} team={teams.away}/>
+                    <Preview home={true} isFavorite={homeIsFavorite} team={teams.home}/>
                 </React.Fragment>
 				}
 			</Paper>
@@ -90,11 +104,13 @@ interface ITeamRowProps
 {
 	home: boolean;
 	team: IScheduleTeamItem;
+	isFavorite: boolean;
 	children?: React.ReactNode;
 }
 
 interface IScoreProps extends ITeamRowProps
 {
+	hideScores: boolean;
 	linescore: LiveGameLinescore;
 }
 
@@ -105,7 +121,10 @@ const TeamRow = (props: ITeamRowProps) =>
 	return (
 		<div className={styles.teamRow}>
 			<div className={styles.team}>
-				<div className={teamNameClasses}>{props.team.team.teamName}</div>
+				<div className={teamNameClasses}>
+					{props.team.team.teamName}
+					{props.isFavorite && <MdFavorite style={{fontSize: "0.8rem", color: "red", paddingLeft: 4}}/>}
+				</div>
 				<div className={styles.record}>
 					{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})
 				</div>
@@ -121,6 +140,7 @@ const Score = (props: IScoreProps) =>
 {
 	const {
 		linescore,
+		hideScores,
 		...rest
 	} = props;
 
@@ -131,17 +151,23 @@ const Score = (props: IScoreProps) =>
 
 	const teamValues = getHomeAwayVal(props.home, props.linescore.teams);
 
+	const numberOrHidden = (val: number) => hideScores ? "-" : val;
+
+	const runs = numberOrHidden(teamValues.runs);
+	const hits = numberOrHidden(teamValues.hits);
+	const errors = numberOrHidden(teamValues.errors);
+
 	return (
 		<TeamRow {...rest}>
 			<div className={styles.rhe}>
 				<div className={styles.score}>
-					{teamValues.runs}
+					{runs}
 				</div>
 				<div className={styles.hits}>
-					{teamValues.hits}
+					{hits}
 				</div>
 				<div className={styles.errors}>
-					{teamValues.errors}
+					{errors}
 				</div>
 			</div>
 		</TeamRow>
@@ -176,7 +202,6 @@ interface IStatusProps
 const Status = (props: IStatusProps) =>
 {
 	const future = props.status.statusCode === "S";
-	const final = props.status.statusCode === "F";
 	const hasScore = props.linescore && props.linescore.innings && props.linescore.innings.length > 0;
 	const date = moment(props.gameDate).local();
 

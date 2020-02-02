@@ -16,7 +16,7 @@ import cookies from "browser-cookies";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Button} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
-import SettingsIntercom, {ISettingsIntercomPayload} from "../Global/Settings/SettingsIntercom";
+import {ISettingsIntercomPayload, SettingsIntercom} from "../Global/Settings/SettingsIntercom";
 
 interface ISidebarProps
 {
@@ -74,8 +74,10 @@ export class Sidebar extends React.Component<Props, State>
 	private get patreonUrl()
 	{
 		const clientId = "4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008";
-		const redirectUri = `${window.location.protocol}//${window.location.hostname}/auth/redirect`;
-		return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+		const host = location.hostname === "localhost" ? "localhost:5000" : location.hostname;
+		const redirectUri = `${window.location.protocol}//${host}/auth/redirect`;
+		const scopes = ["users", "pledges-to-me", "my-campaign"];
+		return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes.join(" ")}`;
 	}
 
 	private logOut = () =>
@@ -107,7 +109,7 @@ export class Sidebar extends React.Component<Props, State>
                     </MenuItem>
 					}
 					{this.state.settings.favoriteTeams.map(team => (
-						<MenuItem onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Team.resolve({team})}>
+						<MenuItem key={team} onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Team.resolve({team})}>
 							{Teams.TeamList[team]}
 						</MenuItem>
 					))}
@@ -128,14 +130,14 @@ export class Sidebar extends React.Component<Props, State>
 						Settings
 					</MenuItem>
 				</List>
-				{!authContext.authorized &&
+				{!authContext.authorized && authContext.loaded &&
                 <a className={styles.patreonButtonLink} href={this.patreonUrl}>
                     <PatreonButton className={styles.patreonButton} style={{width: "100%"}}>
                         Log in with Patreon
                     </PatreonButton>
                 </a>
 				}
-				{authContext.authorized &&
+				{authContext.authorized && authContext.loaded &&
                 <Button className={styles.patreonButton} onClick={this.logOut}>
                     Log out
                 </Button>

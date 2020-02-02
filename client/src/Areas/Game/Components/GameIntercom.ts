@@ -49,6 +49,7 @@ export class GameIntercom extends Intercom<IGameIntercomState>
 			.catch(e => console.error(e));
 	}
 
+
 	private onFetch(data: LiveData)
 	{
 		const isFinal = data.gameData.status.statusCode === "F";

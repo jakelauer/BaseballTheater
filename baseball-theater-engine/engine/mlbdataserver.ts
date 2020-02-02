@@ -94,7 +94,7 @@ export class MlbDataServer
 	)
 	{
 		const now = moment();
-		
+
 		const dateString = now.format("YYYY-MM-DD");
 		season = !season ? now.year() : season;
 

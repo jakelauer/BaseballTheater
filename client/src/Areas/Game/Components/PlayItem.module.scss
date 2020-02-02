@@ -1,3 +1,5 @@
+@import "../../../styles/vars";
+
 .playDetails
 {
 	margin-left: 2rem;
@@ -11,4 +13,30 @@
 	{
 		flex-direction: column;
 	}
+}
+
+.actions
+{
+	display: flex;
+}
+
+.videoAvatar
+{
+	background-color: #FFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover
+	{
+		a
+		{
+			color: $color-accent;
+		}
+	}
+}
+
+.unauthed, .unauthed a
+{
+	cursor: not-allowed;
 }

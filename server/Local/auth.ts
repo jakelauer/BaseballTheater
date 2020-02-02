@@ -5,10 +5,23 @@ import fetch from "cross-fetch";
 import {Database} from "../DB/Database";
 import moment from "moment";
 import ClientOAuth2 from "client-oauth2";
+import {isProd} from "../config/config";
+
+interface TokenWithExpires extends ClientOAuth2.Token
+{
+	expires: Date;
+}
 
 class _Auth
 {
 	public static Instance = new _Auth();
+
+	private static get host()
+	{
+		return !isProd
+			? "http://localhost:5000"
+			: `https://beta.baseball.theater`;
+	}
 
 	private readonly id: string;
 	private readonly secret: string;
@@ -26,9 +39,9 @@ class _Auth
 		this.initialize();
 	}
 
-	private getRedirectUri()
+	private static getRedirectUri()
 	{
-		return `https://beta.baseball.theater/auth/redirect`;
+		return `${_Auth.host}/auth/redirect`;
 	}
 
 	public initialize()
@@ -38,7 +51,7 @@ class _Auth
 			clientSecret: this.secret,
 			accessTokenUri: 'https://www.patreon.com/api/oauth2/token',
 			authorizationUri: 'https://www.patreon.com/oauth2/authorize',
-			redirectUri: this.getRedirectUri(),
+			redirectUri: _Auth.getRedirectUri(),
 			scopes: ['notifications', 'gist']
 		})
 	}
@@ -52,14 +65,17 @@ class _Auth
 
 	public async storeUserToken(req: Request, res: Response)
 	{
-		const user = await this.client.code.getToken(req.originalUrl);
-		console.log(user); //=> { accessToken: '...', tokenType: 'bearer', ... }
+		let user = await this.client.code.getToken(req.originalUrl, {
+			redirectUri: _Auth.getRedirectUri()
+		}) as TokenWithExpires;
 
-		const token = user.accessToken;
+		user = await user.refresh() as TokenWithExpires;
+
+		const accessToken = user.accessToken;
 
 		const profileInfo = await fetch("https://www.patreon.com/api/oauth2/api/current_user", {
 			headers: {
-				authorization: `Bearer ${token}`
+				authorization: `Bearer ${accessToken}`
 			}
 		});
 
@@ -70,45 +86,40 @@ class _Auth
 			expires: new Date(8640000000000000)
 		});
 
-		res.cookie("token", token, {
+		res.cookie("token", accessToken, {
 			expires: new Date(8640000000000000)
 		});
 
-		const expiresAt = moment();
+		const expiresAt = moment(user.expires);
 		res.cookie("token_expiry", expiresAt.format(), {
 			expires: new Date(8640000000000000)
 		});
 
 		// Refresh the current users access token.
-		user.refresh().then(async function (updatedUser)
-		{
-			console.log(updatedUser !== user); //=> true
-			console.log(updatedUser.accessToken);
-
-			await Database.users.updateOne({id: userId}, {
-				$set: {
-					id: userId,
-					refresh_token: updatedUser.refreshToken,
-					refresh_expiry: "0"
-				}
-			}, {upsert: true});
-		});
+		await Database.users.updateOne({id: userId}, {
+			$set: {
+				id: userId,
+				refresh_token: user.refreshToken,
+				refresh_expiry: user.expires
+			}
+		}, {upsert: true});
 	}
 
-	public async getRefreshAuthStatus(req: Request, res: Response)
+	public async getRefreshAuthStatus(req: Request, res: Response): Promise<{ userId: string, accessToken: string, levels: string[] }>
 	{
 		if (!req.cookies)
 		{
-			return false;
+			req.cookies = {};
+			console.log("AUTH: no cookies");
 		}
 
-		const storedId = req.cookies["id"];
-		const storedToken = req.cookies["token"];
+		const storedId = req.cookies["id"] || "";
+		const storedAccessToken = req.cookies["token"] || "";
+
+		let userId: string = storedId;
+		let accessToken = storedAccessToken;
+
 		const storedTokenExpiry = req.cookies["token_expiry"];
-		if (!storedId || !storedToken)
-		{
-			return false;
-		}
 
 		const foundUsers = await Database.users.find({
 			id: storedId
@@ -121,7 +132,8 @@ class _Auth
 			const refreshExpired = moment(dbUser.refresh_expiry).isBefore(moment());
 			if (refreshExpired)
 			{
-				res.redirect("/auth/authorize");
+				userId = null;
+				accessToken = null;
 			}
 
 			const accessExpired = moment(storedTokenExpiry).isBefore(moment());
@@ -129,24 +141,65 @@ class _Auth
 			{
 				try
 				{
-					const tokenToUse = this.client.createToken(storedToken, dbUser.refresh_token);
+					const tokenToUse = this.client.createToken(storedAccessToken, dbUser.refresh_token);
 
 					const newToken = await tokenToUse.refresh();
 
-					res.cookie("token", newToken, {
+					res.cookie("token", newToken.accessToken, {
 						expires: new Date(8640000000000000)
 					});
+
+					userId = storedId;
+					accessToken = newToken.accessToken;
 				}
 				catch (e)
 				{
 					console.log(e);
 
-					return false;
+					return null;
 				}
 			}
-
-			return true;
 		}
+
+		const levels = await this.getSubscriberLevel(userId, accessToken);
+
+		const userData = {
+			userId,
+			accessToken,
+			levels
+		};
+
+		return userData;
+	}
+
+	private async getSubscriberLevel(userId: string, accessToken: string): Promise<string[]>
+	{
+		let levels: string[] = [];
+
+		if (!userId || !accessToken)
+		{
+			return levels;
+		}
+
+		const profileInfo = await fetch("https://www.patreon.com/api/oauth2/api/current_user", {
+			headers: {
+				authorization: `Bearer ${accessToken}`
+			}
+		}).then(r => r.json());
+
+		if (profileInfo && !profileInfo.errors && profileInfo.included && profileInfo.data.relationships && profileInfo.data.relationships.pledges)
+		{
+			const pledgeIds = profileInfo.data.relationships.pledges.data.map((p: any) => p.id);
+			if (pledgeIds && pledgeIds.length)
+			{
+				const pledges = profileInfo.included.filter((i: any) => i.type === "pledge" && pledgeIds.includes(i.id));
+				const rewardIds = pledges.map((p: any) => p.relationships.reward.data.id);
+				const rewards = rewardIds.map((r: any) => profileInfo.included.find((i: any) => i.type === "reward" && i.id === r));
+				levels = rewards.map((r: any) => r.attributes.title);
+			}
+		}
+
+		return levels;
 	}
 }
 

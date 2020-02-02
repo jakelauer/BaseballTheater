@@ -1,4 +1,5 @@
 import {AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore, Player} from "./live";
+import {ITeams} from "./teams";
 
 export interface ISchedule
 {
@@ -72,7 +73,7 @@ export interface IScheduleTeam extends AbstractIdLinkName
 	season: number;
 	venue: AbstractIdLinkName;
 	teamCode: string;
-	fileCode: string;
+	fileCode: keyof ITeams;
 	abbreviation: string;
 	teamName: string;
 	locationName: string;

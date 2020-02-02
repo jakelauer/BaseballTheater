@@ -100,20 +100,18 @@ export class Highlight extends React.Component<Props, State>
 							{!loading && this.defaultVideo &&
                             <a href={this.defaultVideo.url} target={"_blank"}>
                                 <Typography gutterBottom variant="h5" component="h2" className={styles.title}>
-									{media.title}
+	                                {media.title}
                                 </Typography>
-                                <Respond at={RespondSizes.small} hide={true}>
+                                <Respond at={RespondSizes.medium} hide={true}>
                                     <Typography variant="body2" color="textSecondary" component="p">
-										{media.description}
+			                            {media.description}
                                     </Typography>
                                 </Respond>
                             </a>
 							}
 						</CardContent>
 					</CardActionArea>
-					<Respond at={RespondSizes.small} hide={false}>
 						{actions}
-					</Respond>
 				</div>
 			</Card>
 		);

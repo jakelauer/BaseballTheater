@@ -2,7 +2,6 @@ import * as React from "react";
 import styles from "./GameArea.module.scss";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
 import {RouteComponentProps, withRouter} from "react-router";
 import {GameTabs, IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
 import {Wrap} from "./Wrap";
@@ -10,8 +9,12 @@ import {LiveGame} from "./LiveGame";
 import {BoxScore} from "./BoxScore";
 import {Highlights} from "./Highlights";
 import {GameIntercom, IGameIntercomState} from "./Components/GameIntercom";
+import {CircularProgress, Tabs} from "@material-ui/core";
+import {Respond} from "../../Global/Respond/Respond";
+import {RespondSizes} from "../../Global/Respond/RespondIntercom";
+import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
 import {Link} from "react-router-dom";
-import {CircularProgress} from "@material-ui/core";
+import Tab from "@material-ui/core/Tab";
 
 interface IGameAreaProps extends RouteComponentProps<IGameParams>
 {
@@ -67,7 +70,7 @@ class GameArea extends React.Component<Props, State>
 	{
 		if (!this.state.gameData)
 		{
-			return <CircularProgress />;
+			return <CircularProgress/>;
 		}
 
 		switch (this.props.match.params.tab)
@@ -108,46 +111,83 @@ class GameArea extends React.Component<Props, State>
 		const boxScoreLink = this.getTab("BoxScore");
 		const highlightsLink = this.getTab("Highlights");
 
+		const tabs = [
+			{
+				label: "Wrap",
+				disabled: !this.hasWrap(),
+				icon: <LibraryBooks/>,
+				value: "Wrap",
+				linkDestination: wrapLink
+			},
+			{
+				label: "Play-by-play",
+				disabled: false,
+				icon: <Update/>,
+				value: "LiveGame",
+				linkDestination: liveGameLink
+			},
+			{
+				label: "Box Score",
+				disabled: false,
+				icon: <ListAlt/>,
+				value: "BoxScore",
+				linkDestination: boxScoreLink
+			},
+			{
+				label: "Highlights",
+				disabled: false,
+				icon: <PlayCircleOutline/>,
+				value: "Highlights",
+				linkDestination: highlightsLink
+			},
+		];
+
+
 		return (
 			<div className={styles.gameWrapper}>
+				<Respond at={RespondSizes.medium} hide={true}>
+					<Tabs
+						className={styles.tabs}
+						centered={true}
+						value={this.state.tabValue}
+						onChange={this.handleChange}
+						indicatorColor={"primary"}
+						textColor="primary"
+					>
+						{tabs.map(tab => (
+							<Tab
+								key={tab.label}
+								style={{height: "3.5rem"}}
+								label={tab.label}
+								disabled={tab.disabled}
+								value={tab.value}
+								component={p => <Link {...p} replace={true} to={tab.linkDestination}/>}
+							/>
+						))}
+					</Tabs>
+				</Respond>
 				<div className={styles.content}>
 					{this.renderTab()}
 				</div>
-				<BottomNavigation
-					value={this.state.tabValue}
-					onChange={this.handleChange}
-					showLabels
-					className={styles.root}
-				>
-                    <BottomNavigationAction
-	                    label="Wrap"
-	                    disabled={!this.hasWrap()}
-	                    icon={<LibraryBooks/>}
-	                    value={"Wrap"}
-	                    component={p => <Link {...p} replace={true} to={wrapLink}/>}
-                    />
-
-					<BottomNavigationAction
-						label="Play-by-play"
-						icon={<Update/>}
-						value={"LiveGame"}
-						component={p => <Link {...p} replace={true} to={liveGameLink}/>}
-					/>
-
-					<BottomNavigationAction
-						label="Box Score"
-						icon={<ListAlt/>}
-						value={"BoxScore"}
-						component={p => <Link {...p} replace={true} to={boxScoreLink}/>}
-					/>
-
-					<BottomNavigationAction
-						label="Highlights"
-						icon={<PlayCircleOutline/>}
-						value={"Highlights"}
-						component={p => <Link {...p} replace={true} to={highlightsLink}/>}
-					/>
-				</BottomNavigation>
+				<Respond at={RespondSizes.medium} hide={false}>
+					<BottomNavigation
+						value={this.state.tabValue}
+						onChange={this.handleChange}
+						showLabels
+						className={styles.root}
+					>
+						{tabs.map(tab => (
+							<BottomNavigationAction
+								key={tab.label}
+								label={tab.label}
+								disabled={tab.disabled}
+								icon={tab.icon}
+								value={tab.value}
+								component={p => <Link {...p} replace={true} to={tab.linkDestination}/>}
+							/>
+						))}
+					</BottomNavigation>
+				</Respond>
 			</div>
 		);
 	}
