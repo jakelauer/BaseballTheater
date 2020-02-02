@@ -9,11 +9,11 @@ export interface ISettingsIntercomPayload
 	hideScores: boolean;
 }
 
-class SettingsIntercom extends Intercom<ISettingsIntercomPayload>
+class SettingsIntercomInternal extends Intercom<ISettingsIntercomPayload>
 {
 	private static LocalStorageKey = "settings";
 
-	public static Instance = new SettingsIntercom(SettingsIntercom.getInitialState());
+	public static Instance = new SettingsIntercomInternal(SettingsIntercomInternal.getInitialState());
 
 	private static getInitialState(): ISettingsIntercomPayload
 	{
@@ -49,12 +49,12 @@ class SettingsIntercom extends Intercom<ISettingsIntercomPayload>
 
 	private store()
 	{
-		localStorage.setItem(SettingsIntercom.LocalStorageKey, JSON.stringify(this.state));
+		localStorage.setItem(SettingsIntercomInternal.LocalStorageKey, JSON.stringify(this.state));
 	}
 
 	private static restore()
 	{
-		const storedSettingsString = localStorage.getItem(SettingsIntercom.LocalStorageKey);
+		const storedSettingsString = localStorage.getItem(SettingsIntercomInternal.LocalStorageKey);
 		if (!storedSettingsString)
 		{
 			return;
@@ -64,4 +64,4 @@ class SettingsIntercom extends Intercom<ISettingsIntercomPayload>
 	}
 }
 
-export default SettingsIntercom.Instance;
+export const SettingsIntercom = SettingsIntercomInternal.Instance;

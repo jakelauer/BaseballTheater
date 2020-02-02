@@ -9,7 +9,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Select from "@material-ui/core/Select";
 import {ITeams, Teams} from "baseball-theater-engine";
 import MenuItem from "@material-ui/core/MenuItem";
-import SettingsIntercom, {ISettingsIntercomPayload} from "../../Global/Settings/SettingsIntercom";
+import {ISettingsIntercomPayload, SettingsIntercom} from "../../Global/Settings/SettingsIntercom";
 import Checkbox from "@material-ui/core/Checkbox";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
@@ -66,7 +66,7 @@ export default class SettingsArea extends React.Component<Props, State>
 					Settings
 				</Typography>
 				<List>
-					<ListItem>
+					<ListItem style={{paddingLeft: 0, paddingRight: 0}}>
 						<ListItemText primary={"Hide Scores"}/>
 						<ListItemSecondaryAction>
 							<Switch
@@ -77,18 +77,20 @@ export default class SettingsArea extends React.Component<Props, State>
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
-					<ListItem>
+					<ListItem style={{paddingLeft: 0, paddingRight: 0}}>
 						<ListItemText primary={"Favorite Teams"}/>
 						<ListItemSecondaryAction>
-							<FormControl>
+							<FormControl variant={"filled"} style={{
+								width: 150
+							}}>
 								<InputLabel id="teamSelect">Team</InputLabel>
 								<Select
 									labelId={"teamSelect"}
-									style={{
-										width: 250
-									}}
 									value={this.state.settings.favoriteTeams}
 									multiple
+									style={{
+										width: "100%"
+									}}
 									onChange={this.handleTeamsChange}
 									renderValue={value =>
 									{

@@ -115,12 +115,12 @@ export class LiveGame extends React.Component<Props, State>
 			return aInning - bInning;
 		});
 
-		const inningButtons = liveData.linescore.innings.map(inning =>
+		const inningButtons = liveData.linescore.innings.map((inning, i) =>
 		{
 			const color = inning.num === this.state.selectedInning ? "primary" : undefined;
 			const variant = inning.num === this.state.selectedInning ? "contained" : undefined;
 
-			return <Tab label={`Inning ${inning.num}`} value={inning.num}/>;
+			return <Tab key={i} label={`Inning ${inning.num}`} value={inning.num}/>;
 		});
 
 		const renderedHalfInnings = playsByInningKeys.map((k, i) =>

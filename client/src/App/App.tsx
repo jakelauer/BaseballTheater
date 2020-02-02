@@ -2,25 +2,21 @@ import React from 'react';
 import styles from "./App.module.scss";
 import {DialogContentText, Grid} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import {Menu} from "@material-ui/icons";
 import Drawer from "@material-ui/core/Drawer";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import {AuthIntercom, IAuthContext} from "../Global/AuthIntercom";
 import {Routes} from "./Routes";
 import {Sidebar} from "./Sidebar";
 import ScrollMemory from "react-router-scroll-memory";
 import {RespondSizes} from "../Global/Respond/RespondIntercom";
 import {Respond} from "../Global/Respond/Respond";
+import {SidebarDrawer} from "./SidebarDrawer";
+import {ErrorBoundary} from "./ErrorBoundary";
 
 interface IAppState
 {
-	drawerOpen: boolean;
 	search: string;
 	loading: boolean;
 	error: Error;
@@ -34,7 +30,6 @@ export class App extends React.Component<{}, IAppState>
 		super(props);
 
 		this.state = {
-			drawerOpen: false,
 			error: undefined,
 			search: "",
 			loading: false,
@@ -56,38 +51,15 @@ export class App extends React.Component<{}, IAppState>
 		})
 	}
 
-	private closeDrawer = () =>
-	{
-		this.setState({
-			drawerOpen: false
-		});
-	};
-
-	private openDrawer = () =>
-	{
-		this.setState({
-			drawerOpen: true
-		});
-	};
-
 	public render()
 	{
 		return (
 			<React.Fragment>
-				<ScrollMemory />
+				<ScrollMemory/>
 				<div className={styles.wrapper}>
 					<nav className={styles.nav}>
 						<Respond at={RespondSizes.medium}>
-							<AppBar position="fixed" className={styles.appBar}>
-								<Toolbar>
-									<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" onClick={this.openDrawer}>
-										<Menu/>
-									</IconButton>
-								</Toolbar>
-							</AppBar>
-							<SwipeableDrawer onClose={this.closeDrawer} onOpen={this.openDrawer} open={this.state.drawerOpen}>
-								<Sidebar authContext={this.state.authContext} onNavigate={this.closeDrawer}/>
-							</SwipeableDrawer>
+							<SidebarDrawer authContext={this.state.authContext}/>
 						</Respond>
 						<Respond at={RespondSizes.medium} hide={true}>
 							<Drawer anchor={"left"} variant={"persistent"} open={true} classes={{
@@ -98,9 +70,11 @@ export class App extends React.Component<{}, IAppState>
 						</Respond>
 					</nav>
 					<main className={styles.main}>
-						<Container maxWidth={"xl"} style={{position: "relative", paddingLeft: 0}}>
+						<Container maxWidth={"xl"} style={{position: "relative"}}>
 							<Grid container>
-								<Routes/>
+								<ErrorBoundary>
+									<Routes/>
+								</ErrorBoundary>
 							</Grid>
 						</Container>
 					</main>

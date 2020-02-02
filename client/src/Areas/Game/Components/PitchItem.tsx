@@ -2,10 +2,16 @@ import * as React from "react";
 import {ListItem, ListItemAvatar, ListItemText} from "@material-ui/core";
 import styles from "./PitchItem.module.scss";
 import {LiveGamePlayEvent} from "baseball-theater-engine";
+import {MdVideoLibrary} from "react-icons/all";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import classNames from "classnames";
+import {IAuthContext} from "../../../Global/AuthIntercom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 interface IPitchItemProps
 {
 	pitch: LiveGamePlayEvent;
+	auth: IAuthContext;
 }
 
 interface DefaultProps
@@ -41,7 +47,24 @@ export class PitchItem extends React.Component<Props, State>
 			startSpeed
 		} = pitch.pitchData;
 
-		const secondary = `${startSpeed}mph ${pitch.details.type.description} [${breaks.spinRate} Spin Rate]`;
+		const secondary = (
+			<div style={{paddingRight: "1rem"}}>
+				<div>{`${startSpeed}mph ${pitch.details.type.description} [${breaks.spinRate} Spin Rate]`}</div>
+			</div>
+		);
+
+		const authed = this.props.auth.levels.includes("Backer");
+		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${pitch.playId}` : "#";
+		const linkClasses = classNames(styles.videoLink, {
+			[styles.unauthed]: !authed
+		});
+
+		const tooltip = (
+			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
+				<div>Video of play</div>
+				{!authed && <i>(Patreon Backers Only)</i>}
+			</div>
+		);
 
 		return (
 			<ListItem>
@@ -52,6 +75,28 @@ export class PitchItem extends React.Component<Props, State>
 					primary={pitch.details.description}
 					secondary={secondary}
 				/>
+				{pitch.playId &&
+                <ListItemSecondaryAction>
+                    <Tooltip arrow title={tooltip}>
+                        <a
+                            target={"_blank"}
+                            className={linkClasses}
+                            href={href}
+                            onClick={e =>
+							{
+								e.stopPropagation();
+								if (!authed)
+								{
+									e.preventDefault();
+								}
+							}}
+                            style={{fontSize: "1.5rem"}}
+                        >
+                            <MdVideoLibrary/>
+                        </a>
+                    </Tooltip>
+                </ListItemSecondaryAction>
+				}
 			</ListItem>
 		);
 	}

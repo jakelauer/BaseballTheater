@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require('path');
 const fs = require('fs');
 
@@ -28,5 +29,10 @@ module.exports = {
     output: {
         filename: 'server.js',
         path: path.resolve(appDirectory, "output/server")
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            __PRODUCTION__: true
+        })
+    ]
 };

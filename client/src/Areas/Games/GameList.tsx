@@ -10,6 +10,7 @@ import {SiteRoutes} from "../../Global/Routes/Routes";
 import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 import {MlbUtils} from "baseball-theater-engine/mlbutils";
 import {ContainerProgress} from "../../UI/ContainerProgress";
+import {ISettingsIntercomPayload, SettingsIntercom} from "../../Global/Settings/SettingsIntercom";
 
 interface IGameListProps
 {
@@ -28,6 +29,7 @@ interface IGameListState
 	loading: boolean;
 	scoreboard: IScheduleGameList;
 	isCurrent: boolean;
+	settings: ISettingsIntercomPayload;
 }
 
 export class GameList extends React.Component<Props, State>
@@ -36,9 +38,12 @@ export class GameList extends React.Component<Props, State>
 	{
 		super(props);
 
+		console.log("GameList");
+
 		this.state = {
 			loading: true,
 			scoreboard: null,
+			settings: SettingsIntercom.state,
 			isCurrent: false
 		}
 	}
@@ -46,7 +51,7 @@ export class GameList extends React.Component<Props, State>
 	public componentDidMount()
 	{
 		this.fetchSchedule();
-
+		SettingsIntercom.listen(settings => this.setState({settings}));
 	}
 
 	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
@@ -89,12 +94,13 @@ export class GameList extends React.Component<Props, State>
 			return <ContainerProgress/>;
 		}
 
-		const orderedGames = this.state.scoreboard.dates[0].games.sort((a, b) => {
-			//const aIsFavorite = (favoriteTeam.indexOf(a.home_file_code) > -1 || favoriteTeam.indexOf(a.away_file_code) > -1) ? -1 : 0;
-			//const bIsFavorite = (favoriteTeam.indexOf(b.home_file_code) > -1 || favoriteTeam.indexOf(b.away_file_code) > -1) ? -1 : 0;
-			//const favoriteReturn = aIsFavorite - bIsFavorite;
+		const favoriteTeams = this.state.settings.favoriteTeams;
 
-			const favoriteReturn = 0;
+		const orderedGames = this.state.scoreboard.dates[0].games.sort((a, b) =>
+		{
+			const aIsFavorite = (favoriteTeams.indexOf(a.teams.home.team.fileCode) > -1 || favoriteTeams.indexOf(a.teams.away.team.fileCode) > -1) ? -1 : 0;
+			const bIsFavorite = (favoriteTeams.indexOf(b.teams.home.team.fileCode) > -1 || favoriteTeams.indexOf(b.teams.away.team.fileCode) > -1) ? -1 : 0;
+			const favoriteReturn = aIsFavorite - bIsFavorite;
 
 			const aTime = moment(a.gameDate);
 			const bTime = moment(b.gameDate);
@@ -110,7 +116,7 @@ export class GameList extends React.Component<Props, State>
 			return favoriteReturn || finalReturn || startTimeReturn;
 		});
 
-		const gameSummaries = this.state.scoreboard.dates[0].games
+		const gameSummaries = orderedGames
 			.map(game => (
 				<Grid key={game.gamePk} item xs={12} sm={6} lg={4}>
 					<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk})} className={styles.gameLink}>
@@ -120,7 +126,7 @@ export class GameList extends React.Component<Props, State>
 			));
 
 		return (
-			<Grid className={styles.gameSummaries} container spacing={3}>
+			<Grid className={styles.gameSummaries} container spacing={3} style={{paddingLeft: 0}}>
 				{
 					this.state.loading
 						? <CircularProgress className={styles.progress}/>

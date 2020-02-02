@@ -50,7 +50,7 @@ export class Highlights extends React.Component<Props, State>
 		const videosOrSkeleton = rest.length ? rest : Array(20).fill(0);
 
 		const restRendered = videosOrSkeleton.map(item => (
-			<Grid key={item.guid} item xs={12} sm={6} lg={4} xl={3}>
+			<Grid key={item.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
 				<Highlight media={item} className={styles.highlight}/>
 			</Grid>
 		));
@@ -59,7 +59,7 @@ export class Highlights extends React.Component<Props, State>
 			<div className={styles.wrapper}>
 				<div className={styles.featured}>
 				</div>
-				<Grid container className={styles.rest} spacing={3}>
+				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0}}>
 					{restRendered}
 					{!this.props.media && <ContainerProgress/>}
 				</Grid>
