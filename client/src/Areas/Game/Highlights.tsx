@@ -1,14 +1,17 @@
 import * as React from "react";
-import {GameMedia} from "baseball-theater-engine";
+import {GameMedia, LiveData} from "baseball-theater-engine";
 import styles from "./Highlights.module.scss";
 import {Highlight} from "../../UI/Highlight";
 import {Grid} from "@material-ui/core";
 import {ContainerProgress} from "../../UI/ContainerProgress";
+import moment from "moment";
+import Helmet from "react-helmet";
 
 interface IHighlightsProps
 {
 	gamePk: string;
 	media: GameMedia;
+	liveData: LiveData;
 }
 
 interface DefaultProps
@@ -28,8 +31,7 @@ export class Highlights extends React.Component<Props, State>
 	{
 		super(props);
 
-		this.state = {
-		};
+		this.state = {};
 	}
 
 	private get highlights()
@@ -43,6 +45,11 @@ export class Highlights extends React.Component<Props, State>
 
 	public render()
 	{
+		if (!this.props.liveData?.gameData)
+		{
+			return <ContainerProgress/>;
+		}
+
 		const recap = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("recap")));
 		const condensed = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("condensed")));
 		const rest = this.highlights.filter(a => a !== condensed && a !== recap);
@@ -55,10 +62,26 @@ export class Highlights extends React.Component<Props, State>
 			</Grid>
 		));
 
+		const teams = this.props.liveData.gameData.teams;
+		const date = moment(this.props.liveData.gameData.datetime.dateTime).format("MMMM D, YYYY");
+
 		return (
 			<div className={styles.wrapper}>
-				<div className={styles.featured}>
-				</div>
+				<Helmet>
+					<title>{`Highlights - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+				</Helmet>
+				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
+					{recap &&
+                    <Grid item xl={4} sm={12} md={6}>
+                        <Highlight media={recap} className={styles.highlight}/>
+                    </Grid>
+					}
+					{condensed &&
+                    <Grid item xl={4} sm={12} md={6}>
+                        <Highlight media={condensed} className={styles.highlight}/>
+                    </Grid>
+					}
+				</Grid>
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0}}>
 					{restRendered}
 					{!this.props.media && <ContainerProgress/>}

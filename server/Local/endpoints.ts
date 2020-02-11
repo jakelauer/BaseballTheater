@@ -45,7 +45,11 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 
 		console.log(host);
 
-		res.redirect(host + "/");
+		const state = decodeURIComponent(req.query.state) || "/";
+
+		console.log(host + state);
+
+		res.redirect(host + state);
 	});
 
 	app.get("/auth/status", async (req, res) =>

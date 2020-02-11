@@ -76,13 +76,13 @@ class GameArea extends React.Component<Props, State>
 		switch (this.props.match.params.tab)
 		{
 			case "Wrap":
-				return <Wrap gameIntercom={this.gameIntercom}/>;
+				return <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
 			case "LiveGame":
 				return <LiveGame liveData={this.state.gameData.liveData}/>;
 			case "BoxScore":
 				return <BoxScore liveData={this.state.gameData.liveData}/>;
 			case "Highlights":
-				return <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId}/>;
+				return <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId} liveData={this.state.gameData.liveData}/>;
 		}
 	}
 
@@ -113,6 +113,13 @@ class GameArea extends React.Component<Props, State>
 
 		const tabs = [
 			{
+				label: "Highlights",
+				disabled: false,
+				icon: <PlayCircleOutline/>,
+				value: "Highlights",
+				linkDestination: highlightsLink
+			},
+			{
 				label: "Wrap",
 				disabled: !this.hasWrap(),
 				icon: <LibraryBooks/>,
@@ -132,13 +139,6 @@ class GameArea extends React.Component<Props, State>
 				icon: <ListAlt/>,
 				value: "BoxScore",
 				linkDestination: boxScoreLink
-			},
-			{
-				label: "Highlights",
-				disabled: false,
-				icon: <PlayCircleOutline/>,
-				value: "Highlights",
-				linkDestination: highlightsLink
 			},
 		];
 

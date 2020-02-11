@@ -5,7 +5,7 @@ import {LiveGamePlayEvent} from "baseball-theater-engine";
 import {MdVideoLibrary} from "react-icons/all";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import classNames from "classnames";
-import {IAuthContext} from "../../../Global/AuthIntercom";
+import {AuthIntercom, BackerType, IAuthContext} from "../../../Global/AuthIntercom";
 import Tooltip from "@material-ui/core/Tooltip";
 
 interface IPitchItemProps
@@ -53,7 +53,7 @@ export class PitchItem extends React.Component<Props, State>
 			</div>
 		);
 
-		const authed = this.props.auth.levels.includes("Backer");
+		const authed = AuthIntercom.hasLevel(BackerType.ProBacker);
 		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${pitch.playId}` : "#";
 		const linkClasses = classNames(styles.videoLink, {
 			[styles.unauthed]: !authed
@@ -62,7 +62,7 @@ export class PitchItem extends React.Component<Props, State>
 		const tooltip = (
 			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
 				<div>Video of play</div>
-				{!authed && <i>(Patreon Backers Only)</i>}
+				{!authed && <i>(Pro Backers Only)</i>}
 			</div>
 		);
 
@@ -77,17 +77,17 @@ export class PitchItem extends React.Component<Props, State>
 				/>
 				{pitch.playId &&
                 <ListItemSecondaryAction>
-                    <Tooltip arrow title={tooltip}>
+                    <Tooltip arrow title={tooltip} enterTouchDelay={0}>
                         <a
                             target={"_blank"}
                             className={linkClasses}
                             href={href}
                             onClick={e =>
-							{
-								e.stopPropagation();
-								if (!authed)
-								{
-									e.preventDefault();
+			                {
+				                e.stopPropagation();
+				                if (!authed)
+				                {
+					                e.preventDefault();
 								}
 							}}
                             style={{fontSize: "1.5rem"}}

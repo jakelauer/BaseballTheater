@@ -1,13 +1,15 @@
 import * as React from "react";
-import {GameIntercom} from "./Components/GameIntercom";
-import {GameMedia} from "baseball-theater-engine";
+import {GameMedia, LiveData} from "baseball-theater-engine";
 import {CircularProgress, Typography} from "@material-ui/core";
 import styles from "./Wrap.module.scss";
 import marked from "marked";
+import Helmet from "react-helmet";
+import moment from "moment";
 
 interface IWrapProps
 {
-	gameIntercom: GameIntercom;
+	media: GameMedia;
+	liveData: LiveData;
 }
 
 interface DefaultProps
@@ -19,7 +21,6 @@ type State = IWrapState;
 
 interface IWrapState
 {
-	media: GameMedia;
 }
 
 export class Wrap extends React.Component<Props, State>
@@ -29,31 +30,29 @@ export class Wrap extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			media: props.gameIntercom.state.media
 		}
-	}
-
-	public componentDidMount(): void
-	{
-		this.props.gameIntercom.listen(data => this.setState({
-			media: data.media
-		}));
 	}
 
 	public render()
 	{
-		if (!this.state.media?.editorial?.recap?.mlb)
+		if (!this.props.media?.editorial?.recap?.mlb || !this.props.liveData)
 		{
 			return <CircularProgress className={styles.progress}/>;
 		}
 
-		const mlbRecap = this.state.media.editorial.recap.mlb;
+		const mlbRecap = this.props.media.editorial.recap.mlb;
 
 		const parsed = marked(mlbRecap.body);
 
+		const teams = this.props.liveData.gameData.teams;
+		const date = moment(this.props.liveData.gameData.datetime.dateTime).format("MMMM D, YYYY");
+
 		return (
 			<div className={styles.wrapper}>
-				<Typography variant={"h3"} className={styles.title}>
+				<Helmet>
+					<title>{`Wrap - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+				</Helmet>
+				<Typography variant={"h4"} className={styles.title}>
 					{mlbRecap.headline}
 				</Typography>
 				<Typography

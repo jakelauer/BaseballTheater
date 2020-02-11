@@ -61,11 +61,12 @@ export default class SettingsArea extends React.Component<Props, State>
 	public render()
 	{
 		return (
-			<Container maxWidth={"sm"} style={{marginLeft: 0}}>
+			<Container maxWidth={"sm"} style={{marginLeft: 0, paddingTop: "1rem"}}>
 				<Typography variant={"h4"}>
 					Settings
 				</Typography>
 				<List>
+
 					<ListItem style={{paddingLeft: 0, paddingRight: 0}}>
 						<ListItemText primary={"Hide Scores"}/>
 						<ListItemSecondaryAction>
@@ -77,6 +78,7 @@ export default class SettingsArea extends React.Component<Props, State>
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
+
 					<ListItem style={{paddingLeft: 0, paddingRight: 0}}>
 						<ListItemText primary={"Favorite Teams"}/>
 						<ListItemSecondaryAction>
@@ -110,6 +112,10 @@ export default class SettingsArea extends React.Component<Props, State>
 								</Select>
 							</FormControl>
 						</ListItemSecondaryAction>
+					</ListItem>
+
+					<ListItem>
+						<ListItemText primary={"Sort"}/>
 					</ListItem>
 				</List>
 			</Container>

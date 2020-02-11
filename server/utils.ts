@@ -27,7 +27,7 @@ export class Utils
 		{
 			if (!Utils.cachedValidApiKeys)
 			{
-				const file = fs.readFileSync(path.resolve(process.cwd(), "./apikeys.json"), "utf8");
+				const file = fs.readFileSync(path.resolve(process.cwd(), "./server/apikeys.json"), "utf8");
 				Utils.cachedValidApiKeys = JSON.parse(file);
 			}
 

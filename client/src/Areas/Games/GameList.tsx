@@ -11,6 +11,7 @@ import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 import {MlbUtils} from "baseball-theater-engine/mlbutils";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {ISettingsIntercomPayload, SettingsIntercom} from "../../Global/Settings/SettingsIntercom";
+import Helmet from "react-helmet";
 
 interface IGameListProps
 {
@@ -37,8 +38,6 @@ export class GameList extends React.Component<Props, State>
 	constructor(props: Props)
 	{
 		super(props);
-
-		console.log("GameList");
 
 		this.state = {
 			loading: true,
@@ -125,14 +124,21 @@ export class GameList extends React.Component<Props, State>
 				</Grid>
 			));
 
+		const formattedDate = this.props.day.format("MMMM D, YYYY");
+
 		return (
-			<Grid className={styles.gameSummaries} container spacing={3} style={{paddingLeft: 0}}>
-				{
-					this.state.loading
-						? <CircularProgress className={styles.progress}/>
-						: gameSummaries
-				}
-			</Grid>
+			<React.Fragment>
+				<Helmet>
+					<title>{`Games for ${formattedDate}`}</title>
+				</Helmet>
+				<Grid className={styles.gameSummaries} container spacing={3} style={{paddingLeft: 0}}>
+					{
+						this.state.loading
+							? <CircularProgress className={styles.progress}/>
+							: gameSummaries
+					}
+				</Grid>
+			</React.Fragment>
 		);
 	}
 }

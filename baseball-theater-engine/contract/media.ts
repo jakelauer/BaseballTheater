@@ -135,3 +135,36 @@ export interface Keyword
 	slug: string;
 	displayName: string;
 }
+
+export interface VideoSearch
+{
+	meta: {
+		page_size: number;
+		offset: number;
+		moreResults: boolean;
+	}
+	docs: MediaDoc[];
+}
+
+export interface MediaDoc
+{
+	id: string;
+	content_id: string;
+	slug: string;
+	title: string;
+	type: string;
+	lastPublish: string;
+	blurb: string;
+	description: string;
+	duration: string;
+	url: string;
+	mediaPlaybackId: string;
+	source: string;
+	createdOn: string;
+	date: string;
+	kicker: string;
+	keywordsDisplay: Keyword[];
+	keywordsAll: Keyword[];
+	image: ArticleImage;
+	playbacks: MediaItemPlayback[];
+}

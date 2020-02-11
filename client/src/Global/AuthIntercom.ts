@@ -6,12 +6,18 @@ export interface IAuthContext
 {
 	userId: string;
 	authorized: boolean;
-	levels: BackerTypes[];
+	levels: BackerType[];
 	loaded: boolean;
 	isSubscriber: boolean;
 }
 
-type BackerTypes = "Backer" | "Pro Backer" | "Star Backer" | "Premium Sponsor";
+export enum BackerType
+{
+	Backer = "Backer",
+	ProBacker = "Pro Backer",
+	StarBacker = "Star Backer",
+	PremiumSponsor = "Premium Sponsor"
+}
 
 class _AuthIntercom extends Intercom<IAuthContext>
 {
@@ -30,9 +36,14 @@ class _AuthIntercom extends Intercom<IAuthContext>
 		this.initialize();
 	}
 
+	private get isOwner()
+	{
+		return this.state.userId === "5206592";
+	}
+
 	private async initialize()
 	{
-		const user: { userId: string, accessToken: string, levels: BackerTypes[] } = await fetch("/auth/status")
+		const user: { userId: string, accessToken: string, levels: BackerType[] } = await fetch("/auth/status")
 			.then(r => r.json());
 
 		this.update({
@@ -46,6 +57,11 @@ class _AuthIntercom extends Intercom<IAuthContext>
 	public refresh()
 	{
 		this.initialize();
+	}
+
+	public hasLevel(backerType: BackerType)
+	{
+		return this.state.levels?.indexOf(backerType) > -1 || this.isOwner;
 	}
 
 }

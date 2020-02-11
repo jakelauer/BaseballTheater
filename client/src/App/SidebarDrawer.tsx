@@ -1,14 +1,17 @@
 import * as React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import {Sidebar} from "./Sidebar";
 import {IAuthContext} from "../Global/AuthIntercom";
 import styles from "./App.module.scss";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import {Menu} from "@material-ui/icons";
+import {ArrowBack, Menu} from "@material-ui/icons";
+import {FaSearch} from "react-icons/all";
+import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import {SiteRoutes} from "../Global/Routes/Routes";
+import Sidebar from "./Sidebar";
 
-interface ISidebarDrawerProps
+interface ISidebarDrawerProps extends RouteComponentProps
 {
 	authContext: IAuthContext;
 }
@@ -25,7 +28,7 @@ interface ISidebarDrawerState
 	drawerOpen: boolean;
 }
 
-export class SidebarDrawer extends React.Component<Props, State>
+class SidebarDrawer extends React.Component<Props, State>
 {
 	constructor(props: Props)
 	{
@@ -52,13 +55,32 @@ export class SidebarDrawer extends React.Component<Props, State>
 
 	public render()
 	{
+		const menuButton = (
+			<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="back" onClick={this.openDrawer}>
+				<Menu style={{fontSize: "2rem"}}/> <span className={styles.logoText}>Baseball Theater</span>
+			</IconButton>
+		);
+
+		const backButton = (
+			<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" component={p => <Link {...p} to={SiteRoutes.Games.resolve()}/>}>
+				<ArrowBack style={{fontSize: "2rem"}}/> <span className={styles.logoText}>Baseball Theater</span>
+			</IconButton>
+		);
+
+		const menuOrBack = (this.props.location.pathname.includes("games"))
+			? menuButton
+			: backButton;
+
 		return (
 			<React.Fragment>
 				<AppBar position="fixed" className={styles.appBar}>
-					<Toolbar>
-						<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" onClick={this.openDrawer}>
-							<Menu/>
-						</IconButton>
+					<Toolbar className={styles.toolbar}>
+						{menuOrBack}
+						<div className={styles.barlogo}>
+							<Link to={SiteRoutes.Search.resolve()}>
+								<FaSearch style={{color: "white"}}/>
+							</Link>
+						</div>
 					</Toolbar>
 				</AppBar>
 				<SwipeableDrawer
@@ -73,3 +95,5 @@ export class SidebarDrawer extends React.Component<Props, State>
 		);
 	}
 }
+
+export default withRouter(SidebarDrawer);

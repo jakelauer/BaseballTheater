@@ -41,9 +41,10 @@ export class SiteRoutes
 	public static Standings = new SiteRoute<{ year: string; }>("/standings/:year", {
 		year: moment().format("YYYY")
 	});
-	public static FeaturedVideos = new SiteRoute<{category: string, tag?: string}>("/videos/:category/:tag?");
-	public static Teams = new SiteRoute("/teams");
+	public static FeaturedVideos = new SiteRoute<{ category: string, tag?: string }>("/videos/:category/:tag?");
+	public static Teams = new SiteRoute("/team/:teamFileCode");
 	public static Team = new SiteRoute<{ team: keyof ITeams }>("/team/:team");
 	public static ApiTest = new SiteRoute("/apitest");
 	public static Settings = new SiteRoute("/settings");
+	public static Search = new SiteRoute("/search");
 }

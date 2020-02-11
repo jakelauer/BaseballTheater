@@ -29,7 +29,8 @@ export class ContainerProgress extends React.Component<Props, State>
 	{
 		return (
 			<div style={{
-				position: "absolute",
+				position: "fixed",
+				zIndex: 99,
 				top: 0,
 				left: 0,
 				right: 0,
