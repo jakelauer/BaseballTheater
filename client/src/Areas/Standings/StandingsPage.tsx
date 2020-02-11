@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import {SiteRoutes} from "../../Global/Routes/Routes";
 import {ITeams} from "baseball-theater-engine";
 import {ContainerProgress} from "../../UI/ContainerProgress";
+import styles from "./StandingsPage.module.scss";
 
 interface IStandingsPageProps
 {
@@ -65,7 +66,7 @@ export class StandingsPage extends React.Component<Props, State>
 		const records = this.state.standings.records;
 
 		return (
-			<div style={{paddingLeft: 32}}>
+			<div>
 				{records.map(record => <Division {...record} />)}
 			</div>
 		);
@@ -79,7 +80,7 @@ const Division: React.FC<StandingsRecord> = (props) =>
 			<Typography variant="h5">
 				{props.division.nameShort}
 			</Typography>
-			<TableContainer>
+			<TableContainer className={styles.table}>
 				<Table>
 					<TableHead>
 						<TableRow>
@@ -142,21 +143,21 @@ const Division: React.FC<StandingsRecord> = (props) =>
 					<TableBody>
 						{props.teamRecords.map(teamRecord => (
 							<TableRow>
-								<TableCell>
+								<TableCell className={styles.cell}>
 									<Link to={SiteRoutes.Team.resolve({team: teamRecord.team.fileCode as keyof ITeams})}>
 										{teamRecord.team.teamName}
 									</Link>
 								</TableCell>
-								<TableCell>{teamRecord.wins}</TableCell>
-								<TableCell>{teamRecord.losses}</TableCell>
-								<TableCell>{teamRecord.winningPercentage}</TableCell>
-								<TableCell>{teamRecord.gamesBack}</TableCell>
-								<TableCell>{teamRecord.magicNumber}</TableCell>
-								<TableCell>{teamRecord.runsScored}</TableCell>
-								<TableCell>{teamRecord.runsAllowed}</TableCell>
-								<TableCell>{teamRecord.runDifferential}</TableCell>
-								<TableCell>{teamRecord.records.expectedRecords[0].wins} - {teamRecord.records.expectedRecords[0].losses}</TableCell>
-								<TableCell>{teamRecord.records.expectedRecords[1].wins} - {teamRecord.records.expectedRecords[1].losses}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.wins}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.losses}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.winningPercentage}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.gamesBack}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.magicNumber}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.runsScored}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.runsAllowed}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.runDifferential}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.records.expectedRecords[0].wins} - {teamRecord.records.expectedRecords[0].losses}</TableCell>
+								<TableCell className={styles.cell}>{teamRecord.records.expectedRecords[1].wins} - {teamRecord.records.expectedRecords[1].losses}</TableCell>
 							</TableRow>
 						))}
 					</TableBody>

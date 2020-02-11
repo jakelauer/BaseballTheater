@@ -7,7 +7,7 @@ import styles from "./PlayItem.module.scss";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import {MdVideoLibrary} from "react-icons/all";
 import Avatar from "@material-ui/core/Avatar";
-import {AuthIntercom, IAuthContext} from "../../../Global/AuthIntercom";
+import {AuthIntercom, BackerType, IAuthContext} from "../../../Global/AuthIntercom";
 import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -66,7 +66,7 @@ export class PlayItem extends React.Component<Props, State>
 		const playEventsLength = this.props.play?.playEvents?.length ?? 1;
 		const playId = this.props.play.playEvents?.[playEventsLength - 1]?.playId;
 
-		const authed = this.state.auth.levels.includes("Backer");
+		const authed = AuthIntercom.hasLevel(BackerType.ProBacker);
 		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${playId}` : "#";
 		const avatarClasses = classNames(styles.videoAvatar, {
 			[styles.unauthed]: !authed
@@ -74,7 +74,7 @@ export class PlayItem extends React.Component<Props, State>
 		const tooltip = (
 			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
 				<div>Video of play</div>
-				{!authed && <i>(Patreon Backers Only)</i>}
+				{!authed && <i>(Pro Backers Only)</i>}
 			</div>
 		);
 
@@ -83,7 +83,7 @@ export class PlayItem extends React.Component<Props, State>
 				<ListItem button onClick={this.toggle}>
 					<ListItemAvatar>
 						{playId &&
-                        <Tooltip title={tooltip} arrow>
+                        <Tooltip title={tooltip} arrow enterTouchDelay={0}>
                             <Avatar className={avatarClasses}>
                                 <a target={"_blank"} href={href}
                                    onClick={e =>

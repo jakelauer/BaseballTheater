@@ -1,10 +1,50 @@
-import {CompilationPlaylists, MlbDataServer, NonPlayTags, RecapTags, SinglePlayTags} from "../../baseball-theater-engine";
+import {CompilationPlaylists, ITeams, MlbDataServer, NonPlayTags, RecapTags, SinglePlayTags} from "../../baseball-theater-engine";
 import {Express} from "express";
 import {PlaybackUtils} from "./PlaybackUtils";
 import moment from "moment";
+import {Teams} from "../../baseball-theater-engine/dist/contract";
 
 export const RegisterPlaybackEndpoints = (app: Express) =>
 {
+	/**
+	 * @swagger
+	 *
+	 * /api/team:
+	 *  get:
+	 *      description: Returns videos for a particular team
+	 *      parameters:
+	 *      - in: query
+	 *        name: team
+	 *        required: true
+	 *        description: The team in question (filecode)
+	 *      - in: query
+	 *        name: sinceDays
+	 *        description: The number of days ago to search (max 7)
+	 *        type: number
+	 *      - in: header
+	 *        name: x-api-key
+	 *        description: Your API Key
+	 *        type: string
+	 *      - in: header
+	 *        name: x-app
+	 *        description: Your app
+	 *        type: string
+	 */
+	app.get("/api/team", (req, res) =>
+	{
+		PlaybackUtils.requireApiKey(req, res);
+
+		const team = req.query.team as keyof ITeams;
+		const page = req.query.page || 1;
+		const teamCodeNumber = Teams.TeamIdList[team as keyof typeof Teams.TeamIdList];
+
+		const MLB = new MlbDataServer();
+		MLB.videoTagSearchNode(`teamid-${teamCodeNumber}`, page).then(data =>
+		{
+			res.send(data);
+		});
+	});
+
 	/**
 	 * @swagger
 	 *

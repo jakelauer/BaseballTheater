@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styles from "./App.module.scss";
 import {DialogContentText, Grid} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
@@ -8,32 +8,41 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import {AuthIntercom, IAuthContext} from "../Global/AuthIntercom";
 import {Routes} from "./Routes";
-import {Sidebar} from "./Sidebar";
+import Sidebar from "./Sidebar";
 import ScrollMemory from "react-router-scroll-memory";
 import {RespondSizes} from "../Global/Respond/RespondIntercom";
 import {Respond} from "../Global/Respond/Respond";
-import {SidebarDrawer} from "./SidebarDrawer";
 import {ErrorBoundary} from "./ErrorBoundary";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import Helmet from "react-helmet";
+import moment from "moment";
+import SidebarDrawer from "./SidebarDrawer";
 
 interface IAppState
 {
 	search: string;
 	loading: boolean;
-	error: Error;
 	authContext: IAuthContext;
+	showInstallPromptDialog: boolean;
+	installPromptSnackbarContent: ReactNode;
 }
 
 export class App extends React.Component<{}, IAppState>
 {
+	private beforeInstallPromptEvent: BeforeInstallPromptEvent;
+
 	constructor(props: {})
 	{
 		super(props);
 
 		this.state = {
-			error: undefined,
 			search: "",
 			loading: false,
-			authContext: AuthIntercom.state
+			authContext: AuthIntercom.state,
+			showInstallPromptDialog: false,
+			installPromptSnackbarContent: null
 		};
 	}
 
@@ -42,19 +51,69 @@ export class App extends React.Component<{}, IAppState>
 		AuthIntercom.listen(data => this.setState({
 			authContext: data
 		}));
+
+		window.addEventListener("beforeinstallprompt", e =>
+		{
+			e.preventDefault();
+
+			this.beforeInstallPromptEvent = e as BeforeInstallPromptEvent;
+
+			const visits = JSON.parse(localStorage.getItem("visits") ?? "0");
+			const threeMosAgo = moment().add(-3, "months");
+			const declineDate = moment(localStorage.getItem("decline-date") ?? threeMosAgo.add(-1, "minute").format());
+
+			const expired = declineDate.isBefore(threeMosAgo);
+
+			if (visits > 3 && expired)
+			{
+				this.setState({
+					showInstallPromptDialog: true
+				});
+			}
+		});
 	}
 
-	public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void
+	private onInstallDialogClose = () =>
 	{
 		this.setState({
-			error
-		})
-	}
+			showInstallPromptDialog: false
+		});
+
+		localStorage.setItem("decline-date", moment().format());
+	};
+
+	private onInstallDialogApprove = () =>
+	{
+		this.onInstallDialogClose();
+		this.beforeInstallPromptEvent?.prompt();
+
+		// Wait for the user to respond to the prompt
+		this.beforeInstallPromptEvent?.userChoice?.then((choiceResult) =>
+		{
+			if (choiceResult.outcome === 'accepted')
+			{
+				this.setState({
+					installPromptSnackbarContent: "Installed! You're gonna love it, I promise."
+				});
+			}
+			else
+			{
+				this.setState({
+					installPromptSnackbarContent: "You promised to install it and then didn't. I can't believe this."
+				});
+			}
+		});
+	};
+
+	private onInstallPromptSnackbarClose = () => this.setState({
+		installPromptSnackbarContent: null
+	});
 
 	public render()
 	{
 		return (
 			<React.Fragment>
+				<Helmet defaultTitle={"Baseball Theater"} titleTemplate={"%s | Baseball Theater"}/>
 				<ScrollMemory/>
 				<div className={styles.wrapper}>
 					<nav className={styles.nav}>
@@ -78,14 +137,36 @@ export class App extends React.Component<{}, IAppState>
 							</Grid>
 						</Container>
 					</main>
-					<Dialog open={this.state.error !== undefined} onClose={() => this.setState({error: undefined})}>
-						<DialogTitle>Error</DialogTitle>
+					<Dialog
+						open={this.state.showInstallPromptDialog}
+						onClose={this.onInstallDialogClose}
+					>
+						<DialogTitle>
+							Install Baseball Theater
+						</DialogTitle>
 						<DialogContent>
 							<DialogContentText>
-								There was an error rendering the page :(
+								You enjoy Baseball Theater, right? I mean, it's pretty great. Did you know you can install it like a normal app and access it all the time?
+								<br/><br/>
+								Do you want to install?
+								<br/>
+								<small>Seriously, it's super convenient.</small>
 							</DialogContentText>
 						</DialogContent>
+						<DialogActions>
+							<Button onClick={this.onInstallDialogClose} color="primary">
+								No, leave me alone.
+							</Button>
+							<Button autoFocus onClick={this.onInstallDialogApprove} color="primary">
+								Yes, I need this in my life.
+							</Button>
+						</DialogActions>
 					</Dialog>
+					<Snackbar
+						open={!!this.state.installPromptSnackbarContent}
+						onClose={this.onInstallPromptSnackbarClose}
+						message={this.state.installPromptSnackbarContent}
+					/>
 				</div>
 			</React.Fragment>
 		);

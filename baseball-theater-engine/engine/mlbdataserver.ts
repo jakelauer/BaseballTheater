@@ -77,6 +77,16 @@ export class MlbDataServer
 		);
 	}
 
+	public async getScoreboardNode(date: moment.Moment)
+	{
+		const dateString = date.format("YYYY-MM-DD");
+		const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1,51&date=${dateString}&gameTypes=E,S,R,A,F,D,L,W&hydrate=team(leaders(showOnPreview(leaderCategories=[homeRuns,runsBattedIn,battingAverage],statGroup=[pitching,hitting]))),linescore(matchup,runners),flags,liveLookin,review,broadcasts(all),decisions,person,probablePitcher,stats,homeRuns,previousPlay,game(content(media(featured,epg),summary),tickets),seriesStatus(useOverride=true)&useLatestGames=false&scheduleTypes=events,games&language=en&leagueIds=103,104,420`;
+		return await Internal_DataLoaderNode.load<IScheduleGameList>(
+			url,
+			"schedule" + dateString
+		);
+	}
+
 	public async getStandings(asOfDate: moment.Moment)
 	{
 		const date = asOfDate.format("YYYY-MM-DD");
@@ -176,7 +186,7 @@ export class MlbDataServer
 				return {
 					metadata: item,
 					video: videoJson
-				};
+				} as VideoSearchWithMetadata;
 			});
 
 			return Promise.all(promises);

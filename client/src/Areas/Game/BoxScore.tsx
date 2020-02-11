@@ -5,6 +5,9 @@ import {CircularProgress, Tab, Tabs} from "@material-ui/core";
 import styles from "./BoxScore.module.scss";
 import {Respond} from "../../Global/Respond/Respond";
 import {RespondSizes} from "../../Global/Respond/RespondIntercom";
+import Helmet from "react-helmet";
+import moment from "moment";
+import SwipeableViews from "react-swipeable-views";
 
 interface IBoxScoreProps
 {
@@ -20,7 +23,7 @@ type State = IBoxScoreState;
 
 interface IBoxScoreState
 {
-	selectedTeam: string;
+	index: number;
 }
 
 export class BoxScore extends React.Component<Props, State>
@@ -30,21 +33,11 @@ export class BoxScore extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			selectedTeam: props.liveData?.liveData?.boxscore?.teams?.away?.team?.name ?? ""
+			index: 0
 		};
 	}
 
-	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
-	{
-		if (prevState.selectedTeam === "" && this.props.liveData?.liveData?.boxscore?.teams?.away?.team?.name)
-		{
-			this.setState({
-				selectedTeam: this.props.liveData?.liveData?.boxscore?.teams?.away?.team?.name
-			});
-		}
-	}
-
-	private readonly onTeamSelect = (e: any, selectedTeam: string) => this.setState({selectedTeam});
+	private readonly onTeamSelect = (index: number) => this.setState({index});
 
 	public render()
 	{
@@ -62,37 +55,50 @@ export class BoxScore extends React.Component<Props, State>
 			home
 		} = this.props.liveData?.liveData?.boxscore?.teams ?? {};
 
+		const teams = this.props.liveData.gameData.teams;
+		const date = moment(this.props.liveData.gameData.datetime.dateTime).format("MMMM D, YYYY");
+
+		const teamsRendered = [
+			<BoxScoreTeam
+				data={away}
+				team={gameData.teams.away}
+				players={players}
+				className={styles.team}/>,
+			<BoxScoreTeam
+				data={home}
+				team={gameData.teams.home}
+				players={players}
+				className={styles.team}/>
+		];
+
 		return (
 			<div className={styles.bothTeams}>
+				<Helmet>
+					<title>{`Box Score - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+				</Helmet>
 				<Respond at={RespondSizes.small} hide={false}>
 					<Tabs
 						className={styles.inningTabs}
 						orientation={"horizontal"}
 						variant="scrollable"
-						value={this.state.selectedTeam}
-						onChange={this.onTeamSelect}
+						value={this.state.index}
+						onChange={(e, i) => this.onTeamSelect(i)}
 						indicatorColor="primary"
 						textColor="primary"
 					>
-						<Tab label={boxscore.teams.away.team.name} value={boxscore.teams.away.team.name}/>
-						<Tab label={boxscore.teams.home.team.name} value={boxscore.teams.home.team.name}/>
+						<Tab label={boxscore.teams.away.team.name} value={0}/>
+						<Tab label={boxscore.teams.home.team.name} value={1}/>
 					</Tabs>
 				</Respond>
 
-				<Respond at={RespondSizes.small} hide={this.state.selectedTeam !== boxscore.teams.away.team.name} ignoreIfUnmatched={true}>
-					<BoxScoreTeam
-						data={away}
-						team={gameData.teams.away}
-						players={players}
-						className={styles.team}/>
+				<Respond at={RespondSizes.small} hide={false}>
+					<SwipeableViews index={this.state.index} onChangeIndex={this.onTeamSelect}>
+						{teamsRendered}
+					</SwipeableViews>
 				</Respond>
 
-				<Respond at={RespondSizes.small} hide={this.state.selectedTeam !== boxscore.teams.home.team.name} ignoreIfUnmatched={true}>
-					<BoxScoreTeam
-						data={home}
-						team={gameData.teams.home}
-						players={players}
-						className={styles.team}/>
+				<Respond at={RespondSizes.small} hide={true}>
+					{teamsRendered}
 				</Respond>
 			</div>
 		);
