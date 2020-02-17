@@ -205,3 +205,9 @@ ModelManifest.xml
 /.vscode/launch.json
 /BaseballTheater
 /BaseballTheaterCore/Node
+/.vs/BaseballTheater/v16/Server/sqlite3/storage.ide-wal
+/.vs/BaseballTheater/v16/Server/sqlite3/storage.ide-shm
+/.vs/BaseballTheater/v16/Server/sqlite3/storage.ide
+/.vs/BaseballTheater/v16/Server/sqlite3/db.lock
+/.vs/BaseballTheater/DesignTimeBuild/.dtbcache
+/.vs/BaseballTheater/config/applicationhost.config
