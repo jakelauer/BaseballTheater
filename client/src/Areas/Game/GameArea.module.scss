@@ -1,0 +1,42 @@
+.gameWrapper
+{
+	height: 100vh;
+	width: 100%;
+}
+
+.tabs
+{
+	position: fixed;
+	top: 0;
+	left: 15vw;
+	right: 0;
+	background: white;
+	border-bottom: 1px solid #EEE;
+	z-index: 9;
+	height: 56px;
+}
+
+.root
+{
+	position: fixed;
+	bottom: 0;
+	left: 15vw;
+	right: 0;
+	border-top: 1px solid #EEE;
+
+	:global(.r-medium) &
+	{
+		left: 0;
+	}
+}
+
+.content
+{
+	flex: 1 0;
+	padding-bottom: 5rem;
+
+	:global(html:not(.r-medium)) &
+	{
+		padding-top: 3.5rem;
+	}
+}

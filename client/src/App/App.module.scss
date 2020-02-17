@@ -1,0 +1,147 @@
+@import "../styles/vars";
+
+
+.wrapper
+{
+	display: flex;
+	font-family: Roboto, sans-serif;
+
+	:global(.r-medium) &
+	{
+		padding-top: 3.5rem;
+		flex-direction: column;
+	}
+}
+
+.sidebar
+{
+	position: fixed;
+	width: 20vw;
+}
+
+.appBar
+{
+	background: red;
+}
+
+.toolbar
+{
+	height: 4rem;
+	min-height: 4rem;
+
+	:global(.r-medium) &
+	{
+		height: 3.5rem;
+		min-height: 3.5rem;
+	}
+}
+
+.logo
+{
+	display: flex;
+	color: white;
+	font-size: 1.5rem;
+	font-family: "bebas", sans-serif;
+	align-items: center;
+	padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+	background: $color-accent;
+	text-decoration: none;
+
+	&:before
+	{
+		content: "";
+		margin-right: 1rem;
+		display: block;
+		width: 2rem;
+		height: 2rem;
+		background: url("/assets/logo-circle.png") no-repeat center;
+		background-size: cover;
+	}
+}
+
+.barlogo
+{
+	display: flex;
+	color: white;
+	font-size: 1.5rem;
+	font-family: "bebas", sans-serif;
+	align-items: center;
+	justify-self: center;
+	text-align: right;
+	flex: 1 0;
+	justify-content: flex-end;
+}
+
+.menuButton span.logoText
+{
+	padding-left: 1rem;
+	font-size: 1.5rem;
+	font-family: "bebas", sans-serif;
+}
+
+.drawerPaper,
+.nav
+{
+	width: 15vw;
+	min-width: 250px;
+}
+
+:global(.r-medium) .nav
+{
+	width: auto;
+}
+
+.main
+{
+	width: 85vw;
+	max-width: calc(100vw - 250px);
+
+	:global(.r-medium) &
+	{
+		width: auto;
+		max-width: none;
+	}
+}
+
+.indent
+{
+	padding-left: 1rem;
+}
+
+.patreonButtonLink
+{
+	display: block;
+	text-decoration: none;
+	margin: 1rem 1rem 0;
+}
+
+.sponsors
+{
+	margin-top: 3rem;
+
+	p
+	{
+		text-align: center;
+		font-size: .9rem;
+	}
+}
+
+.sponsor
+{
+	margin: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 2rem;
+	color: #DDD;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	&:not(.hasSponsor)
+	{
+		pointer-events: none;
+		cursor: default;
+		border: 1px dashed #DDD;
+	}
+}
