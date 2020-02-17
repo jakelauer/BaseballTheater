@@ -1,0 +1,64 @@
+@import "../../../styles/teamcolors";
+
+.info, .notes
+{
+	margin-top: 1rem;
+}
+
+.wrapper
+{
+	font-size: 13px;
+}
+
+.content
+{
+	max-width: 40rem;
+	margin: 0 auto;
+}
+
+.boxScoreTable
+{
+	width: 100%;
+	padding: 0;
+	border-spacing: 0;
+
+	td
+	{
+		padding-right: 0.5rem;
+		text-align: right;
+	}
+
+	th
+	{
+		padding-right: 0.5rem;
+		font-weight: bold;
+		min-width: 1rem;
+		text-align: right;
+	}
+
+	.player
+	{
+		width: 10rem;
+		text-align: left;
+	}
+
+	.substitute
+	{
+		text-indent: 1rem;
+	}
+}
+
+.sectionLabel
+{
+	margin: 1rem 0;
+	padding: 0.5rem;
+
+	span
+	{
+		color: transparent;
+		filter: invert(1) grayscale(1) contrast(9);
+		background: inherit;
+		background-clip: text;
+		font-weight: bold;
+	}
+}

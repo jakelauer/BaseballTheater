@@ -1,0 +1,10 @@
+.cell
+{
+	white-space: nowrap;
+}
+
+.table
+{
+	max-width: calc(100vw - 64px);
+	overflow-x: auto;
+}

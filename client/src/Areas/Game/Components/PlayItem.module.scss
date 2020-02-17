@@ -1,0 +1,42 @@
+@import "../../../styles/vars";
+
+.playDetails
+{
+	border-bottom: 1px dotted gray;
+}
+
+.pitches
+{
+	display: flex;
+
+	:global(.r-medium) &
+	{
+		flex-direction: column;
+	}
+}
+
+.actions
+{
+	display: flex;
+}
+
+.videoAvatar
+{
+	background-color: #FFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover
+	{
+		a
+		{
+			color: $color-accent;
+		}
+	}
+}
+
+.unauthed, .unauthed a
+{
+	cursor: not-allowed;
+}

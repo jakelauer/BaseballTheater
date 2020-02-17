@@ -1,0 +1,50 @@
+@import "../../../styles/vars";
+
+.pitchNumber
+{
+	position: relative;
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.25rem;
+	margin-right: 1rem;
+
+	span
+	{
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		width: 75%;
+		height: 75%;
+		border-radius: 50%;
+	}
+
+	&:after
+	{
+		content: "";
+		float: left;
+		position: relative;
+		padding-bottom: 100%;
+		width: 100%;
+		height: 0;
+	}
+}
+
+.videoLink
+{
+	display: inline-block;
+	margin-top: 0.25rem;
+
+	&:hover
+	{
+		color: $color-accent;
+	}
+}
+
+.unauthed, .unauthed a
+{
+	cursor: not-allowed;
+}

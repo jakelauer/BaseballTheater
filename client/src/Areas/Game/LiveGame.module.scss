@@ -1,0 +1,43 @@
+.inningWrapper
+{
+	display: flex;
+
+	.inningTabs
+	{
+		height: 100%;
+		border-right: 1px solid #EEE;
+		min-width: 160px;
+
+		:global(.r-medium) &
+		{
+			position: fixed;
+			top: 3.5rem;
+			left: 0;
+			width: 100%;
+			height: 50px;
+			background: white;
+			z-index: 9;
+			box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
+		}
+	}
+
+	:global(.r-medium) &
+	{
+		flex-direction: column;
+		padding-bottom: 5rem;
+	}
+}
+
+.slide
+{
+	will-change: transform;
+}
+
+.inningButton
+{
+	position: fixed;
+	box-shadow: 0 9px 5px -5px rgba(0, 0, 0, 0.5);
+	z-index: 50;
+	bottom: 5rem;
+	right: 1rem;
+}
