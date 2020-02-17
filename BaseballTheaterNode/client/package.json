@@ -63,7 +63,7 @@
     "patreon": "0.4.0",
     "prop-types": "15.6.1",
     "react": "16.2.0",
-    "react-dom": "16.2.0",
+    "react-dom": "16.2.1",
     "react-ga": "^2.5.3",
     "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
