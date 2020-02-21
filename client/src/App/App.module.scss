@@ -128,11 +128,7 @@ span.logoText
 
 .sponsor
 {
-<<<<<<< HEAD
 	margin: 2rem;
-=======
-	margin: 1rem;
->>>>>>> 13156296a9402102e21582d4a3a5c66024db176b
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -142,7 +138,6 @@ span.logoText
 	background-position: center;
 	background-repeat: no-repeat;
 
-<<<<<<< HEAD
 	&:not(.hasLink)
 	{
 		pointer-events: none;
@@ -158,14 +153,6 @@ span.logoText
 	{
 		border: none;
 	}
-=======
-	&:not(.hasSponsor)
-	{
-		pointer-events: none;
-		cursor: default;
-		border: 1px dashed #DDD;
-	}
->>>>>>> 13156296a9402102e21582d4a3a5c66024db176b
 }
 
 .menuButton.hasUpdate::after
