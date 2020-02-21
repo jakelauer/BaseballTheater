@@ -213,7 +213,11 @@ class Sidebar extends React.Component<Props, State>
 					<p>Diamond Sponsors</p>
 					<Sponsor imagePath={"/assets/backers/playback.svg"} url={"https://getplayback.com"}/>
 					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
+<<<<<<< HEAD
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
+=======
+					<Sponsor/>
+>>>>>>> 13156296a9402102e21582d4a3a5c66024db176b
 				</div>
 			</>
 		);
@@ -255,8 +259,12 @@ interface ISponsorProps
 const Sponsor: React.FC<ISponsorProps> = (props) =>
 {
 	const className = classNames(styles.sponsor, {
+<<<<<<< HEAD
 		[styles.hasLink]: !!props.url,
 		[styles.hasImage]: !!props.imagePath
+=======
+		[styles.hasSponsor]: !!props.imagePath
+>>>>>>> 13156296a9402102e21582d4a3a5c66024db176b
 	});
 
 	let style: React.CSSProperties;
