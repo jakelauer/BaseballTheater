@@ -1,16 +1,20 @@
 import * as React from "react";
-import {MediaItem} from "baseball-theater-engine";
+import {MediaItem, MediaItemPlayback} from "baseball-theater-engine";
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@material-ui/core";
 import styles from "./Highlight.module.scss";
 import {Respond} from "../Global/Respond/Respond";
 import classNames from "classnames";
 import Skeleton from "@material-ui/lab/Skeleton";
-import {RespondSizes} from "../Global/Respond/RespondIntercom";
+import {RespondSizes} from "../Global/Respond/RespondDataStore";
+import CardHeader from "@material-ui/core/CardHeader";
+import {SettingsDataStore} from "../Global/Settings/SettingsDataStore";
+import {SiteRoutes} from "../Global/Routes/Routes";
 
 interface IHighlightProps
 {
 	media?: MediaItem;
 	className?: string;
+	showExtra?: boolean;
 }
 
 interface DefaultProps
@@ -47,24 +51,38 @@ export class Highlight extends React.Component<Props, State>
 
 	private get defaultVideo()
 	{
-		return this.props.media?.playbacks?.filter(a => a.url.includes(".mp4"))[0]
-			|| undefined;
+		return this.props.media?.playbacks?.filter(a => a.url.includes(".mp4"))[0];
 	}
 
-	private getKLabel(url: string, alt: string)
+	private getKLabel(media: MediaItemPlayback)
 	{
-		const matches = url.match(/([0-9]{3,5})k/gi);
+		const matches = media.url.match(/([0-9]{3,5})k/gi);
 
 		return matches && matches.length >= 1
 			? matches[0]
-			: alt;
+			: media.name;
 	}
 
 	public render()
 	{
 		const {media, loading} = this.props;
 
-		const mp4s = media && media.playbacks && media.playbacks.filter(a => a.url.includes(".mp4")) || [];
+		if (!media)
+		{
+			return null;
+		}
+
+		let mp4s = media && media.playbacks && media.playbacks.filter(a => a.url.includes(".mp4")) || [];
+		mp4s = mp4s
+			.reduce((unique, item) =>
+			{
+				return unique.find(a => a.url === item.url) ? unique : [...unique, item];
+			}, [] as MediaItemPlayback[])
+			.sort((a, b) =>
+			{
+				return parseInt(b.width) - parseInt(a.width);
+			})
+			.slice(0, 3);
 
 		const actions = (
 			<CardActions>
@@ -72,7 +90,7 @@ export class Highlight extends React.Component<Props, State>
 					? mp4s.map(a => (
 						<a href={a.url} target={"_blank"} key={a.url}>
 							<Button size="small" color="primary">
-								{this.getKLabel(a.url, a.name)}
+								{this.getKLabel(a)}
 							</Button>
 						</a>
 					))
@@ -81,39 +99,79 @@ export class Highlight extends React.Component<Props, State>
 			</CardActions>
 		);
 
+		const mediaTitle = media?.title ?? "";
+
+		let title = mediaTitle.match(/recap/gi) ?? false
+			? "Recap"
+			: mediaTitle.match(/cg/gi) ?? false
+				? "Condensed Game"
+				: media?.title;
+
+		const gamePk = media?.keywordsAll?.find(k => k.type === "game_pk")?.value;
+
 		return (
 			<Card className={classNames(this.props.className, styles.highlight)}>
-				{this.defaultVideo && !loading ?
-					<a href={this.defaultVideo.url} target={"_blank"}>
-						<CardMedia
-							className={styles.cardMedia}
-							image={this.image.src}
-							title={media.image.altText}
-						/>
+				<div className={styles.cardContent}>
+					{this.defaultVideo && !loading ?
+						<a href={this.defaultVideo.url} target={"_blank"}>
+							<CardMedia
+								className={styles.cardMedia}
+								image={this.image.src}
+								title={media.image.altText}
+							/>
 
-					</a>
-					: <Skeleton variant={"rect"} width={"100%"} height={150}/>
-				}
-				<div className={styles.meta}>
-					<CardActionArea className={styles.actionArea}>
-						<CardContent>
-							{!loading && this.defaultVideo &&
-                            <a href={this.defaultVideo.url} target={"_blank"}>
-                                <Typography gutterBottom variant="h5" component="h2" className={styles.title}>
-	                                {media.title}
-                                </Typography>
-                                <Respond at={RespondSizes.medium} hide={true}>
-                                    <Typography variant="body2" color="textSecondary" component="p">
-			                            {media.description}
-                                    </Typography>
-                                </Respond>
-                            </a>
-							}
-						</CardContent>
-					</CardActionArea>
+						</a>
+						: <Skeleton variant={"rect"} width={"100%"} height={150}/>
+					}
+					<div className={styles.meta}>
+						<CardActionArea className={styles.actionArea}>
+							{!loading && this.defaultVideo && (
+								<CardContent>
+									<a href={this.defaultVideo.url} target={"_blank"}>
+										<Typography gutterBottom variant="h6" component="h2" className={styles.title}>
+											{title}
+										</Typography>
+										{SettingsDataStore.state.highlightDescriptions && (
+											<Respond at={RespondSizes.medium} hide={true}>
+												<Typography variant="body2" color="textSecondary" component="p">
+													{media.description}
+												</Typography>
+											</Respond>
+										)}
+									</a>
+								</CardContent>
+							)}
+						</CardActionArea>
 						{actions}
+					</div>
 				</div>
+				{this.props.showExtra && (
+					<PossibleLink content={<span>View Game &raquo;</span>} gamePk={gamePk}/>
+				)}
 			</Card>
 		);
 	}
 }
+
+interface PLProps
+{
+	gamePk: string;
+	content: React.ReactNode;
+}
+
+const PossibleLink = ({gamePk, content}: PLProps) =>
+{
+	const cardHeader = (
+		<CardHeader style={{padding: "0.25rem 0.5rem", borderTop: "1px solid #EEE"}} subheader={content} titleTypographyProps={{
+			variant: "button"
+		}}/>
+	);
+
+	return gamePk
+		? (
+			<a href={SiteRoutes.Game.resolve({gameId: gamePk})}>
+				{cardHeader}
+			</a>
+		)
+		: cardHeader;
+};

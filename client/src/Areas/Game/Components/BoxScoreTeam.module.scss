@@ -12,7 +12,6 @@
 
 .content
 {
-	max-width: 40rem;
 	margin: 0 auto;
 }
 
@@ -40,6 +39,12 @@
 	{
 		width: 10rem;
 		text-align: left;
+		white-space: nowrap;
+	}
+
+	a:hover
+	{
+		text-decoration: underline;
 	}
 
 	.substitute

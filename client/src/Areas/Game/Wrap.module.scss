@@ -19,6 +19,11 @@
 
 .wrap
 {
+	p:first-of-type
+	{
+		display: none;
+	}
+
 	p
 	{
 		line-height: 2rem;

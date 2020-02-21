@@ -10,8 +10,9 @@ import {SiteRoutes} from "../../Global/Routes/Routes";
 import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 import {MlbUtils} from "baseball-theater-engine/mlbutils";
 import {ContainerProgress} from "../../UI/ContainerProgress";
-import {ISettingsIntercomPayload, SettingsIntercom} from "../../Global/Settings/SettingsIntercom";
+import {ISettingsDataStorePayload, SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
 import Helmet from "react-helmet";
+import Typography from "@material-ui/core/Typography";
 
 interface IGameListProps
 {
@@ -30,7 +31,7 @@ interface IGameListState
 	loading: boolean;
 	scoreboard: IScheduleGameList;
 	isCurrent: boolean;
-	settings: ISettingsIntercomPayload;
+	settings: ISettingsDataStorePayload;
 }
 
 export class GameList extends React.Component<Props, State>
@@ -42,7 +43,7 @@ export class GameList extends React.Component<Props, State>
 		this.state = {
 			loading: true,
 			scoreboard: null,
-			settings: SettingsIntercom.state,
+			settings: SettingsDataStore.state,
 			isCurrent: false
 		}
 	}
@@ -50,7 +51,7 @@ export class GameList extends React.Component<Props, State>
 	public componentDidMount()
 	{
 		this.fetchSchedule();
-		SettingsIntercom.listen(settings => this.setState({settings}));
+		SettingsDataStore.listen(settings => this.setState({settings}));
 	}
 
 	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
@@ -118,7 +119,7 @@ export class GameList extends React.Component<Props, State>
 		const gameSummaries = orderedGames
 			.map(game => (
 				<Grid key={game.gamePk} item xs={12} sm={6} lg={4}>
-					<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk})} className={styles.gameLink}>
+					<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk, gameDate: "_"})} className={styles.gameLink}>
 						<GameSummary game={game}/>
 					</Link>
 				</Grid>
@@ -137,6 +138,12 @@ export class GameList extends React.Component<Props, State>
 							? <CircularProgress className={styles.progress}/>
 							: gameSummaries
 					}
+
+					{gameSummaries.length === 0 && !this.state.loading && (
+						<div style={{textAlign: "center", width: "100%", marginTop: 100}}>
+							<Typography>No games found</Typography>
+						</div>
+					)}
 				</Grid>
 			</React.Fragment>
 		);

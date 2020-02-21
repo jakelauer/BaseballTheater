@@ -6,11 +6,11 @@ import Drawer from "@material-ui/core/Drawer";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import {AuthIntercom, IAuthContext} from "../Global/AuthIntercom";
+import {AuthDataStore, IAuthContext} from "../Global/AuthDataStore";
 import {Routes} from "./Routes";
 import Sidebar from "./Sidebar";
 import ScrollMemory from "react-router-scroll-memory";
-import {RespondSizes} from "../Global/Respond/RespondIntercom";
+import {RespondSizes} from "../Global/Respond/RespondDataStore";
 import {Respond} from "../Global/Respond/Respond";
 import {ErrorBoundary} from "./ErrorBoundary";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -19,6 +19,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Helmet from "react-helmet";
 import moment from "moment";
 import SidebarDrawer from "./SidebarDrawer";
+import {RouteComponentProps, withRouter} from "react-router";
+import ReactGA from "react-ga";
 
 interface IAppState
 {
@@ -29,18 +31,18 @@ interface IAppState
 	installPromptSnackbarContent: ReactNode;
 }
 
-export class App extends React.Component<{}, IAppState>
+export class App extends React.Component<RouteComponentProps, IAppState>
 {
 	private beforeInstallPromptEvent: BeforeInstallPromptEvent;
 
-	constructor(props: {})
+	constructor(props: RouteComponentProps)
 	{
 		super(props);
 
 		this.state = {
 			search: "",
 			loading: false,
-			authContext: AuthIntercom.state,
+			authContext: AuthDataStore.state,
 			showInstallPromptDialog: false,
 			installPromptSnackbarContent: null
 		};
@@ -48,7 +50,7 @@ export class App extends React.Component<{}, IAppState>
 
 	public componentDidMount(): void
 	{
-		AuthIntercom.listen(data => this.setState({
+		AuthDataStore.listen(data => this.setState({
 			authContext: data
 		}));
 
@@ -71,6 +73,14 @@ export class App extends React.Component<{}, IAppState>
 				});
 			}
 		});
+
+		if (!location.hostname.includes("local"))
+		{
+			this.props.history.listen(() =>
+			{
+				ReactGA.pageview(window.location.pathname + window.location.search);
+			});
+		}
 	}
 
 	private onInstallDialogClose = () =>
@@ -173,4 +183,4 @@ export class App extends React.Component<{}, IAppState>
 	}
 }
 
-export default App;
+export default withRouter(App);

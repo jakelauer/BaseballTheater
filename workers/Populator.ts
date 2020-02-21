@@ -84,23 +84,26 @@ class PopulatorInternal
 			console.log(data.highlights.highlights.items.length);
 			highlights = data.highlights.highlights.items.map(highlight =>
 			{
-				const images = highlight.image.cuts;
+				if (highlight && highlight.image && highlight.image.cuts)
+				{
+					const images = highlight.image.cuts;
 
-				const matchingCut = images.find(a => a.aspectRatio === "16:9" && a.width < 1000 && a.width > 500)
-					|| images.find(a => a.aspectRatio === "16:9")
-					|| images[0];
+					const matchingCut = images.find(a => a.aspectRatio === "16:9" && a.width < 1000 && a.width > 500)
+						|| images.find(a => a.aspectRatio === "16:9")
+						|| images[0];
 
-				highlight.image.cuts = [matchingCut];
+					highlight.image.cuts = [matchingCut];
 
-				const final = {
-					highlight,
-					game_pk
-				};
+					const final = {
+						highlight,
+						game_pk
+					};
 
-				console.log(final);
+					console.log(final);
 
-				return final;
-			})
+					return final;
+				}
+			}).filter(a => a !== undefined);
 		}
 
 		return highlights;

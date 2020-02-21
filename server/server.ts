@@ -5,6 +5,7 @@ import {RegisterLocalEndpoints} from "./Local/endpoints";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import serveStatic from "serve-static";
+import {Search} from "./Local/search";
 
 // Create the app
 const app = express();
@@ -25,6 +26,8 @@ app.get("/service-worker.js", (req, res) =>
 	res.set("Content-Type", "application/javascript");
 	serveStatic("/service-worker.js");
 });
+
+Search.initialize();
 
 // Register endpoints
 RegisterPlaybackEndpoints(app);

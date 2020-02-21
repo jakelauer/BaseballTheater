@@ -1,14 +1,17 @@
-.wrapper
+.tabs
 {
-	padding: 1rem 0 4rem 0;
-}
+	position: fixed;
+	top: 0;
+	left: 15vw;
+	right: 0;
+	background: white;
+	border-bottom: 1px solid #EEE;
+	z-index: 9;
+	height: 56px;
 
-.highlight
-{
-	height: 100%;
-}
-
-.progress
-{
-	margin: 0 auto;
+	:global(.r-medium) &
+	{
+		top: 3.5rem;
+		left: 0;
+	}
 }

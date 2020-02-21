@@ -1,6 +1,12 @@
 .wrapper
 {
 	width: 100%;
+
+	:global(.r-small) &
+	{
+		padding-top: 2rem;
+		padding-bottom: 6rem;
+	}
 }
 
 .date
@@ -12,7 +18,15 @@
 
 	:global(.r-small) &
 	{
-		padding-top: 1rem;
+		position: fixed;
+		z-index: 99;
+		padding: 0.25rem 1rem;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		box-sizing: border-box;
+		box-shadow: 0 0 10px rgba(black, 0.2);
+		background: white;
 	}
 }
 

@@ -26,6 +26,7 @@ export class SiteRoute<T extends object = {}>
 export type GameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
 export interface IGameParams
 {
+	gameDate?: string;
 	gameId: string,
 	tab?: GameTabs;
 }
@@ -34,7 +35,7 @@ export interface IGameParams
 export class SiteRoutes
 {
 	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?");
-	public static Game = new SiteRoute<IGameParams>("/game/:gameId/:tab?", {tab: "Highlights"});
+	public static Game = new SiteRoute<IGameParams>("/game/:gameDate/:gameId/:tab?", {gameDate: "_"});
 	public static Schedule = new SiteRoute<{ year: string; team?: string }>("/schedule/:year/:team?", {
 		year: moment().format("YYYY")
 	});
@@ -46,5 +47,5 @@ export class SiteRoutes
 	public static Team = new SiteRoute<{ team: keyof ITeams }>("/team/:team");
 	public static ApiTest = new SiteRoute("/apitest");
 	public static Settings = new SiteRoute("/settings");
-	public static Search = new SiteRoute("/search");
+	public static Search = new SiteRoute<{ query?: string, gameIds?: string }>("/search/:query?/:gameIds?");
 }

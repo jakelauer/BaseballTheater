@@ -5,7 +5,7 @@ import {Button, Collapse, List, ListItem, ListItemText, Menu, MenuItem, Tab, Tab
 import {StringUtils} from "../../Utility/StringUtils";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import styles from "./LiveGame.module.scss";
-import RespondIntercom, {RespondIntercomPayload, RespondSizes} from "../../Global/Respond/RespondIntercom";
+import {RespondDataStore, RespondDataStorePayload, RespondSizes} from "../../Global/Respond/RespondDataStore";
 import Helmet from "react-helmet";
 import moment from "moment";
 import {ContainerProgress} from "../../UI/ContainerProgress";
@@ -28,7 +28,7 @@ type State = ILiveGameState;
 interface ILiveGameState
 {
 	selectedInning: number;
-	respond: RespondIntercomPayload;
+	respond: RespondDataStorePayload;
 	halfInnings: HalfInnings[];
 	halfInningsKeysSorted: string[][];
 	inningMenuOpen: boolean;
@@ -95,7 +95,7 @@ export class LiveGame extends React.Component<Props, State>
 
 	public componentDidMount(): void
 	{
-		RespondIntercom.listen(data => this.setState({
+		RespondDataStore.listen(data => this.setState({
 			respond: data
 		}));
 	}

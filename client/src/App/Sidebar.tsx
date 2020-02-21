@@ -3,7 +3,7 @@ import styles from "./App.module.scss";
 import List from "@material-ui/core/List";
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
 import SettingsIcon from '@material-ui/icons/Settings';
-import {Equalizer, ExpandLess, ExpandMore, PlayCircleFilled} from "@material-ui/icons";
+import {Equalizer, Search} from "@material-ui/icons";
 import EventIcon from "@material-ui/icons/Event";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -11,15 +11,18 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import {Teams} from "baseball-theater-engine";
-import {AuthIntercom, BackerType, IAuthContext} from "../Global/AuthIntercom";
+import {AuthDataStore, BackerType, IAuthContext} from "../Global/AuthDataStore";
 import cookies from "browser-cookies";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Button, ListItemAvatar} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
-import {ISettingsIntercomPayload, SettingsIntercom} from "../Global/Settings/SettingsIntercom";
+import {ISettingsDataStorePayload, SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 import classNames from "classnames";
-import {FaVideo, FiDownloadCloud, FiSearch} from "react-icons/all";
+import {FaVideo, FiDownloadCloud} from "react-icons/all";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
+import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
+import Divider from "@material-ui/core/Divider";
 
 interface ISidebarProps extends RouteComponentProps
 {
@@ -40,13 +43,22 @@ const PatreonButton = withStyles({
 	},
 })(Button);
 
+const LogInButton = withStyles({
+	root: {
+		backgroundColor: "#DDDDDD",
+		"&:hover": {
+			backgroundColor: "#EEEEEE"
+		}
+	}
+})(Button);
+
 type Props = ISidebarProps & DefaultProps;
 type State = ISidebarState;
 
 interface ISidebarState
 {
 	videoTagsOpen: boolean;
-	settings: ISettingsIntercomPayload;
+	settings: ISettingsDataStorePayload;
 	authContext: IAuthContext;
 	waitingForUpdate: boolean;
 }
@@ -59,8 +71,8 @@ class Sidebar extends React.Component<Props, State>
 
 		this.state = {
 			videoTagsOpen: false,
-			settings: SettingsIntercom.state,
-			authContext: AuthIntercom.state,
+			settings: SettingsDataStore.state,
+			authContext: AuthDataStore.state,
 			waitingForUpdate: false
 		};
 	}
@@ -94,41 +106,30 @@ class Sidebar extends React.Component<Props, State>
 		cookies.erase("token");
 		cookies.erase("token_expiry");
 
-		AuthIntercom.refresh();
+		AuthDataStore.refresh();
 	};
 
 	public componentDidMount(): void
 	{
-		AuthIntercom.listen(data => this.setState({
+		AuthDataStore.listen(data => this.setState({
 			authContext: data
+		}));
+
+		SettingsDataStore.listen(data => this.setState({
+			settings: data
 		}));
 
 		this.checkUpdates();
 	}
 
-	private async checkUpdates()
+	private checkUpdates()
 	{
-
-		if ('serviceWorker' in navigator)
+		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
 		{
-			const testForUpdate = (registration: ServiceWorkerRegistration) =>
-			{
-				if (registration?.waiting && registration?.active)
-				{
-					this.setState({
-						waitingForUpdate: true
-					});
-				}
-			};
-
-			navigator.serviceWorker.getRegistration().then(testForUpdate);
-
-			window.addEventListener('load', async () =>
-			{
-				const registration = await navigator.serviceWorker.register('/service-worker.js');
-				testForUpdate(registration);
-			});
-		}
+			this.setState({
+				waitingForUpdate: hasUpdate
+			})
+		});
 	}
 
 	public render()
@@ -136,36 +137,42 @@ class Sidebar extends React.Component<Props, State>
 		const {videoTagsOpen} = this.state;
 		const {authContext, onNavigate} = this.props;
 
-		const isStarBacker = AuthIntercom.hasLevel(BackerType.StarBacker);
+		const isStarBacker = AuthDataStore.hasLevel(BackerType.StarBacker);
 
 		return (
-			<React.Fragment>
+			<>
 				<Link to="/" className={styles.logo}>
 					Baseball Theater
 				</Link>
 				<List component={"nav"}>
 					{this.state.waitingForUpdate && (
-						<MenuItem onClick={update} icon={<FiDownloadCloud/>} textStyle={{color: "#ce0f0f"}}>
-							New Version Available
-						</MenuItem>
+						<React.Fragment>
+							<Tooltip title={"Click to update"}>
+								<MenuItem onClick={ServiceWorkerUpdate.update} icon={<FiDownloadCloud/>} textStyle={{color: "#ce0f0f"}}>
+									New Version Available
+								</MenuItem>
+							</Tooltip>
+							<Divider/>
+						</React.Fragment>
+					)}
+					{isStarBacker && this.state.settings.favoriteTeams.length > 0 && (
+						<React.Fragment>
+							{this.state.settings.favoriteTeams.map(team => (
+								<MenuItem key={team} onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Team.resolve({team})}>
+									{Teams.TeamList[team]}
+								</MenuItem>
+							))}
+							<Divider/>
+						</React.Fragment>
 					)}
 					<MenuItem onClick={onNavigate} icon={<EventIcon/>} path={SiteRoutes.Games.resolve()}>
 						Games
 					</MenuItem>
-					{isStarBacker && this.state.settings.favoriteTeams.map(team => (
-						<MenuItem key={team} onClick={onNavigate} icon={<SportsBaseball/>} path={SiteRoutes.Team.resolve({team})}>
-							{Teams.TeamList[team]}
-						</MenuItem>
-					))}
-					<MenuItem icon={<PlayCircleFilled/>} end={videoTagsOpen ? <ExpandLess/> : <ExpandMore/>} onClick={this.onFeaturedVideosClick}>
-						Highlights
-					</MenuItem>
+					{/*<MenuItem icon={<PlayCircleFilled/>} end={videoTagsOpen ? <ExpandLess/> : <ExpandMore/>} onClick={this.onFeaturedVideosClick}>
+					 Highlights
+					 </MenuItem>*/}
 					<Collapse in={videoTagsOpen} timeout="auto">
 						<List component="div" disablePadding>
-							<ListItem onClick={onNavigate} button component={p => <Link {...p} to={SiteRoutes.Search.resolve()}/>}>
-								<ListItemIcon className={styles.indent}><FiSearch/></ListItemIcon>
-								<ListItemText primary={"Search"}/>
-							</ListItem>
 							<ListItem onClick={onNavigate} button component={p => <Link {...p} to={SiteRoutes.FeaturedVideos.resolve({category: "Recap"})}/>}>
 								<ListItemIcon className={styles.indent}><FaVideo/></ListItemIcon>
 								<ListItemText primary={"Recaps"}/>
@@ -175,6 +182,9 @@ class Sidebar extends React.Component<Props, State>
 					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve()}>
 						Standings
 					</MenuItem>
+					<MenuItem onClick={onNavigate} icon={<Search/>} path={SiteRoutes.Search.resolve()}>
+						Search
+					</MenuItem>
 					<MenuItem onClick={onNavigate} icon={<SettingsIcon/>} path={SiteRoutes.Settings.resolve()}>
 						Settings
 					</MenuItem>
@@ -183,13 +193,13 @@ class Sidebar extends React.Component<Props, State>
 					<React.Fragment>
 						<a className={styles.patreonButtonLink} href={"https://www.patreon.com/jakelauer"}>
 							<PatreonButton className={styles.patreonJoin} style={{width: "100%"}}>
-								Become a Patron
+								Join as a Patron
 							</PatreonButton>
 						</a>
 						<a className={styles.patreonButtonLink} href={this.patreonUrl}>
-							<PatreonButton className={styles.patreonButton} style={{width: "100%"}}>
-								Log in with Patreon
-							</PatreonButton>
+							<LogInButton className={styles.patreonButton} style={{width: "100%"}}>
+								Patron Log In
+							</LogInButton>
 						</a>
 					</React.Fragment>
 				)
@@ -202,10 +212,10 @@ class Sidebar extends React.Component<Props, State>
 				<div className={styles.sponsors}>
 					<p>Diamond Sponsors</p>
 					<Sponsor imagePath={"/assets/backers/playback.svg"} url={"https://getplayback.com"}/>
-					<Sponsor/>
+					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
 					<Sponsor/>
 				</div>
-			</React.Fragment>
+			</>
 		);
 	}
 }
@@ -263,40 +273,5 @@ const Sponsor: React.FC<ISponsorProps> = (props) =>
 	);
 };
 
-export async function update()
-{
-	try
-	{
-		const registration = await navigator.serviceWorker.getRegistration();
-
-		if (!registration)
-		{
-			location.reload();
-			return;
-		}
-
-		if (!registration.waiting)
-		{
-			const isInstalling = registration.installing!;
-			if (isInstalling)
-			{
-				isInstalling.onstatechange = () =>
-					isInstalling.state === "installed" && isInstalling.postMessage('skipWaiting');
-			}
-			else
-			{
-				location.reload();
-			}
-			return;
-		}
-
-		registration.waiting.postMessage('skipWaiting');
-	}
-	catch (e)
-	{
-		console.error('SW: Error checking registration:', e);
-		window.location.reload();
-	}
-}
 
 export default withRouter(Sidebar);

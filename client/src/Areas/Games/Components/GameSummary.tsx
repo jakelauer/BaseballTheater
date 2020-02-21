@@ -5,7 +5,7 @@ import {LiveGameLinescore} from "baseball-theater-engine";
 import {Paper} from "@material-ui/core";
 import classNames from "classnames";
 import moment from "moment";
-import {ISettingsIntercomPayload, SettingsIntercom} from "../../../Global/Settings/SettingsIntercom";
+import {ISettingsDataStorePayload, SettingsDataStore} from "../../../Global/Settings/SettingsDataStore";
 import {MdFavorite} from "react-icons/all";
 
 interface IGameSummaryProps
@@ -23,7 +23,7 @@ type State = IGameSummaryState;
 interface IGameSummaryState
 {
 	hovered: boolean;
-	settings: ISettingsIntercomPayload;
+	settings: ISettingsDataStorePayload;
 }
 
 export class GameSummary extends React.Component<Props, State>
@@ -34,13 +34,13 @@ export class GameSummary extends React.Component<Props, State>
 
 		this.state = {
 			hovered: false,
-			settings: SettingsIntercom.state
+			settings: SettingsDataStore.state
 		};
 	}
 
 	public componentDidMount(): void
 	{
-		SettingsIntercom.listen(data => this.setState({
+		SettingsDataStore.listen(data => this.setState({
 			settings: data
 		}));
 	}
@@ -80,9 +80,9 @@ export class GameSummary extends React.Component<Props, State>
 
 		return (
 			<Paper className={styles.gameSummary} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} elevation={elevation}>
-				{status &&
-                <Status status={status} gameDate={gameDate} linescore={linescore}/>
-				}
+				{status && (
+					<Status status={status} gameDate={gameDate} linescore={linescore}/>
+				)}
 				{linescore &&
                 <React.Fragment>
                     <Score home={false} team={teams.away} isFavorite={awayIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>

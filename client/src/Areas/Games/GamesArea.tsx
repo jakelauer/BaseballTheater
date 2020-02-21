@@ -8,6 +8,8 @@ import DateFnsUtils from '@date-io/moment';
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import Fab from "@material-ui/core/Fab";
 import {SiteRoutes} from "../../Global/Routes/Routes";
+import {GamesUtils} from "../../Utility/GamesUtils";
+import {Button} from "@material-ui/core";
 
 interface IGamesAreaParams
 {
@@ -21,19 +23,37 @@ interface IGamesAreaState
 
 class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, IGamesAreaState>
 {
+	private static SessionStorageDateStringKey = "game-list-date";
+
 	constructor(props: RouteComponentProps<IGamesAreaParams>)
 	{
 		super(props);
 
 		this.state = {
-			dateString: props.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD")
+			dateString: props.match.params.yyyymmdd || GamesUtils.StartingDate().format("YYYYMMDD")
 		};
+	}
+
+	public componentDidMount(): void
+	{
+		if (!this.props.match.params.yyyymmdd)
+		{
+			this.props.history.replace(SiteRoutes.Games.resolve({
+				yyyymmdd: this.state.dateString
+			}))
+		}
 	}
 
 	public static getDerivedStateFromProps(p: RouteComponentProps<IGamesAreaParams>)
 	{
+		const storedDateString = sessionStorage.getItem(GamesArea.SessionStorageDateStringKey);
+
+		const dateString = p.match.params.yyyymmdd || storedDateString || GamesUtils.StartingDate().format("YYYYMMDD");
+
+		sessionStorage.setItem(GamesArea.SessionStorageDateStringKey, dateString);
+
 		return {
-			dateString: p.match.params.yyyymmdd || moment("Oct 30, 2019").format("YYYYMMDD")
+			dateString
 		};
 	}
 
@@ -41,8 +61,10 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 	{
 		if (date.isValid())
 		{
+			const newDate = date.format("YYYYMMDD");
+
 			this.props.history.push(SiteRoutes.Games.resolve({
-				yyyymmdd: date.format("YYYYMMDD")
+				yyyymmdd: newDate
 			}));
 		}
 	};
@@ -62,6 +84,13 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 
 		this.props.history.push(SiteRoutes.Games.resolve({
 			yyyymmdd: prevDate.format("YYYYMMDD")
+		}));
+	};
+
+	private today = () =>
+	{
+		this.props.history.push(SiteRoutes.Games.resolve({
+			yyyymmdd: moment().format("YYYYMMDD")
 		}));
 	};
 
@@ -97,6 +126,11 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 						<Fab size={"small"} color={"primary"} onClick={this.nextDate}>
 							<KeyboardArrowRight/>
 						</Fab>
+					</div>
+					<div>
+						<Button variant={"text"} style={{marginLeft: "1rem"}} color={"primary"} onClick={this.today}>
+							Today
+						</Button>
 					</div>
 				</div>
 				<div className={styles.gameList}>

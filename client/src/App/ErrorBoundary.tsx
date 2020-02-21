@@ -1,7 +1,7 @@
 import * as React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Button} from "@material-ui/core";
-import {SettingsIntercom} from "../Global/Settings/SettingsIntercom";
+import {SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 
 interface IErrorBoundaryProps
 {
@@ -67,17 +67,20 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 	private generateReportLines(joinWith: string)
 	{
 		return [
-			`Describe the issue:`,
-			``,
 			`URL: ${location.href}`,
 			`Timestamp: ${(new Date()).toISOString()}`,
 			`Browser: ${navigator.userAgent}`,
 			`Platform: ${navigator.platform}`,
-			`Error: ${this.state.error.stack}`,
-			`More info: ${this.state.errorInfo.componentStack}`,
-			`Settings: ${JSON.stringify(SettingsIntercom.state)}`
+			`More info: ${this.state.errorInfo.componentStack.split("\n").join(joinWith)}`,
+			`Settings: ${JSON.stringify(SettingsDataStore.state)}`
 		].join(joinWith);
 	}
+
+	private openEmail = () =>
+	{
+		window.location.href = (`mailto:baseball.theater@gmail.com?subject=Baseball.Theater%20Error&body=${this.generateReportLines(ErrorBoundaryInternal.EmailLineBreak)}`);
+		return;
+	};
 
 	public render()
 	{
@@ -87,8 +90,8 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 				<div>
 					<div>
 						<br/>
-						<Button variant={"contained"} color={"primary"} style={{color: "white"}}>
-							<a target={"_blank"} style={{color: "white"}} href={`mailto:baseball.theater@gmail.com?subject=Baseball.Theater%20Error&body=${this.generateReportLines(ErrorBoundaryInternal.EmailLineBreak)}`}>Please click here to send an error report</a>
+						<Button variant={"contained"} color={"primary"} style={{color: "white"}} onClick={this.openEmail}>
+							Please click here to send an error report
 						</Button>
 					</div>
 					<pre style={{fontSize: "11px", marginTop: "3rem"}}>
@@ -100,9 +103,6 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 			return <div>
 				<h2>Uh oh, something went wrong!</h2>
 				<div>{desc}</div>
-				<div>
-					{this.generateReportLines("\n")}
-				</div>
 			</div>;
 		}
 
