@@ -7,9 +7,10 @@ import styles from "./PlayItem.module.scss";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import {MdVideoLibrary} from "react-icons/all";
 import Avatar from "@material-ui/core/Avatar";
-import {AuthIntercom, BackerType, IAuthContext} from "../../../Global/AuthIntercom";
+import {AuthDataStore, BackerType, IAuthContext} from "../../../Global/AuthDataStore";
 import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
+import {GameDataStoreContext} from "./GameDataStore";
 
 interface IPlayItemProps
 {
@@ -37,13 +38,13 @@ export class PlayItem extends React.Component<Props, State>
 
 		this.state = {
 			expanded: false,
-			auth: AuthIntercom.state
+			auth: AuthDataStore.state
 		};
 	}
 
 	public componentDidMount(): void
 	{
-		AuthIntercom.listen(auth => this.setState({auth}));
+		AuthDataStore.listen(auth => this.setState({auth}));
 	}
 
 	private toggle = () => this.setState({
@@ -66,7 +67,7 @@ export class PlayItem extends React.Component<Props, State>
 		const playEventsLength = this.props.play?.playEvents?.length ?? 1;
 		const playId = this.props.play.playEvents?.[playEventsLength - 1]?.playId;
 
-		const authed = AuthIntercom.hasLevel(BackerType.ProBacker);
+		const authed = AuthDataStore.hasLevel(BackerType.ProBacker);
 		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${playId}` : "#";
 		const avatarClasses = classNames(styles.videoAvatar, {
 			[styles.unauthed]: !authed
@@ -74,51 +75,53 @@ export class PlayItem extends React.Component<Props, State>
 		const tooltip = (
 			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
 				<div>Video of play</div>
-				{!authed && <i>(Pro Backers Only)</i>}
 			</div>
 		);
 
 		return (
-			<React.Fragment>
-				<ListItem button onClick={this.toggle}>
-					<ListItemAvatar>
-						{playId &&
-                        <Tooltip title={tooltip} arrow enterTouchDelay={0}>
-                            <Avatar className={avatarClasses}>
-                                <a target={"_blank"} href={href}
-                                   onClick={e =>
-								   {
-									   e.stopPropagation();
-									   if (!authed)
+			<GameDataStoreContext.Consumer>
+				{gameDataStore => (<>
+					<ListItem button onClick={this.toggle}>
+						<ListItemAvatar>
+							{playId &&
+                            <Tooltip title={tooltip} arrow enterTouchDelay={0}>
+                                <Avatar className={avatarClasses}>
+                                    <a target={"_blank"} href={href}
+                                       onClick={e =>
 									   {
-										   e.preventDefault();
-									   }
-								   }}>
-                                    <MdVideoLibrary/>
-                                </a>
-                            </Avatar>
-                        </Tooltip>
-						}
-					</ListItemAvatar>
-					<ListItemText
-						primary={result.event}
-						secondary={result.description}
-					/>
-					<ListItemSecondaryAction>
-						<div className={styles.actions}>
-							{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}
+										   e.stopPropagation();
+										   if (!authed)
+										   {
+											   gameDataStore.showUpsell(BackerType.ProBacker);
+											   e.preventDefault();
+										   }
+									   }}>
+                                        <MdVideoLibrary/>
+                                    </a>
+                                </Avatar>
+                            </Tooltip>
+							}
+						</ListItemAvatar>
+						<ListItemText
+							primary={result.event}
+							secondary={result.description}
+						/>
+						<ListItemSecondaryAction>
+							<div className={styles.actions}>
+								{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}
+							</div>
+						</ListItemSecondaryAction>
+					</ListItem>
+					<Collapse in={this.state.expanded} className={styles.playDetails}>
+						<div className={styles.pitches}>
+							<Strikezone play={this.props.play}/>
+							<List>
+								{pitchItems}
+							</List>
 						</div>
-					</ListItemSecondaryAction>
-				</ListItem>
-				<Collapse in={this.state.expanded} className={styles.playDetails}>
-					<div className={styles.pitches}>
-						<Strikezone play={this.props.play}/>
-						<List>
-							{pitchItems}
-						</List>
-					</div>
-				</Collapse>
-			</React.Fragment>
+					</Collapse>
+				</>)}
+			</GameDataStoreContext.Consumer>
 		);
 	}
 }

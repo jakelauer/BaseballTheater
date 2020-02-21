@@ -15,7 +15,8 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "noEmit": false,
-    "baseUrl": "server"
+    "baseUrl": "server",
+    "outDir": "C:/temp"
   },
   "include": [
     "server"

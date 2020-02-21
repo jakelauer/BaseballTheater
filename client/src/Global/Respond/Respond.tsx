@@ -1,5 +1,5 @@
 import * as React from "react";
-import RespondIntercom, {RespondSizes} from "./RespondIntercom";
+import {RespondDataStore, RespondSizes} from "./RespondDataStore";
 
 interface IRespondProps
 {
@@ -36,7 +36,7 @@ export class Respond extends React.Component<Props, IRespondState>
 
 	public componentDidMount()
 	{
-		RespondIntercom.listen(data => this.setState({
+		RespondDataStore.listen(data => this.setState({
 			current: data.sizes
 		}));
 	}

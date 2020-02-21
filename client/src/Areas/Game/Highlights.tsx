@@ -6,6 +6,7 @@ import {Grid} from "@material-ui/core";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import moment from "moment";
 import Helmet from "react-helmet";
+import Divider from "@material-ui/core/Divider";
 
 interface IHighlightsProps
 {
@@ -72,16 +73,17 @@ export class Highlights extends React.Component<Props, State>
 				</Helmet>
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
 					{recap &&
-                    <Grid item xl={4} sm={12} md={6}>
+                    <Grid item lg={4} xs={12} sm={12} md={6}>
                         <Highlight media={recap} className={styles.highlight}/>
                     </Grid>
 					}
 					{condensed &&
-                    <Grid item xl={4} sm={12} md={6}>
+                    <Grid item lg={4} xs={12} sm={12} md={6}>
                         <Highlight media={condensed} className={styles.highlight}/>
                     </Grid>
 					}
 				</Grid>
+				<Divider style={{marginBottom: "2rem"}}/>
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0}}>
 					{restRendered}
 					{!this.props.media && <ContainerProgress/>}

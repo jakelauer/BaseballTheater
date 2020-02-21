@@ -4,7 +4,7 @@
   "description": "View highlights, game stats, and more for every game played during the season.",
   "lang": "en-US",
   "start_url": "/games",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "any",
   "theme_color": "#ce0f0f",
   "icons": [

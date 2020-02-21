@@ -168,3 +168,9 @@ export interface MediaDoc
 	image: ArticleImage;
 	playbacks: MediaItemPlayback[];
 }
+
+export interface IHighlightSearchItem
+{
+	highlight: MediaItem;
+	game_pk: number;
+}

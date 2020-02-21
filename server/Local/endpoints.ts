@@ -3,10 +3,14 @@ import {Express} from "express";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Auth} from "./auth";
 import {isProd} from "../config/config";
+import {Search} from "./search";
+import apicache from "apicache";
+
+const cache = apicache.middleware;
 
 export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 {
-	app.get("/api/proxy", (req, res, next) =>
+	app.get("/api/proxy", cache("30 seconds"), (req, res, next) =>
 	{
 		const url = req.query.url;
 		if (!url)
@@ -21,6 +25,24 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			{
 				res.send(json);
 			});
+	});
+
+	app.get("/api/search", cache("1 minute"), (req, res) =>
+	{
+		const text: string = req.query.text;
+		const gameIds = req.query.gameIds?.split(",")?.map((s: string) => parseInt(s));
+		const page = parseInt(req.query.page);
+
+		try
+		{
+			const results = Search.doSearch({text, gameIds}, page) ?? [];
+
+			res.send(results);
+		}
+		catch (e)
+		{
+			throw e;
+		}
 	});
 
 	app.get("/auth/authorize", (req, res) =>

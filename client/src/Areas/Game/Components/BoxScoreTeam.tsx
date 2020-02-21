@@ -132,7 +132,9 @@ const Batter = ({player, fullPlayer}: IPlayerItem) =>
 		<tr>
 			<td className={playerClasses}>
 				<strong>{player.stats.batting.note}</strong>
-				{fullPlayer.lastInitName}
+				<a href={`https://www.mlb.com/player/${player.person.id}`} target={"_blank"} rel={"noreferrer nofollow"}>
+					{fullPlayer.lastName} (<span>{player.allPositions.map(a => a.abbreviation).join("-")}</span>)
+				</a>
 			</td>
 			<td>{player.stats.batting.atBats || 0}</td>
 			<td>{player.stats.batting.runs || 0}</td>
@@ -151,7 +153,11 @@ const Pitcher = ({player, fullPlayer}: IPlayerItem) =>
 {
 	return (
 		<tr>
-			<td className={styles.player}>{fullPlayer.lastInitName}</td>
+			<td className={styles.player}>
+				<a href={`https://www.mlb.com/player/${player.person.id}`} target={"_blank"} rel={"noreferrer nofollow"}>
+					{fullPlayer.lastInitName}
+				</a>
+			</td>
 			<td>{player.stats.pitching.inningsPitched || 0}</td>
 			<td>{player.stats.pitching.hits || 0}</td>
 			<td>{player.stats.pitching.runs || 0}</td>

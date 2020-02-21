@@ -1,5 +1,6 @@
 import * as React from "react";
 import {CircularProgress} from "@material-ui/core";
+import {RespondDataStore, RespondDataStorePayload, RespondSizes} from "../Global/Respond/RespondDataStore";
 
 interface IContainerProgressProps
 {
@@ -14,6 +15,7 @@ type State = IContainerProgressState;
 
 interface IContainerProgressState
 {
+	respond: RespondDataStorePayload;
 }
 
 export class ContainerProgress extends React.Component<Props, State>
@@ -22,7 +24,19 @@ export class ContainerProgress extends React.Component<Props, State>
 	{
 		super(props);
 
-		this.state = {};
+		this.state = {
+			respond: RespondDataStore.state
+		};
+	}
+
+	public componentDidMount(): void
+	{
+		RespondDataStore.listen(data =>
+		{
+			this.setState({
+				respond: data
+			});
+		});
 	}
 
 	public render()
@@ -32,12 +46,13 @@ export class ContainerProgress extends React.Component<Props, State>
 				position: "fixed",
 				zIndex: 99,
 				top: 0,
-				left: 0,
+				left: RespondDataStore.test(RespondSizes.medium) ? 0 : "15vw",
 				right: 0,
 				height: "100vh",
 				display: "flex",
 				alignItems: "center",
-				justifyContent: "center"
+				justifyContent: "center",
+				pointerEvents: "none"
 			}}>
 				<CircularProgress/>
 			</div>

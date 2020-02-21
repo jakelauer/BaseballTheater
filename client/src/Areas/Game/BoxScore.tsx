@@ -1,13 +1,14 @@
 import * as React from "react";
 import {LiveData} from "baseball-theater-engine";
 import {BoxScoreTeam} from "./Components/BoxScoreTeam";
-import {CircularProgress, Tab, Tabs} from "@material-ui/core";
+import {Tab, Tabs} from "@material-ui/core";
 import styles from "./BoxScore.module.scss";
 import {Respond} from "../../Global/Respond/Respond";
-import {RespondSizes} from "../../Global/Respond/RespondIntercom";
+import {RespondSizes} from "../../Global/Respond/RespondDataStore";
 import Helmet from "react-helmet";
 import moment from "moment";
 import SwipeableViews from "react-swipeable-views";
+import {ContainerProgress} from "../../UI/ContainerProgress";
 
 interface IBoxScoreProps
 {
@@ -43,7 +44,7 @@ export class BoxScore extends React.Component<Props, State>
 	{
 		if (!this.props.liveData)
 		{
-			return <CircularProgress/>;
+			return <ContainerProgress/>;
 		}
 
 		const gameData = this.props.liveData.gameData;
@@ -72,34 +73,44 @@ export class BoxScore extends React.Component<Props, State>
 		];
 
 		return (
-			<div className={styles.bothTeams}>
+			<div>
 				<Helmet>
 					<title>{`Box Score - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
 				</Helmet>
-				<Respond at={RespondSizes.small} hide={false}>
-					<Tabs
-						className={styles.inningTabs}
-						orientation={"horizontal"}
-						variant="scrollable"
-						value={this.state.index}
-						onChange={(e, i) => this.onTeamSelect(i)}
-						indicatorColor="primary"
-						textColor="primary"
-					>
-						<Tab label={boxscore.teams.away.team.name} value={0}/>
-						<Tab label={boxscore.teams.home.team.name} value={1}/>
-					</Tabs>
-				</Respond>
+				<div className={styles.bothTeams}>
+					<Respond at={RespondSizes.small} hide={false}>
+						<Tabs
+							className={styles.inningTabs}
+							orientation={"horizontal"}
+							variant="scrollable"
+							value={this.state.index}
+							onChange={(e, i) => this.onTeamSelect(i)}
+							indicatorColor="primary"
+							textColor="primary"
+						>
+							<Tab label={boxscore.teams.away.team.name} value={0}/>
+							<Tab label={boxscore.teams.home.team.name} value={1}/>
+						</Tabs>
+					</Respond>
 
-				<Respond at={RespondSizes.small} hide={false}>
-					<SwipeableViews index={this.state.index} onChangeIndex={this.onTeamSelect}>
+					<Respond at={RespondSizes.small} hide={false}>
+						<SwipeableViews index={this.state.index} onChangeIndex={this.onTeamSelect}>
+							{teamsRendered}
+						</SwipeableViews>
+					</Respond>
+
+					<Respond at={RespondSizes.small} hide={true}>
 						{teamsRendered}
-					</SwipeableViews>
-				</Respond>
-
-				<Respond at={RespondSizes.small} hide={true}>
-					{teamsRendered}
-				</Respond>
+					</Respond>
+				</div>
+				<div style={{padding: 16, fontSize: 13}}>
+					{boxscore.info.map(data => (
+						<div>
+							<strong>{data.label}: </strong>
+							<span>{data.value}</span>
+						</div>
+					))}
+				</div>
 			</div>
 		);
 	}

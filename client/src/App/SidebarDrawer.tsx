@@ -1,15 +1,17 @@
 import * as React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import {IAuthContext} from "../Global/AuthIntercom";
+import {IAuthContext} from "../Global/AuthDataStore";
 import styles from "./App.module.scss";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import {ArrowBack, Menu} from "@material-ui/icons";
 import {FaSearch} from "react-icons/all";
 import {Link, RouteComponentProps, withRouter} from "react-router-dom";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import Sidebar from "./Sidebar";
+import {HamburgerArrow} from "react-animated-burgers";
+import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
+import classNames from "classnames";
 
 interface ISidebarDrawerProps extends RouteComponentProps
 {
@@ -26,6 +28,7 @@ type State = ISidebarDrawerState;
 interface ISidebarDrawerState
 {
 	drawerOpen: boolean;
+	waitingForUpdate: boolean;
 }
 
 class SidebarDrawer extends React.Component<Props, State>
@@ -35,7 +38,8 @@ class SidebarDrawer extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			drawerOpen: false
+			drawerOpen: false,
+			waitingForUpdate: false
 		};
 	}
 
@@ -53,29 +57,40 @@ class SidebarDrawer extends React.Component<Props, State>
 		});
 	};
 
+	public componentDidMount(): void
+	{
+		this.checkUpdates();
+	}
+
+	private checkUpdates()
+	{
+		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
+		{
+			this.setState({
+				waitingForUpdate: hasUpdate
+			})
+		});
+	}
+
 	public render()
 	{
-		const menuButton = (
-			<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="back" onClick={this.openDrawer}>
-				<Menu style={{fontSize: "2rem"}}/> <span className={styles.logoText}>Baseball Theater</span>
-			</IconButton>
-		);
+		const hamburgerActive = !(this.props.location.pathname.includes("games"));
+		const onClick = hamburgerActive
+			? () => this.props.history.push("/")
+			: this.openDrawer;
 
-		const backButton = (
-			<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu" component={p => <Link {...p} to={SiteRoutes.Games.resolve()}/>}>
-				<ArrowBack style={{fontSize: "2rem"}}/> <span className={styles.logoText}>Baseball Theater</span>
-			</IconButton>
-		);
-
-		const menuOrBack = (this.props.location.pathname.includes("games"))
-			? menuButton
-			: backButton;
+		const menuButtonClasses = classNames(styles.menuButton, {
+			[styles.hasUpdate]: this.state.waitingForUpdate && !hamburgerActive
+		});
 
 		return (
 			<React.Fragment>
 				<AppBar position="fixed" className={styles.appBar}>
 					<Toolbar className={styles.toolbar}>
-						{menuOrBack}
+						<IconButton edge="start" className={menuButtonClasses} color="inherit" aria-label="back">
+							<HamburgerArrow isActive={hamburgerActive} barColor="white" buttonWidth={30} buttonStyle={{padding: 4, outline: "none"}} onClick={onClick}/>
+						</IconButton>
+						<span className={styles.logoText}>Baseball Theater</span>
 						<div className={styles.barlogo}>
 							<Link to={SiteRoutes.Search.resolve()}>
 								<FaSearch style={{color: "white"}}/>
