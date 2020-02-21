@@ -128,7 +128,7 @@ span.logoText
 
 .sponsor
 {
-	margin: 1rem;
+	margin: 2rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -138,11 +138,20 @@ span.logoText
 	background-position: center;
 	background-repeat: no-repeat;
 
-	&:not(.hasSponsor)
+	&:not(.hasLink)
 	{
 		pointer-events: none;
 		cursor: default;
+	}
+
+	&.hasLink:not(.hasImage)
+	{
 		border: 1px dashed #DDD;
+	}
+
+	&.hasImage
+	{
+		border: none;
 	}
 }
 
