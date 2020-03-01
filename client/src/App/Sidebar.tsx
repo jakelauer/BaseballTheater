@@ -93,7 +93,7 @@ class Sidebar extends React.Component<Props, State>
 	private get patreonUrl()
 	{
 		const clientId = "4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008";
-		const host = location.hostname === "localhost" ? "localhost:5000" : location.hostname;
+		const host = location.hostname === "jlauer.local" ? "jlauer.local:5000" : location.hostname;
 		const redirectUri = `${window.location.protocol}//${host}/auth/redirect`;
 		const scopes = ["users", "pledges-to-me", "my-campaign"];
 		const state = encodeURIComponent(this.props.location.pathname);

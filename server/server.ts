@@ -6,6 +6,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import serveStatic from "serve-static";
 import {Search} from "./Local/search";
+import bodyParser from "body-parser";
 
 // Create the app
 const app = express();
@@ -18,6 +19,10 @@ app.use(express.static(clientFolder, {
 }));
 app.use(compression());
 app.use(cookieParser());
+app.use(bodyParser.json({
+	type: ['application/json', 'text/plain']
+}) as any);
+app.use(bodyParser.urlencoded({extended: true}) as any);
 
 app.get("/service-worker.js", (req, res) =>
 {

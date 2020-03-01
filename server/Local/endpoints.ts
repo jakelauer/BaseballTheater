@@ -62,7 +62,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 		}
 
 		const host = !isProd
-			? "http://localhost:3000"
+			? "http://jlauer.local:3000"
 			: ``;
 
 		console.log(host);
@@ -79,6 +79,20 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 		const result = await Auth.getRefreshAuthStatus(req, res);
 
 		res.send(result);
+	});
+
+	app.post("/auth/save-settings", async (req, res) =>
+	{
+		await Auth.saveSettings(req);
+
+		res.send();
+	});
+
+	app.get("/auth/get-settings", async (req, res) =>
+	{
+		const foundSettings = await Auth.getSettings(req);
+
+		res.send(foundSettings);
 	});
 
 	app.get("*", (req: Request, res: Response, next: NextFunction) =>

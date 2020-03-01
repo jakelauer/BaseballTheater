@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
@@ -25,6 +26,9 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
+    plugins: [
+        new FriendlyErrorsWebpackPlugin(),
+    ],
     output: {
         filename: 'populator.js',
         path: path.resolve(appDirectory, "output/populator")

@@ -61,10 +61,10 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 			this.beforeInstallPromptEvent = e as BeforeInstallPromptEvent;
 
 			const visits = JSON.parse(localStorage.getItem("visits") ?? "0");
-			const threeMosAgo = moment().add(-3, "months");
-			const declineDate = moment(localStorage.getItem("decline-date") ?? threeMosAgo.add(-1, "minute").format());
+			const thirtyDaysAgo = moment().add(-30, "days");
+			const declineDate = moment(localStorage.getItem("decline-date") ?? thirtyDaysAgo.add(-1, "minute").format());
 
-			const expired = declineDate.isBefore(threeMosAgo);
+			const expired = declineDate.isBefore(thirtyDaysAgo);
 
 			if (visits > 3 && expired)
 			{

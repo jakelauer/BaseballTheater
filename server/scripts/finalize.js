@@ -16,6 +16,8 @@ function copyOutput() {
 
 const finalize = () => {
     copyOutput();
+    console.log("copied client dir");
+    console.log(fs.existsSync(resolve("server/apikeys.json")));
     fs.copyFileSync(resolve("server/apikeys.json"), path.resolve(output, "server/apikeys.json"));
     fs.mkdir(path.resolve(output, "server/config"));
     fs.copyFileSync(resolve("server/config/keys.json"), path.resolve(output, "server/config/keys.json"));

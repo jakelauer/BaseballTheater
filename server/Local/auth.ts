@@ -3,7 +3,6 @@ import * as path from "path";
 import {Request, Response} from "express";
 import fetch from "cross-fetch";
 import {Database} from "../DB/Database";
-import moment from "moment";
 import ClientOAuth2 from "client-oauth2";
 import {isProd} from "../config/config";
 
@@ -19,7 +18,7 @@ class _Auth
 	private static get host()
 	{
 		return !isProd
-			? "http://localhost:5000"
+			? "http://jlauer.local:5000"
 			: `https://beta.baseball.theater`;
 	}
 
@@ -83,22 +82,25 @@ class _Auth
 		const userId = profileData.data.id;
 
 		res.cookie("id", userId, {
-			expires: new Date(8640000000000000)
+			expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))
 		});
 
-		res.cookie("token", accessToken, {
-			expires: new Date(8640000000000000)
+		res.cookie("accessToken", accessToken, {
+			expires: new Date(Date.now() + (1000 * 60 * 2)),
+			httpOnly: true
 		});
 
-		const expiresAt = moment(user.expires);
-		res.cookie("token_expiry", expiresAt.format(), {
-			expires: new Date(8640000000000000)
+		const tokenExpiry = new Date(Date.now() + (1000 * 60));
+		res.cookie("token_expiry", tokenExpiry, {
+			expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
+			httpOnly: true
 		});
 
 		// Refresh the current users access token.
 		await Database.users.updateOne({id: userId}, {
 			$set: {
 				id: userId,
+				accessToken: user.accessToken,
 				refresh_token: user.refreshToken,
 				refresh_expiry: user.expires
 			}
@@ -114,12 +116,12 @@ class _Auth
 		}
 
 		const storedId = req.cookies["id"] || "";
-		const storedAccessToken = req.cookies["token"] || "";
+		const storedAccessToken = req.cookies["accessToken"] || "";
 
 		let userId: string = storedId;
 		let accessToken = storedAccessToken;
 
-		const storedTokenExpiry = req.cookies["token_expiry"];
+		const storedAccessTokenExpiry = new Date(req.cookies["token_expiry"]);
 
 		const foundUsers = await Database.users.find({
 			id: storedId
@@ -129,28 +131,44 @@ class _Auth
 		{
 			const dbUser = foundUsers[0];
 
-			const refreshExpired = moment(dbUser.refresh_expiry).isBefore(moment());
+			const now = new Date();
+			const refreshExpired = now > dbUser.refresh_expiry;
 			if (refreshExpired)
 			{
 				userId = null;
 				accessToken = null;
 			}
 
-			const accessExpired = moment(storedTokenExpiry).isBefore(moment());
+			const accessExpired = now > storedAccessTokenExpiry;
 			if (accessExpired)
 			{
 				try
 				{
 					const tokenToUse = this.client.createToken(storedAccessToken, dbUser.refresh_token);
 
-					const newToken = await tokenToUse.refresh();
+					const newToken = await tokenToUse.refresh() as TokenWithExpires;
 
-					res.cookie("token", newToken.accessToken, {
+					res.cookie("accessToken", newToken.accessToken, {
 						expires: new Date(8640000000000000)
+					});
+
+					const tokenExpiry = new Date(Date.now() + (1000 * 60));
+					res.cookie("token_expiry", tokenExpiry, {
+						expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
+						httpOnly: true
 					});
 
 					userId = storedId;
 					accessToken = newToken.accessToken;
+
+					// Refresh the current users access token.
+					await Database.users.updateOne({id: userId}, {
+						$set: {
+							accessToken: newToken.accessToken,
+							refresh_token: newToken.refreshToken,
+							refresh_expiry: newToken.expires
+						}
+					}, {upsert: false});
 				}
 				catch (e)
 				{
@@ -200,6 +218,35 @@ class _Auth
 		}
 
 		return levels;
+	}
+
+	public async saveSettings(req: Request)
+	{
+		const storedId = req.cookies["id"] || "";
+		const storedAccessToken = req.cookies["accessToken"] || "";
+
+		// Refresh the current users access token.
+		await Database.users.updateOne({id: storedId, accessToken: storedAccessToken}, {
+			$set: {
+				settings: req.body as Object
+			}
+		}, {upsert: false});
+	}
+
+	public async getSettings(req: Request)
+	{
+		const storedId = req.cookies["id"] || "";
+
+		const foundUsers = await Database.users.find({
+			id: storedId
+		}).toArray();
+
+		if (foundUsers && foundUsers.length === 1)
+		{
+			return foundUsers[0].settings;
+		}
+
+		return null;
 	}
 }
 
