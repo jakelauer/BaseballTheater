@@ -146,6 +146,10 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 								</ErrorBoundary>
 							</Grid>
 						</Container>
+						<Container style={{textAlign: "center", padding: "2rem"}}>
+							&copy; {moment().year()}. Created by <a href={"http://jakelauer.com"}>Jake Lauer</a> (<a href={"https://www.reddit.com/user/hellocontrol_"}>HelloControl_</a>).
+							Go Cubs.
+						</Container>
 					</main>
 					<Dialog
 						open={this.state.showInstallPromptDialog}

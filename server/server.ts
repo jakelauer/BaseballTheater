@@ -7,10 +7,12 @@ import cookieParser from "cookie-parser";
 import serveStatic from "serve-static";
 import {Search} from "./Local/search";
 import bodyParser from "body-parser";
+import {Config} from "./config/config";
+
 
 // Create the app
 const app = express();
-const port = process.env.PORT || 5000;
+const port = Config.Port || 5000;
 const clientFolder = path.join(process.cwd(), 'client');
 
 // Set up basic settings

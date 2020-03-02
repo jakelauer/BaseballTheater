@@ -74,7 +74,7 @@ class SearchInternal
 	public doSearch(query: { text: string, gameIds?: number[] }, page = 0)
 	{
 		const fuse = new Fuse(this.highlightsSearchable, {
-			sort: true,
+			sort: false,
 			threshold: 0.2,
 			distance: 10,
 			minMatchCharLength: 2,

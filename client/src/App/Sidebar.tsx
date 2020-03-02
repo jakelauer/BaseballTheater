@@ -3,7 +3,7 @@ import styles from "./App.module.scss";
 import List from "@material-ui/core/List";
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
 import SettingsIcon from '@material-ui/icons/Settings';
-import {Equalizer, Search} from "@material-ui/icons";
+import {Equalizer, ReportProblem, Search} from "@material-ui/icons";
 import EventIcon from "@material-ui/icons/Event";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -212,6 +212,13 @@ class Sidebar extends React.Component<Props, State>
 					<Sponsor imagePath={"/assets/backers/playback.svg"} url={"https://getplayback.com"}/>
 					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
+				</div>
+				<div className={styles.bottom}>
+					<div className={styles.report}>
+						<a target={"_blank"} rel={"noreferrer nofollow"} href={"https://github.com/jakelauer/BaseballTheater/issues/new"}>
+							<ReportProblem/> <span>Report a Problem</span>
+						</a>
+					</div>
 				</div>
 			</>
 		);

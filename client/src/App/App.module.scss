@@ -19,6 +19,39 @@
 	width: 20vw;
 }
 
+.bottom
+{
+	display: flex;
+	flex-direction: column;
+	flex: 1 0;
+
+	.report
+	{
+		margin-top: auto;
+		padding: 1rem 0;
+		text-align: center;
+
+		a
+		{
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			text-decoration: none;
+			color: $color-accent;
+
+			span
+			{
+				margin-left: 0.5rem;
+			}
+
+			&:hover
+			{
+				color: black;
+			}
+		}
+	}
+}
+
 .appBar
 {
 	background: red;

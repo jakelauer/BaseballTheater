@@ -1,7 +1,7 @@
 import * as React from "react";
 import moment from "moment/moment";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import {CircularProgress} from "@material-ui/core";
+import {CircularProgress, Paper} from "@material-ui/core";
 import {GameSummary} from "./Components/GameSummary";
 import styles from "./GameList.module.scss";
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
+import {Skeleton} from "@material-ui/lab";
 
 interface IGameListProps
 {
@@ -102,7 +103,22 @@ export class GameList extends React.Component<Props, State>
 	{
 		if (!this.state.scoreboard)
 		{
-			return <ContainerProgress/>;
+			const count = Array(20).fill(0);
+			return (
+				<>
+					<ContainerProgress/>
+					<Grid className={styles.gameSummaries} container spacing={3} style={{paddingLeft: 0}}>
+
+						{count.map(i =>
+							<Grid key={i} item xs={12} sm={6} lg={4}>
+								<Paper className={styles.gameSummary} elevation={4} variant={"elevation"}>
+									<Skeleton style={{height: "10rem"}}/>
+								</Paper>
+							</Grid>)
+						}
+					</Grid>
+				</>
+			);
 		}
 
 

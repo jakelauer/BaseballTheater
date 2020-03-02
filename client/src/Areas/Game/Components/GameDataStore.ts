@@ -1,16 +1,19 @@
-import {Intercom} from "../../../Global/Intercom/intercom";
+import {DataStore} from "../../../Global/Intercom/DataStore";
 import moment from "moment";
 import {GameMedia, LiveData} from "baseball-theater-engine";
 import {MlbClientDataFetcher} from "../../../Global/Mlb/MlbClientDataFetcher";
+import {BackerType} from "../../../Global/AuthDataStore";
+import {createContext} from "react";
 
-export interface IGameIntercomState
+export interface IGameDataStorePayload
 {
 	updateTime: moment.Moment;
 	liveData: LiveData;
 	media: GameMedia;
+	upsellBackerType: BackerType | null;
 }
 
-export class GameIntercom extends Intercom<IGameIntercomState>
+export class GameDataStore extends DataStore<IGameDataStorePayload>
 {
 	private interval: number = null;
 
@@ -19,7 +22,8 @@ export class GameIntercom extends Intercom<IGameIntercomState>
 		super({
 			updateTime: moment(),
 			media: null,
-			liveData: null
+			liveData: null,
+			upsellBackerType: null
 		});
 
 		this.fetchLiveData();
@@ -49,7 +53,6 @@ export class GameIntercom extends Intercom<IGameIntercomState>
 			.catch(e => console.error(e));
 	}
 
-
 	private onFetch(data: LiveData)
 	{
 		const isFinal = data.gameData.status.statusCode === "F";
@@ -74,4 +77,20 @@ export class GameIntercom extends Intercom<IGameIntercomState>
 	{
 		clearInterval(this.interval);
 	}
+
+	public showUpsell(backerType: BackerType)
+	{
+		this.update({
+			upsellBackerType: backerType
+		});
+	}
+
+	public hideUpsell()
+	{
+		this.update({
+			upsellBackerType: null
+		});
+	}
 }
+
+export const GameDataStoreContext = createContext<GameDataStore>(null);

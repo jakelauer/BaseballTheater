@@ -147,6 +147,8 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 	{
 		const date = moment(this.state.dateString);
 
+		const transformStyle = this.state.translateX !== 0 ? {transform: `translateX(${this.state.translateX}px)`} : undefined;
+
 		return (
 			<div className={styles.wrapper}>
 				<div className={styles.date}>
@@ -182,7 +184,7 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 						</Button>
 					</div>
 				</div>
-				<div className={styles.gameList} style={{transform: `translateX(${this.state.translateX}px)`}}>
+				<div className={styles.gameList} style={transformStyle}>
 					<Swipeable onSwipedLeft={this.onSwipedLeft} onSwipedRight={this.onSwipedRight} onSwiping={this.onSwiping}>
 						<GameList day={date}/>
 					</Swipeable>
