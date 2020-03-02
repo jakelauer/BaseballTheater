@@ -73,16 +73,16 @@ export default class TeamsArea extends React.Component<Props, State>
 					indicatorColor={"primary"}
 					textColor="primary"
 				>
-					<Tab label={"Schedule"} value={0}/>
-					<Tab label={"Recent Highlights"} value={1}/>
+					<Tab label={"Recent Highlights"} value={0}/>
+					<Tab label={"Schedule"} value={1}/>
 				</Tabs>
 
 				{index === 0 && (
-					<TeamSchedule/>
+					<TeamHighlights/>
 				)}
 
 				{index === 1 && (
-					<TeamHighlights/>
+					<TeamSchedule/>
 				)}
 			</React.Fragment>
 		);

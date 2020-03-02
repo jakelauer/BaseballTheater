@@ -1,0 +1,70 @@
+@import "../../../styles/vars";
+@import "../../../styles/teamcolors";
+
+.miniBoxScore
+{
+	display: flex;
+	width: 100vw;
+	max-width: 900px;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem 0;
+
+	table
+	{
+		border-collapse: collapse;
+	}
+
+	td
+	{
+		line-height: 1rem;
+		padding: 0.5vw;
+		border: 1px solid $color-basic-background;
+	}
+
+	td.r,
+	td.h,
+	td.e
+	{
+		font-weight: bold;
+	}
+
+	.r-medium &
+	{
+		margin-bottom: 1rem;
+	}
+}
+
+.teamTable
+{
+	font-weight: bold;
+
+	td
+	{
+		padding-right: 1rem;
+		border-right: 0;
+		white-space: nowrap;
+	}
+}
+
+.inningsTable
+{
+	flex: auto;
+	table-layout: fixed;
+
+	table
+	{
+		width: 100%;
+	}
+}
+
+td.singleVal
+{
+	text-align: center;
+}
+
+.headers
+{
+	font-weight: bold;
+	background: #F7F7F7;
+}

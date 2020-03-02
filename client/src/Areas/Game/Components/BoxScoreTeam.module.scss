@@ -3,11 +3,19 @@
 .info, .notes
 {
 	margin-top: 1rem;
+	padding: 0 8px;
 }
 
 .wrapper
 {
-	font-size: 13px;
+	padding: 0 1rem;
+	font-size: 0.9rem;
+}
+
+:global(.r-small) .wrapper
+{
+	font-size: 0.7rem;
+	padding: 0;
 }
 
 .content
@@ -18,7 +26,7 @@
 .boxScoreTable
 {
 	width: 100%;
-	padding: 0;
+	padding: 0 8px;
 	border-spacing: 0;
 
 	td

@@ -1,3 +1,18 @@
+.miniBoxWrap
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 -32px;
+	border-bottom: 1px solid #EEE;
+
+	:global(.r-small) &
+	{
+		margin: 0;
+		font-size: 0.7rem;
+	}
+}
+
 .inningWrapper
 {
 	display: flex;

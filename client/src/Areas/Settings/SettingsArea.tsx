@@ -15,6 +15,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import {GameTabs} from "../../Global/Routes/Routes";
 import Divider from "@material-ui/core/Divider";
+import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
+import {Upsell} from "../../UI/Upsell";
 
 interface ISettingsAreaProps
 {
@@ -30,6 +32,7 @@ type State = ISettingsAreaState;
 interface ISettingsAreaState
 {
 	settings: ISettingsDataStorePayload;
+	authContext: IAuthContext;
 }
 
 export default class SettingsArea extends React.Component<Props, State>
@@ -39,6 +42,7 @@ export default class SettingsArea extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
+			authContext: AuthDataStore.state,
 			settings: SettingsDataStore.state
 		};
 	}
@@ -48,6 +52,8 @@ export default class SettingsArea extends React.Component<Props, State>
 		SettingsDataStore.listen(data => this.setState({
 			settings: data
 		}));
+
+		AuthDataStore.listen(authContext => this.setState({authContext}));
 	}
 
 	private readonly handleTeamsChange = (event: React.ChangeEvent<{ value: unknown }>) =>
@@ -174,6 +180,14 @@ export default class SettingsArea extends React.Component<Props, State>
 						</ListItemSecondaryAction>
 					</ListItem>
 				</List>
+
+
+				{!AuthDataStore.hasLevel(BackerType.Backer) && (
+					<div>
+						<Divider/>
+						<Upsell hideClose={true} levelRequired={BackerType.Backer} isModal={true} titleOverride={"Did you know? Backers can sync settings!"}/>
+					</div>
+				)}
 			</Container>
 		);
 	}

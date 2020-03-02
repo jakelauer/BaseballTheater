@@ -1,7 +1,24 @@
+.miniBoxWrap
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 -32px;
+	border-bottom: 1px solid #EEE;
+
+	:global(.r-small) &
+	{
+		margin: 0;
+		font-size: 0.7rem;
+	}
+}
+
 .bothTeams
 {
 	display: flex;
-	padding-left: 16px;
+	margin: 0 -16px;
+	overflow: hidden;
+	width: calc(100% + 32px);
 
 	:global(.r-medium) &
 	{
@@ -11,6 +28,5 @@
 	.team
 	{
 		flex: 1 0;
-		padding-right: 1rem;
 	}
 }

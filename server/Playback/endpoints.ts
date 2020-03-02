@@ -3,6 +3,9 @@ import {Express} from "express";
 import {PlaybackUtils} from "./PlaybackUtils";
 import moment from "moment";
 import {Teams} from "../../baseball-theater-engine/dist/contract";
+import apicache from "apicache";
+
+const cache = apicache.middleware;
 
 export const RegisterPlaybackEndpoints = (app: Express) =>
 {
@@ -30,7 +33,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 	 *        description: Your app
 	 *        type: string
 	 */
-	app.get("/api/team", (req, res) =>
+	app.get("/api/team", cache("1 minute"), (req, res) =>
 	{
 		PlaybackUtils.requireApiKey(req, res);
 
@@ -71,7 +74,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 	 *        description: Your app
 	 *        type: string
 	 */
-	app.get("/api/compilations", (req, res) =>
+	app.get("/api/compilations", cache("1 minute"), (req, res) =>
 	{
 		PlaybackUtils.requireApiKey(req, res);
 
@@ -118,7 +121,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 	 *        description: Your app
 	 *        type: string
 	 */
-	app.get("/api/recaps", (req, res) =>
+	app.get("/api/recaps", cache("1 minute"), (req, res) =>
 	{
 		PlaybackUtils.requireApiKey(req, res);
 
@@ -165,7 +168,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 	 *        description: Your app
 	 *        type: string
 	 */
-	app.get("/api/singleplays", (req, res) =>
+	app.get("/api/singleplays", cache("1 minute"), (req, res) =>
 	{
 		PlaybackUtils.requireApiKey(req, res);
 
@@ -212,7 +215,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 	 *        description: Your app
 	 *        type: string
 	 */
-	app.get("/api/nonplays", (req, res) =>
+	app.get("/api/nonplays", cache("1 minute"), (req, res) =>
 	{
 		PlaybackUtils.requireApiKey(req, res);
 

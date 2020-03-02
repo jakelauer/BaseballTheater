@@ -11,7 +11,7 @@ import {SiteRoutes} from "../Global/Routes/Routes";
 import Sidebar from "./Sidebar";
 import {HamburgerArrow} from "react-animated-burgers";
 import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
-import classNames from "classnames";
+import {SystemUpdateAlt} from "@material-ui/icons";
 
 interface ISidebarDrawerProps extends RouteComponentProps
 {
@@ -79,16 +79,19 @@ class SidebarDrawer extends React.Component<Props, State>
 			? () => this.props.history.push("/")
 			: this.openDrawer;
 
-		const menuButtonClasses = classNames(styles.menuButton, {
-			[styles.hasUpdate]: this.state.waitingForUpdate && !hamburgerActive
-		});
+		const updateIconShown = this.state.waitingForUpdate && !hamburgerActive;
 
 		return (
 			<React.Fragment>
 				<AppBar position="fixed" className={styles.appBar}>
 					<Toolbar className={styles.toolbar}>
-						<IconButton edge="start" className={menuButtonClasses} color="inherit" aria-label="back">
-							<HamburgerArrow isActive={hamburgerActive} barColor="white" buttonWidth={30} buttonStyle={{padding: 4, outline: "none"}} onClick={onClick}/>
+						<IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="back">
+							{updateIconShown && (
+								<SystemUpdateAlt onClick={onClick} fontSize={"large"}/>
+							)}
+							{!updateIconShown && (
+								<HamburgerArrow isActive={hamburgerActive} barColor="white" buttonWidth={30} buttonStyle={{padding: 4, outline: "none"}} onClick={onClick}/>
+							)}
 						</IconButton>
 						<span className={styles.logoText}>Baseball Theater</span>
 						<div className={styles.barlogo}>

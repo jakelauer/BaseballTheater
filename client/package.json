@@ -74,6 +74,7 @@
     "react-app-polyfill": "^1.0.2",
     "react-dev-utils": "^9.0.3",
     "react-dom": "^16.9.0",
+    "react-swipeable": "^5.5.1",
     "react-ga": "^2.7.0",
     "react-helmet": "^5.2.1",
     "react-icons": "^3.9.0",

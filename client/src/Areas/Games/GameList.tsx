@@ -13,6 +13,9 @@ import {ContainerProgress} from "../../UI/ContainerProgress";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
 import Helmet from "react-helmet";
 import Typography from "@material-ui/core/Typography";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 
 interface IGameListProps
 {
@@ -87,12 +90,21 @@ export class GameList extends React.Component<Props, State>
 			})
 	}
 
+	private static getSearchLink(term: string, games: string[])
+	{
+		return SiteRoutes.Search.resolve({
+			gameIds: games.join(","),
+			query: term
+		});
+	}
+
 	public render()
 	{
 		if (!this.state.scoreboard)
 		{
 			return <ContainerProgress/>;
 		}
+
 
 		const favoriteTeams = this.state.settings.favoriteTeams;
 
@@ -127,11 +139,45 @@ export class GameList extends React.Component<Props, State>
 
 		const formattedDate = this.props.day.format("MMMM D, YYYY");
 
+		const anyGamesComplete = orderedGames.some(g => g.status.statusCode === "F");
+		const gameIds = orderedGames.map(g => g.gamePk);
+
 		return (
 			<React.Fragment>
 				<Helmet>
 					<title>{`Games for ${formattedDate}`}</title>
 				</Helmet>
+
+				{anyGamesComplete && (
+					<>
+						<div className={styles.specialHighlights}>
+							<ButtonGroup variant={"outlined"} size={"small"} className={styles.buttonGroup}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("recap", gameIds)}/>}>
+									Recaps
+								</Button>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("condensed", gameIds)}/>}>
+									Condensed
+								</Button>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("must c", gameIds)}/>}>
+									Must C
+								</Button>
+							</ButtonGroup>
+							<ButtonGroup variant={"outlined"} size={"small"} className={styles.buttonGroup}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("StatCast", gameIds)}/>}>
+									StatCast
+								</Button>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("home run", gameIds)}/>}>
+									Home Runs
+								</Button>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("defense", gameIds)}/>}>
+									Defense
+								</Button>
+							</ButtonGroup>
+						</div>
+						<Divider style={{marginBottom: "2rem"}}/>
+					</>
+				)}
+
 				<Grid className={styles.gameSummaries} container spacing={3} style={{paddingLeft: 0}}>
 					{
 						this.state.loading

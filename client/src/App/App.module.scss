@@ -154,16 +154,3 @@ span.logoText
 		border: none;
 	}
 }
-
-.menuButton.hasUpdate::after
-{
-	position: absolute;
-	content: "";
-	width: 13px;
-	height: 13px;
-	border-radius: 50%;
-	background: white;
-	top: 15px;
-	right: 12px;
-	box-shadow: 0 2px 3px rgba(0, 0, 0, 0.9);
-}

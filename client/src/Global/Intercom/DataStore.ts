@@ -1,10 +1,10 @@
-import {IntercomListener} from "./IntercomListener";
+import {DataStoreObserver} from "./DataStoreObserver";
 
-export abstract class Intercom<TState extends {},
-	TListenerParams extends {} = never>
+export abstract class DataStore<TState extends {},
+	TObserverParams extends {} = never>
 {
 	private _currentState: TState;
-	private readonly _listeners: IntercomListener<TState, TListenerParams>[] = [];
+	private readonly _observers: DataStoreObserver<TState, TObserverParams>[] = [];
 
 	protected constructor(initialState: TState)
 	{
@@ -25,16 +25,16 @@ export abstract class Intercom<TState extends {},
 
 	protected selectListenersForUpdate()
 	{
-		return this._listeners;
+		return this._observers;
 	}
 
-	public listen(callback: (data: TState) => void, params: TListenerParams = undefined)
+	public listen(callback: (data: TState) => void, params: TObserverParams = undefined)
 	{
-		const listener = new IntercomListener(callback, params);
+		const observer = new DataStoreObserver(callback, params);
 
-		this._listeners.push(listener);
+		this._observers.push(observer);
 
-		listener.callback(this._currentState);
+		observer.callback(this._currentState);
 	}
 
 	public get state()

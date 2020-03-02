@@ -2,13 +2,12 @@ import * as React from "react";
 import {MediaItem, MediaItemPlayback} from "baseball-theater-engine";
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@material-ui/core";
 import styles from "./Highlight.module.scss";
-import {Respond} from "../Global/Respond/Respond";
 import classNames from "classnames";
 import Skeleton from "@material-ui/lab/Skeleton";
-import {RespondSizes} from "../Global/Respond/RespondDataStore";
 import CardHeader from "@material-ui/core/CardHeader";
 import {SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 import {SiteRoutes} from "../Global/Routes/Routes";
+import moment from "moment";
 
 interface IHighlightProps
 {
@@ -109,6 +108,8 @@ export class Highlight extends React.Component<Props, State>
 
 		const gamePk = media?.keywordsAll?.find(k => k.type === "game_pk")?.value;
 
+		const date = moment(media.date);
+
 		return (
 			<Card className={classNames(this.props.className, styles.highlight)}>
 				<div className={styles.cardContent}>
@@ -132,11 +133,9 @@ export class Highlight extends React.Component<Props, State>
 											{title}
 										</Typography>
 										{SettingsDataStore.state.highlightDescriptions && (
-											<Respond at={RespondSizes.medium} hide={true}>
-												<Typography variant="body2" color="textSecondary" component="p">
-													{media.description}
-												</Typography>
-											</Respond>
+											<Typography variant="body2" color="textSecondary" component="p">
+												{media.description}
+											</Typography>
 										)}
 									</a>
 								</CardContent>
@@ -146,7 +145,7 @@ export class Highlight extends React.Component<Props, State>
 					</div>
 				</div>
 				{this.props.showExtra && (
-					<PossibleLink content={<span>View Game &raquo;</span>} gamePk={gamePk}/>
+					<PossibleLink content={<span>{date.format("MMM D, YYYY")} &raquo;</span>} gamePk={gamePk}/>
 				)}
 			</Card>
 		);

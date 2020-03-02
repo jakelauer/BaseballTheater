@@ -43,16 +43,20 @@ export class PitchItem extends React.Component<Props, State>
 			return null;
 		}
 
-		const {
-			breaks,
-			startSpeed
-		} = pitch.pitchData;
+		let secondary: React.ReactNode = null;
+		if (pitch.pitchData && pitch.details?.type)
+		{
+			const {
+				breaks,
+				startSpeed
+			} = pitch.pitchData;
 
-		const secondary = (
-			<div style={{paddingRight: "1rem"}}>
-				<div>{`${startSpeed}mph ${pitch.details.type.description} [${breaks.spinRate} Spin Rate]`}</div>
-			</div>
-		);
+			secondary = (
+				<div style={{paddingRight: "1rem"}}>
+					<div>{`${startSpeed ?? "? "}mph ${pitch.details?.type?.description ?? "?"} [${breaks.spinRate ?? '?'} SR]`}</div>
+				</div>
+			);
+		}
 
 		const authed = AuthDataStore.hasLevel(BackerType.ProBacker);
 		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${pitch.playId}` : "#";
@@ -71,10 +75,10 @@ export class PitchItem extends React.Component<Props, State>
 				{gameDataStore => (<>
 					<ListItem>
 						<ListItemAvatar className={styles.pitchNumber}>
-							<span style={{backgroundColor: pitch.details.ballColor}}>{pitch.pitchNumber}</span>
+							<span style={{backgroundColor: pitch.details?.ballColor}}>{pitch.pitchNumber}</span>
 						</ListItemAvatar>
 						<ListItemText
-							primary={pitch.details.description}
+							primary={pitch.details?.description}
 							secondary={secondary}
 						/>
 						{pitch.playId &&

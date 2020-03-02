@@ -1,0 +1,21 @@
+.wrapper
+{
+	width: 100%;
+}
+
+.boxWrapper
+{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.paper
+{
+	width: 50%;
+
+	:global(html.r-small) &
+	{
+		width: 100%;
+	}
+}

@@ -24,6 +24,7 @@ app.use(bodyParser.json({
 }) as any);
 app.use(bodyParser.urlencoded({extended: true}) as any);
 
+
 app.get("/service-worker.js", (req, res) =>
 {
 	// Don't cache service worker is a best practice (otherwise clients wont get emergency bug fix)

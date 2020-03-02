@@ -1,0 +1,24 @@
+.schedule
+{
+	width: 100%;
+	padding-top: calc(56px + 2rem);
+	overflow-x: auto;
+}
+
+.info
+{
+	display: flex;
+
+	> div
+	{
+		text-align: left;
+		padding-left: 3rem;
+		max-width: 10rem;
+		white-space: nowrap;
+	}
+}
+
+.item
+{
+	cursor: pointer;
+}

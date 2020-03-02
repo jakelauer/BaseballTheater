@@ -102,9 +102,7 @@ class Sidebar extends React.Component<Props, State>
 
 	private logOut = () =>
 	{
-		cookies.erase("id");
-		cookies.erase("token");
-		cookies.erase("token_expiry");
+		cookies.erase("auth");
 
 		AuthDataStore.refresh();
 	};

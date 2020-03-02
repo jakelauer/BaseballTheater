@@ -1,4 +1,4 @@
-import {Intercom} from "../Intercom/intercom";
+import {DataStore} from "../Intercom/DataStore";
 
 export enum RespondSizes
 {
@@ -13,18 +13,18 @@ export enum RespondSizes
 
 type RespondSizesKeys = keyof typeof RespondSizes;
 
-export interface RespondIntercomPayload
+export interface RespondDataStorePayload
 {
 	sizes: RespondSizes[];
 }
 
-class RespondIntercom extends Intercom<RespondIntercomPayload>
+class _RespondDataStore extends DataStore<RespondDataStorePayload>
 {
-	public static Instance = new RespondIntercom({
+	public static Instance = new _RespondDataStore({
 		sizes: []
 	});
 
-	constructor(initialState: RespondIntercomPayload)
+	constructor(initialState: RespondDataStorePayload)
 	{
 		super(initialState);
 
@@ -71,4 +71,4 @@ class RespondIntercom extends Intercom<RespondIntercomPayload>
 	}
 }
 
-export default RespondIntercom.Instance;
+export const RespondDataStore = _RespondDataStore.Instance;

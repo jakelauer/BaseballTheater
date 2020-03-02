@@ -1,0 +1,11 @@
+.vscode/*
+.idea/*
+node_modules/*
+/baseball-theater-engine/node_modules/
+/baseball-theater-engine/dist/
+/output/
+/server/*.js
+/server/Local/*.js
+/server/Playback/*.js
+/**/*.js.map
+/**/*.d.ts

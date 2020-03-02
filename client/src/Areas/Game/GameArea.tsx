@@ -13,11 +13,11 @@ import {CircularProgress, Tabs} from "@material-ui/core";
 import {Respond} from "../../Global/Respond/Respond";
 import {RespondSizes} from "../../Global/Respond/RespondDataStore";
 import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
-import {Link} from "react-router-dom";
 import Tab from "@material-ui/core/Tab";
 import {Upsell} from "../../UI/Upsell";
 import Dialog from "@material-ui/core/Dialog";
 import {SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
+import {ErrorBoundary} from "../../App/ErrorBoundary";
 
 interface IGameAreaProps extends RouteComponentProps<IGameParams>
 {
@@ -55,7 +55,10 @@ class GameArea extends React.Component<Props, State>
 
 	public componentDidMount(): void
 	{
-		this.gameDataStore.listen(gameData => this.setState({gameData}));
+		this.gameDataStore.listen(gameData =>
+		{
+			this.setState({gameData});
+		});
 	}
 
 	public componentWillUnmount(): void
@@ -67,7 +70,9 @@ class GameArea extends React.Component<Props, State>
 	{
 		this.setState({
 			tabValue: value
-		})
+		});
+
+		history.replaceState(null, null, this.getTab(value as GameTabs));
 	};
 
 	private renderTab()
@@ -77,7 +82,7 @@ class GameArea extends React.Component<Props, State>
 			return <CircularProgress/>;
 		}
 
-		switch (this.props.match.params.tab)
+		switch (this.state.tabValue)
 		{
 			case "Wrap":
 				return <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
@@ -118,39 +123,30 @@ class GameArea extends React.Component<Props, State>
 			})}/>;
 		}
 
-		const wrapLink = this.getTab("Wrap");
-		const liveGameLink = this.getTab("LiveGame");
-		const boxScoreLink = this.getTab("BoxScore");
-		const highlightsLink = this.getTab("Highlights");
-
 		const tabs = [
 			{
-				label: "Highlights",
+				label: "Videos",
 				disabled: false,
 				icon: <PlayCircleOutline/>,
 				value: "Highlights",
-				linkDestination: highlightsLink
 			},
 			{
-				label: "Wrap",
+				label: "Recap",
 				disabled: !this.hasWrap(),
 				icon: <LibraryBooks/>,
 				value: "Wrap",
-				linkDestination: wrapLink
 			},
 			{
-				label: "Play-by-play",
+				label: "Plays",
 				disabled: false,
 				icon: <Update/>,
 				value: "LiveGame",
-				linkDestination: liveGameLink
 			},
 			{
 				label: "Box Score",
 				disabled: false,
 				icon: <ListAlt/>,
 				value: "BoxScore",
-				linkDestination: boxScoreLink
 			},
 		];
 
@@ -168,36 +164,35 @@ class GameArea extends React.Component<Props, State>
 								indicatorColor={"primary"}
 								textColor="primary"
 							>
-								{tabs.map(tab => (
+								{tabs.filter(a => !a.disabled).map(tab => (
 									<Tab
 										key={tab.label}
 										style={{height: "3.5rem"}}
 										label={tab.label}
-										disabled={tab.disabled}
 										value={tab.value}
-										component={p => <Link {...p} replace={true} to={tab.linkDestination}/>}
 									/>
 								))}
 							</Tabs>
 						</Respond>
 						<div className={styles.content}>
-							{this.renderTab()}
+							<ErrorBoundary>
+								{this.renderTab()}
+							</ErrorBoundary>
 						</div>
 						<Respond at={RespondSizes.medium} hide={false}>
 							<BottomNavigation
 								value={this.state.tabValue}
 								onChange={this.handleChange}
-								showLabels
 								className={styles.root}
+								showLabels
 							>
-								{tabs.map(tab => (
+								{tabs.filter(a => !a.disabled).map(tab => (
 									<BottomNavigationAction
+										style={{minWidth: 0}}
 										key={tab.label}
 										label={tab.label}
-										disabled={tab.disabled}
 										icon={tab.icon}
 										value={tab.value}
-										component={p => <Link {...p} replace={true} to={tab.linkDestination}/>}
 									/>
 								))}
 							</BottomNavigation>

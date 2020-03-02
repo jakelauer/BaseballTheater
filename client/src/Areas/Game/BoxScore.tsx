@@ -9,6 +9,7 @@ import Helmet from "react-helmet";
 import moment from "moment";
 import SwipeableViews from "react-swipeable-views";
 import {ContainerProgress} from "../../UI/ContainerProgress";
+import {MiniBoxScore} from "./Components/MiniBoxScore";
 
 interface IBoxScoreProps
 {
@@ -77,6 +78,9 @@ export class BoxScore extends React.Component<Props, State>
 				<Helmet>
 					<title>{`Box Score - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
 				</Helmet>
+				<div className={styles.miniBoxWrap}>
+					<MiniBoxScore game={this.props.liveData}/>
+				</div>
 				<div className={styles.bothTeams}>
 					<Respond at={RespondSizes.small} hide={false}>
 						<Tabs

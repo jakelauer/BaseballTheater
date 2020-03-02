@@ -1,4 +1,4 @@
-import {Intercom} from "./Intercom/intercom";
+import {DataStore} from "./Intercom/DataStore";
 
 // @ts-ignore
 
@@ -13,15 +13,23 @@ export interface IAuthContext
 
 export enum BackerType
 {
+	None = "",
 	Backer = "Backer",
 	ProBacker = "Pro Backer",
 	StarBacker = "Star Backer",
 	PremiumSponsor = "Premium Sponsor"
 }
 
-class _AuthIntercom extends Intercom<IAuthContext>
+const BackerLevelMap = {
+	[BackerType.Backer]: [BackerType.Backer],
+	[BackerType.ProBacker]: [BackerType.Backer, BackerType.ProBacker],
+	[BackerType.StarBacker]: [BackerType.Backer, BackerType.ProBacker, BackerType.StarBacker],
+	[BackerType.PremiumSponsor]: [BackerType.Backer, BackerType.ProBacker, BackerType.StarBacker, BackerType.PremiumSponsor],
+};
+
+class _AuthDatastore extends DataStore<IAuthContext>
 {
-	public static Instance = new _AuthIntercom();
+	public static Instance = new _AuthDatastore();
 
 	private constructor()
 	{
@@ -43,13 +51,17 @@ class _AuthIntercom extends Intercom<IAuthContext>
 
 	private async initialize()
 	{
-		const user: { userId: string, accessToken: string, levels: BackerType[] } = await fetch("/auth/status")
+		const user: { userId: string, accessToken: string, levels: BackerType } = await fetch("/auth/status")
 			.then(r => r.json());
+
+		const levels = user.levels
+			? BackerLevelMap[user.levels]
+			: [BackerType.None];
 
 		this.update({
 			authorized: !!user?.userId,
 			userId: user?.userId,
-			levels: user?.levels,
+			levels,
 			loaded: true
 		});
 	}
@@ -66,4 +78,4 @@ class _AuthIntercom extends Intercom<IAuthContext>
 
 }
 
-export const AuthIntercom = _AuthIntercom.Instance;
+export const AuthDataStore = _AuthDatastore.Instance;

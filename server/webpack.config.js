@@ -7,7 +7,7 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const entryPath = resolveApp("server/server.ts");
 
-module.exports = {
+module.exports = (serverEnv) => ({
     entry: entryPath,
     target: "node",
     mode: "production",
@@ -34,7 +34,7 @@ module.exports = {
     plugins: [
         new FriendlyErrorsWebpackPlugin(),
         new webpack.DefinePlugin({
-            __PRODUCTION__: true
+            __SERVER_ENV__: `\"${serverEnv}\"`
         })
     ]
-};
+});

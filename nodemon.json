@@ -1,0 +1,13 @@
+{
+  "verbose": true,
+  "legacyWatch": true,
+  "ext": "*",
+  "watch": [
+    "server/*.ts",
+    "server/**/*.ts"
+  ],
+  "ignore": [
+    "server/**/*.spec.ts"
+  ],
+  "exec": "yarn server"
+}

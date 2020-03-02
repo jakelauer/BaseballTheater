@@ -10,6 +10,7 @@ import Fab from "@material-ui/core/Fab";
 import {SiteRoutes} from "../../Global/Routes/Routes";
 import {GamesUtils} from "../../Utility/GamesUtils";
 import {Button} from "@material-ui/core";
+import {EventData, Swipeable} from "react-swipeable";
 
 interface IGamesAreaParams
 {
@@ -19,6 +20,7 @@ interface IGamesAreaParams
 interface IGamesAreaState
 {
 	dateString: string;
+	translateX: number;
 }
 
 class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, IGamesAreaState>
@@ -30,6 +32,7 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 		super(props);
 
 		this.state = {
+			translateX: 0,
 			dateString: props.match.params.yyyymmdd || GamesUtils.StartingDate().format("YYYYMMDD")
 		};
 	}
@@ -94,6 +97,52 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 		}));
 	};
 
+	private onSwiping = (e: EventData) =>
+	{
+		const absX = Math.abs(e.deltaX);
+		const absY = Math.abs(e.deltaY);
+		const tx = -e.deltaX / 5;
+		this.setState({
+			translateX: absX > absY ? tx : 0
+		})
+	};
+
+	private onSwipedRight = (e: EventData) =>
+	{
+		const absX = Math.abs(e.deltaX);
+		const absY = Math.abs(e.deltaY);
+		const actualDeltaX = absX > absY ? absX : 0;
+
+		if (actualDeltaX > window.innerWidth / 3)
+		{
+			this.prevDate();
+		}
+		else
+		{
+			this.setState({
+				translateX: 0
+			});
+		}
+	};
+
+	private onSwipedLeft = (e: EventData) =>
+	{
+		const absX = Math.abs(e.deltaX);
+		const absY = Math.abs(e.deltaY);
+		const actualDeltaX = absX > absY ? absX : 0;
+
+		if (actualDeltaX > window.innerWidth / 3)
+		{
+			this.nextDate();
+		}
+		else
+		{
+			this.setState({
+				translateX: 0
+			});
+		}
+	};
+
 	public render()
 	{
 		const date = moment(this.state.dateString);
@@ -133,8 +182,10 @@ class GamesArea extends React.Component<RouteComponentProps<IGamesAreaParams>, I
 						</Button>
 					</div>
 				</div>
-				<div className={styles.gameList}>
-					<GameList day={date}/>
+				<div className={styles.gameList} style={{transform: `translateX(${this.state.translateX}px)`}}>
+					<Swipeable onSwipedLeft={this.onSwipedLeft} onSwipedRight={this.onSwipedRight} onSwiping={this.onSwiping}>
+						<GameList day={date}/>
+					</Swipeable>
 				</div>
 			</div>
 		);

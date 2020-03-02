@@ -4,23 +4,35 @@ import {Request, Response} from "express";
 import fetch from "cross-fetch";
 import {Database} from "../DB/Database";
 import ClientOAuth2 from "client-oauth2";
-import {isProd} from "../config/config";
+import * as crypto from "crypto";
+import {Config} from "../config/config";
 
 interface TokenWithExpires extends ClientOAuth2.Token
 {
 	expires: Date;
 }
 
+interface IUserData
+{
+	userId: string;
+	accessToken: string;
+	accessTokenExpiry: Date;
+}
+
+interface IAuthStatus
+{
+	userId: string,
+	accessToken: string,
+	levels: string[]
+}
+
 class _Auth
 {
 	public static Instance = new _Auth();
 
-	private static get host()
-	{
-		return !isProd
-			? "http://jlauer.local:5000"
-			: `https://beta.baseball.theater`;
-	}
+	private static AuthCookieName = "auth";
+	private static EncryptionKey: Buffer;
+	private static EncryptionIv: Buffer;
 
 	private readonly id: string;
 	private readonly secret: string;
@@ -35,12 +47,15 @@ class _Auth
 		this.id = keys.patreon.id;
 		this.secret = keys.patreon.secret;
 
+		_Auth.EncryptionKey = new Buffer(keys.crypto.key32);
+		_Auth.EncryptionIv = new Buffer(keys.crypto.iv16);
+
 		this.initialize();
 	}
 
 	private static getRedirectUri()
 	{
-		return `${_Auth.host}/auth/redirect`;
+		return `${Config.host}/auth/redirect`;
 	}
 
 	public initialize()
@@ -70,31 +85,21 @@ class _Auth
 
 		user = await user.refresh() as TokenWithExpires;
 
-		const accessToken = user.accessToken;
-
 		const profileInfo = await fetch("https://www.patreon.com/api/oauth2/api/current_user", {
 			headers: {
-				authorization: `Bearer ${accessToken}`
+				authorization: `Bearer ${user.accessToken}`
 			}
 		});
 
 		const profileData = await profileInfo.json();
 		const userId = profileData.data.id;
-
-		res.cookie("id", userId, {
-			expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))
-		});
-
-		res.cookie("accessToken", accessToken, {
-			expires: new Date(Date.now() + (1000 * 60 * 2)),
-			httpOnly: true
-		});
-
 		const tokenExpiry = new Date(Date.now() + (1000 * 60));
-		res.cookie("token_expiry", tokenExpiry, {
-			expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
-			httpOnly: true
-		});
+
+		_Auth.setAuthCookie({
+			accessToken: user.accessToken,
+			accessTokenExpiry: tokenExpiry,
+			userId
+		}, res);
 
 		// Refresh the current users access token.
 		await Database.users.updateOne({id: userId}, {
@@ -107,7 +112,7 @@ class _Auth
 		}, {upsert: true});
 	}
 
-	public async getRefreshAuthStatus(req: Request, res: Response): Promise<{ userId: string, accessToken: string, levels: string[] }>
+	public async getRefreshAuthStatus(req: Request, res: Response): Promise<IAuthStatus>
 	{
 		if (!req.cookies)
 		{
@@ -115,79 +120,78 @@ class _Auth
 			console.log("AUTH: no cookies");
 		}
 
-		const storedId = req.cookies["id"] || "";
-		const storedAccessToken = req.cookies["accessToken"] || "";
+		const authStatus: IAuthStatus = {
+			accessToken: null,
+			levels: [],
+			userId: null
+		};
 
-		let userId: string = storedId;
-		let accessToken = storedAccessToken;
-
-		const storedAccessTokenExpiry = new Date(req.cookies["token_expiry"]);
-
-		const foundUsers = await Database.users.find({
-			id: storedId
-		}).toArray();
-
-		if (foundUsers && foundUsers.length === 1)
+		const storedUserData = _Auth.getAuthCookie(req);
+		if (storedUserData)
 		{
-			const dbUser = foundUsers[0];
+			authStatus.accessToken = storedUserData.accessToken;
+			authStatus.userId = storedUserData.userId;
 
-			const now = new Date();
-			const refreshExpired = now > dbUser.refresh_expiry;
-			if (refreshExpired)
-			{
-				userId = null;
-				accessToken = null;
-			}
+			const foundUsers = await Database.users.find({
+				id: storedUserData.userId
+			}).toArray();
 
-			const accessExpired = now > storedAccessTokenExpiry;
-			if (accessExpired)
+			if (foundUsers && foundUsers.length === 1)
 			{
-				try
+				const dbUser = foundUsers[0];
+
+				const now = new Date();
+				const refreshExpired = now > dbUser.refresh_expiry;
+				if (refreshExpired)
 				{
-					const tokenToUse = this.client.createToken(storedAccessToken, dbUser.refresh_token);
+					authStatus.userId = null;
+					authStatus.accessToken = null;
 
-					const newToken = await tokenToUse.refresh() as TokenWithExpires;
-
-					res.cookie("accessToken", newToken.accessToken, {
-						expires: new Date(8640000000000000)
-					});
-
-					const tokenExpiry = new Date(Date.now() + (1000 * 60));
-					res.cookie("token_expiry", tokenExpiry, {
-						expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
-						httpOnly: true
-					});
-
-					userId = storedId;
-					accessToken = newToken.accessToken;
-
-					// Refresh the current users access token.
-					await Database.users.updateOne({id: userId}, {
-						$set: {
-							accessToken: newToken.accessToken,
-							refresh_token: newToken.refreshToken,
-							refresh_expiry: newToken.expires
-						}
-					}, {upsert: false});
+					// Return null for everything
+					return authStatus;
 				}
-				catch (e)
-				{
-					console.log(e);
 
-					return null;
+				const accessExpired = now > storedUserData.accessTokenExpiry;
+				if (accessExpired || !storedUserData.accessToken)
+				{
+					try
+					{
+						const newCreatedToken = this.client.createToken(storedUserData.accessToken, dbUser.refresh_token);
+						const newRefreshedToken = await newCreatedToken.refresh() as TokenWithExpires;
+
+						const newUserData: IUserData = {
+							userId: storedUserData.userId,
+							accessToken: newRefreshedToken.accessToken,
+							accessTokenExpiry: new Date(Date.now() + (1000 * 60))
+						};
+
+						authStatus.userId = newUserData.userId;
+						authStatus.accessToken = newUserData.accessToken;
+
+						_Auth.setAuthCookie(newUserData, res);
+
+						// Refresh the current users access token.
+						await Database.users.updateOne({id: newUserData.userId}, {
+							$set: {
+								accessToken: newRefreshedToken.accessToken,
+								refresh_token: newRefreshedToken.refreshToken,
+								refresh_expiry: newRefreshedToken.expires
+							}
+						}, {upsert: false});
+					}
+					catch (e)
+					{
+						console.error(e);
+
+						return authStatus;
+					}
 				}
 			}
 		}
 
-		const levels = await this.getSubscriberLevel(userId, accessToken);
+		authStatus.levels = await this.getSubscriberLevel(authStatus.userId, authStatus.accessToken);
 
-		const userData = {
-			userId,
-			accessToken,
-			levels
-		};
-
-		return userData;
+		return authStatus;
 	}
 
 	private async getSubscriberLevel(userId: string, accessToken: string): Promise<string[]>
@@ -222,31 +226,83 @@ class _Auth
 
 	public async saveSettings(req: Request)
 	{
-		const storedId = req.cookies["id"] || "";
-		const storedAccessToken = req.cookies["accessToken"] || "";
-
-		// Refresh the current users access token.
-		await Database.users.updateOne({id: storedId, accessToken: storedAccessToken}, {
-			$set: {
-				settings: req.body as Object
-			}
-		}, {upsert: false});
+		const storedUserData = _Auth.getAuthCookie(req);
+		if (storedUserData)
+		{
+			// Refresh the current users access token.
+			await Database.users.updateOne({id: storedUserData.userId, accessToken: storedUserData.accessToken}, {
+				$set: {
+					settings: req.body as Object
+				}
+			}, {upsert: false});
+		}
 	}
 
 	public async getSettings(req: Request)
 	{
-		const storedId = req.cookies["id"] || "";
-
-		const foundUsers = await Database.users.find({
-			id: storedId
-		}).toArray();
-
-		if (foundUsers && foundUsers.length === 1)
+		const storedUserData = _Auth.getAuthCookie(req);
+		if (storedUserData)
 		{
-			return foundUsers[0].settings;
+			const foundUsers = await Database.users.find({
+				id: storedUserData.userId
+			}).toArray();
+
+			if (foundUsers && foundUsers.length === 1)
+			{
+				return foundUsers[0].settings;
+			}
 		}
 
 		return null;
+	}
+
+	private static setAuthCookie(userData: IUserData, res: Response)
+	{
+		const encrypted = _Auth.encodeUserInfo(userData);
+
+		res.cookie(_Auth.AuthCookieName, encrypted, {
+			expires: new Date(Date.now() + (1000 * 60 * 60 * 24 * 30)),
+			httpOnly: false
+		});
+	}
+
+	private static getAuthCookie(req: Request)
+	{
+		const authCookie = req.cookies[_Auth.AuthCookieName];
+		if (authCookie)
+		{
+			return _Auth.decodeUserInfo(authCookie);
+		}
+	}
+
+	private static encodeUserInfo(userData: IUserData): string
+	{
+		return _Auth.encrypt(JSON.stringify(userData));
+	}
+
+	private static decodeUserInfo(encoded: string): IUserData
+	{
+		const decrypted = _Auth.decrypt(encoded);
+
+		return JSON.parse(decrypted) as IUserData;
+	}
+
+	private static encrypt(o: string | object)
+	{
+		const text = typeof o === "string" ? o : JSON.stringify(o);
+		let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(_Auth.EncryptionKey), _Auth.EncryptionIv);
+		let encrypted = cipher.update(text);
+		encrypted = Buffer.concat([encrypted, cipher.final()]);
+		return encrypted.toString('hex');
+	}
+
+	private static decrypt(text: string)
+	{
+		let encryptedText = Buffer.from(text, 'hex');
+		let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(_Auth.EncryptionKey), _Auth.EncryptionIv);
+		let decrypted = decipher.update(encryptedText);
+		decrypted = Buffer.concat([decrypted, decipher.final()]);
+		return decrypted.toString();
 	}
 }
 

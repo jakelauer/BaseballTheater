@@ -3,6 +3,8 @@ import {BoxScorePlayer, GameTeam, TeamBoxScore} from "baseball-theater-engine";
 import styles from "./BoxScoreTeam.module.scss";
 import classNames from "classnames";
 import {Player} from "../../../../../baseball-theater-engine/contract";
+import {Respond} from "../../../Global/Respond/Respond";
+import {RespondSizes} from "../../../Global/Respond/RespondDataStore";
 
 interface IBoxScoreTeamProps
 {
@@ -54,7 +56,9 @@ export class BoxScoreTeam extends React.Component<Props, State>
 		return (
 			<div className={classNames(className, styles.wrapper)}>
 				<div className={styles.content}>
-					<h2 className={teamColorClasses}>{data.team.name}</h2>
+					<Respond at={RespondSizes.small} hide={true}>
+						<h2 className={teamColorClasses}>{data.team.name}</h2>
+					</Respond>
 					<div className={sectionLabelClasses}>
 						<span>Batting</span>
 					</div>
@@ -68,8 +72,7 @@ export class BoxScoreTeam extends React.Component<Props, State>
 							<th>{"BB"}</th>
 							<th>{"K"}</th>
 							<th>{"AVG"}</th>
-							<th>{"OBP"}</th>
-							<th>{"SLG"}</th>
+							<th>{"OPS"}</th>
 						</tr>
 						{batters}
 					</table>
@@ -143,8 +146,7 @@ const Batter = ({player, fullPlayer}: IPlayerItem) =>
 			<td>{player.stats.batting.baseOnBalls || 0}</td>
 			<td>{player.stats.batting.strikeOuts || 0}</td>
 			<td>{player.seasonStats.batting.avg}</td>
-			<td>{player.seasonStats.batting.obp}</td>
-			<td>{player.seasonStats.batting.slg}</td>
+			<td>{player.seasonStats.batting.ops}</td>
 		</tr>
 	);
 };

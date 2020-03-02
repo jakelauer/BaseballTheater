@@ -12,3 +12,35 @@
 {
 	padding-left: 32px;
 }
+
+.specialHighlights
+{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 1rem auto;
+	justify-content: center;
+	font-size: 0.7rem;
+	white-space: nowrap;
+}
+
+.buttonGroup
+{
+	display: flex;
+	width: 33vw;
+
+	:global(.r-medium) &
+	{
+		width: 50vw;
+	}
+
+	:global(.r-small) &
+	{
+		width: 100%;
+	}
+
+	> a
+	{
+		flex: 1 0;
+	}
+}

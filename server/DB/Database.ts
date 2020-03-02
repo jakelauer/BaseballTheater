@@ -1,12 +1,19 @@
 import {MongoClient} from "mongodb";
+import * as fs from "fs";
+import * as path from "path";
 
 class _Database
 {
 	public static Instance = new _Database();
 	private _client: MongoClient;
+	private url: string;
 
 	constructor()
 	{
+		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
+		const keys = JSON.parse(keysFile)[0];
+		this.url = keys.mongo.url;
+
 		this.initialize();
 	}
 
@@ -22,8 +29,7 @@ class _Database
 
 	public initialize()
 	{
-		const url = "mongodb://localhost:27017";
-		MongoClient.connect(url, {
+		MongoClient.connect(this.url, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true
 		}, (err, client) =>

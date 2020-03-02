@@ -10,6 +10,7 @@ import Helmet from "react-helmet";
 import moment from "moment";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {IoIosMenu} from "react-icons/all";
+import {MiniBoxScore} from "./Components/MiniBoxScore";
 
 type HalfInnings = { [key: string]: IHalfInning };
 
@@ -173,72 +174,77 @@ export class LiveGame extends React.Component<Props, State>
 		const keys = this.state.halfInningsKeysSorted?.[this.state.selectedInning - 1];
 
 		return (
-			<div className={styles.inningWrapper}>
-				<Helmet>
-					<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
-				</Helmet>
-				{!isMedium && (
-					<Tabs
-						className={styles.inningTabs}
-						orientation={orientation}
-						variant="scrollable"
-						value={this.state.selectedInning}
-						onChange={(e, i) => this.onInningSelect(i)}
-						indicatorColor="primary"
-						textColor="primary"
-					>
-						{
-							liveData.linescore.innings.map((inning, i) => (
-								<Tab key={i} label={inning.ordinalNum} value={inning.num}/>
-							))
-						}
-					</Tabs>
-				)}
-				{isMedium && (
-					<React.Fragment>
-						<div>
-							<Button
-								ref={this.buttonRef}
-								aria-controls="simple-menu"
-								aria-haspopup="true"
-								className={styles.inningButton}
-								color={"primary"}
-								size={"large"}
-								onClick={() => this.setState({inningMenuOpen: true})}
-								variant={"contained"}
-							>
-								<IoIosMenu style={{
-									marginRight: "0.5rem",
-									fontSize: "1.5rem"
-								}}/>
-								{liveData.linescore.innings[this.state.selectedInning - 1]?.ordinalNum} Inning
-							</Button>
-						</div>
-						<Menu
-							keepMounted
-							anchorEl={this.buttonRef.current}
-							anchorOrigin={{
-								horizontal: "center",
-								vertical: "top"
-							}}
-							open={this.state.inningMenuOpen}
-							onClose={this.onMenuClose}
+			<div className={styles.wrapper}>
+				<div className={styles.miniBoxWrap}>
+					<MiniBoxScore game={this.props.liveData}/>
+				</div>
+				<div className={styles.inningWrapper}>
+					<Helmet>
+						<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+					</Helmet>
+					{!isMedium && (
+						<Tabs
+							className={styles.inningTabs}
+							orientation={orientation}
+							variant="scrollable"
+							value={this.state.selectedInning}
+							onChange={(e, i) => this.onInningSelect(i)}
+							indicatorColor="primary"
+							textColor="primary"
 						>
 							{
 								liveData.linescore.innings.map((inning, i) => (
-									<MenuItem onClick={_ => this.onMenuSelect(i + 1)}>{inning.ordinalNum} Inning</MenuItem>
+									<Tab key={i} label={inning?.ordinalNum} value={inning?.num}/>
 								))
 							}
-						</Menu>
-					</React.Fragment>
-				)}
+						</Tabs>
+					)}
+					{isMedium && (
+						<React.Fragment>
+							<div>
+								<Button
+									ref={this.buttonRef}
+									aria-controls="simple-menu"
+									aria-haspopup="true"
+									className={styles.inningButton}
+									color={"primary"}
+									size={"large"}
+									onClick={() => this.setState({inningMenuOpen: true})}
+									variant={"contained"}
+								>
+									<IoIosMenu style={{
+										marginRight: "0.5rem",
+										fontSize: "1.5rem"
+									}}/>
+									{liveData.linescore.innings[this.state.selectedInning - 1]?.ordinalNum} Inning
+								</Button>
+							</div>
+							<Menu
+								keepMounted
+								anchorEl={this.buttonRef.current}
+								anchorOrigin={{
+									horizontal: "center",
+									vertical: "top"
+								}}
+								open={this.state.inningMenuOpen}
+								onClose={this.onMenuClose}
+							>
+								{
+									liveData.linescore.innings.map((inning, i) => (
+										<MenuItem onClick={_ => this.onMenuSelect(i + 1)}>{inning.ordinalNum} Inning</MenuItem>
+									))
+								}
+							</Menu>
+						</React.Fragment>
+					)}
 
-				{halfInnings && keys &&
-                <Inning
-                    halfInnings={halfInnings}
-                    keysSorted={keys}
-                />
-				}
+					{halfInnings && keys &&
+                    <Inning
+                        halfInnings={halfInnings}
+                        keysSorted={keys}
+                    />
+					}
+				</div>
 			</div>
 		);
 

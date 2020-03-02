@@ -2,9 +2,9 @@ import {fetch} from "cross-fetch";
 import {Express} from "express";
 import {NextFunction, Request, Response} from "express-serve-static-core";
 import {Auth} from "./auth";
-import {isProd} from "../config/config";
 import {Search} from "./search";
 import apicache from "apicache";
+import {Config} from "../config/config";
 
 const cache = apicache.middleware;
 
@@ -61,15 +61,9 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			throw e;
 		}
 
-		const host = !isProd
-			? "http://jlauer.local:3000"
-			: ``;
-
-		console.log(host);
+		const host = Config.host.replace("local:5000", "local:3000");
 
 		const state = decodeURIComponent(req.query.state) || "/";
-
-		console.log(host + state);
 
 		res.redirect(host + state);
 	});
@@ -78,7 +72,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 	{
 		const result = await Auth.getRefreshAuthStatus(req, res);
 
-		res.send(result);
+		res.send(result ?? {});
 	});
 
 	app.post("/auth/save-settings", async (req, res) =>
