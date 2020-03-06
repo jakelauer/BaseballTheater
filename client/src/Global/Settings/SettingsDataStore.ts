@@ -61,7 +61,7 @@ class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
 	public setFavoriteTeams(teams: (keyof ITeams)[])
 	{
 		this.update({
-			favoriteTeams: teams
+			favoriteTeams: teams.filter(t => t.toLocaleLowerCase() !== "chw")
 		});
 	}
 

@@ -7,7 +7,6 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Switch from "@material-ui/core/Switch";
 import ListItem from "@material-ui/core/ListItem";
 import Select from "@material-ui/core/Select";
-import {ITeams, Teams} from "baseball-theater-engine";
 import MenuItem from "@material-ui/core/MenuItem";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -17,6 +16,7 @@ import {GameTabs} from "../../Global/Routes/Routes";
 import Divider from "@material-ui/core/Divider";
 import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
 import {Upsell} from "../../UI/Upsell";
+import {ITeams, TeamList, Teams} from "baseball-theater-engine";
 
 interface ISettingsAreaProps
 {
@@ -84,6 +84,20 @@ export default class SettingsArea extends React.Component<Props, State>
 			"LiveGame": "Play-by-play"
 		};
 
+		const ogTeamList = Teams.TeamList;
+		const teamNames = Object.values(ogTeamList);
+		const uniqueTeamNames = Array.from(new Set(teamNames));
+
+		// This is convoluted... but it basically makes a unique list of team names, then gets the team file codes from those.
+		const reversedTeamList = Object.keys(TeamList).reduce((obj, key) =>
+		{
+			const val = TeamList[key as keyof typeof TeamList] as string;
+			return {...obj, ...{[val as string]: key}};
+		}, {}) as { [key: string]: string };
+
+		const teamList = uniqueTeamNames.map(v => reversedTeamList[v]) as (keyof ITeams)[];
+
+
 		return (
 			<Container maxWidth={"sm"} style={{marginLeft: 0, paddingTop: "2rem"}}>
 				<Typography variant={"h4"}>
@@ -118,7 +132,7 @@ export default class SettingsArea extends React.Component<Props, State>
 											: valueArray.map(a => a.toUpperCase()).join(", ");
 									}}
 								>
-									{Object.keys(Teams.TeamList).map(key => (
+									{teamList.map(key => (
 										<MenuItem value={key} style={{padding: 5}}>
 											<Checkbox checked={this.state.settings.favoriteTeams.indexOf(key as keyof ITeams) > -1}/>
 											{Teams.TeamList[key as keyof ITeams]}
