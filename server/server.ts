@@ -8,7 +8,8 @@ import serveStatic from "serve-static";
 import {Search} from "./Local/search";
 import bodyParser from "body-parser";
 import {Config} from "./config/config";
-
+import {Auth} from "./Local/auth";
+import {Database} from "./DB/Database";
 
 // Create the app
 const app = express();
@@ -19,8 +20,8 @@ const clientFolder = path.join(process.cwd(), 'client');
 app.use(express.static(clientFolder, {
 	cacheControl: true
 }));
-app.use(compression());
-app.use(cookieParser());
+app.use(compression() as any);
+app.use(cookieParser() as any);
 app.use(bodyParser.json({
 	type: ['application/json', 'text/plain']
 }) as any);
@@ -35,8 +36,6 @@ app.get("/service-worker.js", (req, res) =>
 	serveStatic("/service-worker.js");
 });
 
-Search.initialize();
-
 // Register endpoints
 RegisterPlaybackEndpoints(app);
 RegisterLocalEndpoints(app, clientFolder);
@@ -44,3 +43,7 @@ RegisterLocalEndpoints(app, clientFolder);
 // Start the server
 const server = app.listen(port, () => console.log(`Listening on port ${port}`));
 server.setTimeout(10000);
+
+Search.initialize();
+Auth.initialize();
+Database.initialize();

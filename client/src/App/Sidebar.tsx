@@ -211,6 +211,7 @@ class Sidebar extends React.Component<Props, State>
 					<p>Diamond Sponsors</p>
 					<Sponsor imagePath={"/assets/backers/playback.svg"} url={"https://getplayback.com"}/>
 					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
+					<Sponsor imagePath={"/assets/backers/carlsplace.png"} url={"https://www.carlofet.com/?utm_medium=advertising&utm_source=baseballtheater&utm_campaign=baseballtheater"}/>
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
 				</div>
 				<div className={styles.bottom}>

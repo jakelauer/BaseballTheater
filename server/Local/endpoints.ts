@@ -27,7 +27,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			});
 	});
 
-	app.get("/api/search", cache("1 minute"), (req, res) =>
+	app.get("/api/search", cache("1 minute"), async (req, res) =>
 	{
 		const text: string = req.query.text;
 		const gameIds = req.query.gameIds?.split(",")?.map((s: string) => parseInt(s));
@@ -35,7 +35,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 
 		try
 		{
-			const results = Search.doSearch({text, gameIds}, page) ?? [];
+			const results = await Search.doSearch({text, gameIds}, page) ?? [];
 
 			res.send(results);
 		}

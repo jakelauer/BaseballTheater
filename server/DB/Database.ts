@@ -13,8 +13,6 @@ class _Database
 		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
 		const keys = JSON.parse(keysFile)[0];
 		this.url = keys.mongo.url;
-
-		this.initialize();
 	}
 
 	private get client()

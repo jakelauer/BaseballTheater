@@ -30,6 +30,7 @@
     "eslint-plugin-import": "^2.20.1",
     "express": "4.17.1",
     "fuse.js": "^3.4.6",
+    "flexsearch": "^0.6.32",
     "apicache": "^1.5.3",
     "express-serve-static-core": "^0.1.1",
     "moment": "^2.24.0",

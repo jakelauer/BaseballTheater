@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import {IHighlightSearchItem} from "../../baseball-theater-engine/contract";
-import Fuse from 'fuse.js';
+import FlexSearch from "flexsearch";
 
 interface IFuseHighlight
 {
@@ -14,8 +14,20 @@ class SearchInternal
 {
 	public static Instance = new SearchInternal();
 	private allHighlights: IHighlightSearchItem[] = [];
-	private highlightsSearchable: IFuseHighlight[] = [];
 	private loadedFilesSizes: { [key: string]: number } = {};
+	private flexSearch = FlexSearch.create({
+		profile: "fast",
+		doc: {
+			id: "highlight:guid",
+			field: [
+				"highlight:headline",
+				"highlight:description",
+				"highlight:blurb",
+				"highlight:keywordsAll:displayName",
+				"highlight:keywordsAll:value"
+			]
+		}
+	});
 
 	public initialize()
 	{
@@ -27,14 +39,28 @@ class SearchInternal
 		setTimeout(() => this.loadIntoMemory(), 1000 * 60 * 10);
 	};
 
+	private afterAllLoaded(startingCount: number)
+	{
+		this.allHighlights = this.allHighlights.sort((a, b) =>
+		{
+			return b.game_pk - a.game_pk;
+		});
+
+		const finalCount = this.allHighlights.length;
+
+		console.log(`Loaded ${finalCount - startingCount} new highlights.`);
+	}
+
 	private loadIntoMemory()
 	{
 		console.log("Loading highights at " + Date.now());
 
 		const startingCount = this.allHighlights.length;
 
-		const files = fs.readdirSync("C:/highlightdata");
-		files.reverse().forEach(file =>
+		const files = fs.readdirSync("C:/highlightdata").filter(a => a.includes("2020") || a.includes("2019"));
+		let totalLoaded = 0;
+		const filesLength = files.length;
+		files.reverse().forEach((file, i) =>
 		{
 			try
 			{
@@ -44,13 +70,39 @@ class SearchInternal
 				const knownFileSizeBytes = this.loadedFilesSizes[filePath] ?? -1;
 				if (knownFileSizeBytes !== fileSizeInBytes)
 				{
-					console.log(`Loading ${filePath}`);
-					const fileJson = fs.readFileSync(filePath);
-					const fileHighlights = JSON.parse(fileJson.toString()) as IHighlightSearchItem[];
-					const newHighlights = fileHighlights.filter(h => this.allHighlights.indexOf(h) === -1);
-					this.allHighlights.push(...newHighlights);
+					fs.readFile(filePath, (err, fileJson) =>
+					{
+						totalLoaded++;
 
-					this.loadedFilesSizes[filePath] = fileSizeInBytes;
+						if (err)
+						{
+							console.error(err);
+						}
+						else
+						{
+							const fileHighlights = JSON.parse(fileJson.toString()) as IHighlightSearchItem[];
+							const newHighlights = fileHighlights.filter(h => this.allHighlights.indexOf(h) === -1);
+
+							this.flexSearch.add(newHighlights);
+
+							this.allHighlights.push(...newHighlights);
+
+							this.loadedFilesSizes[filePath] = fileSizeInBytes;
+
+							console.log(`Loaded and indexed ${filePath}. ${totalLoaded} of ${filesLength}`);
+						}
+
+
+						if (totalLoaded === filesLength)
+						{
+							this.afterAllLoaded(startingCount);
+						}
+
+					});
+				}
+				else
+				{
+					totalLoaded++;
 				}
 			}
 			catch (e)
@@ -59,40 +111,24 @@ class SearchInternal
 			}
 		});
 
-		this.highlightsSearchable = this.allHighlights.map((h: IHighlightSearchItem, i) => ({
-			index: i,
-			searchText: `${h.highlight.title} ${h.highlight.description} ${h.highlight.date} ${h.highlight.blurb}`,
-			game_pk: h.game_pk
-		}));
-
-		const finalCount = this.highlightsSearchable.length;
-		console.log(`Loaded ${finalCount - startingCount} new highlights.`);
 
 		this.loadTimer();
 	}
 
-	public doSearch(query: { text: string, gameIds?: number[] }, page = 0)
+	public async doSearch(query: { text: string, gameIds?: number[] }, page = 0)
 	{
-		const fuse = new Fuse(this.highlightsSearchable, {
-			sort: false,
-			threshold: 0.2,
-			distance: 10,
-			minMatchCharLength: 2,
-			keys: [
-				"searchText"
-			]
-		});
+		let matches = await this.flexSearch.search(query.text, {
+			sort: (a: IHighlightSearchItem, b: IHighlightSearchItem) => b.game_pk - a.game_pk
+		} as any);
 
-		const matches = fuse.search(query.text);
-
-		let trueMatches = matches.map(m => this.allHighlights[m.index]);
+		let highlightMatches = matches as IHighlightSearchItem[];
 
 		if (query.gameIds)
 		{
-			trueMatches = trueMatches.filter(a => query.gameIds.includes(a.game_pk));
+			highlightMatches = highlightMatches.filter(a => query.gameIds.includes(a.game_pk));
 		}
 
-		return trueMatches.slice(page * 20, (page + 1) * 20);
+		return highlightMatches.slice(page * 20, (page + 1) * 20);
 	}
 }
 

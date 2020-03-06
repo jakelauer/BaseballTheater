@@ -49,8 +49,6 @@ class _Auth
 
 		_Auth.EncryptionKey = new Buffer(keys.crypto.key32);
 		_Auth.EncryptionIv = new Buffer(keys.crypto.iv16);
-
-		this.initialize();
 	}
 
 	private static getRedirectUri()
