@@ -14,6 +14,7 @@ import {SiteRoutes} from "../../Global/Routes/Routes";
 import Button from "@material-ui/core/Button";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import Typography from "@material-ui/core/Typography";
+import Helmet from "react-helmet";
 
 interface ISearchAreaParams
 {
@@ -125,6 +126,9 @@ const SearchArea: React.FC<Props> = (props) =>
 
 	return (
 		<div className={styles.wrapper} style={{marginTop: props.match.params.gameIds ? "2rem" : "0"}}>
+			<Helmet>
+				<title>{`Search: ${text}`}</title>
+			</Helmet>
 			{!props.match.params.gameIds && (
 				<div className={styles.boxWrapper}>
 					<Paper className={classes.root + " " + styles.paper}>
@@ -147,6 +151,9 @@ const SearchArea: React.FC<Props> = (props) =>
 				</div>
 			)}
 			<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
+				<Typography variant={"h4"}>Search: {text}</Typography>
+			</Grid>
+			<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
 				{highlightsRendered}
 			</Grid>
 			{highlights.length > 0 && highlights.length % 20 === 0 && (
@@ -163,7 +170,9 @@ const SearchArea: React.FC<Props> = (props) =>
 			)}
 
 			{!isLoading && highlights.length === 0 && text.length >= 3 && (
-				<Typography>No Highlights Found</Typography>
+				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
+					<Typography>No Highlights Found</Typography>
+				</Grid>
 			)}
 		</div>
 	);

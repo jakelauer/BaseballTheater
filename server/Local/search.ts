@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import {IHighlightSearchItem} from "../../baseball-theater-engine/contract";
 
-interface IFuseHighlight
+interface ISearchable
 {
 	index: number;
 	searchText: string;
@@ -13,7 +13,7 @@ class SearchInternal
 {
 	public static Instance = new SearchInternal();
 	private allHighlights: IHighlightSearchItem[] = [];
-	private allSearchable: string[] = [];
+	private allSearchable: ISearchable[] = [];
 	private loadedFilesSizes: { [key: string]: number } = {};
 
 	public initialize()
@@ -31,6 +31,20 @@ class SearchInternal
 		this.allHighlights = this.allHighlights.sort((a, b) =>
 		{
 			return b.game_pk - a.game_pk;
+		});
+
+		this.allSearchable = this.allHighlights.map((h, i) =>
+		{
+			const keywords = h.highlight.keywordsAll.map(k => k.value + " " + k.displayName);
+			const searchText = `${h.highlight?.headline ?? ""} ${h.highlight?.blurb ?? ""} ${h.highlight?.kicker ?? ""} ${h.highlight?.description ?? ""} ${keywords}`
+				.replace(/\W/g, '')
+				.toUpperCase();
+
+			return {
+				game_pk: h.game_pk,
+				index: i,
+				searchText
+			};
 		});
 
 		const finalCount = this.allHighlights.length;
@@ -103,32 +117,24 @@ class SearchInternal
 
 	public async doSearch(query: { text: string, gameIds?: number[] }, page = 0)
 	{
-		const upperWords = query.text.toUpperCase().replace(/\W/g, '').split(" ");
+		const upperWords = query.text.toUpperCase().replace(/[\W_]/g, '').split(" ");
 
-		let matches = this.allHighlights.filter(h =>
+		let start = this.allSearchable;
+		let matches = [];
+
+		if (query.gameIds)
 		{
-			const keywords = h.highlight.keywordsAll.map(k => k.value + " " + k.displayName);
+			start = start.filter(a => query.gameIds.includes(a.game_pk));
+		}
 
-			const checkAgainst = `${h.highlight?.headline ?? ""} ${h.highlight?.blurb ?? ""} ${h.highlight?.kicker ?? ""} ${h.highlight?.description ?? ""} ${keywords}`
-				.replace(/\W/g, '')
-				.toUpperCase();
-
-			let matched = upperWords.every(word => checkAgainst.includes(word));
-
-			if (query.gameIds)
-			{
-				matched = matched && query.gameIds.includes(h.game_pk);
-			}
+		matches = start.filter(h =>
+		{
+			let matched = upperWords.every(word => h.searchText.includes(word));
 
 			return matched;
 		});
 
-		if (query.gameIds)
-		{
-			matches = matches.filter(a => query.gameIds.includes(a.game_pk));
-		}
-
-		return matches.slice(page * 20, (page + 1) * 20);
+		return matches.slice(page * 20, (page + 1) * 20).map(m => this.allHighlights[m.index]);
 	}
 }
 
