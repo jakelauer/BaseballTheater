@@ -100,11 +100,16 @@ export class Highlight extends React.Component<Props, State>
 
 		const mediaTitle = media?.title ?? "";
 
-		let title = mediaTitle.match(/recap/gi) ?? false
+		const isRecap = mediaTitle.match(/recap/gi) ?? false;
+		const isCondensed = mediaTitle.match(/cg/gi) ?? false;
+
+		let title = isRecap
 			? "Recap"
-			: mediaTitle.match(/cg/gi) ?? false
+			: isCondensed
 				? "Condensed Game"
 				: media?.title;
+
+		const description = isRecap || isCondensed ? "" : media?.description;
 
 		const gamePk = media?.keywordsAll?.find(k => k.type === "game_pk")?.value;
 
@@ -134,7 +139,7 @@ export class Highlight extends React.Component<Props, State>
 										</Typography>
 										{SettingsDataStore.state.highlightDescriptions && (
 											<Typography variant="body2" color="textSecondary" component="p">
-												{media.description}
+												{description}
 											</Typography>
 										)}
 									</a>
