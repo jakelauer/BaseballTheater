@@ -182,11 +182,11 @@ export class GameList extends React.Component<Props, State>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("StatCast", gameIds)}/>}>
 									StatCast
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("home run", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("home_run", gameIds)}/>}>
 									Home Runs
 								</Button>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("defense", gameIds)}/>}>
-									Defense
+									Top Defense
 								</Button>
 							</ButtonGroup>
 						</div>

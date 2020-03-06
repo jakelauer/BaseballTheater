@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import {IHighlightSearchItem} from "../../baseball-theater-engine/contract";
-import FlexSearch from "flexsearch";
 
 interface IFuseHighlight
 {
@@ -14,20 +13,8 @@ class SearchInternal
 {
 	public static Instance = new SearchInternal();
 	private allHighlights: IHighlightSearchItem[] = [];
+	private allSearchable: string[] = [];
 	private loadedFilesSizes: { [key: string]: number } = {};
-	private flexSearch = FlexSearch.create({
-		profile: "fast",
-		doc: {
-			id: "highlight:guid",
-			field: [
-				"highlight:headline",
-				"highlight:description",
-				"highlight:blurb",
-				"highlight:keywordsAll:displayName",
-				"highlight:keywordsAll:value"
-			]
-		}
-	});
 
 	public initialize()
 	{
@@ -57,9 +44,10 @@ class SearchInternal
 
 		const startingCount = this.allHighlights.length;
 
-		const files = fs.readdirSync("C:/highlightdata").filter(a => a.includes("2020") || a.includes("2019"));
+		const files = fs.readdirSync("C:/highlightdata");
 		let totalLoaded = 0;
 		const filesLength = files.length;
+		console.log(`${filesLength} files`);
 		files.reverse().forEach((file, i) =>
 		{
 			try
@@ -82,8 +70,6 @@ class SearchInternal
 						{
 							const fileHighlights = JSON.parse(fileJson.toString()) as IHighlightSearchItem[];
 							const newHighlights = fileHighlights.filter(h => this.allHighlights.indexOf(h) === -1);
-
-							this.flexSearch.add(newHighlights);
 
 							this.allHighlights.push(...newHighlights);
 
@@ -117,18 +103,32 @@ class SearchInternal
 
 	public async doSearch(query: { text: string, gameIds?: number[] }, page = 0)
 	{
-		let matches = await this.flexSearch.search(query.text, {
-			sort: (a: IHighlightSearchItem, b: IHighlightSearchItem) => b.game_pk - a.game_pk
-		} as any);
+		const upperWords = query.text.toUpperCase().replace(/\W/g, '').split(" ");
 
-		let highlightMatches = matches as IHighlightSearchItem[];
+		let matches = this.allHighlights.filter(h =>
+		{
+			const keywords = h.highlight.keywordsAll.map(k => k.value + " " + k.displayName);
+
+			const checkAgainst = `${h.highlight?.headline ?? ""} ${h.highlight?.blurb ?? ""} ${h.highlight?.kicker ?? ""} ${h.highlight?.description ?? ""} ${keywords}`
+				.replace(/\W/g, '')
+				.toUpperCase();
+
+			let matched = upperWords.every(word => checkAgainst.includes(word));
+
+			if (query.gameIds)
+			{
+				matched = matched && query.gameIds.includes(h.game_pk);
+			}
+
+			return matched;
+		});
 
 		if (query.gameIds)
 		{
-			highlightMatches = highlightMatches.filter(a => query.gameIds.includes(a.game_pk));
+			matches = matches.filter(a => query.gameIds.includes(a.game_pk));
 		}
 
-		return highlightMatches.slice(page * 20, (page + 1) * 20);
+		return matches.slice(page * 20, (page + 1) * 20);
 	}
 }
 
