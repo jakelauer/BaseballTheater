@@ -88,7 +88,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 			{
 				const withDayResults = data.filter(r =>
 				{
-					return moment(r.metadata.date).isAfter(limit);
+					return moment(r.date).isAfter(limit);
 				});
 
 				res.send(withDayResults);
@@ -135,7 +135,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 			{
 				const withDayResults = data.filter(r =>
 				{
-					return moment(r.metadata.date).isAfter(limit);
+					return moment(r.date).isAfter(limit);
 				});
 
 				res.send(withDayResults);
@@ -182,7 +182,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 			{
 				const withDayResults = data.filter(r =>
 				{
-					return moment(r.metadata.date).isAfter(limit);
+					return moment(r.date).isAfter(limit);
 				});
 
 				res.send(withDayResults);
@@ -229,7 +229,7 @@ export const RegisterPlaybackEndpoints = (app: Express) =>
 			{
 				const withDayResults = data.filter(r =>
 				{
-					return moment(r.metadata.date).isAfter(limit);
+					return moment(r.date).isAfter(limit);
 				});
 
 				res.send(withDayResults);

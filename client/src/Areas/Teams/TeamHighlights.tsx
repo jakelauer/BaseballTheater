@@ -1,12 +1,12 @@
 import * as React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
 import {ITeams, Teams} from "baseball-theater-engine/contract/teams";
-import {VideoSearchWithMetadata} from "baseball-theater-engine";
 import {CircularProgress, Grid} from "@material-ui/core";
 import styles from "./TeamHighlights.module.scss";
 import {Highlight} from "../../UI/Highlight";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
+import {MediaItem} from "../../../../baseball-theater-engine/contract";
 
 interface ITeamHighlightsProps
 {
@@ -21,7 +21,7 @@ type State = ITeamHighlightsState;
 
 interface ITeamHighlightsState
 {
-	videos: VideoSearchWithMetadata[];
+	videos: MediaItem[];
 	page: number;
 	loading: boolean;
 	authContext: IAuthContext;
@@ -94,7 +94,7 @@ class TeamHighlights extends React.Component<Props, State>
 			}
 		})
 			.then(r => r.json())
-			.then((data: VideoSearchWithMetadata[]) =>
+			.then((data: MediaItem[]) =>
 			{
 				this.setState({
 					videos: [...this.state.videos, ...data],
@@ -118,8 +118,8 @@ class TeamHighlights extends React.Component<Props, State>
 			<div className={styles.wrapper}>
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
 					{this.state.videos.map(video => (
-						<Grid key={video.video.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
-							<Highlight media={video.video} className={styles.highlight}/>
+						<Grid key={video.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
+							<Highlight media={video} className={styles.highlight}/>
 						</Grid>
 					))}
 				</Grid>

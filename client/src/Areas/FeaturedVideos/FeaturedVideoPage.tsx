@@ -1,6 +1,6 @@
 import * as React from "react";
 import {RouteComponentProps} from "react-router";
-import {RecapTags, VideoSearchWithMetadata} from "baseball-theater-engine";
+import {MediaItem, RecapTags} from "baseball-theater-engine";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
 import {StringUtils} from "../../Utility/StringUtils";
 import {Grid} from "@material-ui/core";
@@ -22,7 +22,7 @@ type State = IFeaturedVideoPageState;
 
 interface IFeaturedVideoPageState
 {
-	videos: VideoSearchWithMetadata[];
+	videos: MediaItem[];
 	loading: boolean;
 }
 

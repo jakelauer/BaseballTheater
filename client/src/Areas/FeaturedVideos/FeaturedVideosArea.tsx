@@ -1,10 +1,5 @@
 import * as React from "react";
-import {MlbDataServer, RecapTags, VideoSearchWithMetadata} from "baseball-theater-engine";
-import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import {CircularProgress, Grid} from "@material-ui/core";
-import {StringUtils} from "../../Utility/StringUtils";
-import {Highlight} from "../../UI/Highlight";
-import styles from "../Game/Highlights.module.scss";
+import {MediaItem, RecapTags} from "baseball-theater-engine";
 import {Route} from "react-router";
 import {SiteRoutes} from "../../Global/Routes/Routes";
 import {FeaturedVideoPage} from "./FeaturedVideoPage";
@@ -22,7 +17,7 @@ type State = IFeaturedVideosAreaState;
 
 interface IFeaturedVideosAreaState
 {
-	recapTags: { [K in keyof typeof RecapTags]?: VideoSearchWithMetadata[] };
+	recapTags: { [K in keyof typeof RecapTags]?: MediaItem[] };
 }
 
 export default class FeaturedVideosArea extends React.Component<Props, State>
@@ -40,7 +35,7 @@ export default class FeaturedVideosArea extends React.Component<Props, State>
 	{
 		return (
 			<React.Fragment>
-				<Route path={SiteRoutes.FeaturedVideos.path} component={FeaturedVideoPage} />
+				<Route path={SiteRoutes.FeaturedVideos.path} component={FeaturedVideoPage}/>
 			</React.Fragment>
 		);
 	}

@@ -1,6 +1,6 @@
 ﻿import Internal_DataLoader from "./utils/internal_dataloader";
 import Internal_DataLoaderNode from "./utils/internal_dataloadernode";
-import {CompilationPlaylists, GameMedia, IHighlightSearchItem, LiveData, MediaItem, PlayerListResponse, VideoSearchResults, VideoSearchWithMetadata} from "../contract";
+import {CompilationPlaylists, GameMedia, IHighlightSearchItem, LiveData, MediaItem, PlayerListResponse} from "../contract";
 import moment from "moment";
 import {ISchedule, IScheduleGameList, ITeamDetails} from "../contract/teamschedule";
 import {Standings} from "../contract/standings";
@@ -168,56 +168,26 @@ export class MlbDataServer
 	private searchTag = (tag: string, page = 1) => this.searchTagIso(tag, page, false);
 	private searchTagNode = (tag: string, page = 1) => this.searchTagIso(tag, page, true);
 
-	public videoTagSearchIso(tag: string, page = 1, isNode = false): Promise<VideoSearchWithMetadata[]>
+	public videoTagSearchIso(tag: string, page = 1, isNode = false): Promise<MediaItem[]>
 	{
 		return this.searchTagIso(tag, page, isNode).then(json =>
 		{
-			const docs: VideoSearchResults[] = json.docs;
-			const promises = docs.map(async item =>
-			{
-				const slug = item.slug;
-				const videoDataUrl = `https://www.mlb.com/data-service/en/videos/${slug}`;
-				console.log(videoDataUrl);
+			const docs: MediaItem[] = json.docs;
 
-				const videoJson = isNode
-					? await Internal_DataLoaderNode.load<MediaItem>(videoDataUrl)
-					: await Internal_DataLoader.load<MediaItem>(videoDataUrl);
-
-				return {
-					metadata: item,
-					video: videoJson
-				} as VideoSearchWithMetadata;
-			});
-
-			return Promise.all(promises);
+			return Promise.all(docs);
 		});
 	}
 
-	public videoTagSearch = (tag: string, page = 1): Promise<VideoSearchWithMetadata[]> => this.videoTagSearchIso(tag, page, false);
-	public videoTagSearchNode = (tag: string, page = 1): Promise<VideoSearchWithMetadata[]> => this.videoTagSearchIso(tag, page, true);
+	public videoTagSearch = (tag: string, page = 1): Promise<MediaItem[]> => this.videoTagSearchIso(tag, page, false);
+	public videoTagSearchNode = (tag: string, page = 1): Promise<MediaItem[]> => this.videoTagSearchIso(tag, page, true);
 
-	private videoPlaylistSearchIso(tag: CompilationPlaylists, page = 1, isNode = false): Promise<VideoSearchWithMetadata[]>
+	private videoPlaylistSearchIso(tag: CompilationPlaylists, page = 1, isNode = false): Promise<MediaItem[]>
 	{
 		return this.searchPlaylistIso(tag, page, isNode).then(json =>
 		{
-			const docs: VideoSearchResults[] = json.docs;
-			const promises = docs.map(async item =>
-			{
-				const slug = item.slug;
-				const videoDataUrl = `https://www.mlb.com/data-service/en/videos/${slug}`;
-				console.log(videoDataUrl);
+			const docs: MediaItem[] = json.docs;
 
-				const videoJson = isNode
-					? await Internal_DataLoaderNode.load<MediaItem>(videoDataUrl)
-					: await Internal_DataLoader.load<MediaItem>(videoDataUrl);
-
-				return {
-					metadata: item,
-					video: videoJson
-				};
-			});
-
-			return Promise.all(promises);
+			return Promise.all(docs);
 		});
 	}
 

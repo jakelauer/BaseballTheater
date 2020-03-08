@@ -1,7 +1,7 @@
 import {Utils} from "../utils";
 import {Request, Response} from "express";
-import {VideoSearchWithMetadata} from "../../baseball-theater-engine/contract";
 import moment from "moment";
+import {MediaItem} from "baseball-theater-engine";
 
 export class PlaybackUtils
 {
@@ -18,13 +18,13 @@ export class PlaybackUtils
 		}
 	};
 
-	public static getPagesUntilTimeLimit<T>(promiseGenerator: (page: number) => Promise<VideoSearchWithMetadata[]>, timeLimit: moment.Moment)
+	public static getPagesUntilTimeLimit<T>(promiseGenerator: (page: number) => Promise<MediaItem[]>, timeLimit: moment.Moment)
 	{
 		let page = 1;
-		const results: VideoSearchWithMetadata[] = [];
+		const results: MediaItem[] = [];
 		let hitLimit = false;
 
-		return new Promise<VideoSearchWithMetadata[]>((resolve, reject) =>
+		return new Promise<MediaItem[]>((resolve, reject) =>
 		{
 			const fetchNextPage = (): Promise<void> => promiseGenerator(page)
 				.then(data =>
@@ -34,7 +34,7 @@ export class PlaybackUtils
 					if (data.length > 0)
 					{
 						const oldest = data[data.length - 1];
-						const oldestDate = moment(oldest.metadata.date);
+						const oldestDate = moment(oldest.date);
 						hitLimit = hitLimit || oldestDate.isBefore(timeLimit);
 						if (!hitLimit)
 						{
