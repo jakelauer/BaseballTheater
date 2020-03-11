@@ -8,6 +8,7 @@ import classNames from "classnames";
 import {AuthDataStore, BackerType, IAuthContext} from "../../../Global/AuthDataStore";
 import Tooltip from "@material-ui/core/Tooltip";
 import {GameDataStoreContext} from "./GameDataStore";
+import moment from "moment";
 
 interface IPitchItemProps
 {
@@ -59,16 +60,23 @@ export class PitchItem extends React.Component<Props, State>
 		}
 
 		const authed = AuthDataStore.hasLevel(BackerType.ProBacker);
-		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${pitch.playId}` : "#";
+		const playVideoEnabled = moment().isAfter(moment(pitch.endTime).add(36, "hour"));
+		const href = authed && playVideoEnabled ? `https://baseballsavant.mlb.com/sporty-videos?playId=${pitch.playId}` : "#";
 		const linkClasses = classNames(styles.videoLink, {
 			[styles.unauthed]: !authed
 		});
+		let label = "Video of pitch";
+		if (!playVideoEnabled)
+		{
+			label += " (not available until 2 days after game)";
+		}
 
 		const tooltip = (
 			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
-				<div>Video of play</div>
+				<div>{label}</div>
 			</div>
 		);
+
 
 		return (
 			<GameDataStoreContext.Consumer>
@@ -89,14 +97,17 @@ export class PitchItem extends React.Component<Props, State>
                                     className={linkClasses}
                                     href={href}
                                     onClick={e =>
-									{
-										e.stopPropagation();
-										if (!authed)
-										{
-											gameDataStore.showUpsell(BackerType.ProBacker);
-											e.preventDefault();
-										}
-									}}
+                                    {
+	                                    e.stopPropagation();
+	                                    if (!authed || !playVideoEnabled)
+	                                    {
+		                                    if (!authed)
+		                                    {
+			                                    gameDataStore.showUpsell(BackerType.ProBacker);
+		                                    }
+		                                    e.preventDefault();
+	                                    }
+                                    }}
                                     style={{fontSize: "1.5rem"}}
                                 >
                                     <MdVideoLibrary/>

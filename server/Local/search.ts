@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import {IHighlightSearchItem} from "../../baseball-theater-engine/contract";
+import {MlbDataServer} from "baseball-theater-engine";
+import {IFullVideoSearchQueryParams} from "../../baseball-theater-engine/contract/FullVideoSearch";
+import fetch from "cross-fetch";
 
 interface ISearchable
 {
@@ -83,7 +86,11 @@ class SearchInternal
 						else
 						{
 							const fileHighlights = JSON.parse(fileJson.toString()) as IHighlightSearchItem[];
-							const newHighlights = fileHighlights.filter(h => this.allHighlights.indexOf(h) === -1);
+							const newHighlights = fileHighlights.filter(nh =>
+							{
+								const alreadyFound = this.allHighlights.find(oh => oh.highlight.guid === nh.highlight.guid);
+								return !alreadyFound;
+							});
 
 							this.allHighlights.push(...newHighlights);
 
@@ -135,6 +142,12 @@ class SearchInternal
 		});
 
 		return matches.slice(page * 20, (page + 1) * 20).map(m => this.allHighlights[m.index]);
+	}
+
+	public async doFullSearch(params: IFullVideoSearchQueryParams)
+	{
+		const MLB = new MlbDataServer(undefined, fetch);
+		return await MLB.fullVideoSearch(params);
 	}
 }
 

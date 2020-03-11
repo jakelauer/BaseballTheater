@@ -11,6 +11,7 @@ import {AuthDataStore, BackerType, IAuthContext} from "../../../Global/AuthDataS
 import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import {GameDataStoreContext} from "./GameDataStore";
+import moment from "moment";
 
 interface IPlayItemProps
 {
@@ -68,13 +69,20 @@ export class PlayItem extends React.Component<Props, State>
 		const playId = this.props.play.playEvents?.[playEventsLength - 1]?.playId;
 
 		const authed = AuthDataStore.hasLevel(BackerType.ProBacker);
-		const href = authed ? `https://baseballsavant.mlb.com/sporty-videos?playId=${playId}` : "#";
+		const playVideoEnabled = moment().isAfter(moment(about.endTime).add(36, "hour"));
+		const href = authed && playVideoEnabled ? `https://baseballsavant.mlb.com/sporty-videos?playId=${playId}` : "#";
 		const avatarClasses = classNames(styles.videoAvatar, {
 			[styles.unauthed]: !authed
 		});
+
+		let label = "Video of play";
+		if (!playVideoEnabled)
+		{
+			label += " (not available until 2 days after game)";
+		}
 		const tooltip = (
 			<div style={{textAlign: "center", fontSize: "0.8rem"}}>
-				<div>Video of play</div>
+				<div>{label}</div>
 			</div>
 		);
 
@@ -88,14 +96,17 @@ export class PlayItem extends React.Component<Props, State>
                                 <Avatar className={avatarClasses}>
                                     <a target={"_blank"} href={href}
                                        onClick={e =>
-									   {
-										   e.stopPropagation();
-										   if (!authed)
-										   {
-											   gameDataStore.showUpsell(BackerType.ProBacker);
-											   e.preventDefault();
-										   }
-									   }}>
+                                       {
+	                                       e.stopPropagation();
+	                                       if (!authed || !playVideoEnabled)
+	                                       {
+		                                       if (!authed)
+		                                       {
+			                                       gameDataStore.showUpsell(BackerType.ProBacker);
+		                                       }
+		                                       e.preventDefault();
+	                                       }
+                                       }}>
                                         <MdVideoLibrary/>
                                     </a>
                                 </Avatar>

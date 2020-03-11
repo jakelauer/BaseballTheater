@@ -4,19 +4,42 @@ import {CompilationPlaylists, GameMedia, IHighlightSearchItem, LiveData, MediaIt
 import moment from "moment";
 import {ISchedule, IScheduleGameList, ITeamDetails} from "../contract/teamschedule";
 import {Standings} from "../contract/standings";
+import {ApolloClient} from "apollo-client";
+import {InMemoryCache, NormalizedCacheObject} from 'apollo-cache-inmemory';
+import {HttpLink} from 'apollo-link-http';
+import gql from "graphql-tag";
+import {IFullVideoSearchQueryParams} from "../contract/FullVideoSearch";
 
 export class MlbDataServer
 {
+	private _cache: InMemoryCache;
+	private _mlbLink: HttpLink;
+
+	private client: ApolloClient<NormalizedCacheObject>;
+
 	/**
 	 * Creates a new data server
 	 * @param {(url: string) => string} urlTransformer If you need to use a proxy, this will allow you to hit that URL instead, given the MLB.com url
+	 * @param fetch If serverside, must pass a fetch functio
 	 */
-	constructor(private readonly urlTransformer?: (url: string) => string)
+	constructor(private readonly urlTransformer?: (url: string) => string, fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> = window?.fetch)
 	{
 		if (urlTransformer)
 		{
 			Internal_DataLoader.transformUrl = urlTransformer;
 		}
+
+		this._cache = new InMemoryCache();
+
+		this._mlbLink = new HttpLink({
+			uri: 'https://fastball-gateway.mlb.com/',
+			fetch
+		});
+
+		this.client = new ApolloClient({
+			cache: this._cache,
+			link: this._mlbLink
+		});
 	}
 
 	public async getLiveGame(gameId: number | string)
@@ -203,5 +226,54 @@ export class MlbDataServer
 		}
 
 		return await fetch(url).then(r => r.json()) as IHighlightSearchItem[];
+	}
+
+	public async fullVideoSearch(params: IFullVideoSearchQueryParams)
+	{
+		const query = gql`
+		    query Search(
+		        $query: String!
+		        $page: Int
+		        $limit: Int
+		        $feedPreference: FeedPreference
+		        $languagePreference: LanguagePreference
+		        $searchType: SearchType
+		        $contentPreference: ContentPreference
+		    ) {
+		        search(
+		            query: $query
+		            limit: $limit
+		            page: $page
+		            feedPreference: $feedPreference
+		            languagePreference: $languagePreference
+		            searchType: $searchType
+		            contentPreference: $contentPreference
+		        ) {
+		            plays {
+		                mediaPlayback {
+		                  slug
+		                  blurb
+		                  timestamp
+		                  feeds {
+		                    type
+		                    duration
+		                    image {
+		                      altText
+		                      cuts {
+		                        width
+		                        src
+		                      }
+		                    }
+		                  }
+		                }
+		              }
+		              total
+		        }
+		    }
+		`;
+
+		return await this.client.query<MediaItem>({
+			query
+		});
 	}
 }
