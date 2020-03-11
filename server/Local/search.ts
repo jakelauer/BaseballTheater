@@ -17,6 +17,7 @@ class SearchInternal
 	public static Instance = new SearchInternal();
 	private allHighlights: IHighlightSearchItem[] = [];
 	private allSearchable: ISearchable[] = [];
+	private loadedPlaybackIds: string[] = [];
 	private loadedFilesSizes: { [key: string]: number } = {};
 
 	public initialize()
@@ -86,13 +87,10 @@ class SearchInternal
 						else
 						{
 							const fileHighlights = JSON.parse(fileJson.toString()) as IHighlightSearchItem[];
-							const newHighlights = fileHighlights.filter(nh =>
-							{
-								const alreadyFound = this.allHighlights.find(oh => oh.highlight.guid === nh.highlight.guid);
-								return !alreadyFound;
-							});
+							const newHighlights = fileHighlights.filter(nh => this.loadedPlaybackIds.indexOf(nh.highlight.mediaPlaybackId) === -1);
 
 							this.allHighlights.push(...newHighlights);
+							this.loadedPlaybackIds.push(...newHighlights.map(h => h.highlight.mediaPlaybackId));
 
 							this.loadedFilesSizes[filePath] = fileSizeInBytes;
 
