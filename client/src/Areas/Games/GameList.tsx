@@ -124,7 +124,7 @@ export class GameList extends React.Component<Props, State>
 
 		const favoriteTeams = this.state.settings.favoriteTeams;
 
-		const orderedGames = this.state.scoreboard.dates[0].games.sort((a, b) =>
+		const orderedGames = this.state.scoreboard.dates?.[0]?.games?.sort((a, b) =>
 		{
 			const aIsFavorite = (favoriteTeams.indexOf(a.teams.home.team.fileCode) > -1 || favoriteTeams.indexOf(a.teams.away.team.fileCode) > -1) ? -1 : 0;
 			const bIsFavorite = (favoriteTeams.indexOf(b.teams.home.team.fileCode) > -1 || favoriteTeams.indexOf(b.teams.away.team.fileCode) > -1) ? -1 : 0;
@@ -142,7 +142,7 @@ export class GameList extends React.Component<Props, State>
 			const finalReturn = MlbUtils.gameIsOver(a) ? 1 : 0;
 
 			return favoriteReturn || finalReturn || startTimeReturn;
-		});
+		}) ?? [];
 
 		const gameSummaries = orderedGames
 			.map(game => (

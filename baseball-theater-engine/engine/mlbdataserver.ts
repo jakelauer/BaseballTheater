@@ -22,24 +22,24 @@ export class MlbDataServer
 	 * @param {(url: string) => string} urlTransformer If you need to use a proxy, this will allow you to hit that URL instead, given the MLB.com url
 	 * @param fetch If serverside, must pass a fetch functio
 	 */
-	constructor(private readonly urlTransformer?: (url: string) => string, fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> = window?.fetch)
+	constructor(private readonly urlTransformer?: (url: string) => string)
 	{
 		if (urlTransformer)
 		{
 			Internal_DataLoader.transformUrl = urlTransformer;
 		}
 
-		this._cache = new InMemoryCache();
-
-		this._mlbLink = new HttpLink({
-			uri: 'https://fastball-gateway.mlb.com/',
-			fetch
-		});
-
-		this.client = new ApolloClient({
-			cache: this._cache,
-			link: this._mlbLink
-		});
+		// this._cache = new InMemoryCache();
+		//
+		// this._mlbLink = new HttpLink({
+		// 	uri: 'https://fastball-gateway.mlb.com/',
+		// 	fetch
+		// });
+		//
+		// this.client = new ApolloClient({
+		// 	cache: this._cache,
+		// 	link: this._mlbLink
+		// });
 	}
 
 	public async getLiveGame(gameId: number | string)

@@ -5,8 +5,6 @@ import {Auth} from "./auth";
 import {Search} from "./search";
 import apicache from "apicache";
 import {Config} from "../config/config";
-import {MediaItem} from "baseball-theater-engine";
-import {ApolloQueryResult} from "apollo-client";
 
 const cache = apicache.middleware;
 
@@ -49,23 +47,23 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 
 	app.get("/api/fullsearch", cache("1 minute"), async (req, res) =>
 	{
-		try
-		{
-			const results: ApolloQueryResult<MediaItem> = await Search.doFullSearch({
-				contentPreference: "CMS_FIRST",
-				languagePreference: "EN",
-				limit: 32,
-				page: parseInt(req.query.page),
-				query: req.query.query,
-				searchType: "UNIFIED"
-			});
-
-			res.send(results);
-		}
-		catch (e)
-		{
-			throw e;
-		}
+		// try
+		// {
+		// 	const results: ApolloQueryResult<MediaItem> = await Search.doFullSearch({
+		// 		contentPreference: "CMS_FIRST",
+		// 		languagePreference: "EN",
+		// 		limit: 32,
+		// 		page: parseInt(req.query.page),
+		// 		query: req.query.query,
+		// 		searchType: "UNIFIED"
+		// 	});
+		//
+		// 	res.send(results);
+		// }
+		// catch (e)
+		// {
+		// 	throw e;
+		// }
 	});
 
 	app.get("/auth/authorize", (req, res) =>

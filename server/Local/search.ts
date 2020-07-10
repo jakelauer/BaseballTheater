@@ -3,7 +3,6 @@ import path from "path";
 import {IHighlightSearchItem} from "../../baseball-theater-engine/contract";
 import {MlbDataServer} from "baseball-theater-engine";
 import {IFullVideoSearchQueryParams} from "../../baseball-theater-engine/contract/FullVideoSearch";
-import fetch from "cross-fetch";
 
 interface ISearchable
 {
@@ -144,7 +143,7 @@ class SearchInternal
 
 	public async doFullSearch(params: IFullVideoSearchQueryParams)
 	{
-		const MLB = new MlbDataServer(undefined, fetch);
+		const MLB = new MlbDataServer(undefined);
 		return await MLB.fullVideoSearch(params);
 	}
 }
