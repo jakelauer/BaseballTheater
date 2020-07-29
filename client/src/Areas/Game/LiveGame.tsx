@@ -230,8 +230,12 @@ export class LiveGame extends React.Component<Props, State>
 								onClose={this.onMenuClose}
 							>
 								{
-									liveData.linescore.innings.map((inning, i) => (
-										<MenuItem onClick={_ => this.onMenuSelect(i + 1)}>{inning.ordinalNum} Inning</MenuItem>
+									liveData.linescore.innings.slice(0, liveData.linescore.currentInning).map((inning, i) => (
+										<MenuItem onClick={_ => this.onMenuSelect(i + 1)}>
+											{inning?.ordinalNum
+												? `${inning?.ordinalNum} Inning`
+												: `Inning ${i + 1}`}
+										</MenuItem>
 									))
 								}
 							</Menu>

@@ -54,6 +54,8 @@ export class PlayItem extends React.Component<Props, State>
 
 	public render()
 	{
+		const play = this.props.play;
+
 		const {
 			about,
 			result,
@@ -114,7 +116,7 @@ export class PlayItem extends React.Component<Props, State>
 							}
 						</ListItemAvatar>
 						<ListItemText
-							primary={result.event}
+							primary={result.event || `${play.matchup.batter.fullName} hits against ${play.matchup.pitcher.fullName}`}
 							secondary={result.description}
 						/>
 						<ListItemSecondaryAction>

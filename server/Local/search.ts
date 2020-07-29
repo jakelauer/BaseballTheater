@@ -61,7 +61,7 @@ class SearchInternal
 
 		const startingCount = this.allHighlights.length;
 
-		const files = fs.readdirSync("C:/highlightdata");
+		const files = fs.readdirSync("C:/highlightdata").filter(f => f.includes("2019") || f.includes("2020"));
 		let totalLoaded = 0;
 		const filesLength = files.length;
 		console.log(`${filesLength} files`);

@@ -17,7 +17,7 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 {
 	private interval: number = null;
 
-	constructor(private readonly gamePk: string, private readonly ms: number = 30 * 1000)
+	constructor(private readonly gamePk: string, private readonly ms: number = 10 * 1000)
 	{
 		super({
 			updateTime: moment(),
