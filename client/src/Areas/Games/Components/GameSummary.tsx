@@ -78,18 +78,22 @@ export class GameSummary extends React.Component<Props, State>
 		const homeIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.home.team.fileCode) > -1;
 		const awayIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.away.team.fileCode) > -1;
 
+		const gameTime = moment(gameDate);
+		const future = moment().isBefore(gameDate);
+		const hasScore = (linescore?.innings?.length ?? 0) > 0 && (status.abstractGameCode === "L" || status.abstractGameCode === "F");
+
 		return (
 			<Paper className={styles.gameSummary} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} elevation={elevation}>
 				{status && (
 					<Status status={status} gameDate={gameDate} linescore={linescore}/>
 				)}
-				{linescore &&
+				{(!future && hasScore) &&
                 <React.Fragment>
                     <Score home={false} team={teams.away} isFavorite={awayIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
                     <Score home={true} team={teams.home} isFavorite={homeIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
                 </React.Fragment>
 				}
-				{!linescore &&
+				{(future || !hasScore) &&
                 <React.Fragment>
                     <Preview home={false} isFavorite={awayIsFavorite} team={teams.away}/>
                     <Preview home={true} isFavorite={homeIsFavorite} team={teams.home}/>
@@ -201,16 +205,18 @@ interface IStatusProps
 
 const Status = (props: IStatusProps) =>
 {
-	const future = props.status.statusCode === "S";
-	const hasScore = props.linescore && props.linescore.innings && props.linescore.innings.length > 0;
-	const date = moment(props.gameDate).local();
+	const gameDate = moment(props.gameDate);
+	const localDate = gameDate.local();
+	const future = moment().isBefore(gameDate);
+	const finished = props.status.abstractGameCode === "F";
+	const hasScore = (props.linescore?.innings?.length ?? 0) > 0 && (props.status.abstractGameCode === "L" || props.status.abstractGameCode === "F");
 
 	return (
 		<div className={styles.status}>
 			<div className={styles.statusDetail}>{props.status.detailedState}</div>
-			{future &&
+			{future && !finished &&
             <div className={styles.statusInfo}>
-				{date.format("hh:mma")}
+				{localDate.format("hh:mma")}
             </div>
 			}
 			{hasScore &&

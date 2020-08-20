@@ -1,6 +1,5 @@
 import * as React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
-import {ITeams, Teams} from "baseball-theater-engine/contract/teams";
 import {CircularProgress, Grid} from "@material-ui/core";
 import styles from "./TeamHighlights.module.scss";
 import {Highlight} from "../../UI/Highlight";
@@ -111,8 +110,6 @@ class TeamHighlights extends React.Component<Props, State>
 		{
 			return "Requires Pro Backer";
 		}
-
-		const team = Teams.TeamList[this.props.match.params.teamFileCode as keyof ITeams];
 
 		return (
 			<div className={styles.wrapper}>

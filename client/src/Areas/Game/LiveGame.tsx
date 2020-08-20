@@ -66,10 +66,11 @@ export class LiveGame extends React.Component<Props, State>
 		let shouldUpdate = false;
 		let newState: State = {...this.state};
 
-		if (this.props.liveData && this.state.selectedInning === -1)
+		if (this.props.liveData?.liveData.linescore?.innings && this.state.selectedInning === -1)
 		{
 			shouldUpdate = true;
-			newState.selectedInning = this.props.liveData.liveData.linescore.innings.length;
+			const innings = this.props.liveData?.liveData?.linescore?.innings.filter(a => !!a);
+			newState.selectedInning = innings.length;
 		}
 
 		if (!this.state.halfInnings.length && !!this.props.liveData?.liveData)

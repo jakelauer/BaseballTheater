@@ -82,17 +82,28 @@ class GameArea extends React.Component<Props, State>
 			return <CircularProgress/>;
 		}
 
+		let content = null;
 		switch (this.state.tabValue)
 		{
 			case "Wrap":
-				return <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
+				content = <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
+				break;
 			case "LiveGame":
-				return <LiveGame liveData={this.state.gameData.liveData}/>;
+				content = <LiveGame liveData={this.state.gameData.liveData}/>;
+				break;
 			case "BoxScore":
-				return <BoxScore liveData={this.state.gameData.liveData}/>;
+				content = <BoxScore liveData={this.state.gameData.liveData}/>;
+				break;
 			case "Highlights":
-				return <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId} liveData={this.state.gameData.liveData}/>;
+				content = <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId} liveData={this.state.gameData.liveData}/>;
+				break;
 		}
+
+		return (
+			<ErrorBoundary>
+				{content}
+			</ErrorBoundary>
+		);
 	}
 
 	private hasWrap()

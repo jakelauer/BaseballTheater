@@ -53,7 +53,7 @@ export class Highlights extends React.Component<Props, State>
 
 		const recap = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("recap")));
 		const condensed = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("condensed")));
-		const rest = this.highlights.filter(a => a !== condensed && a !== recap);
+		const rest = this.highlights.filter(a => a !== condensed && a !== recap && a.image !== undefined);
 
 		const videosOrSkeleton = rest.length ? rest : Array(20).fill(0);
 
@@ -72,12 +72,12 @@ export class Highlights extends React.Component<Props, State>
 					<title>{`Highlights - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
 				</Helmet>
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
-					{recap &&
+					{recap && recap.image &&
                     <Grid item lg={4} xs={12} sm={12} md={6}>
                         <Highlight media={recap} className={styles.highlight}/>
                     </Grid>
 					}
-					{condensed &&
+					{condensed && condensed.image &&
                     <Grid item lg={4} xs={12} sm={12} md={6}>
                         <Highlight media={condensed} className={styles.highlight}/>
                     </Grid>

@@ -14,13 +14,12 @@ import {Teams} from "baseball-theater-engine";
 import {AuthDataStore, BackerType, IAuthContext} from "../Global/AuthDataStore";
 import cookies from "browser-cookies";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Button, ListItemAvatar} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItemAvatar} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 import classNames from "classnames";
 import {FaVideo, FiDownloadCloud} from "react-icons/all";
 import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
 import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
 import Divider from "@material-ui/core/Divider";
 
@@ -143,16 +142,17 @@ class Sidebar extends React.Component<Props, State>
 					Baseball Theater
 				</Link>
 				<List component={"nav"}>
-					{this.state.waitingForUpdate && (
-						<React.Fragment>
-							<Tooltip title={"Click to update"}>
-								<MenuItem onClick={ServiceWorkerUpdate.update} icon={<FiDownloadCloud/>} textStyle={{color: "#ce0f0f"}}>
-									New Version Available
-								</MenuItem>
-							</Tooltip>
-							<Divider/>
-						</React.Fragment>
-					)}
+					<Dialog open={this.state.waitingForUpdate}>
+						<DialogTitle>Update Available</DialogTitle>
+						<DialogContent>
+							<Typography>You are using an old version of Baseball Theater. Update to the new one!</Typography>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={ServiceWorkerUpdate.update} startIcon={<FiDownloadCloud/>} variant={"contained"}>
+								Update Now
+							</Button>
+						</DialogActions>
+					</Dialog>
 					{isStarBacker && this.state.settings.favoriteTeams.length > 0 && (
 						<React.Fragment>
 							{this.state.settings.favoriteTeams.map(team => (

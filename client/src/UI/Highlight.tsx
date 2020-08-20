@@ -41,7 +41,7 @@ export class Highlight extends React.Component<Props, State>
 
 	private get image()
 	{
-		const images = this.props.media.image.cuts;
+		const images = this.props.media.image?.cuts ?? [];
 
 		return images.find(a => a.aspectRatio === "16:9" && a.width < 1000 && a.width > 500)
 			|| images.find(a => a.aspectRatio === "16:9")
@@ -66,7 +66,7 @@ export class Highlight extends React.Component<Props, State>
 	{
 		const {media, loading} = this.props;
 
-		if (!media)
+		if (!media?.image)
 		{
 			return null;
 		}
@@ -122,8 +122,8 @@ export class Highlight extends React.Component<Props, State>
 						<a href={this.defaultVideo.url} target={"_blank"}>
 							<CardMedia
 								className={styles.cardMedia}
-								image={this.image.src}
-								title={media.image.altText}
+								image={this.image?.src}
+								title={media?.image?.altText}
 							/>
 
 						</a>

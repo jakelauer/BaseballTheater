@@ -113,7 +113,8 @@ export class MlbDataServer
 	public async getStandings(asOfDate: moment.Moment)
 	{
 		const date = asOfDate.format("YYYY-MM-DD");
-		const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2019&date=${date}&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))`;
+		const year = asOfDate.format("YYYY");
+		const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${year}&date=${date}&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))`;
 
 		return await Internal_DataLoader.load<Standings>(
 			url,
