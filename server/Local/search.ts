@@ -138,6 +138,11 @@ class SearchInternal
 			return matched;
 		});
 
+		matches = matches.sort((a, b) =>
+		{
+			return b.game_pk - a.game_pk;
+		})
+
 		return matches.slice(page * 20, (page + 1) * 20).map(m => this.allHighlights[m.index]);
 	}
 

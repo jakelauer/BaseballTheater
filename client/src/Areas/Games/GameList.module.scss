@@ -27,20 +27,35 @@
 .buttonGroup
 {
 	display: flex;
-	width: 33vw;
+	width: 50vw;
+
+	:global(.r-large) &
+	{
+		width: 65vw;
+	}
 
 	:global(.r-medium) &
 	{
-		width: 50vw;
+		width: 65vw;
 	}
 
 	:global(.r-small) &
 	{
 		width: 100%;
+		flex-wrap: wrap;
 	}
 
 	> a
 	{
 		flex: 1 0;
+
+		:global(.r-small) &
+		{
+			flex: none;
+			width: 33%;
+			border: 1px solid #ccc;
+			border-radius: 0;
+			margin: 0;
+		}
 	}
 }

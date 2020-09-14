@@ -14,8 +14,6 @@ import {Respond} from "../../Global/Respond/Respond";
 import {RespondSizes} from "../../Global/Respond/RespondDataStore";
 import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
 import Tab from "@material-ui/core/Tab";
-import {Upsell} from "../../UI/Upsell";
-import Dialog from "@material-ui/core/Dialog";
 import {SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
 import {ErrorBoundary} from "../../App/ErrorBoundary";
 
@@ -211,17 +209,6 @@ class GameArea extends React.Component<Props, State>
 					</GameDataStoreContext.Provider>
 				</div>
 				<div className={styles.upsellAnchor} ref={this.upsellAnchor}/>
-				<Dialog
-					id="simple-menu"
-					keepMounted
-					classes={{
-						paper: styles.dialog
-					}}
-					open={this.state.gameData.upsellBackerType !== null}
-					onClose={() => this.gameDataStore.hideUpsell()}
-				>
-					<Upsell isModal={true} levelRequired={this.state.gameData.upsellBackerType} onCancel={() => this.gameDataStore.hideUpsell()}/>
-				</Dialog>
 			</>
 		);
 	}

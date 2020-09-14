@@ -21,6 +21,12 @@ import moment from "moment";
 import SidebarDrawer from "./SidebarDrawer";
 import {RouteComponentProps, withRouter} from "react-router";
 import ReactGA from "react-ga";
+import {Upsell} from "../UI/Upsell";
+import {UpsellDataStore} from "../Areas/Game/Components/UpsellDataStore";
+import {useDataStore} from "../Utility/HookUtils";
+import Typography from "@material-ui/core/Typography";
+import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
+import {FiDownloadCloud} from "react-icons/all";
 
 interface IAppState
 {
@@ -29,6 +35,7 @@ interface IAppState
 	authContext: IAuthContext;
 	showInstallPromptDialog: boolean;
 	installPromptSnackbarContent: ReactNode;
+	waitingForUpdate: boolean;
 }
 
 export class App extends React.Component<RouteComponentProps, IAppState>
@@ -44,12 +51,27 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 			loading: false,
 			authContext: AuthDataStore.state,
 			showInstallPromptDialog: false,
-			installPromptSnackbarContent: null
+			installPromptSnackbarContent: null,
+			waitingForUpdate: false
 		};
+	}
+
+	private checkUpdates()
+	{
+		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
+		{
+			this.setState({
+				waitingForUpdate: hasUpdate
+			})
+		});
 	}
 
 	public componentDidMount(): void
 	{
+		this.checkUpdates();
+
+		setTimeout(() => this.checkUpdates(), 5000);
+
 		AuthDataStore.listen(data => this.setState({
 			authContext: data
 		}));
@@ -176,6 +198,18 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 							</Button>
 						</DialogActions>
 					</Dialog>
+					<Dialog open={this.state.waitingForUpdate}>
+						<DialogTitle>Update Available</DialogTitle>
+						<DialogContent>
+							<Typography>You are using an old version of Baseball Theater. Update to the new one!</Typography>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={ServiceWorkerUpdate.update} startIcon={<FiDownloadCloud/>} variant={"contained"}>
+								Update Baseball Theater
+							</Button>
+						</DialogActions>
+					</Dialog>
+					<UpsellDialog/>
 					<Snackbar
 						open={!!this.state.installPromptSnackbarContent}
 						onClose={this.onInstallPromptSnackbarClose}
@@ -185,6 +219,25 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 			</React.Fragment>
 		);
 	}
+}
+
+const UpsellDialog: React.FC = () =>
+{
+	const upsellData = useDataStore(UpsellDataStore);
+
+	return (
+		<Dialog
+			id="simple-menu"
+			keepMounted
+			classes={{
+				paper: styles.dialog
+			}}
+			open={upsellData.backerType !== null}
+			onClose={() => UpsellDataStore.close()}
+		>
+			<Upsell isModal={true} levelRequired={upsellData.backerType} onCancel={() => UpsellDataStore.close()}/>
+		</Dialog>
+	);
 }
 
 export default withRouter(App);

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {LiveData, LiveGamePlay} from "baseball-theater-engine";
 import {PlayItem} from "./Components/PlayItem";
-import {Button, Collapse, List, ListItem, ListItemText, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {Button, ButtonGroup, Collapse, List, ListItem, ListItemText, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import {StringUtils} from "../../Utility/StringUtils";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import styles from "./LiveGame.module.scss";
@@ -11,6 +11,7 @@ import moment from "moment";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {IoIosMenu} from "react-icons/all";
 import {MiniBoxScore} from "./Components/MiniBoxScore";
+import {ScoringPlays} from "./Components/ScoringPlays";
 
 type HalfInnings = { [key: string]: IHalfInning };
 
@@ -33,6 +34,7 @@ interface ILiveGameState
 	halfInnings: HalfInnings[];
 	halfInningsKeysSorted: string[][];
 	inningMenuOpen: boolean;
+	mode: "scoring" | "all";
 }
 
 interface IHalfInning
@@ -57,7 +59,8 @@ export class LiveGame extends React.Component<Props, State>
 			},
 			halfInnings: [],
 			halfInningsKeysSorted: [],
-			inningMenuOpen: false
+			inningMenuOpen: false,
+			mode: "scoring"
 		};
 	}
 
@@ -176,14 +179,30 @@ export class LiveGame extends React.Component<Props, State>
 
 		return (
 			<div className={styles.wrapper}>
+				<Helmet>
+					<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+				</Helmet>
 				<div className={styles.miniBoxWrap}>
 					<MiniBoxScore game={this.props.liveData}/>
 				</div>
+				<div className={styles.playTypes}>
+					<ButtonGroup variant={"contained"}>
+						<Button
+							color={this.state.mode === "scoring" ? "primary" : "secondary"}
+							onClick={() => this.setState({mode: "scoring"})}
+						>
+							Scoring Plays
+						</Button>
+						<Button
+							color={this.state.mode === "all" ? "primary" : "secondary"}
+							onClick={() => this.setState({mode: "all"})}
+						>
+							All Plays
+						</Button>
+					</ButtonGroup>
+				</div>
 				<div className={styles.inningWrapper}>
-					<Helmet>
-						<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
-					</Helmet>
-					{!isMedium && (
+					{!isMedium && this.state.mode === "all" && (
 						<Tabs
 							className={styles.inningTabs}
 							orientation={orientation}
@@ -200,7 +219,7 @@ export class LiveGame extends React.Component<Props, State>
 							}
 						</Tabs>
 					)}
-					{isMedium && (
+					{this.state.mode === "all" && isMedium && (
 						<React.Fragment>
 							<div>
 								<Button
@@ -243,12 +262,16 @@ export class LiveGame extends React.Component<Props, State>
 						</React.Fragment>
 					)}
 
-					{halfInnings && keys &&
-                    <Inning
-                        halfInnings={halfInnings}
-                        keysSorted={keys}
-                    />
-					}
+					{halfInnings && keys && this.state.mode === "all" && (
+						<Inning
+							halfInnings={halfInnings}
+							keysSorted={keys}
+						/>
+					)}
+
+					{this.state.mode === "scoring" && (
+						<ScoringPlays liveData={liveData}/>
+					)}
 				</div>
 			</div>
 		);

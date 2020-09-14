@@ -1,8 +1,8 @@
 import * as React from "react";
 import {IScheduleGame, IScheduleGameStatus, IScheduleTeamItem} from "baseball-theater-engine/contract/teamschedule";
 import styles from "./GameSummary.module.scss";
-import {LiveGameLinescore} from "baseball-theater-engine";
-import {Paper} from "@material-ui/core";
+import {LiveGameLinescore, Player} from "baseball-theater-engine";
+import {Chip, Paper} from "@material-ui/core";
 import classNames from "classnames";
 import moment from "moment";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../../../Global/Settings/SettingsDataStore";
@@ -67,10 +67,10 @@ export class GameSummary extends React.Component<Props, State>
 
 		const {
 			linescore,
+			decisions,
 			gameDate,
 			teams,
 			status,
-			decisions,
 		} = game;
 
 		const elevation = this.state.hovered ? 3 : 1;
@@ -78,30 +78,69 @@ export class GameSummary extends React.Component<Props, State>
 		const homeIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.home.team.fileCode) > -1;
 		const awayIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.away.team.fileCode) > -1;
 
-		const gameTime = moment(gameDate);
+		const finished = status.abstractGameCode === "F";
 		const future = moment().isBefore(gameDate);
 		const hasScore = (linescore?.innings?.length ?? 0) > 0 && (status.abstractGameCode === "L" || status.abstractGameCode === "F");
 
 		return (
 			<Paper className={styles.gameSummary} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} elevation={elevation}>
-				{status && (
-					<Status status={status} gameDate={gameDate} linescore={linescore}/>
+				<div className={styles.gameData}>
+					{status && (
+						<Status status={status} gameDate={gameDate} linescore={linescore}/>
+					)}
+					{(!future && hasScore) &&
+                    <React.Fragment>
+                        <Score
+                            home={false}
+                            team={teams.away}
+                            isFavorite={awayIsFavorite}
+                            linescore={linescore}
+                            hideScores={this.state.settings.hideScores}
+                        />
+                        <Score
+                            home={true}
+                            team={teams.home}
+                            isFavorite={homeIsFavorite}
+                            linescore={linescore}
+                            hideScores={this.state.settings.hideScores}
+                        />
+                    </React.Fragment>
+					}
+					{(future || !hasScore) &&
+                    <React.Fragment>
+                        <Preview home={false} isFavorite={awayIsFavorite} team={teams.away}/>
+                        <Preview home={true} isFavorite={homeIsFavorite} team={teams.home}/>
+                    </React.Fragment>
+					}
+				</div>
+				{finished && decisions && !this.state.settings.hideScores && (
+					<div className={styles.decisions}>
+						{(game.flags?.noHitter || game.flags?.perfectGame) && !this.state.settings.hideScores && (
+							<Chip size={"small"} className={styles.flagged} label={game.flags?.perfectGame ? `Perfect Game` : `No Hitter`}/>
+						)}
+						<Decision label={"WIN"} player={decisions.winner}/>
+						<Decision label={"LOSS"} player={decisions.loser}/>
+						<Decision label={"SAVE"} player={decisions.save}/>
+					</div>
 				)}
-				{(!future && hasScore) &&
-                <React.Fragment>
-                    <Score home={false} team={teams.away} isFavorite={awayIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
-                    <Score home={true} team={teams.home} isFavorite={homeIsFavorite} linescore={linescore} hideScores={this.state.settings.hideScores}/>
-                </React.Fragment>
-				}
-				{(future || !hasScore) &&
-                <React.Fragment>
-                    <Preview home={false} isFavorite={awayIsFavorite} team={teams.away}/>
-                    <Preview home={true} isFavorite={homeIsFavorite} team={teams.home}/>
-                </React.Fragment>
-				}
 			</Paper>
 		);
 	}
+}
+
+const Decision = (props: { label: string; player: Player }) =>
+{
+	if (!props.player)
+	{
+		return null;
+	}
+
+	return (
+		<div className={styles.decision}>
+			<div className={styles.decisionLabel}>{props.label}</div>
+			<div>{props.player.initLastName}</div>
+		</div>
+	);
 }
 
 interface ITeamRowProps
@@ -130,7 +169,7 @@ const TeamRow = (props: ITeamRowProps) =>
 					{props.isFavorite && <MdFavorite style={{fontSize: "0.8rem", color: "red", paddingLeft: 4}}/>}
 				</div>
 				<div className={styles.record}>
-					{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})
+					<>{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})</>
 				</div>
 			</div>
 			<div className={styles.teamValue}>
@@ -203,7 +242,7 @@ interface IStatusProps
 	linescore: LiveGameLinescore;
 }
 
-const Status = (props: IStatusProps) =>
+const Status: React.FC<IStatusProps> = (props) =>
 {
 	const gameDate = moment(props.gameDate);
 	const localDate = gameDate.local();
@@ -213,12 +252,15 @@ const Status = (props: IStatusProps) =>
 
 	return (
 		<div className={styles.status}>
-			<div className={styles.statusDetail}>{props.status.detailedState}</div>
+			<div className={styles.statusDetail}>
+				{props.status.detailedState}
+			</div>
 			{future && !finished &&
             <div className={styles.statusInfo}>
 				{localDate.format("hh:mma")}
             </div>
 			}
+			{props.children}
 			{hasScore &&
             <div className={styles.statusInfo}>
                 <div className={styles.rhe}>

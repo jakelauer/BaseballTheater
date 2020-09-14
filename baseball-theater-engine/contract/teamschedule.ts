@@ -38,6 +38,15 @@ export interface IScheduleGame
 	teams: AbstractHomeAway<IScheduleTeamItem>;
 	linescore: LiveGameLinescore;
 	doubleHeader: "Y" | "N";
+	flags?: {
+		awayTeamNoHitter: boolean;
+		awayTeamPerfectGame: boolean;
+		homeTeamNoHitter: boolean;
+		homeTeamPerfectGame: boolean;
+		noHitter: boolean;
+		perfectGame: boolean;
+
+	}
 	gamedayType: string;
 	tiebreaker: "Y" | "N";
 	gameNumber: number;
@@ -55,6 +64,7 @@ export interface IScheduleGameDecisions
 {
 	winner: Player;
 	loser: Player;
+	save: Player;
 }
 
 export interface IScheduleTeamItem

@@ -12,6 +12,7 @@ import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
 import {GameDataStoreContext} from "./GameDataStore";
 import moment from "moment";
+import {UpsellDataStore} from "./UpsellDataStore";
 
 interface IPlayItemProps
 {
@@ -104,7 +105,7 @@ export class PlayItem extends React.Component<Props, State>
 	                                       {
 		                                       if (!authed)
 		                                       {
-			                                       gameDataStore.showUpsell(BackerType.ProBacker);
+			                                       UpsellDataStore.open(BackerType.ProBacker);
 		                                       }
 		                                       e.preventDefault();
 	                                       }

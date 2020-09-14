@@ -11,6 +11,8 @@ import {SimplePaletteColorOptions} from "@material-ui/core/styles";
 import * as Sentry from '@sentry/browser';
 import ReactGA from 'react-ga';
 
+require("chromecast.ts");
+
 if (!location.hostname.includes("local"))
 {
 	Sentry.init({dsn: "https://393ba71c737f4a80be4ad5b33770f8b6@sentry.io/2696988"});

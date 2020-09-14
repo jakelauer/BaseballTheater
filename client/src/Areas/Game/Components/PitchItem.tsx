@@ -9,6 +9,7 @@ import {AuthDataStore, BackerType, IAuthContext} from "../../../Global/AuthDataS
 import Tooltip from "@material-ui/core/Tooltip";
 import {GameDataStoreContext} from "./GameDataStore";
 import moment from "moment";
+import {UpsellDataStore} from "./UpsellDataStore";
 
 interface IPitchItemProps
 {
@@ -103,7 +104,7 @@ export class PitchItem extends React.Component<Props, State>
 	                                    {
 		                                    if (!authed)
 		                                    {
-			                                    gameDataStore.showUpsell(BackerType.ProBacker);
+			                                    UpsellDataStore.open(BackerType.ProBacker);
 		                                    }
 		                                    e.preventDefault();
 	                                    }

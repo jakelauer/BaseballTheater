@@ -17,6 +17,7 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import {Skeleton} from "@material-ui/lab";
+import classNames from "classnames";
 
 interface IGameListProps
 {
@@ -167,7 +168,7 @@ export class GameList extends React.Component<Props, State>
 				{anyGamesComplete && (
 					<>
 						<div className={styles.specialHighlights}>
-							<ButtonGroup variant={"outlined"} size={"small"} className={styles.buttonGroup}>
+							<ButtonGroup variant={"outlined"} size={"small"} className={classNames(styles.buttonGroup, styles.first)}>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("recap", gameIds)}/>}>
 									Recaps
 								</Button>
@@ -177,8 +178,6 @@ export class GameList extends React.Component<Props, State>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("must c", gameIds)}/>}>
 									Must C
 								</Button>
-							</ButtonGroup>
-							<ButtonGroup variant={"outlined"} size={"small"} className={styles.buttonGroup}>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("StatCast", gameIds)}/>}>
 									StatCast
 								</Button>

@@ -42,7 +42,7 @@ export class BoxScoreTeam extends React.Component<Props, State>
 
 		const batters = battersAsPlayers
 			.filter(p => Object.keys(p.stats.batting).length)
-			.sort((a, b) => data.battingOrder.indexOf(a.person.id) - data.battingOrder.indexOf(b.person.id))
+			.sort((a, b) => parseInt(a.battingOrder) - parseInt(b.battingOrder))
 			.map(p => <Batter fullPlayer={players[`ID${p.person.id}`]} player={p}/>);
 
 		const pitchers = pitchersAsPlayers

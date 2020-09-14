@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import Typography from "@material-ui/core/Typography";
 import Helmet from "react-helmet";
+import {ChromecastFab} from "../../UI/ChromecastFab";
 
 interface ISearchAreaParams
 {
@@ -174,6 +175,8 @@ const SearchArea: React.FC<Props> = (props) =>
 					<Typography>No Highlights Found</Typography>
 				</Grid>
 			)}
+
+			<ChromecastFab/>
 		</div>
 	);
 };

@@ -2,7 +2,6 @@ import {DataStore} from "../../../Global/Intercom/DataStore";
 import moment from "moment";
 import {GameMedia, LiveData} from "baseball-theater-engine";
 import {MlbClientDataFetcher} from "../../../Global/Mlb/MlbClientDataFetcher";
-import {BackerType} from "../../../Global/AuthDataStore";
 import {createContext} from "react";
 
 export interface IGameDataStorePayload
@@ -10,7 +9,6 @@ export interface IGameDataStorePayload
 	updateTime: moment.Moment;
 	liveData: LiveData;
 	media: GameMedia;
-	upsellBackerType: BackerType | null;
 }
 
 export class GameDataStore extends DataStore<IGameDataStorePayload>
@@ -23,7 +21,6 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 			updateTime: moment(),
 			media: null,
 			liveData: null,
-			upsellBackerType: null
 		});
 
 		this.fetchLiveData();
@@ -76,20 +73,6 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 	public cancel()
 	{
 		clearInterval(this.interval);
-	}
-
-	public showUpsell(backerType: BackerType)
-	{
-		this.update({
-			upsellBackerType: backerType
-		});
-	}
-
-	public hideUpsell()
-	{
-		this.update({
-			upsellBackerType: null
-		});
 	}
 }
 

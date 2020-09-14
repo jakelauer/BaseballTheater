@@ -3,7 +3,7 @@ import {DataStoreObserver} from "./DataStoreObserver";
 export abstract class DataStore<TState extends {},
 	TObserverParams extends {} = never>
 {
-	private _currentState: TState;
+	protected _currentState: TState;
 	private readonly _observers: DataStoreObserver<TState, TObserverParams>[] = [];
 
 	protected constructor(initialState: TState)
@@ -13,11 +13,17 @@ export abstract class DataStore<TState extends {},
 
 	protected update(data: Partial<TState>)
 	{
-		this._currentState = Object.assign(this._currentState, data) as TState;
+		this._currentState = this.getNewState(data);
+		;
 		this.broadcast();
 	}
 
-	private broadcast()
+	protected getNewState(data: Partial<TState>): TState
+	{
+		return {...this._currentState, ...data};
+	}
+
+	protected broadcast()
 	{
 		const toUpdate = this.selectListenersForUpdate();
 		toUpdate.forEach(listener => listener.callback(this._currentState));
@@ -28,13 +34,21 @@ export abstract class DataStore<TState extends {},
 		return this._observers;
 	}
 
-	public listen(callback: (data: TState) => void, params: TObserverParams = undefined)
+	public listen(callback: (data: TState) => void, params?: TObserverParams, callbackOnListen = true)
 	{
 		const observer = new DataStoreObserver(callback, params);
 
 		this._observers.push(observer);
 
-		observer.callback(this._currentState);
+		if (callbackOnListen)
+		{
+			observer.callback(this._currentState);
+		}
+
+		return () =>
+		{
+			this._observers.splice(this._observers.indexOf(observer), 1)
+		};
 	}
 
 	public get state()

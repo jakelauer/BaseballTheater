@@ -1,11 +1,19 @@
 @import "../../../styles/teamcolors";
+@import "../../../styles/_vars";
 
 .gameSummary
 {
 	position: relative;
-	padding: 3rem 1rem 1rem 1rem;
+	display: flex;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+.gameData
+{
+	position: relative;
+	padding: 3rem 1rem 1rem 1rem;
+	flex: 1;
 }
 
 .teamRow
@@ -63,5 +71,31 @@
 		padding: 0 0.5rem;
 		width: 1.5rem;
 		text-align: center;
+	}
+}
+
+.flagged
+{
+	background: $color-accent;
+	color: white;
+	margin: 0 0 0.5rem 0;
+}
+
+.decisions
+{
+	min-width: 4rem;
+	font-size: 0.75em;
+	padding: 0.5rem;
+	border-left: 1px solid rgba(black, 0.05);
+}
+
+.decision
+{
+	margin-bottom: 0.75rem;
+
+	.decisionLabel
+	{
+		color: rgba(0, 0, 0, 0.5);
+		font-weight: bold;
 	}
 }

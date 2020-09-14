@@ -165,6 +165,7 @@ export interface BattingStats
 export interface BoxScorePlayer
 {
 	allPositions: AbstractAbbreviationCodeNameType[];
+	battingOrder: string;
 	gameStatus: {
 		isCurrentBatter: boolean;
 		isCurrentPitcher: boolean;

@@ -7,6 +7,8 @@ import {ContainerProgress} from "../../UI/ContainerProgress";
 import moment from "moment";
 import Helmet from "react-helmet";
 import Divider from "@material-ui/core/Divider";
+import {AuthDataStore} from "../../Global/AuthDataStore";
+import {ChromecastFab} from "../../UI/ChromecastFab";
 
 interface IHighlightsProps
 {
@@ -32,7 +34,9 @@ export class Highlights extends React.Component<Props, State>
 	{
 		super(props);
 
-		this.state = {};
+		this.state = {
+			authData: AuthDataStore.state
+		};
 	}
 
 	private get highlights()
@@ -88,6 +92,7 @@ export class Highlights extends React.Component<Props, State>
 					{restRendered}
 					{!this.props.media && <ContainerProgress/>}
 				</Grid>
+				<ChromecastFab/>
 			</div>
 		);
 	}

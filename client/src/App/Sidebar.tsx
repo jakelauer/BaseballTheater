@@ -14,13 +14,12 @@ import {Teams} from "baseball-theater-engine";
 import {AuthDataStore, BackerType, IAuthContext} from "../Global/AuthDataStore";
 import cookies from "browser-cookies";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItemAvatar} from "@material-ui/core";
+import {Button, ListItemAvatar} from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 import classNames from "classnames";
-import {FaVideo, FiDownloadCloud} from "react-icons/all";
+import {FaVideo} from "react-icons/all";
 import Typography from "@material-ui/core/Typography";
-import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
 import Divider from "@material-ui/core/Divider";
 
 interface ISidebarProps extends RouteComponentProps
@@ -59,7 +58,6 @@ interface ISidebarState
 	videoTagsOpen: boolean;
 	settings: ISettingsDataStorePayload;
 	authContext: IAuthContext;
-	waitingForUpdate: boolean;
 }
 
 class Sidebar extends React.Component<Props, State>
@@ -72,7 +70,6 @@ class Sidebar extends React.Component<Props, State>
 			videoTagsOpen: false,
 			settings: SettingsDataStore.state,
 			authContext: AuthDataStore.state,
-			waitingForUpdate: false
 		};
 	}
 
@@ -93,9 +90,10 @@ class Sidebar extends React.Component<Props, State>
 	{
 		const clientId = "4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008";
 		const host = location.hostname === "jlauer.local" ? "jlauer.local:5000" : location.hostname;
-		const redirectUri = `${window.location.protocol}//${host}/auth/redirect`;
+		const protocol = location.hostname === "jlauer.local" ? "http:" : "https:";
+		const redirectUri = `${protocol}//${host}/auth/redirect`;
 		const scopes = ["users", "pledges-to-me", "my-campaign"];
-		const state = encodeURIComponent(this.props.location.pathname);
+		const state = encodeURIComponent(location.pathname);
 		return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes.join(" ")}&state=${state}`;
 	}
 
@@ -115,18 +113,6 @@ class Sidebar extends React.Component<Props, State>
 		SettingsDataStore.listen(data => this.setState({
 			settings: data
 		}));
-
-		this.checkUpdates();
-	}
-
-	private checkUpdates()
-	{
-		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
-		{
-			this.setState({
-				waitingForUpdate: hasUpdate
-			})
-		});
 	}
 
 	public render()
@@ -142,17 +128,6 @@ class Sidebar extends React.Component<Props, State>
 					Baseball Theater
 				</Link>
 				<List component={"nav"}>
-					<Dialog open={this.state.waitingForUpdate}>
-						<DialogTitle>Update Available</DialogTitle>
-						<DialogContent>
-							<Typography>You are using an old version of Baseball Theater. Update to the new one!</Typography>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={ServiceWorkerUpdate.update} startIcon={<FiDownloadCloud/>} variant={"contained"}>
-								Update Now
-							</Button>
-						</DialogActions>
-					</Dialog>
 					{isStarBacker && this.state.settings.favoriteTeams.length > 0 && (
 						<React.Fragment>
 							{this.state.settings.favoriteTeams.map(team => (
@@ -202,16 +177,16 @@ class Sidebar extends React.Component<Props, State>
 					</React.Fragment>
 				)
 				}
-				{authContext.authorized && authContext.loaded &&
-                <Button className={styles.patreonButton} onClick={this.logOut}>
-                    Log out
-                </Button>
-				}
+				{authContext.authorized && authContext.loaded && (
+					<Button className={styles.patreonButton} onClick={this.logOut}>
+						Log out
+					</Button>
+				)}
 				<div className={styles.sponsors}>
 					<p>Diamond Sponsors</p>
-					<Sponsor imagePath={"/assets/backers/playback.svg"} url={"https://getplayback.com"}/>
-					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
+					<Sponsor imagePath={"/assets/backers/hehe.png"} url={"https://hehestreams.com/r/in/706b090de2fe77242ae54e91b9d8302c"}/>
 					<Sponsor imagePath={"/assets/backers/carlsplace.png"} url={"https://www.carlofet.com/?utm_medium=advertising&utm_source=baseballtheater&utm_campaign=baseballtheater"}/>
+					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
 				</div>
 				<div className={styles.bottom}>

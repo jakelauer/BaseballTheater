@@ -8,6 +8,8 @@ import CardHeader from "@material-ui/core/CardHeader";
 import {SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 import {SiteRoutes} from "../Global/Routes/Routes";
 import moment from "moment";
+import {ChromecastUtils} from "../Utility/ChromecastUtils";
+import {FaPlay} from "react-icons/fa";
 
 interface IHighlightProps
 {
@@ -57,9 +59,26 @@ export class Highlight extends React.Component<Props, State>
 	{
 		const matches = media.url.match(/([0-9]{3,5})k/gi);
 
-		return matches && matches.length >= 1
-			? matches[0]
-			: media.name;
+		const Klabel = matches?.[0] ?? "Standard";
+		const numberVal = parseInt(Klabel);
+		let label = Klabel;
+		if (!isNaN(numberVal))
+		{
+			if (numberVal < 4000)
+			{
+				label = "Low";
+			}
+			else if (numberVal >= 4000 && numberVal < 15000)
+			{
+				label = "Standard";
+			}
+			else if (numberVal >= 15000)
+			{
+				label = "High";
+			}
+		}
+
+		return label;
 	}
 
 	public render()
@@ -87,8 +106,8 @@ export class Highlight extends React.Component<Props, State>
 			<CardActions>
 				{mp4s && !loading
 					? mp4s.map(a => (
-						<a href={a.url} target={"_blank"} key={a.url}>
-							<Button size="small" color="primary">
+						<a href={a.url} target={"_blank"} key={a.url} onClick={e => ChromecastUtils.TryCast(e, a.url)}>
+							<Button size="small" color="primary" startIcon={<FaPlay/>}>
 								{this.getKLabel(a)}
 							</Button>
 						</a>
@@ -139,7 +158,7 @@ export class Highlight extends React.Component<Props, State>
 										</Typography>
 										{SettingsDataStore.state.highlightDescriptions && (
 											<Typography variant="body2" color="textSecondary" component="p">
-												{description}
+												[{media.duration}] {description}
 											</Typography>
 										)}
 									</a>

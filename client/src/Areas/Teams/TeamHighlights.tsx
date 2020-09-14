@@ -6,6 +6,7 @@ import {Highlight} from "../../UI/Highlight";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
 import {MediaItem} from "../../../../baseball-theater-engine/contract";
+import {ChromecastFab} from "../../UI/ChromecastFab";
 
 interface ITeamHighlightsProps
 {
@@ -122,6 +123,7 @@ class TeamHighlights extends React.Component<Props, State>
 				</Grid>
 				{this.state.videos.length === 0 && <ContainerProgress/>}
 				{this.state.loading && this.state.videos.length !== 0 && <CircularProgress/>}
+				<ChromecastFab/>
 			</div>
 		);
 	}
