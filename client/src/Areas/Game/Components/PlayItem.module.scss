@@ -5,6 +5,12 @@
 	border-bottom: 1px dotted gray;
 }
 
+.pitcher
+{
+	position: relative;
+	padding: 1rem;
+}
+
 .pitches
 {
 	display: flex;
@@ -43,4 +49,26 @@
 			color: $color-accent;
 		}
 	}
+}
+
+.nonPitchEvent
+{
+	display: flex;
+	align-items: center;
+	padding: 0.5rem;
+	border: 1px solid #EEE;
+	border-width: 1px 0;
+	color: rgba(0, 0, 0, 0.5);
+
+	div
+	{
+		flex: 1 0;
+	}
+}
+
+.nonPitchEventIcon
+{
+	margin-right: 1rem;
+	width: 1rem;
+	font-size: 1.5rem;
 }

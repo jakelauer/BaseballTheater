@@ -76,4 +76,4 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 	}
 }
 
-export const GameDataStoreContext = createContext<GameDataStore>(null);
+export const GameDataStoreContext = createContext<IGameDataStorePayload>(null);

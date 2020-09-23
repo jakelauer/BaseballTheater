@@ -55,7 +55,9 @@ export class PitchItem extends React.Component<Props, State>
 
 			secondary = (
 				<div style={{paddingRight: "1rem"}}>
-					<div>{`${startSpeed ?? "? "}mph ${pitch.details?.type?.description ?? "?"} [${breaks.spinRate ?? '?'} SR]`}</div>
+					<div>
+						{`${startSpeed ?? "? "}mph ${pitch.details?.type?.description ?? "?"} [${breaks.spinRate ?? '?'} SR]`}
+					</div>
 				</div>
 			);
 		}

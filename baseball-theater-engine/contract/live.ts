@@ -307,6 +307,7 @@ export interface LiveGamePlayEvent
 	details: LiveGamePlayEventDetails;
 	count: LiveGamePlayEventCount;
 	pitchData: LiveGamePlayEventPitchData;
+	hitData: LiveGamePlayEventHitData;
 	index: number;
 	pitchNumber: number;
 	startTime: string;
@@ -314,6 +315,17 @@ export interface LiveGamePlayEvent
 	isPitch: boolean;
 	playId: string;
 	type: string;
+}
+
+export interface LiveGamePlayEventHitData
+{
+	launchSpeed: number;
+	launchAngle: number;
+	totalDistance: number;
+	trajectory: string;
+	hardness: string;
+	location: string;
+	coordinates: { coordX: number, coordY: number };
 }
 
 export interface LiveGamePlayEventCount

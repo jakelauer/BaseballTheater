@@ -1,6 +1,7 @@
 import * as React from "react";
-import {LiveGamePlay} from "baseball-theater-engine";
+import {LiveGamePlay, LiveGamePlayEvent} from "baseball-theater-engine";
 import styles from "./Strikezone.module.scss";
+import {Tooltip, Typography} from "@material-ui/core";
 
 interface ISizes
 {
@@ -37,46 +38,67 @@ export class Strikezone extends React.Component<Props, State>
 
 	public render()
 	{
-		const play = this.props.play;
 		const playEvents = this.props.play.playEvents;
 		const pitches = this.props.play.pitchIndex.map(index => playEvents[index]);
-
-		const pitchesRendered = pitches.map((pitch, i) =>
-		{
-			const pitchData = pitch.pitchData;
-			if (!pitchData)
-			{
-				return null;
-			}
-
-			const bottom = 1.6;
-			const top = 3.5;
-			const height = top - bottom;
-
-			const leftPct = (pitchData.coordinates.pX + 0.95) / 1.9;
-			const bottomPct = (pitchData.coordinates.pZ - bottom) / height;
-
-			const style = {
-				left: `${leftPct * 100}%`,
-				bottom: `${bottomPct * 100}%`,
-				zIndex: i + 1
-			};
-
-			return (
-				<div className={styles.pitch} style={style} key={i} data-type={pitch.type}>
-					<span className={styles.pitchCount} style={{backgroundColor: pitch.details.ballColor}}>{i + 1}</span>
-				</div>
-			);
-		});
 
 		return (
 			<div className={styles.wrapper}>
 				<div className={styles.zone}>
 					<div className={styles.zoneBox}>
-						{pitchesRendered}
+						{pitches.map(p => (
+							<Pitch {...p} />
+						))}
 					</div>
 				</div>
 			</div>
 		);
 	}
+}
+
+const Pitch: React.FC<LiveGamePlayEvent> = (pitch) =>
+{
+	const pitchData = pitch.pitchData;
+	if (!pitchData)
+	{
+		return null;
+	}
+
+	const bottom = pitchData.strikeZoneBottom;
+	const top = pitchData.strikeZoneTop;
+	const height = top - bottom;
+
+	const leftPct = (pitchData.coordinates.pX + 0.8) / 1.8;
+	const bottomPct = (pitchData.coordinates.pZ - bottom) / height;
+
+	return (
+		<Tooltip title={<PitchTooltip {...pitch}/>} enterTouchDelay={0}>
+			<div className={styles.pitch} style={{
+				left: `${leftPct * 100}%`,
+				bottom: `${bottomPct * 100}%`,
+				zIndex: pitch.pitchNumber + 1
+			}} key={pitch.pitchNumber} data-type={pitch.type}>
+				<span className={styles.pitchCount} style={{backgroundColor: pitch.details.ballColor}}>{pitch.pitchNumber}</span>
+			</div>
+		</Tooltip>
+	);
+};
+
+const PitchTooltip: React.FC<LiveGamePlayEvent> = (pitch) =>
+{
+	const pitchData = pitch.pitchData;
+
+	return (
+		<Typography>
+			<table>
+				<tr>
+					<td>Start Speed</td>
+					<td>{pitchData.startSpeed} MPH</td>
+				</tr>
+				<tr>
+					<td>End Speed</td>
+					<td>{pitchData.endSpeed} MPH</td>
+				</tr>
+			</table>
+		</Typography>
+	);
 }

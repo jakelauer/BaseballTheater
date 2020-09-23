@@ -9,17 +9,20 @@ export class ChromecastUtils
 {
 	public static TryCast(e: MouseEvent, href: string)
 	{
-		const isProBacker = AuthDataStore.hasLevel(BackerType.ProBacker);
-
-		if (!isProBacker)
-		{
-			UpsellDataStore.open(BackerType.ProBacker);
-		}
-
 		const castSession = cast.framework.CastContext.getInstance().getCurrentSession();
 		if (castSession)
 		{
 			e.preventDefault();
+
+			const isProBacker = AuthDataStore.hasLevel(BackerType.ProBacker);
+
+			if (!isProBacker)
+			{
+				UpsellDataStore.open(BackerType.ProBacker);
+
+				return;
+			}
+
 			const mediaInfo = new chrome.cast.media.MediaInfo(href, "video/mp4");
 			var request = new chrome.cast.media.LoadRequest(mediaInfo);
 			castSession.loadMedia(request).then(

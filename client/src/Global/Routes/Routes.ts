@@ -29,13 +29,14 @@ export interface IGameParams
 	gameDate?: string;
 	gameId: string,
 	tab?: GameTabs;
+	tabDetail?: string;
 }
 
 
 export class SiteRoutes
 {
 	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?");
-	public static Game = new SiteRoute<IGameParams>("/game/:gameDate/:gameId/:tab?", {gameDate: "_"});
+	public static Game = new SiteRoute<IGameParams>("/game/:gameDate/:gameId/:tab?/:tabDetail?", {gameDate: "_"});
 	public static Schedule = new SiteRoute<{ year: string; team?: string }>("/schedule/:year/:team?", {
 		year: moment().format("YYYY")
 	});

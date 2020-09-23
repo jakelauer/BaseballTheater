@@ -5,6 +5,7 @@ import {Auth} from "./auth";
 import {Search} from "./search";
 import apicache from "apicache";
 import {Config} from "../config/config";
+import {changelist} from "./changelist";
 
 const cache = apicache.middleware;
 
@@ -45,25 +46,16 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 		}
 	});
 
-	app.get("/api/fullsearch", cache("1 minute"), async (req, res) =>
+	app.get("/api/changelist", cache("1 minute"), (req, res) =>
 	{
-		// try
-		// {
-		// 	const results: ApolloQueryResult<MediaItem> = await Search.doFullSearch({
-		// 		contentPreference: "CMS_FIRST",
-		// 		languagePreference: "EN",
-		// 		limit: 32,
-		// 		page: parseInt(req.query.page),
-		// 		query: req.query.query,
-		// 		searchType: "UNIFIED"
-		// 	});
-		//
-		// 	res.send(results);
-		// }
-		// catch (e)
-		// {
-		// 	throw e;
-		// }
+		try
+		{
+			res.send(changelist);
+		}
+		catch (e)
+		{
+			throw e;
+		}
 	});
 
 	app.get("/auth/authorize", (req, res) =>

@@ -7,8 +7,6 @@ import {Standings} from "../contract/standings";
 import {ApolloClient} from "apollo-client";
 import {InMemoryCache, NormalizedCacheObject} from 'apollo-cache-inmemory';
 import {HttpLink} from 'apollo-link-http';
-import gql from "graphql-tag";
-import {IFullVideoSearchQueryParams} from "../contract/FullVideoSearch";
 
 export class MlbDataServer
 {
@@ -29,17 +27,6 @@ export class MlbDataServer
 			Internal_DataLoader.transformUrl = urlTransformer;
 		}
 
-		// this._cache = new InMemoryCache();
-		//
-		// this._mlbLink = new HttpLink({
-		// 	uri: 'https://fastball-gateway.mlb.com/',
-		// 	fetch
-		// });
-		//
-		// this.client = new ApolloClient({
-		// 	cache: this._cache,
-		// 	link: this._mlbLink
-		// });
 	}
 
 	public async getLiveGame(gameId: number | string)
@@ -229,52 +216,48 @@ export class MlbDataServer
 		return await fetch(url).then(r => r.json()) as IHighlightSearchItem[];
 	}
 
-	public async fullVideoSearch(params: IFullVideoSearchQueryParams)
+	public async fullVideoSearch(variables: { [name: string]: string[] }, page = 0, limit = 36)
 	{
-		const query = gql`
-		    query Search(
-		        $query: String!
-		        $page: Int
-		        $limit: Int
-		        $feedPreference: FeedPreference
-		        $languagePreference: LanguagePreference
-		        $searchType: SearchType
-		        $contentPreference: ContentPreference
-		    ) {
-		        search(
-		            query: $query
-		            limit: $limit
-		            page: $page
-		            feedPreference: $feedPreference
-		            languagePreference: $languagePreference
-		            searchType: $searchType
-		            contentPreference: $contentPreference
-		        ) {
-		            plays {
-		                mediaPlayback {
-		                  slug
-		                  blurb
-		                  timestamp
-		                  feeds {
-		                    type
-		                    duration
-		                    image {
-		                      altText
-		                      cuts {
-		                        width
-		                        src
-		                      }
-		                    }
-		                  }
-		                }
-		              }
-		              total
-		        }
-		    }
-		`;
+		const query = `Search($query: String!, $page: Int, $limit: Int, $feedPreference: FeedPreference, $languagePreference: LanguagePreference, $contentPreference: ContentPreference) {
+  search(query: $query, limit: $limit, page: $page, feedPreference: $feedPreference, languagePreference: $languagePreference, contentPreference: $contentPreference) {
+    plays {
+      mediaPlayback {
+        id
+        slug
+        blurb
+        timestamp
+        description
+        title
+        canAddToReel
+        feeds {
+          type
+          duration
+          image {
+            altText
+            templateUrl
+            cuts {
+              width
+              src
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    total
+    __typename
+  }
+}`;
+		const makeVar = (items: string[]) => items.map(i => JSON.stringify(i)).join(",").replace(/"/g, "\\\"");
 
-		return await this.client.query<MediaItem>({
-			query
-		});
+		const encoded = Object.keys(variables)
+			.map(name => `${name} = [${makeVar(variables[name])}]`)
+			.join(" AND ");
+
+		const url = `https://fastball-gateway.mlb.com/graphql?query=query%20${encodeURIComponent(query)}&operationName=Search&variables={"query":"${encoded} Order By Timestamp","limit":${limit},"page":${page},"languagePreference":"EN","contentPreference":"MIXED"}`
 	}
 }

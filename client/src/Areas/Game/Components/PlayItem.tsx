@@ -5,18 +5,19 @@ import {Strikezone} from "./Strikezone";
 import {PitchItem} from "./PitchItem";
 import styles from "./PlayItem.module.scss";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import {MdVideoLibrary} from "react-icons/all";
+import {MdInfoOutline, MdVideoLibrary} from "react-icons/all";
 import Avatar from "@material-ui/core/Avatar";
 import {AuthDataStore, BackerType, IAuthContext} from "../../../Global/AuthDataStore";
 import classNames from "classnames";
 import Tooltip from "@material-ui/core/Tooltip";
-import {GameDataStoreContext} from "./GameDataStore";
 import moment from "moment";
 import {UpsellDataStore} from "./UpsellDataStore";
+import {StringUtils} from "../../../Utility/StringUtils";
 
 interface IPlayItemProps
 {
 	play: LiveGamePlay;
+	showOtherEvents: boolean;
 }
 
 interface DefaultProps
@@ -55,7 +56,10 @@ export class PlayItem extends React.Component<Props, State>
 
 	public render()
 	{
-		const play = this.props.play;
+		const {
+			play,
+			showOtherEvents
+		} = this.props;
 
 		const {
 			about,
@@ -89,53 +93,71 @@ export class PlayItem extends React.Component<Props, State>
 			</div>
 		);
 
+		const nonPitchPlays = play.playEvents.filter(pe => !pe.isPitch);
+
+		const finalHit = play.playEvents.filter(a => !!a.hitData)?.reverse()?.[0];
+
 		return (
-			<GameDataStoreContext.Consumer>
-				{gameDataStore => (<>
-					<ListItem button onClick={this.toggle}>
-						<ListItemAvatar>
-							{playId &&
-                            <Tooltip title={tooltip} arrow enterTouchDelay={0}>
-                                <Avatar className={avatarClasses}>
-                                    <a target={"_blank"} href={href}
-                                       onClick={e =>
-                                       {
-	                                       e.stopPropagation();
-	                                       if (!authed || !playVideoEnabled)
-	                                       {
-		                                       if (!authed)
-		                                       {
-			                                       UpsellDataStore.open(BackerType.ProBacker);
-		                                       }
-		                                       e.preventDefault();
-	                                       }
-                                       }}>
-                                        <MdVideoLibrary/>
-                                    </a>
-                                </Avatar>
-                            </Tooltip>
-							}
-						</ListItemAvatar>
-						<ListItemText
-							primary={result.event || `${play.matchup.batter.fullName} hits against ${play.matchup.pitcher.fullName}`}
-							secondary={result.description}
-						/>
-						<ListItemSecondaryAction>
-							<div className={styles.actions}>
-								{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}
-							</div>
-						</ListItemSecondaryAction>
-					</ListItem>
-					<Collapse in={this.state.expanded} className={styles.playDetails}>
-						<div className={styles.pitches}>
-							<Strikezone play={this.props.play}/>
-							<List>
-								{pitchItems}
-							</List>
+			<>
+				{showOtherEvents && nonPitchPlays.map(pe => (
+					<div className={styles.nonPitchEvent}>
+						<MdInfoOutline className={styles.nonPitchEventIcon}/>
+						<div>{pe.details.description}</div>
+					</div>
+				))}
+				<ListItem button onClick={this.toggle}>
+					<ListItemAvatar>
+						{playId &&
+                        <Tooltip title={tooltip} arrow enterTouchDelay={0}>
+                            <Avatar className={avatarClasses}>
+                                <a target={"_blank"} href={href}
+                                   onClick={e =>
+								   {
+									   e.stopPropagation();
+									   if (!authed || !playVideoEnabled)
+									   {
+										   if (!authed)
+										   {
+											   UpsellDataStore.open(BackerType.ProBacker);
+										   }
+										   e.preventDefault();
+									   }
+								   }}>
+                                    <MdVideoLibrary/>
+                                </a>
+                            </Avatar>
+                        </Tooltip>
+						}
+					</ListItemAvatar>
+					<ListItemText
+						primary={result.event || `${play.matchup.batter.fullName} hits against ${play.matchup.pitcher.fullName}`}
+						secondary={result.description}
+					/>
+					<ListItemSecondaryAction>
+						<div className={styles.actions}>
+							{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}
 						</div>
-					</Collapse>
-				</>)}
-			</GameDataStoreContext.Consumer>
+					</ListItemSecondaryAction>
+				</ListItem>
+				<Collapse in={this.state.expanded} className={styles.playDetails}>
+					<div className={styles.pitcher}>Pitching: {play.matchup.pitcher.fullName}</div>
+					<div className={styles.pitches}>
+						<Strikezone play={this.props.play}/>
+						<List>
+							{pitchItems}
+						</List>
+					</div>
+					{finalHit && (
+						<List>
+							<ListItem>EV: {finalHit.hitData.launchSpeed} MPH</ListItem>
+							<ListItem>Launch Angle: {finalHit.hitData.launchAngle}°</ListItem>
+							<ListItem>Distance: {finalHit.hitData.totalDistance}'</ListItem>
+							<ListItem>Hardness: {StringUtils.toProperCase(finalHit.hitData.hardness)}</ListItem>
+							<ListItem>Type: {StringUtils.toProperCase(finalHit.hitData.trajectory.replace("_", " "))}</ListItem>
+						</List>
+					)}
+				</Collapse>
+			</>
 		);
 	}
 }

@@ -163,7 +163,7 @@ class GameArea extends React.Component<Props, State>
 		return (
 			<>
 				<div className={styles.gameWrapper}>
-					<GameDataStoreContext.Provider value={this.gameDataStore}>
+					<GameDataStoreContext.Provider value={this.gameDataStore.state}>
 						<Respond at={RespondSizes.medium} hide={true}>
 							<Tabs
 								className={styles.tabs}

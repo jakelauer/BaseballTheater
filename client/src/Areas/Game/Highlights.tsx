@@ -9,6 +9,7 @@ import Helmet from "react-helmet";
 import Divider from "@material-ui/core/Divider";
 import {AuthDataStore} from "../../Global/AuthDataStore";
 import {ChromecastFab} from "../../UI/ChromecastFab";
+import {Alert} from "@material-ui/lab";
 
 interface IHighlightsProps
 {
@@ -58,8 +59,17 @@ export class Highlights extends React.Component<Props, State>
 		const recap = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("recap")));
 		const condensed = this.highlights.find(a => a.keywordsAll.some(a => a.value.toLocaleLowerCase().includes("condensed")));
 		const rest = this.highlights.filter(a => a !== condensed && a !== recap && a.image !== undefined);
+		rest.sort((a, b) =>
+		{
+			const aDate = moment(a.date);
+			const bDate = moment(b.date);
 
-		const videosOrSkeleton = rest.length ? rest : Array(20).fill(0);
+			return bDate.isBefore(aDate) ? 1 : -1;
+		});
+
+		const videosOrSkeleton = rest.length
+			? rest
+			: Array(20).fill(0);
 
 		const restRendered = videosOrSkeleton.map(item => (
 			<Grid key={item.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
@@ -75,19 +85,28 @@ export class Highlights extends React.Component<Props, State>
 				<Helmet>
 					<title>{`Highlights - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
 				</Helmet>
-				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
-					{recap && recap.image &&
-                    <Grid item lg={4} xs={12} sm={12} md={6}>
-                        <Highlight media={recap} className={styles.highlight}/>
-                    </Grid>
-					}
-					{condensed && condensed.image &&
-                    <Grid item lg={4} xs={12} sm={12} md={6}>
-                        <Highlight media={condensed} className={styles.highlight}/>
-                    </Grid>
-					}
-				</Grid>
-				<Divider style={{marginBottom: "2rem"}}/>
+				{!recap && !condensed && !rest.length && (
+					<Alert severity={"error"}>
+						This game has no videos available yet.
+					</Alert>
+				)}
+				{(recap || condensed) && (
+					<>
+						<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
+							{recap && recap.image &&
+                            <Grid item lg={4} xs={12} sm={12} md={6}>
+                                <Highlight media={recap} className={styles.highlight}/>
+                            </Grid>
+							}
+							{condensed && condensed.image &&
+                            <Grid item lg={4} xs={12} sm={12} md={6}>
+                                <Highlight media={condensed} className={styles.highlight}/>
+                            </Grid>
+							}
+						</Grid>
+						<Divider style={{marginBottom: "2rem"}}/>
+					</>
+				)}
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0}}>
 					{restRendered}
 					{!this.props.media && <ContainerProgress/>}

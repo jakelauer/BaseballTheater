@@ -24,9 +24,7 @@ import ReactGA from "react-ga";
 import {Upsell} from "../UI/Upsell";
 import {UpsellDataStore} from "../Areas/Game/Components/UpsellDataStore";
 import {useDataStore} from "../Utility/HookUtils";
-import Typography from "@material-ui/core/Typography";
-import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
-import {FiDownloadCloud} from "react-icons/all";
+import {UpdateAvailableDialog} from "./UpdateAvailableDialog";
 
 interface IAppState
 {
@@ -35,7 +33,6 @@ interface IAppState
 	authContext: IAuthContext;
 	showInstallPromptDialog: boolean;
 	installPromptSnackbarContent: ReactNode;
-	waitingForUpdate: boolean;
 }
 
 export class App extends React.Component<RouteComponentProps, IAppState>
@@ -52,26 +49,11 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 			authContext: AuthDataStore.state,
 			showInstallPromptDialog: false,
 			installPromptSnackbarContent: null,
-			waitingForUpdate: false
 		};
-	}
-
-	private checkUpdates()
-	{
-		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
-		{
-			this.setState({
-				waitingForUpdate: hasUpdate
-			})
-		});
 	}
 
 	public componentDidMount(): void
 	{
-		this.checkUpdates();
-
-		setTimeout(() => this.checkUpdates(), 5000);
-
 		AuthDataStore.listen(data => this.setState({
 			authContext: data
 		}));
@@ -198,17 +180,7 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 							</Button>
 						</DialogActions>
 					</Dialog>
-					<Dialog open={this.state.waitingForUpdate}>
-						<DialogTitle>Update Available</DialogTitle>
-						<DialogContent>
-							<Typography>You are using an old version of Baseball Theater. Update to the new one!</Typography>
-						</DialogContent>
-						<DialogActions>
-							<Button onClick={ServiceWorkerUpdate.update} startIcon={<FiDownloadCloud/>} variant={"contained"}>
-								Update Baseball Theater
-							</Button>
-						</DialogActions>
-					</Dialog>
+					<UpdateAvailableDialog/>
 					<UpsellDialog/>
 					<Snackbar
 						open={!!this.state.installPromptSnackbarContent}

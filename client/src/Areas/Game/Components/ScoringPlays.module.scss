@@ -1,0 +1,14 @@
+@import "../../../styles/teamcolors";
+
+.chip
+{
+	margin: 2rem auto 1rem;
+	font-weight: bold;
+}
+
+.chipContent
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
