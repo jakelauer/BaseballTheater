@@ -1,6 +1,6 @@
 import * as React from "react";
-import {LiveGamePlay} from "baseball-theater-engine";
-import {Collapse, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText} from "@material-ui/core";
+import {LiveGamePlay, LiveGamePlayEvent} from "baseball-theater-engine";
+import {Chip, Collapse, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText} from "@material-ui/core";
 import {Strikezone} from "./Strikezone";
 import {PitchItem} from "./PitchItem";
 import styles from "./PlayItem.module.scss";
@@ -18,6 +18,7 @@ interface IPlayItemProps
 {
 	play: LiveGamePlay;
 	showOtherEvents: boolean;
+	defaultExpanded: boolean;
 }
 
 interface DefaultProps
@@ -29,7 +30,7 @@ type State = IPlayItemState;
 
 interface IPlayItemState
 {
-	expanded: boolean;
+	userExpanded: boolean;
 	auth: IAuthContext;
 }
 
@@ -40,9 +41,14 @@ export class PlayItem extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			expanded: false,
+			userExpanded: false,
 			auth: AuthDataStore.state
 		};
+	}
+
+	private get expanded()
+	{
+		return this.state.userExpanded || this.props.defaultExpanded;
 	}
 
 	public componentDidMount(): void
@@ -51,7 +57,7 @@ export class PlayItem extends React.Component<Props, State>
 	}
 
 	private toggle = () => this.setState({
-		expanded: !this.state.expanded
+		userExpanded: !this.state.userExpanded
 	});
 
 	public render()
@@ -68,9 +74,10 @@ export class PlayItem extends React.Component<Props, State>
 			playEvents
 		} = this.props.play;
 
-		const pitchItems = pitchIndex
-			.map(pi => playEvents[pi])
-			.map(pe => <PitchItem auth={this.state.auth} key={pe.endTime} pitch={pe}/>);
+		const pitchItems = playEvents
+			.map((pe, i) => pitchIndex.includes(i)
+				? <PitchItem auth={this.state.auth} key={pe.endTime} pitch={pe}/>
+				: i >= pitchIndex[0] && <NonPitchEvent pe={pe}/>);
 
 		const playEventsLength = this.props.play?.playEvents?.length ?? 1;
 		const playId = this.props.play.playEvents?.[playEventsLength - 1]?.playId;
@@ -93,7 +100,7 @@ export class PlayItem extends React.Component<Props, State>
 			</div>
 		);
 
-		const nonPitchPlays = play.playEvents.filter(pe => !pe.isPitch);
+		const nonPitchPlays = play.playEvents.filter(pe => !pe.isPitch).slice(0, pitchIndex[0]);
 
 		const finalHit = play.playEvents.filter(a => !!a.hitData)?.reverse()?.[0];
 
@@ -105,42 +112,53 @@ export class PlayItem extends React.Component<Props, State>
 						<div>{pe.details.description}</div>
 					</div>
 				))}
-				<ListItem button onClick={this.toggle}>
-					<ListItemAvatar>
-						{playId &&
-                        <Tooltip title={tooltip} arrow enterTouchDelay={0}>
-                            <Avatar className={avatarClasses}>
-                                <a target={"_blank"} href={href}
-                                   onClick={e =>
-								   {
-									   e.stopPropagation();
-									   if (!authed || !playVideoEnabled)
+				{!this.props.defaultExpanded && (
+					<ListItem button onClick={this.toggle}>
+						<ListItemAvatar>
+							{playId &&
+                            <Tooltip title={tooltip} arrow enterTouchDelay={0}>
+                                <Avatar className={avatarClasses}>
+                                    <a target={"_blank"} href={href}
+                                       onClick={e =>
 									   {
-										   if (!authed)
+										   e.stopPropagation();
+										   if (!authed || !playVideoEnabled)
 										   {
-											   UpsellDataStore.open(BackerType.ProBacker);
+											   if (!authed)
+											   {
+												   UpsellDataStore.open(BackerType.ProBacker);
+											   }
+											   e.preventDefault();
 										   }
-										   e.preventDefault();
-									   }
-								   }}>
-                                    <MdVideoLibrary/>
-                                </a>
-                            </Avatar>
-                        </Tooltip>
-						}
-					</ListItemAvatar>
-					<ListItemText
-						primary={result.event || `${play.matchup.batter.fullName} hits against ${play.matchup.pitcher.fullName}`}
-						secondary={result.description}
-					/>
-					<ListItemSecondaryAction>
-						<div className={styles.actions}>
-							{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}
+									   }}>
+                                        <MdVideoLibrary/>
+                                    </a>
+                                </Avatar>
+                            </Tooltip>
+							}
+						</ListItemAvatar>
+						<ListItemText
+							primary={result.event || `${play.matchup.batter.fullName} hits against ${play.matchup.pitcher.fullName}`}
+							secondary={result.description}
+						/>
+						<ListItemSecondaryAction>
+							<div className={styles.actions}>
+								{this.expanded ? <ExpandLess/> : <ExpandMore/>}
+							</div>
+						</ListItemSecondaryAction>
+					</ListItem>
+				)}
+				<Collapse in={this.expanded} className={styles.playDetails}>
+
+					<div className={styles.pitcher}>
+						<Chip label={`B: ${play.matchup.batter.fullName} (${play.matchup.batSide.code})`}/>
+						<Chip style={{marginLeft: "auto"}} label={`P: ${play.matchup.pitcher.fullName} (${play.matchup.pitchHand.code})`}/>
+					</div>
+					{this.props.defaultExpanded && result.description && (
+						<div className={styles.result}>
+							{result.description}
 						</div>
-					</ListItemSecondaryAction>
-				</ListItem>
-				<Collapse in={this.state.expanded} className={styles.playDetails}>
-					<div className={styles.pitcher}>Pitching: {play.matchup.pitcher.fullName}</div>
+					)}
 					<div className={styles.pitches}>
 						<Strikezone play={this.props.play}/>
 						<List>
@@ -153,11 +171,21 @@ export class PlayItem extends React.Component<Props, State>
 							<ListItem>Launch Angle: {finalHit.hitData.launchAngle}°</ListItem>
 							<ListItem>Distance: {finalHit.hitData.totalDistance}'</ListItem>
 							<ListItem>Hardness: {StringUtils.toProperCase(finalHit.hitData.hardness)}</ListItem>
-							<ListItem>Type: {StringUtils.toProperCase(finalHit.hitData.trajectory.replace("_", " "))}</ListItem>
+							<ListItem>Type: {StringUtils.toProperCase(finalHit.hitData.trajectory?.replace("_", " "))}</ListItem>
 						</List>
 					)}
 				</Collapse>
 			</>
 		);
 	}
+}
+
+const NonPitchEvent: React.FC<{ pe: LiveGamePlayEvent }> = ({pe}) =>
+{
+	return (
+		<div className={styles.nonPitchEvent}>
+			<MdInfoOutline className={styles.nonPitchEventIcon}/>
+			<div>{pe.details.description}</div>
+		</div>
+	);
 }

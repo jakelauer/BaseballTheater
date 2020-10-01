@@ -1,10 +1,7 @@
 import * as React from "react";
-import {LiveData, LiveGamePlay} from "baseball-theater-engine";
-import {PlayItem} from "./Components/PlayItem";
-import {Button, ButtonGroup, Collapse, List, ListItem, ListItemText, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
-import {StringUtils} from "../../Utility/StringUtils";
-import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import styles from "./LiveGame.module.scss";
+import {LiveData} from "baseball-theater-engine";
+import {Button, ButtonGroup, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import styles from "./Plays.module.scss";
 import {RespondDataStore, RespondDataStorePayload, RespondSizes} from "../../Global/Respond/RespondDataStore";
 import Helmet from "react-helmet";
 import moment from "moment";
@@ -14,10 +11,11 @@ import {MiniBoxScore} from "./Components/MiniBoxScore";
 import {ScoringPlays} from "./Components/ScoringPlays";
 import {IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
 import {RouteComponentProps, withRouter} from "react-router-dom";
+import {PlayUtils} from "./Utils/PlayUtils";
+import {HalfInnings, Inning} from "./Components/Innings";
 
-type HalfInnings = { [key: string]: IHalfInning };
 
-interface ILiveGameProps extends RouteComponentProps<IGameParams>
+interface IPlaysProps extends RouteComponentProps<IGameParams>
 {
 	liveData: LiveData;
 }
@@ -26,10 +24,10 @@ interface DefaultProps
 {
 }
 
-type Props = ILiveGameProps & DefaultProps;
-type State = ILiveGameState;
+type Props = IPlaysProps & DefaultProps;
+type State = IPlaysState;
 
-interface ILiveGameState
+interface IPlaysState
 {
 	selectedInning: number;
 	respond: RespondDataStorePayload;
@@ -39,14 +37,7 @@ interface ILiveGameState
 	mode: "scoring" | "all";
 }
 
-interface IHalfInning
-{
-	inningNumber: number;
-	halfInning: "top" | "bottom";
-	plays: LiveGamePlay[];
-}
-
-class _LiveGame extends React.Component<Props, State>
+class _Plays extends React.Component<Props, State>
 {
 	private buttonRef = React.createRef<HTMLButtonElement>();
 
@@ -80,7 +71,7 @@ class _LiveGame extends React.Component<Props, State>
 
 		if (!this.state.halfInnings.length && !!this.props.liveData?.liveData)
 		{
-			newState.halfInnings = this.getHalfInningsByInning();
+			newState.halfInnings = PlayUtils.getHalfInningsByInning(this.props.liveData?.liveData);
 			newState.halfInningsKeysSorted = newState.halfInnings.map(hi => Object.keys(hi).sort((a, b) =>
 			{
 				const aPlay = hi[a];
@@ -107,42 +98,6 @@ class _LiveGame extends React.Component<Props, State>
 		}));
 	}
 
-	private getHalfInningsByInning()
-	{
-		const liveData = this.props.liveData?.liveData;
-		if (!liveData)
-		{
-			return [];
-		}
-
-		return liveData.linescore.innings.map((inning, i) =>
-		{
-			const playsForInning = liveData.plays.allPlays.filter(a => a.about.inning === i + 1);
-			const playsByInning: { [key: string]: IHalfInning } = {};
-			let lastInningVal = "-1bottom";
-
-			for (let play of playsForInning)
-			{
-				const inningVal = `${play.about.inning}${play.about.halfInning}`;
-				const isNew = inningVal !== lastInningVal;
-				if (isNew)
-				{
-					playsByInning[inningVal] = {
-						inningNumber: play.about.inning,
-						halfInning: play.about.halfInning,
-						plays: []
-					}
-				}
-
-				playsByInning[inningVal].plays.push(play);
-
-				lastInningVal = inningVal;
-			}
-
-			return playsByInning;
-		});
-	}
-
 	private onInningSelect = (inning: number) => this.setState({selectedInning: inning});
 
 	private onMenuClose = () => this.setState({
@@ -165,7 +120,7 @@ class _LiveGame extends React.Component<Props, State>
 		history.replaceState(null, null, SiteRoutes.Game.resolve({
 			gameDate: "_",
 			gameId: this.props.liveData.gamePk.toString(),
-			tab: "LiveGame",
+			tab: "Plays",
 			tabDetail: mode
 		}));
 	}
@@ -278,6 +233,7 @@ class _LiveGame extends React.Component<Props, State>
 
 					{halfInnings && keys && this.state.mode === "all" && (
 						<Inning
+							isCurrentInning={this.state.selectedInning === liveData.linescore.currentInning}
 							halfInnings={halfInnings}
 							keysSorted={keys}
 						/>
@@ -295,58 +251,5 @@ class _LiveGame extends React.Component<Props, State>
 	}
 }
 
-interface IHalfInningProps
-{
-	halfInning: IHalfInning;
-	defaultOpen: boolean;
-}
 
-const HalfInning = ({halfInning, defaultOpen}: IHalfInningProps) =>
-{
-	const [open, setOpen] = React.useState(defaultOpen);
-	const playsSorted = halfInning.plays;
-	const renderedPlays = playsSorted.map((p, i) => (
-		<PlayItem play={p} key={i} showOtherEvents={true}/>
-	));
-	const halfLabel = `${StringUtils.toProperCase(halfInning.halfInning)} ${halfInning.inningNumber}`;
-
-	const handleClick = () => setOpen(!open);
-
-	return (
-		<React.Fragment>
-			<ListItem button onClick={handleClick}>
-				<ListItemText primary={<h2>{halfLabel}</h2>}/>
-				{open ? <ExpandLess/> : <ExpandMore/>}
-			</ListItem>
-			<Collapse in={open}>
-				{renderedPlays}
-			</Collapse>
-		</React.Fragment>
-	);
-};
-
-
-interface IInningProps
-{
-	halfInnings: HalfInnings;
-	keysSorted: string[];
-}
-
-class Inning extends React.Component<IInningProps>
-{
-	public render()
-	{
-		const renderedHalfInnings = this.props.keysSorted.map((k, i) =>
-			<HalfInning key={k} halfInning={this.props.halfInnings[k]} defaultOpen={true}/>
-		);
-
-		return (
-			<List style={{flex: 1}}>
-				{renderedHalfInnings}
-			</List>
-		);
-	}
-};
-
-
-export const LiveGame = withRouter(_LiveGame);
+export const Plays = withRouter(_Plays);

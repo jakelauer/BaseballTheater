@@ -151,7 +151,7 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 							</Grid>
 						</Container>
 						<Container style={{textAlign: "center", padding: "2rem"}}>
-							&copy; {moment().year()}. Created by <a href={"http://jakelauer.com"}>Jake Lauer</a> (<a href={"https://www.reddit.com/user/hellocontrol_"}>HelloControl_</a>).
+							&copy; {moment().year()}. Created by <a href={"http://jakelauer.com"}>Jake Lauer</a> (<a href={"https://www.reddit.com/user/hellocontrol-"}>HelloControl-</a>).
 							Go Cubs.
 						</Container>
 					</main>

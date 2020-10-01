@@ -9,6 +9,7 @@ export interface ISettingsDataStorePayload
 	defaultGameTab: GameTabs;
 	hideScores: boolean;
 	highlightDescriptions: boolean;
+	showUpdateBar: boolean;
 }
 
 class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
@@ -23,7 +24,8 @@ class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
 			defaultGameTab: "Highlights",
 			favoriteTeams: [],
 			hideScores: false,
-			highlightDescriptions: true
+			highlightDescriptions: true,
+			showUpdateBar: true
 		};
 	}
 
@@ -83,6 +85,13 @@ class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
 	{
 		this.update({
 			highlightDescriptions: show
+		});
+	}
+
+	public setShowUpdateBar(show: boolean)
+	{
+		this.update({
+			showUpdateBar: show
 		});
 	}
 

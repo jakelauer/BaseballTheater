@@ -53,12 +53,14 @@ export class PitchItem extends React.Component<Props, State>
 				startSpeed
 			} = pitch.pitchData;
 
+			const sr = breaks.spinRate ? ` [${breaks.spinRate} RPM]` : "";
+
 			secondary = (
-				<div style={{paddingRight: "1rem"}}>
-					<div>
-						{`${startSpeed ?? "? "}mph ${pitch.details?.type?.description ?? "?"} [${breaks.spinRate ?? '?'} SR]`}
-					</div>
-				</div>
+				<span style={{display: "block", paddingRight: "1rem"}}>
+					<span style={{display: "block"}}>
+						{`${startSpeed ?? "? "}mph ${pitch.details?.type?.description ?? "?"}${sr}`}
+					</span>
+				</span>
 			);
 		}
 

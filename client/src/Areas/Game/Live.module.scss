@@ -1,0 +1,73 @@
+.pip
+{
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	opacity: 0.5;
+	background: black;
+	border-radius: 50%;
+	margin: 0.125em;
+
+	&.on
+	{
+		opacity: 1;
+	}
+
+	&.o
+	{
+		background: #ff9600;
+	}
+
+	&.b
+	{
+		background-color: rgb(39, 161, 39);
+	}
+
+	&.s
+	{
+		background-color: rgb(170, 21, 11);
+	}
+
+	&.base
+	{
+		border-radius: 0;
+	}
+}
+
+.status
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	padding: 1rem;
+}
+
+.diamond
+{
+	margin-right: 1rem;
+}
+
+.inner
+{
+	transform: rotateZ(-45deg);
+
+	> div
+	{
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+	}
+}
+
+.statusSection
+{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.statusSection + .statusSection
+{
+	margin-left: 0.5em;
+}

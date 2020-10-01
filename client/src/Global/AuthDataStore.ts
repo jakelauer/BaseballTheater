@@ -8,7 +8,6 @@ export interface IAuthContext
 	authorized: boolean;
 	levels: BackerType[];
 	loaded: boolean;
-	isSubscriber: boolean;
 }
 
 export enum BackerType
@@ -36,7 +35,6 @@ class _AuthDatastore extends DataStore<IAuthContext>
 		super({
 			authorized: false,
 			userId: null,
-			isSubscriber: false,
 			loaded: false,
 			levels: []
 		});

@@ -76,6 +76,11 @@ export default class SettingsArea extends React.Component<Props, State>
 		SettingsDataStore.setShowDescriptions(event.target.checked);
 	};
 
+	private readonly handleShowUpdateBarChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+	{
+		SettingsDataStore.setShowUpdateBar(event.target.checked);
+	};
+
 	public render()
 	{
 		const gameTabs: { [key in GameTabs]?: string } = {
@@ -189,6 +194,18 @@ export default class SettingsArea extends React.Component<Props, State>
 								value={this.state.settings.highlightDescriptions}
 								checked={this.state.settings.highlightDescriptions}
 								onChange={this.handleShowDescriptionsChange}
+								edge="end"
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					<ListItem style={{paddingLeft: 0, paddingRight: 0}}>
+						<ListItemText primary={"Show Update Timer Bar"}/>
+						<ListItemSecondaryAction>
+							<Switch
+								value={this.state.settings.showUpdateBar}
+								checked={this.state.settings.showUpdateBar}
+								onChange={this.handleShowUpdateBarChange}
 								edge="end"
 							/>
 						</ListItemSecondaryAction>

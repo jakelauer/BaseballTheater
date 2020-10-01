@@ -5,17 +5,21 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import {Redirect, RouteComponentProps, withRouter} from "react-router";
 import {GameTabs, IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
 import {Wrap} from "./Wrap";
-import {LiveGame} from "./LiveGame";
+import {Plays} from "./Plays";
 import {BoxScore} from "./BoxScore";
 import {Highlights} from "./Highlights";
 import {GameDataStore, GameDataStoreContext, IGameDataStorePayload} from "./Components/GameDataStore";
-import {CircularProgress, Tabs} from "@material-ui/core";
+import {CircularProgress, LinearProgress, Tabs} from "@material-ui/core";
 import {Respond} from "../../Global/Respond/Respond";
 import {RespondSizes} from "../../Global/Respond/RespondDataStore";
-import {LibraryBooks, ListAlt, PlayCircleOutline, Update} from "@material-ui/icons";
+import {LibraryBooks, ListAlt, PlayCircleOutline, Sync, TableChart} from "@material-ui/icons";
 import Tab from "@material-ui/core/Tab";
 import {SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
 import {ErrorBoundary} from "../../App/ErrorBoundary";
+import {Live} from "./Live";
+import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
+import classNames from "classnames";
+import {useDataStore} from "../../Utility/HookUtils";
 
 interface IGameAreaProps extends RouteComponentProps<IGameParams>
 {
@@ -32,6 +36,7 @@ interface IGameAreaState
 {
 	tabValue: string;
 	gameData: IGameDataStorePayload;
+	authData: IAuthContext;
 }
 
 class GameArea extends React.Component<Props, State>
@@ -46,6 +51,7 @@ class GameArea extends React.Component<Props, State>
 		this.gameDataStore = new GameDataStore(this.props.match.params.gameId);
 
 		this.state = {
+			authData: AuthDataStore.state,
 			tabValue: props.match.params.tab,
 			gameData: this.gameDataStore.state
 		};
@@ -56,6 +62,12 @@ class GameArea extends React.Component<Props, State>
 		this.gameDataStore.listen(gameData =>
 		{
 			this.setState({gameData});
+		});
+
+		AuthDataStore.listen(authData =>
+		{
+			this.setState({authData});
+			this.gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
 		});
 	}
 
@@ -87,7 +99,10 @@ class GameArea extends React.Component<Props, State>
 				content = <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
 				break;
 			case "LiveGame":
-				content = <LiveGame liveData={this.state.gameData.liveData}/>;
+				content = <Live liveData={this.state.gameData.liveData}/>;
+				break;
+			case "Plays":
+				content = <Plays liveData={this.state.gameData.liveData}/>;
 				break;
 			case "BoxScore":
 				content = <BoxScore liveData={this.state.gameData.liveData}/>;
@@ -140,30 +155,42 @@ class GameArea extends React.Component<Props, State>
 				value: "Highlights",
 			},
 			{
+				label: "Live Play",
+				disabled: this.hasWrap(),
+				icon: <Sync/>,
+				value: "LiveGame",
+			},
+			{
+				label: "Plays",
+				disabled: false,
+				icon: <ListAlt/>,
+				value: "Plays",
+			},
+			{
+				label: "Box Score",
+				disabled: false,
+				icon: <TableChart/>,
+				value: "BoxScore",
+			},
+			{
 				label: "Recap",
 				disabled: !this.hasWrap(),
 				icon: <LibraryBooks/>,
 				value: "Wrap",
 			},
-			{
-				label: "Plays",
-				disabled: false,
-				icon: <Update/>,
-				value: "LiveGame",
-			},
-			{
-				label: "Box Score",
-				disabled: false,
-				icon: <ListAlt/>,
-				value: "BoxScore",
-			},
 		];
 
+		const barValue = (this.state.gameData.secondsUntilRefresh - 1) / (this.gameDataStore.refreshSeconds - 1) * 100;
 
 		return (
 			<>
 				<div className={styles.gameWrapper}>
 					<GameDataStoreContext.Provider value={this.gameDataStore.state}>
+						<Respond at={RespondSizes.medium} hide={false}>
+							{!this.state.gameData.cancelled && (
+								<RefreshTimer barValue={barValue}/>
+							)}
+						</Respond>
 						<Respond at={RespondSizes.medium} hide={true}>
 							<Tabs
 								className={styles.tabs}
@@ -173,6 +200,9 @@ class GameArea extends React.Component<Props, State>
 								indicatorColor={"primary"}
 								textColor="primary"
 							>
+								{!this.state.gameData.cancelled && (
+									<RefreshTimer barValue={barValue}/>
+								)}
 								{tabs.filter(a => !a.disabled).map(tab => (
 									<Tab
 										key={tab.label}
@@ -212,6 +242,28 @@ class GameArea extends React.Component<Props, State>
 			</>
 		);
 	}
+}
+
+
+const RefreshTimer: React.FC<{ barValue: number }> = ({barValue}) =>
+{
+	const settings = useDataStore(SettingsDataStore);
+
+	if (!settings.showUpdateBar)
+	{
+		return null;
+	}
+
+	return (
+		<LinearProgress
+			classes={{
+				bar1Determinate: classNames(styles.progressBar, {[styles.progressBarNoAnim]: barValue >= 90})
+			}}
+			variant={"determinate"}
+			value={barValue}
+			style={{position: "absolute", top: 0, left: 0, right: 0, zIndex: 99}}
+		/>
+	);
 }
 
 export default withRouter(GameArea);

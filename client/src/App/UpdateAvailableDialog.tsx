@@ -13,7 +13,7 @@ type Changelists = { [datetime: string]: string[] };
 
 export const UpdateAvailableDialog: React.FC = () =>
 {
-	const [waitingForUpdate, setWaitingForUpdate] = useState(true);
+	const [waitingForUpdate, setWaitingForUpdate] = useState(false);
 	const [changelistData, setChangelistData] = useState<Changelists | null>(null);
 
 	const checkForUpdates = () =>

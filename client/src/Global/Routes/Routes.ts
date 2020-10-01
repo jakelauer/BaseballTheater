@@ -23,7 +23,7 @@ export class SiteRoute<T extends object = {}>
 	}
 }
 
-export type GameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights";
+export type GameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights" | "Plays";
 export interface IGameParams
 {
 	gameDate?: string;

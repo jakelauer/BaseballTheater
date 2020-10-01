@@ -68,7 +68,11 @@ export const ScoringPlays: React.FC<IScoringPlaysProps> = (
 										}
 									/>
 								)}
-								<PlayItem play={sp} showOtherEvents={false}/>
+								<PlayItem
+									defaultExpanded={false}
+									play={sp}
+									showOtherEvents={false}
+								/>
 							</>
 						);
 					})}

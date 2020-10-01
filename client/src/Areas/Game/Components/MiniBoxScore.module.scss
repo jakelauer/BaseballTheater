@@ -8,7 +8,8 @@
 	max-width: 900px;
 	align-items: center;
 	justify-content: center;
-	padding: 1rem 0;
+	padding: 1em 0;
+	font-size: 0.8rem;
 
 	table
 	{
@@ -17,7 +18,7 @@
 
 	td
 	{
-		line-height: 1rem;
+		line-height: 1em;
 		padding: 0.5vw;
 		border: 1px solid $color-basic-background;
 	}
@@ -31,7 +32,7 @@
 
 	.r-medium &
 	{
-		margin-bottom: 1rem;
+		margin-bottom: 1em;
 	}
 }
 
@@ -41,7 +42,7 @@
 
 	td
 	{
-		padding-right: 1rem;
+		padding-right: 1em;
 		border-right: 0;
 		white-space: nowrap;
 	}

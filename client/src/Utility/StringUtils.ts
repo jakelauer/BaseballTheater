@@ -12,6 +12,6 @@ export class StringUtils
 
 	public static toProperCase = (s: string) =>
 	{
-		return s.replace(/(^[a-z])|(\s+[a-z])/g, txt => txt.toUpperCase());
+		return s?.replace(/(^[a-z])|(\s+[a-z])/g, txt => txt.toUpperCase()) ?? "";
 	};
 }

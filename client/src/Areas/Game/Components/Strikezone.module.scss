@@ -14,11 +14,14 @@
 	margin-bottom: 3rem;
 	align-items: center;
 	justify-content: center;
+	background: url("/assets/strikezone.png") center bottom;
 	background-size: cover;
 
 	:global(.r-medium) &
 	{
 		margin: 0 auto;
+		width: 17rem;
+		height: 17rem;
 	}
 
 	.forceSquare

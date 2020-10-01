@@ -45,8 +45,8 @@ export class Strikezone extends React.Component<Props, State>
 			<div className={styles.wrapper}>
 				<div className={styles.zone}>
 					<div className={styles.zoneBox}>
-						{pitches.map(p => (
-							<Pitch {...p} />
+						{pitches.map((p, i) => (
+							<Pitch key={i} {...p} />
 						))}
 					</div>
 				</div>
@@ -67,7 +67,7 @@ const Pitch: React.FC<LiveGamePlayEvent> = (pitch) =>
 	const top = pitchData.strikeZoneTop;
 	const height = top - bottom;
 
-	const leftPct = (pitchData.coordinates.pX + 0.8) / 1.8;
+	const leftPct = ((pitchData.coordinates.pX + 0.5) * 0.8) + 0.1;
 	const bottomPct = (pitchData.coordinates.pZ - bottom) / height;
 
 	return (
