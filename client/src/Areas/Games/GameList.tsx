@@ -175,13 +175,13 @@ export class GameList extends React.Component<Props, State>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("condensed", gameIds)}/>}>
 									Condensed
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("must c", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("must-c", gameIds)}/>}>
 									Must C
 								</Button>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("StatCast", gameIds)}/>}>
 									StatCast
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("home_run", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("home run", gameIds)}/>}>
 									Home Runs
 								</Button>
 								<Button component={p => <Link {...p} to={GameList.getSearchLink("defense", gameIds)}/>}>

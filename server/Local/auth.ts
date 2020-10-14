@@ -99,15 +99,11 @@ class _Auth
 			userId
 		}, res);
 
-		// Refresh the current users access token.
-		await Database.users.updateOne({id: userId}, {
-			$set: {
-				id: userId,
-				accessToken: user.accessToken,
-				refresh_token: user.refreshToken,
-				refresh_expiry: user.expires
-			}
-		}, {upsert: true});
+		await Database.updateUser(userId, {
+			accessToken: user.accessToken,
+			refresh_token: user.refreshToken,
+			refresh_expiry: user.expires
+		});
 	}
 
 	public async getRefreshAuthStatus(req: Request, res: Response): Promise<IAuthStatus>
@@ -130,59 +126,50 @@ class _Auth
 			authStatus.accessToken = storedUserData.accessToken;
 			authStatus.userId = storedUserData.userId;
 
-			const foundUsers = await Database.users.find({
-				id: storedUserData.userId
-			}).toArray();
+			const dbUser = await Database.getUser(storedUserData.userId);
 
-			if (foundUsers && foundUsers.length === 1)
+			const now = new Date();
+			const refreshExpired = now > dbUser.refresh_expiry;
+			if (refreshExpired)
 			{
-				const dbUser = foundUsers[0];
+				authStatus.userId = null;
+				authStatus.accessToken = null;
 
-				const now = new Date();
-				const refreshExpired = now > dbUser.refresh_expiry;
-				if (refreshExpired)
+				// Return null for everything
+				return authStatus;
+			}
+
+			const accessExpired = now > storedUserData.accessTokenExpiry;
+			if (accessExpired || !storedUserData.accessToken)
+			{
+				try
 				{
-					authStatus.userId = null;
-					authStatus.accessToken = null;
+					const newCreatedToken = this.client.createToken(storedUserData.accessToken, dbUser.refresh_token);
+					const newRefreshedToken = await newCreatedToken.refresh() as TokenWithExpires;
 
-					// Return null for everything
-					return authStatus;
+					const newUserData: IUserData = {
+						userId: storedUserData.userId,
+						accessToken: newRefreshedToken.accessToken,
+						accessTokenExpiry: new Date(Date.now() + (1000 * 60))
+					};
+
+					authStatus.userId = newUserData.userId;
+					authStatus.accessToken = newUserData.accessToken;
+
+					_Auth.setAuthCookie(newUserData, res);
+
+					// Refresh the current users access token.
+					await Database.updateUser(newUserData.userId, {
+						accessToken: newRefreshedToken.accessToken,
+						refresh_token: newRefreshedToken.refreshToken,
+						refresh_expiry: newRefreshedToken.expires
+					});
 				}
-
-				const accessExpired = now > storedUserData.accessTokenExpiry;
-				if (accessExpired || !storedUserData.accessToken)
+				catch (e)
 				{
-					try
-					{
-						const newCreatedToken = this.client.createToken(storedUserData.accessToken, dbUser.refresh_token);
-						const newRefreshedToken = await newCreatedToken.refresh() as TokenWithExpires;
+					console.error(e);
 
-						const newUserData: IUserData = {
-							userId: storedUserData.userId,
-							accessToken: newRefreshedToken.accessToken,
-							accessTokenExpiry: new Date(Date.now() + (1000 * 60))
-						};
-
-						authStatus.userId = newUserData.userId;
-						authStatus.accessToken = newUserData.accessToken;
-
-						_Auth.setAuthCookie(newUserData, res);
-
-						// Refresh the current users access token.
-						await Database.users.updateOne({id: newUserData.userId}, {
-							$set: {
-								accessToken: newRefreshedToken.accessToken,
-								refresh_token: newRefreshedToken.refreshToken,
-								refresh_expiry: newRefreshedToken.expires
-							}
-						}, {upsert: false});
-					}
-					catch (e)
-					{
-						console.error(e);
-
-						return authStatus;
-					}
+					return authStatus;
 				}
 			}
 		}
@@ -227,12 +214,9 @@ class _Auth
 		const storedUserData = _Auth.getAuthCookie(req);
 		if (storedUserData)
 		{
-			// Refresh the current users access token.
-			await Database.users.updateOne({id: storedUserData.userId, accessToken: storedUserData.accessToken}, {
-				$set: {
-					settings: req.body as Object
-				}
-			}, {upsert: false});
+			await Database.updateUser(storedUserData.userId, {
+				settings: req.body as Object
+			});
 		}
 	}
 
@@ -241,14 +225,7 @@ class _Auth
 		const storedUserData = _Auth.getAuthCookie(req);
 		if (storedUserData)
 		{
-			const foundUsers = await Database.users.find({
-				id: storedUserData.userId
-			}).toArray();
-
-			if (foundUsers && foundUsers.length === 1)
-			{
-				return foundUsers[0].settings;
-			}
+			return await Database.getUser(storedUserData.userId);
 		}
 
 		return null;

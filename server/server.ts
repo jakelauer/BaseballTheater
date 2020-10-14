@@ -7,13 +7,14 @@ import cookieParser from "cookie-parser";
 import serveStatic from "serve-static";
 import {Search} from "./Local/search";
 import bodyParser from "body-parser";
-import {Config} from "./config/config";
 import {Auth} from "./Local/auth";
 import {Database} from "./DB/Database";
+import {Populator} from "../workers/Populator";
+import moment from "moment";
 
 // Create the app
 const app = express();
-const port = Config.Port || 5000;
+const port = process.env.port || 5000;
 const clientFolder = path.join(process.cwd(), 'client');
 
 // Set up basic settings
@@ -47,3 +48,14 @@ server.setTimeout(10000);
 Search.initialize();
 Auth.initialize();
 Database.initialize();
+
+const runPopulator = () =>
+{
+	Populator.initialize({
+		dateString: moment().add(-2, "days").format("YYYYMMDD")
+	});
+
+	setTimeout(runPopulator, 1000 * 60 * 60);
+};
+
+runPopulator();

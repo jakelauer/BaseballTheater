@@ -1,5 +1,15 @@
 const webpack = require("webpack");
-const config = require("../webpack.config.populator");
-const compiler = webpack(config);
-compiler.run((err, stats) => {
-});
+const path = require("path");
+const configFactory = require("../webpack.config.populator");
+const fs = require('fs-extra');
+
+const appDirectory = fs.realpathSync(process.cwd());
+const resolve = relativePath => path.resolve(appDirectory, relativePath);
+
+module.exports = (outputDir, callback) => {
+    const compiler = webpack(configFactory(outputDir));
+
+    compiler.run((err, stats) => {
+        callback();
+    });
+}

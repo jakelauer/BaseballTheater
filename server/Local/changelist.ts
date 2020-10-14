@@ -1,4 +1,8 @@
 export const changelist: { [datetime: string]: string[] } = {
+	["2020-10-14"]: [
+		"Highlight search upgrade! Search is faster, and includes highlights going all the way back to 2016.",
+		"User settings reset - this is a side effect of a database upgrade.",
+	],
 	["2020-10-01"]: [
 		"Added baserunners to Live Play",
 		"Fixed wonky icon sizes in game view"
@@ -21,13 +25,4 @@ export const changelist: { [datetime: string]: string[] } = {
 		"Added current pitcher to play items",
 		"Improved messages when no items are present in highlights or plays"
 	],
-	["2020-09-13"]: [
-		"[Pro Backers] Chromecast support! This is available for Pro Backers and above. You can cast all highlights to any device that supports it!",
-		"Plays tab now lets you choose between Scoring Plays and All Plays",
-		"Added game decisions (winning/losing pitcher, saves) in the game list",
-		"Added No Hitter and Perfect Game labels to games (only visible if Hide Scores is disabled)",
-		"More understandable video button labels",
-		"Added video durations to video descriptions",
-		"Fixed a bug that caused batting orders to be incorrect",
-	]
 };

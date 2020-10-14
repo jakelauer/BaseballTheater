@@ -6,7 +6,7 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const entryPath = resolveApp("workers/PopulatorServer.ts");
 
-module.exports = {
+module.exports = (outputDir) => ({
     entry: entryPath,
     target: "node",
     mode: "production",
@@ -31,6 +31,6 @@ module.exports = {
     ],
     output: {
         filename: 'populator.js',
-        path: path.resolve(appDirectory, "output/populator")
+        path: path.resolve(outputDir, "populator")
     }
-};
+});

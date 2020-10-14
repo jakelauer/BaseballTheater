@@ -36,7 +36,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 
 		try
 		{
-			const results = await Search.doSearch({text, gameIds}, page) ?? [];
+			const results = await Search.doSearchFromES({text, gameIds}, page) ?? [];
 
 			res.send(results);
 		}

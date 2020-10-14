@@ -120,7 +120,7 @@ const SearchArea: React.FC<Props> = (props) =>
 	};
 
 	const highlightsRendered = highlights.map(item => (
-		<Grid key={item.highlight.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
+		<Grid key={item?.highlight?.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
 			<Highlight media={item?.highlight} className={styles.highlight} showExtra={true}/>
 		</Grid>
 	));

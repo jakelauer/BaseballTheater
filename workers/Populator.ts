@@ -1,8 +1,9 @@
 ﻿import moment = require("moment");
 import {MediaItem} from "../baseball-theater-engine/contract";
 import {MlbDataServer} from "../baseball-theater-engine";
-
-const fs = require('fs');
+import AWS from "aws-sdk";
+import path from "path";
+import fs from "fs";
 
 export interface PopulatorArgs
 {
@@ -13,17 +14,29 @@ export interface PopulatorArgs
 class PopulatorInternal
 {
 	private date: moment.Moment;
-	private results: { [key: string]: MediaItem[] } = {};
-	private allPromises: Promise<any>[] = [];
 	public static Instance = new PopulatorInternal();
+	private awsAccess: string;
+	private awsSecret: string;
 
 	public initialize(args: PopulatorArgs)
 	{
+		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
+		const keys = JSON.parse(keysFile)[0];
+		this.awsAccess = keys.s3.AWS_ACCESS_KEY;
+		this.awsSecret = keys.s3.AWS_SECRET_ACCESS_KEY;
+
+		AWS.config.update({
+			region: 'us-west-2',
+			accessKeyId: this.awsAccess,
+			secretAccessKey: this.awsSecret
+		});
+
 		this.date = args.dateString
 			? moment(args.dateString, "YYYYMMDD")
 			: moment().add(-5, "days");
 
-		this.loadHighlights();
+		this.loadHighlights()
+			.then(() => console.log("Done loading highlights"));
 	}
 
 	private async loadHighlights()
@@ -36,16 +49,50 @@ class PopulatorInternal
 		{
 			const highlights = await this.loadHighlightsForDate(lastDay);
 			const dateString = lastDay.format("YYYYMMDD");
-			const jsonResult = JSON.stringify(highlights);
-			console.log(jsonResult);
-			fs.writeFile("C:\\highlightdata\\" + dateString + ".json", jsonResult, {
-				encoding: "utf8"
-			}, () =>
+			console.log(dateString);
+
+			if (highlights.length)
 			{
-			});
+				this.writeToDynamo(highlights);
+				// const jsonResult = JSON.stringify(highlights);
+				//this.writeToS3(`${dateString}.json`, jsonResult);
+			}
 			lastDay = lastDay.add(1, "day");
 		}
 		console.log("===end loop===");
+	}
+
+	private writeToDynamo(highlights: IHighlightSearchItem[])
+	{
+		const now = Date.now();
+		const docClient = new AWS.DynamoDB.DocumentClient();
+		const table = "bbt-highlights";
+
+		highlights.forEach(h =>
+		{
+			const params = {
+				TableName: table,
+				Item: {
+					game_pk: h.game_pk,
+					...h.highlight,
+					writeDate: now,
+					key: `${h.game_pk}.${h.highlight.id}`
+				}
+			};
+
+			// Call DynamoDB to add the item to the table
+			docClient.put(params, function (err, data)
+			{
+				if (err)
+				{
+					console.error(err);
+				}
+				else
+				{
+					console.log("Stored " + h.highlight.id);
+				}
+			});
+		});
 	}
 
 	private async loadHighlightsForDate(date: moment.Moment)
@@ -79,6 +126,10 @@ class PopulatorInternal
 		let highlights: IHighlightSearchItem[] = [];
 		const hasHighlights = !!(data.highlights && data.highlights.highlights && data.highlights.highlights.items);
 		console.log(`hasHighlights: ${hasHighlights}`)
+		if (!hasHighlights)
+		{
+			return highlights;
+		}
 		if (data.highlights && data.highlights.highlights && data.highlights.highlights.items)
 		{
 			console.log(data.highlights.highlights.items.length);

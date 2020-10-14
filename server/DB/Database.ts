@@ -1,11 +1,23 @@
 import {MongoClient} from "mongodb";
 import * as fs from "fs";
 import * as path from "path";
+import AWS from "aws-sdk";
+
+export interface IUser
+{
+	id: string;
+	accessToken: string;
+	refresh_token: any;
+	refresh_expiry: Date;
+	settings: any;
+}
 
 class _Database
 {
 	public static Instance = new _Database();
 	private _client: MongoClient;
+	private _docClient: AWS.DynamoDB.DocumentClient;
+	private _table = "bbt-patrons";
 	private url: string;
 
 	constructor()
@@ -13,43 +25,83 @@ class _Database
 		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
 		const keys = JSON.parse(keysFile)[0];
 		this.url = keys.mongo.url;
+
+		AWS.config.update({
+			region: 'us-west-2',
+			accessKeyId: keys.s3.AWS_ACCESS_KEY,
+			secretAccessKey: keys.s3.AWS_SECRET_ACCESS_KEY
+		});
 	}
 
 	private get client()
 	{
-		if (!this._client)
+		if (!this._docClient)
 		{
-			throw new Error("Mongo failed to connect");
+			throw new Error("DynamoDB failed to connect");
 		}
 
-		return this._client;
+		return this._docClient;
 	}
 
 	public initialize()
 	{
-		MongoClient.connect(this.url, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true
-		}, (err, client) =>
-		{
-			if (err)
-			{
-				console.error(err);
-				return
-			}
+		this._docClient = new AWS.DynamoDB.DocumentClient();
+	}
 
-			this._client = client;
+	public async updateUser(id: string, update: Partial<IUser>)
+	{
+		return new Promise<void>(async (resolve, reject) =>
+		{
+			const existing = await this.getUser(id)
+
+			const data = {...existing, ...update};
+
+			const params = {
+				TableName: this._table,
+				Item: {
+					id,
+					...data
+				}
+			};
+
+			// Call DynamoDB to add the item to the table
+			this.client.put(params, function (err, data)
+			{
+				if (err)
+				{
+					console.error(err);
+					reject(err);
+				}
+				else
+				{
+					console.log("Updated user " + id);
+					resolve();
+				}
+			});
 		});
 	}
 
-	public get db()
+	public getUser(id: string): Promise<IUser>
 	{
-		return this.client.db("bbt");
-	}
-
-	public get users()
-	{
-		return this.db.collection("patrons");
+		return new Promise((resolve, reject) =>
+		{
+			this._docClient.get({
+				TableName: "bbt-patrons",
+				Key: {
+					id
+				}
+			}, (err, data: any) =>
+			{
+				if (err)
+				{
+					reject(err);
+				}
+				else
+				{
+					resolve(data.Item);
+				}
+			});
+		});
 	}
 }
 
