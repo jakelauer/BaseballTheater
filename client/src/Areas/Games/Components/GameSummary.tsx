@@ -108,8 +108,18 @@ export class GameSummary extends React.Component<Props, State>
 					}
 					{(future || !hasScore) &&
                     <React.Fragment>
-                        <Preview home={false} isFavorite={awayIsFavorite} team={teams.away}/>
-                        <Preview home={true} isFavorite={homeIsFavorite} team={teams.home}/>
+                        <Preview
+							home={false}
+							team={teams.away}
+							isFavorite={awayIsFavorite}
+							hideRecord={this.state.settings.hideScores}
+						/>
+                        <Preview
+							home={true}
+							team={teams.home}
+							isFavorite={homeIsFavorite}
+							hideRecord={this.state.settings.hideScores}
+						/>
                     </React.Fragment>
 					}
 				</div>
@@ -148,6 +158,7 @@ interface ITeamRowProps
 	home: boolean;
 	team: IScheduleTeamItem;
 	isFavorite: boolean;
+	hideRecord: boolean;
 	children?: React.ReactNode;
 }
 
@@ -168,9 +179,11 @@ const TeamRow = (props: ITeamRowProps) =>
 					{props.team.team.teamName}
 					{props.isFavorite && <MdFavorite style={{fontSize: "0.8rem", color: "red", paddingLeft: 4}}/>}
 				</div>
-				<div className={styles.record}>
-					<>{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})</>
-				</div>
+				{!props.hideRecord && (
+					<div className={styles.record}>
+						<>{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})</>
+					</div>
+				)}
 			</div>
 			<div className={styles.teamValue}>
 				{props.children}
@@ -201,7 +214,7 @@ const Score = (props: IScoreProps) =>
 	const errors = numberOrHidden(teamValues.errors);
 
 	return (
-		<TeamRow {...rest}>
+		<TeamRow hideRecord={hideScores} {...rest}>
 			<div className={styles.rhe}>
 				<div className={styles.score}>
 					{runs}
