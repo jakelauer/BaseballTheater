@@ -16,7 +16,8 @@
     "build:server:beta": "node server/scripts/build_v2.js -serverenv=beta",
     "build:server:prod": "node server/scripts/build_v2.js -serverenv=prod",
     "build:populator": "node workers/scripts/build_populator.js",
-    "finalize": "node server/scripts/finalize.js"
+    "finalize": "node server/scripts/finalize.js",
+    "relay": "relay-compiler --watch --src ./client/src --schema ./client/src/Global/GQL/schema.generated.gql --language typescript --extensions ts tsx"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +43,9 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "mongodb": "^3.3.2",
+    "relay-compiler": "11.0.0",
+    "relay-compiler-language-typescript": "13.0.6",
+    "relay-config": "11.0.0",
     "simple-oauth2": "^3.1.0",
     "ts-node": "^8.3.0",
     "typescript": "3.7.2",

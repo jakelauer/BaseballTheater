@@ -1,6 +1,7 @@
 import {DataStoreObserver} from "./DataStoreObserver";
+import {useEffect, useState} from "react";
 
-export abstract class DataStore<TState extends {},
+export abstract class DataStore<TState extends any,
 	TObserverParams extends {} = never>
 {
 	protected _currentState: TState;
@@ -14,13 +15,12 @@ export abstract class DataStore<TState extends {},
 	protected update(data: Partial<TState>)
 	{
 		this._currentState = this.getNewState(data);
-		;
 		this.broadcast();
 	}
 
 	protected getNewState(data: Partial<TState>): TState
 	{
-		return {...this._currentState, ...data};
+		return {...this._currentState as any, ...data};
 	}
 
 	protected broadcast()
@@ -55,4 +55,27 @@ export abstract class DataStore<TState extends {},
 	{
 		return this._currentState;
 	}
+
+	public use(onUpdate?: () => void): TState
+	{
+		return useDataStore(this, onUpdate);
+	}
 }
+
+export const useDataStore = <T extends any, U extends {} = {}>(ds: DataStore<T, U>, onUpdate?: () => void) =>
+{
+	const [current, setCurrent] = useState(ds.state);
+
+	useEffect(() =>
+	{
+		const destroy = ds.listen(data =>
+		{
+			setCurrent(data);
+			onUpdate?.();
+		});
+
+		return () => destroy();
+	}, []);
+
+	return current;
+};

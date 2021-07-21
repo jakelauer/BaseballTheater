@@ -91,18 +91,20 @@ export class GameSummary extends React.Component<Props, State>
 					{(!future && hasScore) &&
                     <React.Fragment>
                         <Score
-                            home={false}
-                            team={teams.away}
-                            isFavorite={awayIsFavorite}
-                            linescore={linescore}
-                            hideScores={this.state.settings.hideScores}
+							home={false}
+							team={teams.away}
+							hideRecord={this.state.settings.hideScores}
+							isFavorite={awayIsFavorite}
+							linescore={linescore}
+							hideScores={this.state.settings.hideScores}
                         />
                         <Score
-                            home={true}
-                            team={teams.home}
-                            isFavorite={homeIsFavorite}
-                            linescore={linescore}
-                            hideScores={this.state.settings.hideScores}
+							home={true}
+							team={teams.home}
+							hideRecord={this.state.settings.hideScores}
+							isFavorite={homeIsFavorite}
+							linescore={linescore}
+							hideScores={this.state.settings.hideScores}
                         />
                     </React.Fragment>
 					}

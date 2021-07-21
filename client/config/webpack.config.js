@@ -337,17 +337,20 @@ module.exports = function(webpackEnv) {
                 plugins: [
                   ['@babel/plugin-proposal-optional-chaining', {loose: true}],
                     ['@babel/plugin-proposal-nullish-coalescing-operator', {loose: true}],
-                  [
-                    require.resolve('babel-plugin-named-asset-import'),
-                    {
-                      loaderMap: {
-                        svg: {
-                          ReactComponent: '@svgr/webpack?-svgo,+ref![path]',
-                        },
-                      },
-                    },
-                  ],
-                ],
+					[
+						require.resolve('babel-plugin-named-asset-import'),
+						{
+							loaderMap: {
+								svg: {
+									ReactComponent: '@svgr/webpack?-svgo,+ref![path]',
+								},
+							},
+						},
+					],
+					[
+						require.resolve("babel-plugin-relay")
+					],
+				],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.

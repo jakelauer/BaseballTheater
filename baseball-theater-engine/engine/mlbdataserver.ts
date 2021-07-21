@@ -205,12 +205,17 @@ export class MlbDataServer
 	public videoPlaylistSearchNode = (tag: CompilationPlaylists, page = 1) => this.videoPlaylistSearchIso(tag, page, true);
 	public videoPlaylistSearch = (tag: CompilationPlaylists, page = 1) => this.videoPlaylistSearchIso(tag, page, false);
 
-	public async videoLocalSearch(text: string, page = 0, gameIds?: string)
+	public async videoLocalSearch(text: string, page = 0, gameIds?: string, perPage?: number)
 	{
 		let url = `/api/search?text=${text}&page=${page}`;
 		if (gameIds)
 		{
 			url += `&gameIds=${gameIds}`;
+		}
+
+		if (perPage)
+		{
+			url += `&perPage=${perPage}`;
 		}
 
 		return await fetch(url).then(r => r.json()) as IHighlightSearchItem[];

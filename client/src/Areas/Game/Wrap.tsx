@@ -55,7 +55,7 @@ export class Wrap extends React.Component<Props, State>
 		inner.innerHTML = parsed;
 		for (let childrenKey in inner.children)
 		{
-			if (inner.children[childrenKey].textContent?.includes("•"))
+			if (inner.children?.[childrenKey]?.textContent?.includes("•"))
 			{
 				inner.removeChild(inner.children[childrenKey]);
 			}

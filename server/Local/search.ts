@@ -6,6 +6,7 @@ import AWS, {S3} from "aws-sdk";
 import createAwsElasticsearchConnector from "aws-elasticsearch-connector";
 import {Client} from "@elastic/elasticsearch";
 import * as RequestParams from "@elastic/elasticsearch/api/requestParams";
+import {Database} from "../DB/Database";
 
 interface ISearchable
 {
@@ -145,7 +146,7 @@ class SearchInternal
 		this.loadTimer();
 	}
 
-	public async doSearchFromES(query: { text: string, gameIds?: number[] }, page = 0): Promise<IHighlightSearchItem[]>
+	public async doSearchFromES(query: { text: string, gameIds?: number[] }, page = 0, perPage = 20): Promise<IHighlightSearchItem[]>
 	{
 		let result: IHighlightSearchItem[] = [];
 
@@ -164,18 +165,20 @@ class SearchInternal
 				node: "https://search-baseball-theater-p3m7bf36psaxxxpjv44lfacmfe.us-west-2.es.amazonaws.com"
 			});
 
-			const wildcardQuery = `${query.text}`
+			if (query.gameIds?.length === 1 && !query.text.trim())
+			{
+				const highlights = await Database.getHighlightsForGame(query.gameIds[0]);
 
-			const per = 20;
+				return highlights;
+			}
 
-			let must: any[] = [
-				{
-					"multi_match": {
-						"query": wildcardQuery,
-						"fields": ["blurb", "title^2", "description", "*"]
-					}
+			let must: any[] = [];
+			must.push({
+				"multi_match": {
+					"query": query.text,
+					"fields": ["blurb", "title^2", "description", "*"]
 				}
-			];
+			});
 
 			if (query.gameIds)
 			{
@@ -188,8 +191,8 @@ class SearchInternal
 
 			const params: RequestParams.Search = {
 				index: "highlights-index",
-				from: page * per,
-				size: per,
+				from: page * perPage,
+				size: perPage,
 				body: {
 					sort: [{"game_pk": {"order": "desc"}}],
 					query: {

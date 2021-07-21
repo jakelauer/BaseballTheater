@@ -92,10 +92,10 @@ export class GameList extends React.Component<Props, State>
 			})
 	}
 
-	private static getSearchLink(term: string, games: string[])
+	private static getSearchLink(term: string, date: string)
 	{
 		return SiteRoutes.Search.resolve({
-			gameIds: games.join(","),
+			date,
 			query: term
 		});
 	}
@@ -155,9 +155,9 @@ export class GameList extends React.Component<Props, State>
 			));
 
 		const formattedDate = this.props.day.format("MMMM D, YYYY");
+		const urlDate = this.props.day.format();
 
 		const anyGamesComplete = orderedGames.some(g => g.status.statusCode === "F");
-		const gameIds = orderedGames.map(g => g.gamePk);
 
 		return (
 			<React.Fragment>
@@ -169,22 +169,22 @@ export class GameList extends React.Component<Props, State>
 					<>
 						<div className={styles.specialHighlights}>
 							<ButtonGroup variant={"outlined"} size={"small"} className={classNames(styles.buttonGroup, styles.first)}>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("recap", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("game-recap", urlDate)}/>}>
 									Recaps
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("condensed", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("condensed-game", urlDate)}/>}>
 									Condensed
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("must-c", gameIds)}/>}>
-									Must C
-								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("StatCast", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("player-tracking", urlDate)}/>}>
 									StatCast
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("home run", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("home-run", urlDate)}/>}>
 									Home Runs
 								</Button>
-								<Button component={p => <Link {...p} to={GameList.getSearchLink("defense", gameIds)}/>}>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("highlight-reel-offense", urlDate)}/>}>
+									Top Offense
+								</Button>
+								<Button component={p => <Link {...p} to={GameList.getSearchLink("highlight-reel-defense", urlDate)}/>}>
 									Top Defense
 								</Button>
 							</ButtonGroup>

@@ -28,15 +28,16 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			});
 	});
 
-	app.get("/api/search", cache("1 minute"), async (req, res) =>
+	app.get("/api/search", cache("5 minutes"), async (req, res) =>
 	{
 		const text: string = req.query.text;
 		const gameIds = req.query.gameIds?.split(",")?.map((s: string) => parseInt(s));
 		const page = parseInt(req.query.page);
+		const perPage = parseInt(req.query.perPage ?? 20);
 
 		try
 		{
-			const results = await Search.doSearchFromES({text, gameIds}, page) ?? [];
+			const results = await Search.doSearchFromES({text, gameIds}, page, perPage) ?? [];
 
 			res.send(results);
 		}

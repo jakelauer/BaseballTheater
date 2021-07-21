@@ -2,6 +2,7 @@ import {MongoClient} from "mongodb";
 import * as fs from "fs";
 import * as path from "path";
 import AWS from "aws-sdk";
+import {IHighlightSearchItem} from "baseball-theater-engine";
 
 export interface IUser
 {
@@ -90,6 +91,31 @@ class _Database
 				Key: {
 					id
 				}
+			}, (err, data: any) =>
+			{
+				if (err)
+				{
+					reject(err);
+				}
+				else
+				{
+					resolve(data.Item);
+				}
+			});
+		});
+	}
+
+	public getHighlightsForGame(game_pk: number): Promise<IHighlightSearchItem[]>
+	{
+		return new Promise((resolve, reject) =>
+		{
+			this._docClient.query({
+				TableName: "bbt-highlights",
+				KeyConditionExpression: "game_pk = :gggggg",
+				ExpressionAttributeValues: {
+					":gggggg": game_pk
+				}
+
 			}, (err, data: any) =>
 			{
 				if (err)

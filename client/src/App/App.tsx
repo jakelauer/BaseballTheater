@@ -25,6 +25,8 @@ import {Upsell} from "../UI/Upsell";
 import {UpsellDataStore} from "../Areas/Game/Components/UpsellDataStore";
 import {useDataStore} from "../Utility/HookUtils";
 import {UpdateAvailableDialog} from "./UpdateAvailableDialog";
+import {RelayEnvironmentProvider} from "react-relay";
+import RelayEnvironment from "./RelayEnvironment";
 
 interface IAppState
 {
@@ -126,7 +128,7 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 	public render()
 	{
 		return (
-			<React.Fragment>
+			<RelayEnvironmentProvider environment={RelayEnvironment}>
 				<Helmet defaultTitle={"Baseball Theater"} titleTemplate={"%s | Baseball Theater"}/>
 				<ScrollMemory/>
 				<div className={styles.wrapper}>
@@ -149,10 +151,6 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 									<Routes/>
 								</ErrorBoundary>
 							</Grid>
-						</Container>
-						<Container style={{textAlign: "center", padding: "2rem"}}>
-							&copy; {moment().year()}. Created by <a href={"http://jakelauer.com"}>Jake Lauer</a> (<a href={"https://www.reddit.com/user/hellocontrol_"}>HelloControl_</a>).
-							Go Cubs.
 						</Container>
 					</main>
 					<Dialog
@@ -188,7 +186,7 @@ export class App extends React.Component<RouteComponentProps, IAppState>
 						message={this.state.installPromptSnackbarContent}
 					/>
 				</div>
-			</React.Fragment>
+			</RelayEnvironmentProvider>
 		);
 	}
 }

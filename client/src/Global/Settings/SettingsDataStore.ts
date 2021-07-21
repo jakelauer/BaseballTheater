@@ -99,9 +99,15 @@ class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
 	{
 		if (AuthDataStore.hasLevel(BackerType.Backer))
 		{
+			const toStore = {...this.state} as any;
+			if ("settings" in toStore)
+			{
+				delete toStore.settings;
+			}
+
 			await fetch("/auth/save-settings", {
 				method: "POST",
-				body: JSON.stringify(this.state)
+				body: JSON.stringify(toStore)
 			});
 		}
 		else
@@ -114,9 +120,9 @@ class _SettingsDataStore extends DataStore<ISettingsDataStorePayload>
 	{
 		try
 		{
-			const data = await fetch("/auth/get-settings").then(r => r.json());
+			const {settings} = await fetch("/auth/get-settings").then(r => r.json());
 
-			return data;
+			return settings;
 		}
 		catch (e)
 		{

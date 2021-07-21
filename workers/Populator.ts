@@ -150,7 +150,7 @@ class PopulatorInternal
 						game_pk
 					};
 
-					console.log(final);
+					//console.log(final);
 
 					return final;
 				}

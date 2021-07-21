@@ -52,7 +52,7 @@ Database.initialize();
 const runPopulator = () =>
 {
 	Populator.initialize({
-		dateString: moment().add(-2, "days").format("YYYYMMDD")
+		dateString: moment().add(-1, "days").format("YYYYMMDD")
 	});
 
 	setTimeout(runPopulator, 1000 * 60 * 60);

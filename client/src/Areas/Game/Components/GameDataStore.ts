@@ -1,6 +1,6 @@
 import {DataStore} from "../../../Global/Intercom/DataStore";
 import moment from "moment";
-import {GameMedia, LiveData} from "baseball-theater-engine";
+import {GameMedia, IHighlightSearchItem, LiveData, MediaItem} from "baseball-theater-engine";
 import {MlbClientDataFetcher} from "../../../Global/Mlb/MlbClientDataFetcher";
 import {createContext} from "react";
 
@@ -110,6 +110,29 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 		this.update({
 			media: data
 		});
+
+		if (!data?.highlights?.highlights?.items?.length)
+		{
+			MlbClientDataFetcher.videoLocalSearch(" ", 0, this.gamePk, 999).then((data: IHighlightSearchItem[]) =>
+			{
+				const mediaItems: MediaItem[] = data.map(h => h.highlight);
+				const gm: GameMedia = {
+					...this.state.media,
+					highlights: {
+						highlights: {
+							items: mediaItems,
+							live: mediaItems,
+							scoreboardPreview: null,
+							type: ""
+						}
+					},
+				};
+
+				this.update({
+					media: gm
+				});
+			});
+		}
 	}
 
 	public cancel()

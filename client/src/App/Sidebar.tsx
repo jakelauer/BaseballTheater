@@ -21,6 +21,8 @@ import classNames from "classnames";
 import {FaVideo} from "react-icons/all";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import Container from "@material-ui/core/Container";
+import moment from "moment";
 
 interface ISidebarProps extends RouteComponentProps
 {
@@ -196,6 +198,11 @@ class Sidebar extends React.Component<Props, State>
 						</a>
 					</div>
 				</div>
+
+				<Container style={{textAlign: "center", padding: "2rem"}}>
+					&copy; {moment().year()}. Created by <a href={"http://jakelauer.com"}>Jake Lauer</a> (<a href={"https://www.reddit.com/user/hellocontrol_"}>HelloControl_</a>).
+					Go Cubs.
+				</Container>
 			</>
 		);
 	}

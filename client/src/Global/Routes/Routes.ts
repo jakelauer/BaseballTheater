@@ -48,5 +48,5 @@ export class SiteRoutes
 	public static Team = new SiteRoute<{ team: keyof ITeams }>("/team/:team");
 	public static ApiTest = new SiteRoute("/apitest");
 	public static Settings = new SiteRoute("/settings");
-	public static Search = new SiteRoute<{ query?: string, gameIds?: string }>("/search/:query?/:gameIds?");
+	public static Search = new SiteRoute<{ query?: string, date?: string }>("/search/:query?/:date?");
 }
