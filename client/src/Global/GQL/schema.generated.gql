@@ -1,0 +1,419 @@
+"""This directive allows results to be deferred during execution"""
+directive @defer on FIELD
+
+enum ArsenalFeedType {
+  HOME
+  AWAY
+  NETWORK
+  CMS
+}
+
+enum AspectRatio {
+  FOUR_THREE
+  SIXTEEN_NINE
+}
+
+type ClipDetails {
+  id: ID!
+  gamePk: Int
+  gameDate: String
+  fields: [SearchFieldValue]
+  links: [Link]
+  mediaPlayback: [MediaPlayback]
+}
+
+type Comparator {
+  name: ComparatorType
+  displayName: String
+  symbol: String
+}
+
+enum ComparatorType {
+  EQUALS
+  EXACT_MATCH
+  NOT_EQUALS
+  LIKE
+  NOT_LIKE
+  GREATER_THAN
+  GREATER_THAN_EQUALS
+  LESS_THAN
+  LESS_THAN_EQUALS
+}
+
+enum ContentGroup {
+  DEFAULT
+  EXPERIENCE_A
+  EXPERIENCE_B
+  EXPERIENCE_C
+  EXPERIENCE_D
+  EXPERIENCE_E
+  EXPERIENCE_F
+}
+
+enum ContentPreference {
+  CMS_FIRST
+  CMS_ONLY
+  PLAY_ONLY
+  MIXED
+}
+
+type Cut {
+  aspectRatio: String
+  width: Int
+  height: Int
+  src: String
+  at2x: String
+  at3x: String
+}
+
+type DeleteReelResponse {
+  reelId: String!
+  deleted: Boolean!
+}
+
+type Feed {
+  type: VideoFeedType!
+  duration: String
+  closedCaptions: [String]
+  playbacks: [Playback]
+  image(aspectRatio: AspectRatio = SIXTEEN_NINE, widths: [Int] = [372, 640, 1024, 1536, 2208, 2608]): Image
+  canAddToReel: Boolean
+}
+
+enum FeedPreference {
+  HOME
+  AWAY
+  NETWORK
+  BATTING_TEAM
+  PITCHING_TEAM
+  WORLD
+  THREE_D_VIZ
+  CMS
+}
+
+type FieldValue {
+  value: String
+  displayValue: String
+}
+
+type Image {
+  title: String!
+  altText: String!
+  templateUrl: String
+  cuts: [Cut]!
+}
+
+type ImageInfo {
+  size: ImageSize!
+  url: String!
+}
+
+enum ImageSize {
+  SIXTY
+  ONETWENTY
+  ONESIXTYEIGHT
+  ONEEIGHTY
+  THREETHIRTYSIX
+  FIVEZEROFOUR
+}
+
+type InfoResponse {
+  query: String!
+  valid: Boolean
+  graph: Object
+}
+
+type KeywordDisplay {
+  displayName: String!
+  slug: String!
+}
+
+enum LanguagePreference {
+  EN
+  ES
+}
+
+type Link {
+  rel: String
+  href: String
+}
+
+type MediaPlayback {
+  id: String!
+  translationId: String
+  title: String
+  type: String
+  createdOn: String
+  lastUpdatedDate: String
+  slug: String
+  kicker: String
+  blurb: String
+  description: String
+  mediaState: String
+  language: LanguagePreference
+  guid: String
+  timestamp: String
+  date: String
+  feeds(types: [VideoFeedType]): [Feed]
+  keywordsDisplay: [KeywordDisplay]
+  playInfo: MediaPlayInfo
+  canAddToReel: Boolean
+}
+
+enum MediaPlaybackIdType {
+  CONTENT_ID
+  PLAY_ID
+  SLUG
+  USER_SLUG
+}
+
+type MediaPlayInfo {
+  teams: TeamsInfo
+  players: PlayersInfo
+  balls: Int
+  strikes: Int
+  outs: Int
+  inning: Int
+  inningHalf: String
+  pitchSpeed: String
+  pitchType: String
+  exitVelocity: String
+  hitDistance: String
+  launchAngle: String
+  gameDayPitchZone: String
+  spinRate: String
+  scoreDifferential: String
+  runners: Runners
+  gamePk: Int
+}
+
+type Mutation {
+  addReel(reelRequest: ReelInput!): ReelResponse
+  deleteReel(reelId: String!): DeleteReelResponse
+}
+
+scalar Object
+
+enum OrderBy {
+  REEL_TITLE
+  DURATION
+  CREATED_AT
+  UPDATED_AT
+}
+
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+type PagedClipDetails {
+  plays: [ClipDetails]
+  total: Int
+}
+
+type PagedReelResponse {
+  reels: [ReelResponse]
+  total: Int
+}
+
+type Playback {
+  name: String!
+  url: String!
+  segments: [Float]
+}
+
+type PlayerInfo {
+  id: Int!
+  name: String
+  firstName: String
+  lastName: String
+  mugshots(sizes: [ImageSize]): [ImageInfo]
+  playerHand: String
+}
+
+type PlayersInfo {
+  pitcher: PlayerInfo
+  batter: PlayerInfo
+}
+
+input PlaylistTransition {
+  transitionPosition: Int!
+  playlistTransitionType: PlaylistTransitionType!
+}
+
+enum PlaylistTransitionType {
+  INTRO
+  OUTRO
+}
+
+type Query {
+  fields(languagePreference: LanguagePreference = EN, searchType: SearchType = UNIFIED, ids: [Int]): [SearchFieldMetadata]
+  types: [SearchFieldTypeMetadata]
+  commonFields(languagePreference: LanguagePreference = EN, plays: [String]!): [SearchFieldValue]
+  search(languagePreference: LanguagePreference = EN, feedPreference: FeedPreference = CMS, searchType: SearchType = UNIFIED, contentGroup: ContentGroup = DEFAULT, query: String!, limit: Int = 10, contentPreference: ContentPreference = CMS_FIRST, page: Int = 0, queryType: QueryType = STRUCTURED): PagedClipDetails
+  queryInfo(languagePreference: LanguagePreference = EN, queries: [String], queryType: QueryType = STRUCTURED): [InfoResponse]
+  mediaPlayback(languagePreference: LanguagePreference = EN, idType: MediaPlaybackIdType = SLUG, contentGroup: ContentGroup = DEFAULT, ids: [String]): [MediaPlayback]
+  people(ids: [Int]): [PlayerInfo]
+  teams(ids: [Int]): [TeamInfo]
+  topicPlayList(languagePreference: LanguagePreference = EN, adobeId: String, topicId: String = "most-popular", videoSlug: String, videoTranslationId: String, teamId: Int, contentGroup: ContentGroup = EXPERIENCE_A, limit: Int = 20, page: Int = 0, sessionId: String): TopicPlayList
+  getReels(limit: Int = 10, orderDirection: OrderDirection = DESC, orderBy: OrderBy = CREATED_AT, page: Int = 0, userId: String): PagedReelResponse
+  getReelBySlug(userId: String, slug: String!): ReelResponse
+  validateReel(reelRequest: ReelInput!): ReelValidationResponse
+  userInfo(userId: String!): UserInfo
+  contentTagDisplayValues(contentTags: [String!]): [KeywordDisplay]
+}
+
+enum QueryType {
+  STRUCTURED
+  FREETEXT
+}
+
+type Range {
+  max: String
+  min: String
+}
+
+input ReelClip {
+  clipSlug: String!
+  videoUrl: String
+  feedType: ArsenalFeedType!
+  thumbnailUrl: String!
+  originalDuration: Float!
+  offsetStartTime: Float
+  offsetEndTime: Float
+  trimmedDuration: Float
+}
+
+input ReelInput {
+  reelTitle: String!
+  thumbnailUrl: String!
+  reelClips: [ReelClip]!
+  transitions: [PlaylistTransition]
+}
+
+type ReelResponse {
+  id: String
+  reelTitle: String
+  reelSlug: String
+  videoUrl: String
+  thumbnailUrl: String
+  duration: Float
+  createdAt: String
+  valid: Boolean
+  errors: [String]
+  mediaPlayback: MediaPlayback
+}
+
+type ReelValidationResponse {
+  valid: Boolean
+  errors: [String]
+}
+
+type Runners {
+  first: Boolean!
+  second: Boolean!
+  third: Boolean!
+}
+
+enum SearchFieldCategory {
+  BATTER
+  FIELDER
+  GAME
+  GENERAL
+  PITCHER
+  PLAYMETADATA
+  RUNNER
+  UNKNOWN
+}
+
+type SearchFieldMetadata {
+  id: ID!
+  category: SearchFieldCategory
+  description: String
+  defaultOperator: String
+  display: Boolean
+  displayName: String!
+  helperText: String
+  name: String!
+  type: SearchFieldType!
+  supportsDistinctValues: Boolean
+  supportsRange: Boolean
+  values: [FieldValue]
+  range: [Range]
+  unitOfMeasurement: UnitOfMeasurement
+}
+
+enum SearchFieldType {
+  STRING
+  NUMBER
+  DATE
+  DATETIME
+  UNKNOWN
+}
+
+type SearchFieldTypeMetadata {
+  name: SearchFieldType
+  supportedComparators: [Comparator]
+}
+
+type SearchFieldValue {
+  name: String
+  value: String
+  displayValue: String
+  displayField: SearchFieldMetadata
+  displayFieldSearchValue: String
+}
+
+enum SearchType {
+  PLAYS
+  UNIFIED
+}
+
+type TeamInfo {
+  id: Int!
+  triCode: String
+  name: String
+  shortName: String
+  logoUrl: String
+}
+
+type TeamsInfo {
+  away: TeamInfo
+  home: TeamInfo
+  batting: TeamInfo
+  pitching: TeamInfo
+}
+
+type TopicPlayList {
+  hasMore: Boolean!
+  title: String!
+  mediaPlayback: [MediaPlayback!]
+  modelType: String!
+  modelVersion: String
+  puid: String
+}
+
+type UnitOfMeasurement {
+  value: String
+  spanishValue: String
+}
+
+type UserInfo {
+  email: String
+  firstName: String
+  lastName: String
+  nickName: String
+  preferredLang: String
+  userId: String!
+}
+
+enum VideoFeedType {
+  CMS
+  HOME
+  AWAY
+  NETWORK
+  WORLD
+  THREE_D_VIZ
+  REEL
+  UNKNOWN
+}
