@@ -27,7 +27,8 @@ const useStyles = makeStyles(() => ({
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "center",
-		margin: "1rem auto"
+		margin: "1rem auto",
+		background: "transparent !important"
 	}
 }));
 

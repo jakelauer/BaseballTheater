@@ -61,6 +61,7 @@ export type NewSearchQuery = {
 };
 
 
+
 /*
 query NewSearchQuery(
   $queryType: QueryType!

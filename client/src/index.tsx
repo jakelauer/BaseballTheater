@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import App from "./App/App";
 import {BrowserRouter} from "react-router-dom";
 import {grey} from "@material-ui/core/colors";
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import createMuiTheme from "@material-ui/core/styles/createTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import {SimplePaletteColorOptions} from "@material-ui/core/styles";
 import * as Sentry from '@sentry/browser';
