@@ -1,13 +1,14 @@
 import * as React from "react";
 import moment from "moment/moment";
+import "moment-duration-format";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import {CircularProgress, Paper} from "@material-ui/core";
+import {Chip, CircularProgress, Paper} from "@material-ui/core";
 import {GameSummary} from "./Components/GameSummary";
 import styles from "./GameList.module.scss";
 import Grid from "@material-ui/core/Grid";
 import {Link} from "react-router-dom";
 import {SiteRoutes} from "../../Global/Routes/Routes";
-import {IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
+import {IScheduleGame, IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
 import {MlbUtils} from "baseball-theater-engine/mlbutils";
 import {ContainerProgress} from "../../UI/ContainerProgress";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
@@ -36,6 +37,7 @@ interface IGameListState
 	loading: boolean;
 	scoreboard: IScheduleGameList;
 	isCurrent: boolean;
+	hoveredGame: string | undefined;
 	settings: ISettingsDataStorePayload;
 }
 
@@ -47,6 +49,7 @@ export class GameList extends React.Component<Props, State>
 
 		this.state = {
 			loading: true,
+			hoveredGame: undefined,
 			scoreboard: null,
 			settings: SettingsDataStore.state,
 			isCurrent: false
@@ -134,25 +137,38 @@ export class GameList extends React.Component<Props, State>
 			const aTime = moment(a.gameDate);
 			const bTime = moment(b.gameDate);
 
-			const startTimeReturn = aTime.isBefore(bTime)
-				? -1
-				: aTime.isAfter(bTime)
-					? 1
-					: 0;
+			const startTimeReturn = bTime.milliseconds() - aTime.milliseconds();
 
-			const finalReturn = MlbUtils.gameIsOver(a) ? 1 : 0;
+			const gameOverA = MlbUtils.gameIsOver(a) ? 1 : 0;
+			const gameOverB = MlbUtils.gameIsOver(b) ? 1 : 0;
+
+			const finalReturn = gameOverB - gameOverA;
 
 			return favoriteReturn || finalReturn || startTimeReturn;
 		}) ?? [];
 
+		const hovered = (gameId: string | undefined) => this.setState({
+			hoveredGame: gameId
+		});
+
+		const getElevation = (gameId: string | undefined) => gameId === this.state.hoveredGame ? 3 : 1;
+
 		const gameSummaries = orderedGames
-			.map(game => (
-				<Grid key={game.gamePk} item xs={12} sm={6} lg={4}>
-					<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk, gameDate: "_"})} className={styles.gameLink}>
-						<GameSummary game={game}/>
-					</Link>
-				</Grid>
-			));
+			.map(game =>
+			{
+				return (
+					<Grid key={game.gamePk} item xs={12} sm={6} lg={4}>
+						<Paper className={styles.gameSummary} onMouseEnter={() => hovered(game.gamePk)} onMouseLeave={() => hovered(undefined)} elevation={getElevation(game.gamePk)}>
+							<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk, gameDate: "_"})} className={styles.gameLink}>
+								<GameSummary game={game}/>
+							</Link>
+							{game.content?.media?.freeGame && (
+								<GameListPlaybackButton game={game}/>
+							)}
+						</Paper>
+					</Grid>
+				);
+			});
 
 		const formattedDate = this.props.day.format("MMMM D, YYYY");
 		const urlDate = this.props.day.format();
@@ -209,4 +225,42 @@ export class GameList extends React.Component<Props, State>
 			</React.Fragment>
 		);
 	}
+}
+
+const GameListPlaybackButton = (props: { game: IScheduleGame }) =>
+{
+	const {game} = props;
+
+	const gameTime = moment(game.gameDate).add(-15, "minutes");
+	const isFuture = gameTime.isAfter(moment());
+	const isPast = game.status.abstractGameCode === "F";
+	const timeUntil = gameTime.format("h:mma")
+	const label = isPast
+		? "WATCH PARTY OVER"
+		: isFuture
+			? <>
+				WATCH ON PLAYBACK <Chip size={"small"} label={timeUntil} color={"primary"} style={{marginLeft: 8, border: "1px solid white"}}/>
+			</>
+			: "WATCH ON PLAYBACK";
+
+	const color = isPast ? "secondary" : "primary";
+
+	return (
+		<div className={styles.playback}>
+			<Button href={"https://www.getplayback.com/mlb-game-of-the-day"}
+			        target={"_blank"}
+			        variant={"contained"}
+			        disabled={isPast}
+			        style={{
+				        paddingLeft: 8,
+				        paddingRight: 8
+			        }}
+			        color={color}
+			        className={styles.playbackButton}
+			        startIcon={<img src={"/assets/playback-logo.svg"} width={20} alt={"Playback"}/>}
+			>
+				{label}
+			</Button>
+		</div>
+	);
 }

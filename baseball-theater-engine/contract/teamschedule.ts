@@ -1,5 +1,6 @@
 import {AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore, Player} from "./live";
 import {ITeams} from "./teams";
+import {GameMedia} from "./media";
 
 export interface ISchedule
 {
@@ -58,6 +59,7 @@ export interface IScheduleGame
 	seriesGameNumber: number;
 	seriesDescription: string;
 	decisions: IScheduleGameDecisions;
+	content: GameMedia;
 }
 
 export interface IScheduleGameDecisions

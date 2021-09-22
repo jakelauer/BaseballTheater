@@ -1,6 +1,7 @@
 .gameLink
 {
 	text-decoration: none;
+	color: black;
 }
 
 .progress
@@ -11,6 +12,32 @@
 .gameSummaries
 {
 	padding-left: 32px;
+}
+
+.gameSummary
+{
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	text-decoration: none;
+	flex-direction: column;
+	height: 100%;
+}
+
+.gameLink
+{
+	display: flex;
+}
+
+.playback
+{
+	display: flex;
+	padding: 8px;
+
+	.playbackButton
+	{
+		flex: 1 0;
+	}
 }
 
 .specialHighlights
