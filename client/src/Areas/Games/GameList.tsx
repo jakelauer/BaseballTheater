@@ -137,14 +137,18 @@ export class GameList extends React.Component<Props, State>
 			const aTime = moment(a.gameDate);
 			const bTime = moment(b.gameDate);
 
-			const startTimeReturn = bTime.milliseconds() - aTime.milliseconds();
+			const aInProgress = a.status.abstractGameCode === "L" ? -1 : 0;
+			const bInProgress = b.status.abstractGameCode === "L" ? -1 : 0;
+			const progressReturn = aInProgress - bInProgress;
 
 			const gameOverA = MlbUtils.gameIsOver(a) ? 1 : 0;
 			const gameOverB = MlbUtils.gameIsOver(b) ? 1 : 0;
 
 			const finalReturn = gameOverB - gameOverA;
 
-			return favoriteReturn || finalReturn || startTimeReturn;
+			const startTimeReturn = aTime.milliseconds() - bTime.milliseconds();
+
+			return favoriteReturn || progressReturn || finalReturn || startTimeReturn;
 		}) ?? [];
 
 		const hovered = (gameId: string | undefined) => this.setState({

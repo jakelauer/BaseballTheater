@@ -9,6 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import {AuthDataStore, IAuthContext} from "../Global/AuthDataStore";
 import {Routes} from "./Routes";
 import Sidebar from "./Sidebar";
+//@ts-ignore
 import ScrollMemory from "react-router-scroll-memory";
 import {RespondSizes} from "../Global/Respond/RespondDataStore";
 import {Respond} from "../Global/Respond/Respond";

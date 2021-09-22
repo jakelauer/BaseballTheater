@@ -2,8 +2,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {ConcreteRequest} from "relay-runtime";
-
+import { ConcreteRequest } from "relay-runtime";
 export type ContentPreference = "CMS_FIRST" | "CMS_ONLY" | "MIXED" | "PLAY_ONLY" | "%future added value";
 export type FeedPreference = "AWAY" | "BATTING_TEAM" | "CMS" | "HOME" | "NETWORK" | "PITCHING_TEAM" | "THREE_D_VIZ" | "WORLD" | "%future added value";
 export type LanguagePreference = "EN" | "ES" | "%future added value";
@@ -110,8 +109,7 @@ query NewSearchQuery(
 }
 */
 
-const node: ConcreteRequest = (function ()
-{
+const node: ConcreteRequest = (function () {
     var v0 = ({
         "defaultValue": null,
         "kind": "LocalArgument",
