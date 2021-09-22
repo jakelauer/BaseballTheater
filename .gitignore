@@ -9,3 +9,4 @@ node_modules/*
 /server/Playback/*.js
 /**/*.js.map
 /**/*.d.ts
+keys.json
