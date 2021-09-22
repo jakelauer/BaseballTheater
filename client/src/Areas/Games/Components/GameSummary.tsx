@@ -2,7 +2,7 @@ import * as React from "react";
 import {IScheduleGame, IScheduleGameStatus, IScheduleTeamItem} from "baseball-theater-engine/contract/teamschedule";
 import styles from "./GameSummary.module.scss";
 import {LiveGameLinescore, Player} from "baseball-theater-engine";
-import {Chip, Paper} from "@material-ui/core";
+import {Chip} from "@material-ui/core";
 import classNames from "classnames";
 import moment from "moment";
 import {ISettingsDataStorePayload, SettingsDataStore} from "../../../Global/Settings/SettingsDataStore";
@@ -22,7 +22,6 @@ type State = IGameSummaryState;
 
 interface IGameSummaryState
 {
-	hovered: boolean;
 	settings: ISettingsDataStorePayload;
 }
 
@@ -33,7 +32,6 @@ export class GameSummary extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			hovered: false,
 			settings: SettingsDataStore.state
 		};
 	}
@@ -44,20 +42,6 @@ export class GameSummary extends React.Component<Props, State>
 			settings: data
 		}));
 	}
-
-	private onMouseEnter = () =>
-	{
-		this.setState({
-			hovered: true
-		})
-	};
-
-	private onMouseLeave = () =>
-	{
-		this.setState({
-			hovered: false
-		})
-	};
 
 	public render()
 	{
@@ -70,10 +54,9 @@ export class GameSummary extends React.Component<Props, State>
 			decisions,
 			gameDate,
 			teams,
+			content,
 			status,
 		} = game;
-
-		const elevation = this.state.hovered ? 3 : 1;
 
 		const homeIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.home.team.fileCode) > -1;
 		const awayIsFavorite = this.state.settings.favoriteTeams.indexOf(teams.away.team.fileCode) > -1;
@@ -83,36 +66,36 @@ export class GameSummary extends React.Component<Props, State>
 		const hasScore = (linescore?.innings?.length ?? 0) > 0 && (status.abstractGameCode === "L" || status.abstractGameCode === "F");
 
 		return (
-			<Paper className={styles.gameSummary} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} elevation={elevation}>
+			<>
 				<div className={styles.gameData}>
 					{status && (
 						<Status status={status} gameDate={gameDate} linescore={linescore}/>
 					)}
 					{(!future && hasScore) &&
-                    <React.Fragment>
-                        <Score
+					<React.Fragment>
+						<Score
 							home={false}
 							team={teams.away}
 							hideRecord={this.state.settings.hideScores}
 							isFavorite={awayIsFavorite}
 							linescore={linescore}
 							hideScores={this.state.settings.hideScores}
-                        />
-                        <Score
+						/>
+						<Score
 							home={true}
 							team={teams.home}
 							hideRecord={this.state.settings.hideScores}
 							isFavorite={homeIsFavorite}
 							linescore={linescore}
 							hideScores={this.state.settings.hideScores}
-                        />
-                    </React.Fragment>
+						/>
+					</React.Fragment>
 					}
 					{(future || !hasScore) &&
-                    <React.Fragment>
-                        <Preview home={false} team={teams.away} isFavorite={awayIsFavorite} hideRecord={this.state.settings.hideScores} />
-                        <Preview home={true} team={teams.home} isFavorite={homeIsFavorite} hideRecord={this.state.settings.hideScores} />
-                    </React.Fragment>
+					<React.Fragment>
+						<Preview home={false} team={teams.away} isFavorite={awayIsFavorite} hideRecord={this.state.settings.hideScores}/>
+						<Preview home={true} team={teams.home} isFavorite={homeIsFavorite} hideRecord={this.state.settings.hideScores}/>
+					</React.Fragment>
 					}
 				</div>
 				{finished && decisions && !this.state.settings.hideScores && (
@@ -125,12 +108,17 @@ export class GameSummary extends React.Component<Props, State>
 						<Decision label={"SAVE"} player={decisions.save}/>
 					</div>
 				)}
-			</Paper>
+			</>
 		);
 	}
 }
 
-const Decision = (props: { label: string; player: Player }) =>
+const Decision = (props:
+	{
+		label: string;
+		player: Player
+	}
+) =>
 {
 	if (!props.player)
 	{
@@ -161,84 +149,88 @@ interface IScoreProps extends ITeamRowProps
 }
 
 const TeamRow = (props: ITeamRowProps) =>
-{
-	const teamNameClasses = classNames(styles.teamColorPrimary, styles[props.team.team.fileCode]);
+	{
+		const teamNameClasses = classNames(styles.teamColorPrimary, styles[props.team.team.fileCode]);
 
-	return (
-		<div className={styles.teamRow}>
-			<div className={styles.team}>
-				<div className={teamNameClasses}>
-					{props.team.team.teamName}
-					{props.isFavorite && <MdFavorite style={{fontSize: "0.8rem", color: "red", paddingLeft: 4}}/>}
-				</div>
-				{!props.hideRecord && (
-					<div className={styles.record}>
-						<>{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})</>
+		return (
+			<div className={styles.teamRow}>
+				<div className={styles.team}>
+					<div className={teamNameClasses}>
+						{props.team.team.teamName}
+						{props.isFavorite && <MdFavorite style={{fontSize: "0.8rem", color: "red", paddingLeft: 4}}/>}
 					</div>
-				)}
+					{!props.hideRecord && (
+						<div className={styles.record}>
+							<>{props.team.leagueRecord.wins} - {props.team.leagueRecord.losses} ({props.team.leagueRecord.pct})</>
+						</div>
+					)}
+				</div>
+				<div className={styles.teamValue}>
+					{props.children}
+				</div>
 			</div>
-			<div className={styles.teamValue}>
-				{props.children}
-			</div>
-		</div>
-	);
-};
+		);
+	}
+;
 
 const Score = (props: IScoreProps) =>
-{
-	const {
-		linescore,
-		hideScores,
-		...rest
-	} = props;
-
-	if (!linescore)
 	{
-		return null;
+		const {
+			linescore,
+			hideScores,
+			...rest
+		} = props;
+
+		if (!linescore)
+		{
+			return null;
+		}
+
+		const teamValues = getHomeAwayVal(props.home, props.linescore.teams);
+
+		const numberOrHidden = (val: number) => hideScores ? "-" : val;
+
+		const runs = numberOrHidden(teamValues.runs);
+		const hits = numberOrHidden(teamValues.hits);
+		const errors = numberOrHidden(teamValues.errors);
+
+		return (
+			<TeamRow hideRecord={hideScores} {...rest}>
+				<div className={styles.rhe}>
+					<div className={styles.score}>
+						{runs}
+					</div>
+					<div className={styles.hits}>
+						{hits}
+					</div>
+					<div className={styles.errors}>
+						{errors}
+					</div>
+				</div>
+			</TeamRow>
+		);
 	}
-
-	const teamValues = getHomeAwayVal(props.home, props.linescore.teams);
-
-	const numberOrHidden = (val: number) => hideScores ? "-" : val;
-
-	const runs = numberOrHidden(teamValues.runs);
-	const hits = numberOrHidden(teamValues.hits);
-	const errors = numberOrHidden(teamValues.errors);
-
-	return (
-		<TeamRow hideRecord={hideScores} {...rest}>
-			<div className={styles.rhe}>
-				<div className={styles.score}>
-					{runs}
-				</div>
-				<div className={styles.hits}>
-					{hits}
-				</div>
-				<div className={styles.errors}>
-					{errors}
-				</div>
-			</div>
-		</TeamRow>
-	);
-};
+;
 
 const Preview = (props: ITeamRowProps) =>
-{
-	return (
-		<TeamRow {...props}>
-			{props.team.probablePitcher &&
-            <div className={styles.preview}>
-				{props.team.probablePitcher.nameFirstLast}
-            </div>
-			}
-		</TeamRow>
-	);
-};
+	{
+		return (
+			<TeamRow {...props}>
+				{props.team.probablePitcher &&
+				<div className={styles.preview}>
+					{props.team.probablePitcher.nameFirstLast}
+				</div>
+				}
+			</TeamRow>
+		);
+	}
+;
 
-const getHomeAwayVal = <T extends {}>(home: boolean, values: { home: T, away: T }) =>
-{
-	return home ? values.home : values.away;
-};
+const getHomeAwayVal =
+	<T extends {}>(home: boolean, values: { home: T, away: T }) =>
+	{
+		return home ? values.home : values.away;
+	};
 
 interface IStatusProps
 {
@@ -255,25 +247,32 @@ const Status: React.FC<IStatusProps> = (props) =>
 	const finished = props.status.abstractGameCode === "F";
 	const hasScore = (props.linescore?.innings?.length ?? 0) > 0 && (props.status.abstractGameCode === "L" || props.status.abstractGameCode === "F");
 
+	const inningLabel = props.linescore.inningState;
+	const currentInning = `${inningLabel} ${props.linescore.currentInningOrdinal}`;
+
+	const statusString = props.status.statusCode === "I"
+		? <Chip label={currentInning} size={"small"}/>
+		: props.status.detailedState;
+
 	return (
 		<div className={styles.status}>
 			<div className={styles.statusDetail}>
-				{props.status.detailedState}
+				{statusString}
 			</div>
 			{future && !finished &&
-            <div className={styles.statusInfo}>
-				{localDate.format("hh:mma")}
-            </div>
+			<div className={styles.statusInfo}>
+				{localDate.format("h:mma")}
+			</div>
 			}
 			{props.children}
 			{hasScore &&
-            <div className={styles.statusInfo}>
-                <div className={styles.rhe}>
-                    <div>R</div>
-                    <div>H</div>
-                    <div>E</div>
-                </div>
-            </div>
+			<div className={styles.statusInfo}>
+				<div className={styles.rhe}>
+					<div>R</div>
+					<div>H</div>
+					<div>E</div>
+				</div>
+			</div>
 			}
 		</div>
 	);

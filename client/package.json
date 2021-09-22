@@ -33,8 +33,8 @@
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.6",
     "babel-plugin-named-asset-import": "^0.3.3",
-    "babel-preset-react-app": "9.1.1",
     "babel-plugin-relay": "11.0.0",
+    "babel-preset-react-app": "9.1.1",
     "baseball-theater-engine": "../baseball-theater-engine/dist",
     "browser-cookies": "^1.2.0",
     "camelcase": "^5.2.0",
@@ -57,8 +57,8 @@
     "graphql-tools": "^7.0.4",
     "html-webpack-plugin": "4.0.0-beta.5",
     "identity-obj-proxy": "3.0.0",
-    "isomorphic-fetch": "^3.0.0",
     "is-wsl": "^1.1.0",
+    "isomorphic-fetch": "^3.0.0",
     "jest": "24.8.0",
     "jest-environment-jsdom-fourteen": "0.1.0",
     "jest-resolve": "24.8.0",
@@ -67,6 +67,7 @@
     "markdown-it": "^10.0.0",
     "mini-css-extract-plugin": "0.5.0",
     "moment": "^2.24.0",
+    "moment-duration-format": "2.3.2",
     "moment-timezone": "^0.5.26",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
@@ -185,5 +186,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@types/moment-duration-format": "^2.2.3"
   }
 }

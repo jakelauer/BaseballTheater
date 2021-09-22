@@ -12,6 +12,7 @@ export interface GameMedia
 export interface GameMediaMedia
 {
 	enhancedGame: boolean;
+	freeGame: boolean;
 	epg: GameMediaMediaEpg[];
 }
 
