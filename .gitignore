@@ -10,4 +10,4 @@ node_modules/*
 /**/*.js.map
 /**/*.d.ts
 keys.json
-apikeys.json
+server/apikeys.json

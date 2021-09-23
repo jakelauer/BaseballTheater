@@ -247,8 +247,8 @@ const Status: React.FC<IStatusProps> = (props) =>
 	const finished = props.status.abstractGameCode === "F";
 	const hasScore = (props.linescore?.innings?.length ?? 0) > 0 && (props.status.abstractGameCode === "L" || props.status.abstractGameCode === "F");
 
-	const inningLabel = props.linescore.inningState;
-	const currentInning = `${inningLabel} ${props.linescore.currentInningOrdinal}`;
+	const inningLabel = props.linescore?.inningState ?? "";
+	const currentInning = `${inningLabel} ${props.linescore?.currentInningOrdinal ?? ""}`;
 
 	const statusString = props.status.statusCode === "I"
 		? <Chip label={currentInning} size={"small"}/>

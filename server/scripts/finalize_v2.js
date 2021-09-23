@@ -10,12 +10,10 @@ const resolve = relativePath => path.resolve(appDirectory, relativePath);
 
 const finalize = (buildName, buildDir, outputDir) => {
     fs.mkdir(path.resolve(outputDir, "server/config"));
-    fs.mkdir(path.resolve(outputDir, ".ebextensions"));
 
     fs.copyFileSync(resolve("server/apikeys.json"), path.resolve(outputDir, "server/apikeys.json"));
     fs.copyFileSync(resolve("server/config/keys.json"), path.resolve(outputDir, "server/config/keys.json"));
 
-    fs.copySync(resolve("./.ebextensions"), path.resolve(buildDir, "./.ebextensions"));
     fs.copySync(resolve("client/build"), path.resolve(outputDir, "client"), {dereference: true});
     fs.copyFileSync(resolve("server/package.json"), path.resolve(buildDir, "package.json"));
     fs.copyFileSync(resolve("server/.env"), path.resolve(outputDir, "./.env"));
