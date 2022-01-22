@@ -13,7 +13,7 @@
     "graphql-tag": "^2.10.3",
     "moment": "2.24.0",
     "moment-timezone": "0.5.26",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^3.1.1"
   },
   "files": [
     "dist"
