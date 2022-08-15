@@ -1,10 +1,10 @@
 import * as React from "react";
-import {RouteComponentProps, withRouter} from "react-router";
 import {Button} from "@material-ui/core";
 import {SettingsDataStore} from "../Global/Settings/SettingsDataStore";
 
 interface IErrorBoundaryProps
 {
+	children?: React.ReactNode;
 }
 
 interface DefaultProps
@@ -29,11 +29,11 @@ interface IErrorBoundaryState
 
 /** This class exists to handle error cases more gracefully than having the app just disappear.
  *  * If a child component errors out, it will display a message with error details */
-class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IErrorBoundaryState>
+class ErrorBoundaryInternal extends React.Component<IErrorBoundaryProps, IErrorBoundaryState>
 {
 	private static EmailLineBreak = "%0D%0A";
 
-	constructor(props: RouteComponentProps<{}>)
+	constructor(props:IErrorBoundaryProps)
 	{
 		super(props);
 
@@ -52,16 +52,16 @@ class ErrorBoundaryInternal extends React.Component<RouteComponentProps<{}>, IEr
 
 		// When the error shows up, we still want people to be able to navigate after it.
 		// So, we will listen to one history change and remove the error state at that point.
-		const unregisterCallback = this.props.history.listen((location) =>
-		{
-			unregisterCallback();
+		// const unregisterCallback = this.props.history.listen((location) =>
+		// {
+		// 	unregisterCallback();
 
-			this.setState({
-				hasError: false,
-				error: null,
-				errorInfo: null
-			});
-		});
+		// 	this.setState({
+		// 		hasError: false,
+		// 		error: null,
+		// 		errorInfo: null
+		// 	});
+		// });
 	}
 
 	private generateReportLines(joinWith: string)

@@ -5,6 +5,7 @@ interface IRespondProps
 {
 	at: RespondSizes;
 	ignoreIfUnmatched?: boolean;
+	children: React.ReactNode;
 }
 
 interface DefaultProps
