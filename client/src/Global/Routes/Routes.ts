@@ -1,6 +1,6 @@
-import pathToRegexp, {PathFunction} from "path-to-regexp";
-import {ITeams} from "baseball-theater-engine";
-import moment from "moment";
+import { ITeams } from 'baseball-theater-engine';
+import moment from 'moment';
+import pathToRegexp, { PathFunction } from 'path-to-regexp';
 
 export class SiteRoute<T extends object = {}>
 {
@@ -24,7 +24,7 @@ export class SiteRoute<T extends object = {}>
 }
 
 export type GameTabs = "Wrap" | "LiveGame" | "BoxScore" | "Highlights" | "Plays";
-export interface IGameParams
+export type IGameParams = 
 {
 	gameDate?: string;
 	gameId: string,

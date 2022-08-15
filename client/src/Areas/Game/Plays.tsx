@@ -1,34 +1,35 @@
-import * as React from "react";
-import {LiveData} from "baseball-theater-engine";
-import {Button, ButtonGroup, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
-import styles from "./Plays.module.scss";
-import {RespondDataStore, RespondDataStorePayload, RespondSizes} from "../../Global/Respond/RespondDataStore";
-import Helmet from "react-helmet";
-import moment from "moment";
-import {ContainerProgress} from "../../UI/ContainerProgress";
-import {IoIosMenu} from "react-icons/all";
-import {MiniBoxScore} from "./Components/MiniBoxScore";
-import {ScoringPlays} from "./Components/ScoringPlays";
-import {IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
-import {RouteComponentProps, withRouter} from "react-router-dom";
-import {PlayUtils} from "./Utils/PlayUtils";
-import {HalfInnings, Inning} from "./Components/Innings";
+import { Button, ButtonGroup, Menu, MenuItem, Tab, Tabs } from '@material-ui/core';
+import { LiveData } from 'baseball-theater-engine';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import Helmet from 'react-helmet';
+import { IoIosMenu } from 'react-icons/all';
+import { useParams } from 'react-router-dom';
+
+import { usePrevious } from '../../Global/Hooks/usePrevious';
+import { useDataStore } from '../../Global/Intercom/DataStore';
+import { RespondDataStore, RespondDataStorePayload, RespondSizes } from '../../Global/Respond/RespondDataStore';
+import { IGameParams, SiteRoutes } from '../../Global/Routes/Routes';
+import { ContainerProgress } from '../../UI/ContainerProgress';
+import { HalfInnings, Inning } from './Components/Innings';
+import { MiniBoxScore } from './Components/MiniBoxScore';
+import { ScoringPlays } from './Components/ScoringPlays';
+import styles from './Plays.module.scss';
+import { PlayUtils } from './Utils/PlayUtils';
 
 
-interface IPlaysProps extends RouteComponentProps<IGameParams>
-{
+interface IPlaysProps {
 	liveData: LiveData;
 }
 
-interface DefaultProps
-{
+interface DefaultProps {
 }
 
 type Props = IPlaysProps & DefaultProps;
 type State = IPlaysState;
 
-interface IPlaysState
-{
+interface IPlaysState {
 	selectedInning: number;
 	respond: RespondDataStorePayload;
 	halfInnings: HalfInnings[];
@@ -37,43 +38,27 @@ interface IPlaysState
 	mode: "scoring" | "all";
 }
 
-class _Plays extends React.Component<Props, State>
-{
-	private buttonRef = React.createRef<HTMLButtonElement>();
+export const Plays: React.FC<Props> = (props) => {
+	const params = useParams<IGameParams>();
+	const buttonRef = React.createRef<HTMLButtonElement>();
+	const prevProps = usePrevious(props);
 
-	constructor(props: Props)
-	{
-		super(props);
+	const [selectedInning, setSelectedInning] = useState(props.liveData ? props.liveData.liveData.linescore.innings.length : -1);
+	const respond = useDataStore(RespondDataStore);
+	const [halfInnings, setHalfInnings] = useState<HalfInnings[]>([]);
+	const [halfInningsKeysSorted, sethalfInningsKeysSorted] = useState<string[][]>([]);
+	const [inningMenuOpen, setInningMenuOpen] = useState(false);
+	const [mode, setMode] = useState<"scoring" | "all">(params.tabDetail === "all" ? "all" : "scoring");
 
-		this.state = {
-			selectedInning: props.liveData ? props.liveData.liveData.linescore.innings.length : -1,
-			respond: {
-				sizes: []
-			},
-			halfInnings: [],
-			halfInningsKeysSorted: [],
-			inningMenuOpen: false,
-			mode: props.match.params.tabDetail === "all" ? "all" : "scoring"
-		};
-	}
-
-	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
-	{
-		let shouldUpdate = false;
-		let newState: State = {...this.state};
-
-		if (this.props.liveData?.liveData.linescore?.innings && this.state.selectedInning === -1)
-		{
-			shouldUpdate = true;
-			const innings = this.props.liveData?.liveData?.linescore?.innings.filter(a => !!a);
-			newState.selectedInning = innings.length;
+	useEffect(() => {
+		if (props.liveData?.liveData.linescore?.innings && selectedInning === -1) {
+			const innings = props.liveData?.liveData?.linescore?.innings.filter(a => !!a);
+			setSelectedInning(innings.length);
 		}
 
-		if (!this.state.halfInnings.length && !!this.props.liveData?.liveData)
-		{
-			newState.halfInnings = PlayUtils.getHalfInningsByInning(this.props.liveData?.liveData);
-			newState.halfInningsKeysSorted = newState.halfInnings.map(hi => Object.keys(hi).sort((a, b) =>
-			{
+		if (!halfInnings.length && !!props.liveData?.liveData) {
+			const newHalfInnings = PlayUtils.getHalfInningsByInning(props.liveData?.liveData);
+			const newHalfInningsKeysSorted = newHalfInnings.map(hi => Object.keys(hi).sort((a, b) => {
 				const aPlay = hi[a];
 				const bPlay = hi[b];
 				const aHalfVal = aPlay.halfInning.length / 10;
@@ -82,174 +67,151 @@ class _Plays extends React.Component<Props, State>
 				const bInning = bPlay.inningNumber + bHalfVal;
 				return aInning - bInning;
 			}));
-			shouldUpdate = true;
+
+			setHalfInnings(newHalfInnings);
+			sethalfInningsKeysSorted(newHalfInningsKeysSorted);
 		}
+	}, [props])
 
-		if (shouldUpdate)
-		{
-			this.setState(newState);
-		}
-	}
+	const onInningSelect = (inning: number) => setSelectedInning(inning);
 
-	public componentDidMount(): void
-	{
-		RespondDataStore.listen(data => this.setState({
-			respond: data
-		}));
-	}
+	const onMenuClose = () => setInningMenuOpen(false);
 
-	private onInningSelect = (inning: number) => this.setState({selectedInning: inning});
-
-	private onMenuClose = () => this.setState({
-		inningMenuOpen: false
-	});
-
-	private onMenuSelect = (index: number) =>
-	{
+	const onMenuSelect = (index: number) => {
 		window.scrollTo(0, 0);
-		this.onInningSelect(index);
-		this.onMenuClose();
+		onInningSelect(index);
+		onMenuClose();
 	};
 
-	private onPlayModeClick = (mode: "scoring" | "all") =>
-	{
-		this.setState({
-			mode
-		});
+	const onPlayModeClick = (mode: "scoring" | "all") => {
+		setMode(mode);
 
 		history.replaceState(null, null, SiteRoutes.Game.resolve({
 			gameDate: "_",
-			gameId: this.props.liveData.gamePk.toString(),
+			gameId: props.liveData.gamePk.toString(),
 			tab: "Plays",
 			tabDetail: mode
 		}));
 	}
 
-	public render()
-	{
-		if (!this.props.liveData)
-		{
-			return <ContainerProgress/>;
-		}
+	if (!props.liveData) {
+		return <ContainerProgress />;
+	}
 
-		const liveData = this.props.liveData.liveData;
+	const liveData = props.liveData.liveData;
 
-		const isMedium = this.state.respond.sizes.indexOf(RespondSizes.medium) > -1;
+	const isMedium = respond.sizes.indexOf(RespondSizes.medium) > -1;
 
-		const orientation = isMedium
-			? "horizontal"
-			: "vertical";
+	const orientation = isMedium
+		? "horizontal"
+		: "vertical";
 
-		const teams = this.props.liveData.gameData.teams;
-		const date = moment(this.props.liveData.gameData.datetime.dateTime).format("MMMM D, YYYY");
+	const teams = props.liveData.gameData.teams;
+	const date = moment(props.liveData.gameData.datetime.dateTime).format("MMMM D, YYYY");
 
-		const halfInnings = this.state.halfInnings?.[this.state.selectedInning - 1];
-		const keys = this.state.halfInningsKeysSorted?.[this.state.selectedInning - 1];
+	const halfInningsChosen = halfInnings?.[selectedInning - 1];
+	const keys = halfInningsKeysSorted?.[selectedInning - 1];
 
-		return (
-			<div className={styles.wrapper}>
-				<Helmet>
-					<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
-				</Helmet>
-				<div className={styles.miniBoxWrap}>
-					<MiniBoxScore game={this.props.liveData}/>
-				</div>
-				<div className={styles.playTypes}>
-					<ButtonGroup variant={"contained"}>
-						<Button
-							color={this.state.mode === "scoring" ? "primary" : "default"}
-							onClick={() => this.onPlayModeClick("scoring")}
-						>
-							Scoring Plays
-						</Button>
-						<Button
-							color={this.state.mode === "all" ? "primary" : "default"}
-							onClick={() => this.onPlayModeClick("all")}
-						>
-							All Plays
-						</Button>
-					</ButtonGroup>
-				</div>
-				<div className={styles.inningWrapper}>
-					{!isMedium && this.state.mode === "all" && (
-						<Tabs
-							className={styles.inningTabs}
-							orientation={orientation}
-							variant="scrollable"
-							value={this.state.selectedInning}
-							onChange={(e, i) => this.onInningSelect(i)}
-							indicatorColor="primary"
-							textColor="primary"
+	return (
+		<div className={styles.wrapper}>
+			<Helmet>
+				<title>{`Play-by-play - ${teams.away.teamName} @ ${teams.home.teamName}, ${date}`}</title>
+			</Helmet>
+			<div className={styles.miniBoxWrap}>
+				<MiniBoxScore game={props.liveData} />
+			</div>
+			<div className={styles.playTypes}>
+				<ButtonGroup variant={"contained"}>
+					<Button
+						color={mode === "scoring" ? "primary" : "default"}
+						onClick={() => onPlayModeClick("scoring")}
+					>
+						Scoring Plays
+					</Button>
+					<Button
+						color={mode === "all" ? "primary" : "default"}
+						onClick={() => onPlayModeClick("all")}
+					>
+						All Plays
+					</Button>
+				</ButtonGroup>
+			</div>
+			<div className={styles.inningWrapper}>
+				{!isMedium && mode === "all" && (
+					<Tabs
+						className={styles.inningTabs}
+						orientation={orientation}
+						variant="scrollable"
+						value={selectedInning}
+						onChange={(e, i) => onInningSelect(i)}
+						indicatorColor="primary"
+						textColor="primary"
+					>
+						{
+							liveData.linescore.innings.map((inning, i) => (
+								<Tab key={i} label={inning?.ordinalNum} value={inning?.num} />
+							))
+						}
+					</Tabs>
+				)}
+				{mode === "all" && isMedium && (
+					<React.Fragment>
+						<div>
+							<Button
+								ref={buttonRef}
+								aria-controls="simple-menu"
+								aria-haspopup="true"
+								className={styles.inningButton}
+								color={"primary"}
+								size={"large"}
+								onClick={() => setInningMenuOpen(true)}
+								variant={"contained"}
+							>
+								<IoIosMenu style={{
+									marginRight: "0.5rem",
+									fontSize: "1.5rem"
+								}} />
+								{liveData.linescore.innings[selectedInning - 1]?.ordinalNum} Inning
+							</Button>
+						</div>
+						<Menu
+							keepMounted
+							anchorEl={buttonRef.current}
+							anchorOrigin={{
+								horizontal: "center",
+								vertical: "top"
+							}}
+							open={inningMenuOpen}
+							onClose={onMenuClose}
 						>
 							{
-								liveData.linescore.innings.map((inning, i) => (
-									<Tab key={i} label={inning?.ordinalNum} value={inning?.num}/>
+								liveData.linescore.innings.slice(0, liveData.linescore.currentInning).map((inning, i) => (
+									<MenuItem onClick={_ => onMenuSelect(i + 1)}>
+										{inning?.ordinalNum
+											? `${inning?.ordinalNum} Inning`
+											: `Inning ${i + 1}`}
+									</MenuItem>
 								))
 							}
-						</Tabs>
-					)}
-					{this.state.mode === "all" && isMedium && (
-						<React.Fragment>
-							<div>
-								<Button
-									ref={this.buttonRef}
-									aria-controls="simple-menu"
-									aria-haspopup="true"
-									className={styles.inningButton}
-									color={"primary"}
-									size={"large"}
-									onClick={() => this.setState({inningMenuOpen: true})}
-									variant={"contained"}
-								>
-									<IoIosMenu style={{
-										marginRight: "0.5rem",
-										fontSize: "1.5rem"
-									}}/>
-									{liveData.linescore.innings[this.state.selectedInning - 1]?.ordinalNum} Inning
-								</Button>
-							</div>
-							<Menu
-								keepMounted
-								anchorEl={this.buttonRef.current}
-								anchorOrigin={{
-									horizontal: "center",
-									vertical: "top"
-								}}
-								open={this.state.inningMenuOpen}
-								onClose={this.onMenuClose}
-							>
-								{
-									liveData.linescore.innings.slice(0, liveData.linescore.currentInning).map((inning, i) => (
-										<MenuItem onClick={_ => this.onMenuSelect(i + 1)}>
-											{inning?.ordinalNum
-												? `${inning?.ordinalNum} Inning`
-												: `Inning ${i + 1}`}
-										</MenuItem>
-									))
-								}
-							</Menu>
-						</React.Fragment>
-					)}
+						</Menu>
+					</React.Fragment>
+				)}
 
-					{halfInnings && keys && this.state.mode === "all" && (
-						<Inning
-							isCurrentInning={this.state.selectedInning === liveData.linescore.currentInning}
-							halfInnings={halfInnings}
-							keysSorted={keys}
-						/>
-					)}
+				{halfInningsChosen && keys && mode === "all" && (
+					<Inning
+						isCurrentInning={selectedInning === liveData.linescore.currentInning}
+						halfInnings={halfInningsChosen}
+						keysSorted={keys}
+					/>
+				)}
 
-					{this.state.mode === "scoring" && (
-						<ScoringPlays
-							liveData={liveData}
-						/>
-					)}
-				</div>
+				{mode === "scoring" && (
+					<ScoringPlays
+						liveData={liveData}
+					/>
+				)}
 			</div>
-		);
+		</div>
+	);
 
-	}
 }
-
-
-export const Plays = withRouter(_Plays);
