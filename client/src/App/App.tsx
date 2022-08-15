@@ -1,35 +1,34 @@
+import { DialogContentText, Grid } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Drawer from '@material-ui/core/Drawer';
+import Snackbar from '@material-ui/core/Snackbar';
+import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
-import styles from "./App.module.scss";
-import { DialogContentText, Grid } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import Drawer from "@material-ui/core/Drawer";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import { AuthDataStore, IAuthContext } from "../Global/AuthDataStore";
-import { Routes } from "./Routes";
-import Sidebar from "./Sidebar";
-//@ts-ignore
-import ScrollMemory from "react-router-scroll-memory";
-import { RespondSizes } from "../Global/Respond/RespondDataStore";
-import { Respond } from "../Global/Respond/Respond";
-import { ErrorBoundary } from "./ErrorBoundary";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import Snackbar from "@material-ui/core/Snackbar";
-import Helmet from "react-helmet";
-import moment from "moment";
-import SidebarDrawer from "./SidebarDrawer";
-import ReactGA from "react-ga";
-import { Upsell } from "../UI/Upsell";
-import { UpsellDataStore } from "../Areas/Game/Components/UpsellDataStore";
-import { useDataStore } from "../Utility/HookUtils";
-import { UpdateAvailableDialog } from "./UpdateAvailableDialog";
-import { RelayEnvironmentProvider } from "react-relay";
-import RelayEnvironment from "./RelayEnvironment";
-import { useNavigate } from 'react-router-dom';
+import ReactGA from 'react-ga';
+import Helmet from 'react-helmet';
+import { RelayEnvironmentProvider } from 'react-relay';
 import { useLocation } from 'react-router';
 
+import { UpsellDataStore } from '../Areas/Game/Components/UpsellDataStore';
+import { AuthDataStore, IAuthContext } from '../Global/AuthDataStore';
+import { Respond } from '../Global/Respond/Respond';
+import { RespondSizes } from '../Global/Respond/RespondDataStore';
+import { Upsell } from '../UI/Upsell';
+import { useDataStore } from '../Utility/HookUtils';
+import styles from './App.module.scss';
+import { ErrorBoundary } from './ErrorBoundary';
+import RelayEnvironment from './RelayEnvironment';
+import { RouteContainer } from './Routes';
+import Sidebar from './Sidebar';
+import SidebarDrawer from './SidebarDrawer';
+import { UpdateAvailableDialog } from './UpdateAvailableDialog';
+
+//@ts-ignore
 interface IAppState {
 	search: string;
 	loading: boolean;
@@ -108,7 +107,6 @@ const App: React.FC = () => {
 	return (
 		<RelayEnvironmentProvider environment={RelayEnvironment}>
 			<Helmet defaultTitle={"Baseball Theater"} titleTemplate={"%s | Baseball Theater"} />
-			<ScrollMemory />
 			<div className={styles.wrapper}>
 				<nav className={styles.nav}>
 					<Respond at={RespondSizes.medium}>
@@ -126,7 +124,7 @@ const App: React.FC = () => {
 					<Container maxWidth={"xl"} style={{ position: "relative" }}>
 						<Grid container>
 							<ErrorBoundary>
-								<Routes />
+								<RouteContainer />
 							</ErrorBoundary>
 						</Grid>
 					</Container>

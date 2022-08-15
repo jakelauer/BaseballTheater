@@ -28,8 +28,8 @@
     "browser-cookies": "^1.2.0",
     "camelcase": "^5.2.0",
     "classnames": "^2.2.6",
-    "fs-extra": "7.0.1",
     "framer-motion": "^1.8.4",
+    "fs-extra": "7.0.1",
     "graphql-tools": "^7.0.4",
     "isomorphic-fetch": "^3.0.0",
     "markdown-it": "^10.0.0",
@@ -56,6 +56,7 @@
     "styled-components": "^5.0.1",
     "swagger-ui-react": "3.23.11",
     "typescript": "^4.4.2",
+    "use-error-boundary": "^2.0.6",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

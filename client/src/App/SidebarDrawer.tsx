@@ -84,7 +84,7 @@ const SidebarDrawer: React.FC<ISidebarDrawerProps> = ({authContext}) =>
 						</IconButton>
 						<span className={styles.logoText}>Baseball Theater</span>
 						<div className={styles.barlogo}>
-							<Link to={SiteRoutes.Search.resolve()}>
+							<Link to={SiteRoutes.Search.resolve({})}>
 								<FaSearch style={{color: "white"}}/>
 							</Link>
 						</div>

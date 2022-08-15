@@ -1,30 +1,31 @@
-import React from 'react';
-import styles from "./App.module.scss";
-import List from "@material-ui/core/List";
-import SportsBaseball from '@material-ui/icons/SportsBaseball';
+import { Button, ListItemAvatar } from '@material-ui/core';
+import Collapse from '@material-ui/core/Collapse';
+import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Typography from '@material-ui/core/Typography';
+import { Equalizer, ReportProblem, Search } from '@material-ui/icons';
+import EventIcon from '@material-ui/icons/Event';
 import SettingsIcon from '@material-ui/icons/Settings';
-import {Equalizer, ReportProblem, Search} from "@material-ui/icons";
-import EventIcon from "@material-ui/icons/Event";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import {Link, RouteComponentProps, withRouter} from "react-router-dom";
-import {SiteRoutes} from "../Global/Routes/Routes";
-import {Teams} from "baseball-theater-engine";
-import {AuthDataStore, BackerType, IAuthContext} from "../Global/AuthDataStore";
-import cookies from "browser-cookies";
-import withStyles from "@material-ui/core/styles/withStyles";
-import {Button, ListItemAvatar} from "@material-ui/core";
-import Collapse from "@material-ui/core/Collapse";
-import {ISettingsDataStorePayload, SettingsDataStore} from "../Global/Settings/SettingsDataStore";
-import classNames from "classnames";
-import {FaVideo} from "react-icons/all";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import Container from "@material-ui/core/Container";
-import moment from "moment";
+import SportsBaseball from '@material-ui/icons/SportsBaseball';
+import { Teams } from 'baseball-theater-engine';
+import cookies from 'browser-cookies';
+import classNames from 'classnames';
+import moment from 'moment';
+import React from 'react';
+import { FaVideo } from 'react-icons/all';
+import { Link } from 'react-router-dom';
 
-interface ISidebarProps extends RouteComponentProps
+import { AuthDataStore, BackerType, IAuthContext } from '../Global/AuthDataStore';
+import { SiteRoutes } from '../Global/Routes/Routes';
+import { ISettingsDataStorePayload, SettingsDataStore } from '../Global/Settings/SettingsDataStore';
+import styles from './App.module.scss';
+
+interface ISidebarProps
 {
 	authContext: IAuthContext;
 }
@@ -91,11 +92,11 @@ class Sidebar extends React.Component<Props, State>
 	private get patreonUrl()
 	{
 		const clientId = "4f3fb1d9df8f53406f60617258e66ef5cba993b1aa72d2e32e66a1b5be0b9008";
-		const host = location.hostname === "jlauer.local" ? "jlauer.local:8000" : location.hostname;
-		const protocol = location.hostname === "jlauer.local" ? "http:" : "https:";
+		const host = window.location.hostname === "jlauer.local" ? "jlauer.local:8000" : window.location.hostname;
+		const protocol = window.location.hostname === "jlauer.local" ? "http:" : "https:";
 		const redirectUri = `${protocol}//${host}/auth/redirect`;
 		const scopes = ["users", "pledges-to-me", "my-campaign"];
-		const state = encodeURIComponent(location.pathname);
+		const state = encodeURIComponent(window.location.pathname);
 		return `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes.join(" ")}&state=${state}`;
 	}
 
@@ -140,7 +141,7 @@ class Sidebar extends React.Component<Props, State>
 							<Divider/>
 						</React.Fragment>
 					)}
-					<MenuItem onClick={onNavigate} icon={<EventIcon/>} path={SiteRoutes.Games.resolve()}>
+					<MenuItem onClick={onNavigate} icon={<EventIcon/>} path={SiteRoutes.GamesRoot.resolve({})}>
 						Games
 					</MenuItem>
 					{/*<MenuItem icon={<PlayCircleFilled/>} end={videoTagsOpen ? <ExpandLess/> : <ExpandMore/>} onClick={this.onFeaturedVideosClick}>
@@ -154,13 +155,13 @@ class Sidebar extends React.Component<Props, State>
 							</ListItem>
 						</List>
 					</Collapse>
-					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve()}>
+					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve({year: moment().year.toString()})}>
 						Standings
 					</MenuItem>
-					<MenuItem onClick={onNavigate} icon={<Search/>} path={SiteRoutes.Search.resolve()}>
+					<MenuItem onClick={onNavigate} icon={<Search/>} path={SiteRoutes.Search.resolve({})}>
 						Search
 					</MenuItem>
-					<MenuItem onClick={onNavigate} icon={<SettingsIcon/>} path={SiteRoutes.Settings.resolve()}>
+					<MenuItem onClick={onNavigate} icon={<SettingsIcon/>} path={SiteRoutes.Settings.resolve({})}>
 						Settings
 					</MenuItem>
 				</List>
@@ -263,4 +264,4 @@ const Sponsor: React.FC<ISponsorProps> = (props) =>
 };
 
 
-export default withRouter(Sidebar);
+export default Sidebar;

@@ -1,6 +1,6 @@
 import { ITeams } from 'baseball-theater-engine';
 import moment from 'moment';
-import pathToRegexp, { PathFunction } from 'path-to-regexp';
+import { compile, PathFunction } from 'path-to-regexp';
 
 export class SiteRoute<T extends object = {}>
 {
@@ -8,7 +8,7 @@ export class SiteRoute<T extends object = {}>
 
 	constructor(private readonly baseRoute: string, private readonly defaults?: Partial<T>)
 	{
-		this.compiler = pathToRegexp.compile(baseRoute)
+		this.compiler = compile(baseRoute)
 	}
 
 	public get path()
@@ -16,7 +16,7 @@ export class SiteRoute<T extends object = {}>
 		return this.baseRoute;
 	}
 
-	public resolve(params?: T)
+	public resolve(params: T)
 	{
 		const paramsWithDefaults = {...this.defaults, ...params};
 		return this.compiler(paramsWithDefaults);
@@ -35,7 +35,8 @@ export type IGameParams =
 
 export class SiteRoutes
 {
-	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd?");
+	public static GamesRoot = new SiteRoute<{ yyyymmdd?: string }>("/games");
+	public static Games = new SiteRoute<{ yyyymmdd?: string }>("/games/:yyyymmdd");
 	public static Game = new SiteRoute<IGameParams>("/game/:gameDate/:gameId/:tab?/:tabDetail?", {gameDate: "_"});
 	public static Schedule = new SiteRoute<{ year: string; team?: string }>("/schedule/:year/:team?", {
 		year: moment().format("YYYY")
