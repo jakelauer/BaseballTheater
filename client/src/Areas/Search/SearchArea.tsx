@@ -1,31 +1,23 @@
-import * as React from "react";
-import {useEffect, useState} from "react";
-import {Grid, Input, InputAdornment, Theme} from "@material-ui/core";
-import styles from "./SearchArea.module.scss";
-import {makeStyles} from "@material-ui/core/styles";
-import {createStyles} from "@material-ui/styles";
-import {RouteComponentProps, withRouter} from "react-router";
-import Typography from "@material-ui/core/Typography";
-import {ChromecastFab} from "../../UI/ChromecastFab";
-import {NewSearch} from "./NewSearch";
-import moment from "moment/moment";
-import {FaSearch} from "react-icons/all";
+import { Grid, Input, InputAdornment, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { createStyles } from '@material-ui/styles';
+import moment from 'moment/moment';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { FaSearch } from 'react-icons/all';
+import { useParams } from 'react-router';
 
-export interface ISearchAreaParams
+import { ChromecastFab } from '../../UI/ChromecastFab';
+import { NewSearch } from './NewSearch';
+import styles from './SearchArea.module.scss';
+
+export type ISearchAreaParams =
 {
 	query: string;
 	date: string;
 }
 
-interface ISearchAreaProps extends RouteComponentProps<ISearchAreaParams>
-{
-}
-
-interface DefaultProps
-{
-}
-
-type Props = ISearchAreaProps & DefaultProps;
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -45,18 +37,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 let timerId = 0;
-const SearchArea: React.FC<Props> = (props) =>
+const SearchArea: React.FC = (props) =>
 {
-	const dateString = moment(decodeURIComponent(props.match.params.date)).format("MMMM Do, YYYY");
-
 	const {
 		date,
 		query
-	} = props.match.params;
+	} = useParams<ISearchAreaParams>();
+	const dateString = moment(decodeURIComponent(date)).format("MMMM Do, YYYY");
 
 	const prepopulated = (date && query) ? {
-		tag: props.match.params.query,
-		date: props.match.params.date
+		tag: query,
+		date: date
 	} : undefined;
 
 	const [tempText, setTempText] = useState("");
@@ -74,10 +65,10 @@ const SearchArea: React.FC<Props> = (props) =>
 	}, [tempText]);
 
 	return (
-		<div className={styles.wrapper} style={{marginTop: props.match.params.date ? "2rem" : "0"}}>
+		<div className={styles.wrapper} style={{marginTop: date ? "2rem" : "0"}}>
 			{date && (
 				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
-					<Typography variant={"h4"}>{dateString}: {props.match.params.query}</Typography>
+					<Typography variant={"h4"}>{dateString}: {query}</Typography>
 				</Grid>
 			)}
 
@@ -113,4 +104,4 @@ const SearchArea: React.FC<Props> = (props) =>
 	);
 };
 
-export default withRouter(SearchArea);
+export default SearchArea;
