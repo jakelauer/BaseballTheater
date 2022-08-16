@@ -2,6 +2,7 @@
   "name": "bbt2",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://jlauer.local:8000",
   "dependencies": {
     "@date-io/moment": "^1.3.11",
     "@material-ui/core": "^4.11.3",

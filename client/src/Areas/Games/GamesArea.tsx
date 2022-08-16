@@ -33,7 +33,7 @@ const GamesArea: React.FC = () => {
 
 	useEffect(() => {
 		if (!params.yyyymmdd) {
-			history.replaceState(null, null, SiteRoutes.Games.resolve({
+			window.history.replaceState(null, null, SiteRoutes.Games.resolve({
 				yyyymmdd: dateString
 			}))
 		}

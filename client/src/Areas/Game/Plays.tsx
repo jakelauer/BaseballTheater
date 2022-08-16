@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import { usePrevious } from '../../Global/Hooks/usePrevious';
 import { useDataStore } from '../../Global/Intercom/DataStore';
 import { RespondDataStore, RespondDataStorePayload, RespondSizes } from '../../Global/Respond/RespondDataStore';
-import { IGameParams, SiteRoutes } from '../../Global/Routes/Routes';
+import { IGameTabDetailParams, SiteRoutes } from '../../Global/Routes/Routes';
 import { ContainerProgress } from '../../UI/ContainerProgress';
 import { HalfInnings, Inning } from './Components/Innings';
 import { MiniBoxScore } from './Components/MiniBoxScore';
@@ -39,7 +39,7 @@ interface IPlaysState {
 }
 
 export const Plays: React.FC<Props> = (props) => {
-	const params = useParams<IGameParams>();
+	const params = useParams<IGameTabDetailParams>();
 	const buttonRef = React.createRef<HTMLButtonElement>();
 	const prevProps = usePrevious(props);
 
@@ -86,7 +86,7 @@ export const Plays: React.FC<Props> = (props) => {
 	const onPlayModeClick = (mode: "scoring" | "all") => {
 		setMode(mode);
 
-		history.replaceState(null, null, SiteRoutes.Game.resolve({
+		window.history.replaceState(null, null, SiteRoutes.GameTabDetail.resolve({
 			gameDate: "_",
 			gameId: props.liveData.gamePk.toString(),
 			tab: "Plays",

@@ -12,6 +12,8 @@ import { Equalizer, ReportProblem, Search } from '@material-ui/icons';
 import EventIcon from '@material-ui/icons/Event';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
+import carlsplace from 'assets/backers/carlsplace.png';
+import storeporter from 'assets/backers/storeporter.png';
 import { Teams } from 'baseball-theater-engine';
 import cookies from 'browser-cookies';
 import classNames from 'classnames';
@@ -155,7 +157,7 @@ class Sidebar extends React.Component<Props, State>
 							</ListItem>
 						</List>
 					</Collapse>
-					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve({year: moment().year.toString()})}>
+					<MenuItem onClick={onNavigate} icon={<Equalizer/>} path={SiteRoutes.Standings.resolve({year: moment().year().toString()})}>
 						Standings
 					</MenuItem>
 					<MenuItem onClick={onNavigate} icon={<Search/>} path={SiteRoutes.Search.resolve({})}>
@@ -187,9 +189,8 @@ class Sidebar extends React.Component<Props, State>
 				)}
 				<div className={styles.sponsors}>
 					<p>Diamond Sponsors</p>
-					<Sponsor imagePath={"/assets/backers/hehe.png"} url={"https://hehestreams.com/r/in/706b090de2fe77242ae54e91b9d8302c"}/>
-					<Sponsor imagePath={"/assets/backers/carlsplace.png"} url={"https://www.carlofet.com/?utm_medium=advertising&utm_source=baseballtheater&utm_campaign=baseballtheater"}/>
-					<Sponsor imagePath={"/assets/backers/storeporter.png"} url={"https://storeporter.com"}/>
+					<Sponsor imagePath={carlsplace} url={"https://www.carlofet.com/?utm_medium=advertising&utm_source=baseballtheater&utm_campaign=baseballtheater"}/>
+					<Sponsor imagePath={storeporter} url={"https://storeporter.com"}/>
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
 				</div>
 				<div className={styles.bottom}>

@@ -1,8 +1,9 @@
-import {DataStore} from "../../../Global/Intercom/DataStore";
-import moment from "moment";
-import {GameMedia, IHighlightSearchItem, LiveData, MediaItem} from "baseball-theater-engine";
-import {MlbClientDataFetcher} from "../../../Global/Mlb/MlbClientDataFetcher";
-import {createContext} from "react";
+import { GameMedia, IHighlightSearchItem, LiveData, MediaItem } from 'baseball-theater-engine';
+import moment from 'moment';
+import { createContext } from 'react';
+
+import { DataStore } from '../../../Global/Intercom/DataStore';
+import { MlbClientDataFetcher } from '../../../Global/Mlb/MlbClientDataFetcher';
 
 export interface IGameDataStorePayload
 {
@@ -22,6 +23,20 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 	constructor(private readonly gamePk: string, private ms: number = 30 * 1000)
 	{
 		super({
+			updateTime: moment(),
+			media: null,
+			liveData: null,
+			lastRefresh: Date.now(),
+			secondsUntilRefresh: ms / 1000,
+			cancelled: false
+		});
+	}
+
+	public initialize(gamePk: string, ms = 30 * 1000)
+	{
+		this.cancel();
+		
+		this.update({
 			updateTime: moment(),
 			media: null,
 			liveData: null,

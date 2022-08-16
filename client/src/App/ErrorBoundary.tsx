@@ -9,12 +9,6 @@ interface IErrorBoundaryProps {
 	children?: React.ReactNode;
 }
 
-interface DefaultProps {
-}
-
-type Props = IErrorBoundaryProps & DefaultProps;
-type State = IErrorBoundaryState;
-
 interface IErrorBoundaryState {
 	error: Error;
 	errorInfo: React.ErrorInfo;

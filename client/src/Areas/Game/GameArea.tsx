@@ -11,7 +11,7 @@ import { ErrorBoundary } from '../../App/ErrorBoundary';
 import { AuthDataStore, BackerType } from '../../Global/AuthDataStore';
 import { Respond } from '../../Global/Respond/Respond';
 import { RespondSizes } from '../../Global/Respond/RespondDataStore';
-import { GameTabs, IGameParams, SiteRoutes } from '../../Global/Routes/Routes';
+import { GameTabs, IGameParams, IGameTabParams, SiteRoutes } from '../../Global/Routes/Routes';
 import { SettingsDataStore } from '../../Global/Settings/SettingsDataStore';
 import { useDataStore } from '../../Utility/HookUtils';
 import { BoxScore } from './BoxScore';
@@ -22,14 +22,25 @@ import { Live } from './Live';
 import { Plays } from './Plays';
 import { Wrap } from './Wrap';
 
+let gameDataStore: GameDataStore;
+
 const GameArea: React.FC = () => {
-	const params = useParams<IGameParams>();
-	const gameDataStore = new GameDataStore(params.gameId);
+	const params = useParams<IGameTabParams>();
 	const upsellAnchor = React.createRef<HTMLDivElement>();
 
 	const authData = useDataStore(AuthDataStore);
 	const [tabValue, setTabValue] = useState<string>(params.tab);
+
+	if(!gameDataStore)
+	{
+		gameDataStore = new GameDataStore(params.gameId);
+	}
+
 	const gameData = useDataStore(gameDataStore);
+
+	useEffect(() => {
+		gameDataStore.initialize(params.gameId)
+	},[params.gameId]);
 
 	useEffect(() => {
 		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
@@ -38,7 +49,7 @@ const GameArea: React.FC = () => {
 	const handleChange = (e: React.ChangeEvent<{}>, value: string) => {
 		setTabValue(value);
 
-		history.replaceState(null, null, getTab(value as GameTabs));
+		window.history.replaceState(null, null, getTab(value as GameTabs));
 	};
 
 	const renderTab = () => {
@@ -85,11 +96,11 @@ const GameArea: React.FC = () => {
 
 	const getTab = (tab: GameTabs) => {
 		const gameId = params.gameId;
-		return SiteRoutes.Game.resolve({ gameId, tab, gameDate: "_" });
+		return SiteRoutes.GameTab.resolve({ gameId, tab, gameDate: "_" });
 	}
 
 	if (!params.tab) {
-		return <Navigate to={SiteRoutes.Game.resolve({
+		return <Navigate to={SiteRoutes.GameTab.resolve({
 			...params as IGameParams,
 			tab: SettingsDataStore.state.defaultGameTab
 		})} />;

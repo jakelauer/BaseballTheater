@@ -1,5 +1,6 @@
-import {DataStoreObserver} from "./DataStoreObserver";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
+
+import { DataStoreObserver } from './DataStoreObserver';
 
 export abstract class DataStore<TState extends any,
 	TObserverParams extends {} = never>
@@ -54,11 +55,6 @@ export abstract class DataStore<TState extends any,
 	public get state()
 	{
 		return this._currentState;
-	}
-
-	public use(onUpdate?: () => void): TState
-	{
-		return useDataStore(this, onUpdate);
 	}
 }
 
