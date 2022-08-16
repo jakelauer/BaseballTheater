@@ -1,12 +1,13 @@
-import * as React from "react";
-import {IScheduleGame, IScheduleGameStatus, IScheduleTeamItem} from "baseball-theater-engine/contract/teamschedule";
-import styles from "./GameSummary.module.scss";
-import {LiveGameLinescore, Player} from "baseball-theater-engine";
-import {Chip} from "@material-ui/core";
-import classNames from "classnames";
-import moment from "moment";
-import {ISettingsDataStorePayload, SettingsDataStore} from "../../../Global/Settings/SettingsDataStore";
-import {MdFavorite} from "react-icons/all";
+import { Chip } from '@material-ui/core';
+import { LiveGameLinescore, Player } from 'baseball-theater-engine';
+import { IScheduleGame, IScheduleGameStatus, IScheduleTeamItem } from 'baseball-theater-engine/contract/teamschedule';
+import classNames from 'classnames';
+import moment from 'moment';
+import * as React from 'react';
+import { MdFavorite } from 'react-icons/all';
+
+import { ISettingsDataStorePayload, SettingsDataStore } from '../../../Global/Settings/SettingsDataStore';
+import styles from './GameSummary.module.scss';
 
 interface IGameSummaryProps
 {
@@ -237,6 +238,7 @@ interface IStatusProps
 	status: IScheduleGameStatus;
 	gameDate: string;
 	linescore: LiveGameLinescore;
+	children?: React.ReactNode;
 }
 
 const Status: React.FC<IStatusProps> = (props) =>

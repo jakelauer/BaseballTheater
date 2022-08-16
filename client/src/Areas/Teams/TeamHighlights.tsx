@@ -1,132 +1,88 @@
-import * as React from "react";
-import {RouteComponentProps, withRouter} from "react-router";
-import {CircularProgress, Grid} from "@material-ui/core";
-import styles from "./TeamHighlights.module.scss";
-import {Highlight} from "../../UI/Highlight";
-import {ContainerProgress} from "../../UI/ContainerProgress";
-import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
-import {MediaItem} from "../../../../baseball-theater-engine/contract";
-import {ChromecastFab} from "../../UI/ChromecastFab";
+import { CircularProgress, Grid } from '@material-ui/core';
+import { useDataStore } from 'Global/Intercom/DataStore';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-interface ITeamHighlightsProps
-{
-}
+import { MediaItem } from '../../../../baseball-theater-engine/contract';
+import { AuthDataStore, BackerType, IAuthContext } from '../../Global/AuthDataStore';
+import { ChromecastFab } from '../../UI/ChromecastFab';
+import { ContainerProgress } from '../../UI/ContainerProgress';
+import { Highlight } from '../../UI/Highlight';
+import styles from './TeamHighlights.module.scss';
 
-interface DefaultProps
-{
-}
-
-type Props = ITeamHighlightsProps & DefaultProps & RouteComponentProps<{ teamFileCode: string }>;
-type State = ITeamHighlightsState;
-
-interface ITeamHighlightsState
-{
+interface ITeamHighlightsState {
 	videos: MediaItem[];
 	page: number;
 	loading: boolean;
 	authContext: IAuthContext;
 }
 
-class TeamHighlights extends React.Component<Props, State>
-{
-	private loading = false;
+const TeamHighlights: React.FC = () => {
+	const params = useParams<{ teamFileCode: string }>();
 
-	constructor(props: Props)
-	{
-		super(props);
+	const [videos, setVideos] = useState<MediaItem[]>([]);
+	const [page, setPage] = useState(1);
+	const [loading, setLoading] = useState(true);
+	const authContext = useDataStore(AuthDataStore);
 
-		this.state = {
-			videos: [],
-			page: 1,
-			loading: true,
-			authContext: AuthDataStore.state
-		};
-	}
+	useEffect(() => {
+		loadNextPage();
 
-	public componentDidMount(): void
-	{
-		this.loadNextPage();
-
-		window.addEventListener("scroll", () =>
-		{
+		window.addEventListener("scroll", () => {
 			const scrollMax = document.body.scrollHeight - window.innerHeight;
 			const scroll = window.scrollY;
-			if (scrollMax - scroll < 50 && !this.loading)
-			{
-				this.loading = true;
-				this.setState({
-					page: this.state.page + 1,
-					loading: true
-				})
+			if (scrollMax - scroll < 50 && !loading) {
+				setLoading(true);
+				setPage(page + 1);
 			}
 		});
+	}, []);
 
-		AuthDataStore.listen(state =>
-		{
-			this.setState({
-				authContext: state
-			});
-		})
-	}
+	useEffect(() => {
+		setPage(1);
+		setVideos([]);
+		setLoading(true);
+		loadNextPage();
+	}, [params.teamFileCode]);
 
-	public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void
-	{
-		if (prevProps.match.params.teamFileCode !== this.props.match.params.teamFileCode)
-		{
-			this.setState({
-				page: 1,
-				videos: [],
-				loading: true
-			}, this.loadNextPage);
-		}
-		else if (prevState.page !== this.state.page)
-		{
-			this.loadNextPage();
-		}
-	}
+	useEffect(() => {
+		loadNextPage();
+	}, [page])
 
-	private loadNextPage()
-	{
-		fetch(`/api/team?page=${this.state.page}&team=${this.props.match.params.teamFileCode}`, {
+	const loadNextPage = () => {
+		fetch(`/api/team?page=${page}&team=${params.teamFileCode}`, {
 			headers: {
 				"x-app": "baseballtheater",
 				"x-api-key": "78AF1CF0-6D5F-4360-83BA-7AF7599EF107"
 			}
 		})
 			.then(r => r.json())
-			.then((data: MediaItem[]) =>
-			{
-				this.setState({
-					videos: [...this.state.videos, ...data],
-					loading: false
-				});
+			.then((data: MediaItem[]) => {
 
-				this.loading = false;
+				setVideos([...videos, ...data]);
+				setLoading(false);
 			});
 	}
 
-	public render()
-	{
-		if (!AuthDataStore.hasLevel(BackerType.ProBacker))
-		{
-			return "Requires Pro Backer";
-		}
-
-		return (
-			<div className={styles.wrapper}>
-				<Grid container className={styles.rest} spacing={3} style={{paddingLeft: 0, marginBottom: "2rem"}}>
-					{this.state.videos.map(video => (
-						<Grid key={video.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
-							<Highlight media={video} className={styles.highlight}/>
-						</Grid>
-					))}
-				</Grid>
-				{this.state.videos.length === 0 && <ContainerProgress/>}
-				{this.state.loading && this.state.videos.length !== 0 && <CircularProgress/>}
-				<ChromecastFab/>
-			</div>
-		);
+	if (!AuthDataStore.hasLevel(BackerType.ProBacker)) {
+		return <>{"Requires Pro Backer"}</>;
 	}
+
+	return (
+		<div className={styles.wrapper}>
+			<Grid container className={styles.rest} spacing={3} style={{ paddingLeft: 0, marginBottom: "2rem" }}>
+				{videos.map(video => (
+					<Grid key={video.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
+						<Highlight media={video} className={styles.highlight} />
+					</Grid>
+				))}
+			</Grid>
+			{videos.length === 0 && <ContainerProgress />}
+			{loading && videos.length !== 0 && <CircularProgress />}
+			<ChromecastFab />
+		</div>
+	);
 }
 
-export default withRouter(TeamHighlights);
+
+export default TeamHighlights;

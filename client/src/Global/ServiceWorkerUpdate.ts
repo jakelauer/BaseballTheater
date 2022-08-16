@@ -28,7 +28,7 @@ export class ServiceWorkerUpdate
 		{
 			if (!registration)
 			{
-				location.reload();
+				window.location.reload();
 				return;
 			}
 
@@ -48,16 +48,16 @@ export class ServiceWorkerUpdate
 				}
 				else
 				{
-					location.reload();
+					window.location.reload();
 				}
 				return;
 			}
 
-			setTimeout(() => location.reload(), 1500);
+			setTimeout(() => window.location.reload(), 1500);
 
 			registration.waiting.postMessage({
 				type: "SKIP_WAITING"
 			});
-		}).catch(e => location.reload());
+		}).catch(e => window.location.reload());
 	}
 }

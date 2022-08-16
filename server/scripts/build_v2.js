@@ -16,8 +16,8 @@ const buildDirName = `build_${serverEnv}___${date.getFullYear()}_${date.getMonth
 const buildDir = resolve(`builds/${buildDirName}`);
 const outputDir = path.resolve(buildDir, "output");
 
-fs.mkdir(buildDir);
-fs.mkdir(outputDir);
+fs.mkdirSync(buildDir);
+fs.mkdirSync(outputDir);
 
 console.log("Starting Client");
 const compiler = webpack(configFactory(serverEnv, outputDir));

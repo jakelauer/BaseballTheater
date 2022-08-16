@@ -1,19 +1,22 @@
-import * as React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import {IAuthContext} from "../Global/AuthDataStore";
-import styles from "./App.module.scss";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import {FaSearch} from "react-icons/all";
-import {Link, RouteComponentProps, withRouter} from "react-router-dom";
-import {SiteRoutes} from "../Global/Routes/Routes";
-import Sidebar from "./Sidebar";
-import {HamburgerArrow} from "react-animated-burgers";
-import {ServiceWorkerUpdate} from "../Global/ServiceWorkerUpdate";
-import {SystemUpdateAlt} from "@material-ui/icons";
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Toolbar from '@material-ui/core/Toolbar';
+import { SystemUpdateAlt } from '@material-ui/icons';
+import { useEffect, useState } from 'react';
+import React from 'react';
+import { HamburgerArrow } from 'react-animated-burgers';
+import { FaSearch } from 'react-icons/all';
+import { useLocation } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface ISidebarDrawerProps extends RouteComponentProps
+import { IAuthContext } from '../Global/AuthDataStore';
+import { SiteRoutes } from '../Global/Routes/Routes';
+import { ServiceWorkerUpdate } from '../Global/ServiceWorkerUpdate';
+import styles from './App.module.scss';
+import Sidebar from './Sidebar';
+
+interface ISidebarDrawerProps
 {
 	authContext: IAuthContext;
 }
@@ -31,55 +34,41 @@ interface ISidebarDrawerState
 	waitingForUpdate: boolean;
 }
 
-class SidebarDrawer extends React.Component<Props, State>
+const SidebarDrawer: React.FC<ISidebarDrawerProps> = ({authContext}) =>
 {
-	constructor(props: Props)
-	{
-		super(props);
+	const navigate = useNavigate();
+	const [drawerOpen, setDrawerOpen] = useState(false);
+	const [waitingForUpdate, setWaitingForUpdate] = useState(true);
+	const location = useLocation();
 
-		this.state = {
-			drawerOpen: false,
-			waitingForUpdate: false
-		};
-	}
+	useEffect(() => {
+		checkUpdates();
+	}, []);
 
-	private closeDrawer = () =>
+	const closeDrawer = () =>
 	{
-		this.setState({
-			drawerOpen: false
-		});
+		setDrawerOpen(false);
 	};
 
-	private openDrawer = () =>
+	const openDrawer = () =>
 	{
-		this.setState({
-			drawerOpen: true
-		});
+		setDrawerOpen(true);
 	};
 
-	public componentDidMount(): void
-	{
-		this.checkUpdates();
-	}
-
-	private checkUpdates()
+	const checkUpdates = () =>
 	{
 		ServiceWorkerUpdate.checkForUpdates((hasUpdate) =>
 		{
-			this.setState({
-				waitingForUpdate: hasUpdate
-			})
+			setWaitingForUpdate(hasUpdate);
 		});
 	}
 
-	public render()
-	{
-		const hamburgerActive = !(this.props.location.pathname.includes("games"));
+		const hamburgerActive = !(location.pathname.includes("games"));
 		const onClick = hamburgerActive
-			? () => this.props.history.push("/")
-			: this.openDrawer;
+			? () => navigate("/")
+			: openDrawer;
 
-		const updateIconShown = this.state.waitingForUpdate && !hamburgerActive;
+		const updateIconShown = waitingForUpdate && !hamburgerActive;
 
 		return (
 			<React.Fragment>
@@ -95,23 +84,23 @@ class SidebarDrawer extends React.Component<Props, State>
 						</IconButton>
 						<span className={styles.logoText}>Baseball Theater</span>
 						<div className={styles.barlogo}>
-							<Link to={SiteRoutes.Search.resolve()}>
+							<Link to={SiteRoutes.Search.resolve({})}>
 								<FaSearch style={{color: "white"}}/>
 							</Link>
 						</div>
 					</Toolbar>
 				</AppBar>
 				<SwipeableDrawer
-					onClose={this.closeDrawer}
-					onOpen={this.openDrawer}
-					open={this.state.drawerOpen}
+					onClose={closeDrawer}
+					onOpen={openDrawer}
+					open={drawerOpen}
 					disableBackdropTransition={true}
 				>
-					<Sidebar authContext={this.props.authContext} onNavigate={this.closeDrawer}/>
+					<Sidebar authContext={authContext} onNavigate={closeDrawer}/>
 				</SwipeableDrawer>
 			</React.Fragment>
 		);
 	}
-}
 
-export default withRouter(SidebarDrawer);
+
+export default SidebarDrawer;

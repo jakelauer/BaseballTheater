@@ -75,7 +75,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 			throw e;
 		}
 
-		let host = Config.host.replace("local:5000", "local:3000");
+		let host = Config.host.replace("local:8000", "local:3000");
 		if (host.includes(":"))
 		{
 			host.replace("http", "https");

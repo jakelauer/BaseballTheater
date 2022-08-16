@@ -1,29 +1,26 @@
-import * as React from "react";
-import {MediaItem, RecapTags} from "baseball-theater-engine";
-import {Route} from "react-router";
-import {SiteRoutes} from "../../Global/Routes/Routes";
-import {FeaturedVideoPage} from "./FeaturedVideoPage";
+import { MediaItem, RecapTags } from 'baseball-theater-engine';
+import * as React from 'react';
+import { Route } from 'react-router';
 
-interface IFeaturedVideosAreaProps
-{
+import { SiteRoutes } from '../../Global/Routes/Routes';
+import { FeaturedVideoPage } from './FeaturedVideoPage';
+
+interface IFeaturedVideosAreaProps {
 }
 
-interface DefaultProps
-{
+interface DefaultProps {
 }
 
 type Props = IFeaturedVideosAreaProps & DefaultProps;
 type State = IFeaturedVideosAreaState;
 
-interface IFeaturedVideosAreaState
-{
+interface IFeaturedVideosAreaState {
 	recapTags: { [K in keyof typeof RecapTags]?: MediaItem[] };
 }
 
 export default class FeaturedVideosArea extends React.Component<Props, State>
 {
-	constructor(props: Props)
-	{
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -31,11 +28,12 @@ export default class FeaturedVideosArea extends React.Component<Props, State>
 		};
 	}
 
-	public render()
-	{
+	public render() {
 		return (
 			<React.Fragment>
-				<Route path={SiteRoutes.FeaturedVideos.path} component={FeaturedVideoPage}/>
+				<Route path={SiteRoutes.FeaturedVideos.path}>
+					<FeaturedVideoPage />
+				</Route>
 			</React.Fragment>
 		);
 	}

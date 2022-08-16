@@ -22,6 +22,11 @@ const buildSwagger = () => {
     const swaggerSpec = swaggerJSDoc(options);
 
 // Generate the swagger def
+    if(!fs.existsSync("output/client"))
+    {
+        fs.mkdirSync("output/client", {recursive: true});
+    }
+    
     fs.writeFile(resolve("output/client/swagger.json"), JSON.stringify(swaggerSpec, null, 2), 'utf8');
 };
 

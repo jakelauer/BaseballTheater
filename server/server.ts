@@ -14,7 +14,7 @@ import moment from "moment";
 
 // Create the app
 const app = express();
-const port = process.env.port || 5000;
+const port = process.env.port || 8000;
 const clientFolder = path.join(process.cwd(), 'client');
 
 // Set up basic settings

@@ -1,5 +1,6 @@
-﻿import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
-import fetch from "node-fetch";
+﻿import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+
+import fetch from 'node-fetch';
 
 class Internal_DataLoaderNode
 {
@@ -23,8 +24,8 @@ class Internal_DataLoaderNode
 			};
 
 			resp
-				.then(response => response.json())
-				.then(myJson =>
+				.then((response:any) => response.json())
+				.then((myJson:any) =>
 				{
 					resolve(myJson);
 				})

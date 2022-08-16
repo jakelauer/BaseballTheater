@@ -1,114 +1,78 @@
-import * as React from "react";
-import styles from "./GameArea.module.scss";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import {Redirect, RouteComponentProps, withRouter} from "react-router";
-import {GameTabs, IGameParams, SiteRoutes} from "../../Global/Routes/Routes";
-import {Wrap} from "./Wrap";
-import {Plays} from "./Plays";
-import {BoxScore} from "./BoxScore";
-import {Highlights} from "./Highlights";
-import {GameDataStore, GameDataStoreContext, IGameDataStorePayload} from "./Components/GameDataStore";
-import {CircularProgress, LinearProgress, Tabs} from "@material-ui/core";
-import {Respond} from "../../Global/Respond/Respond";
-import {RespondSizes} from "../../Global/Respond/RespondDataStore";
-import {LibraryBooks, ListAlt, PlayCircleOutline, Sync, TableChart} from "@material-ui/icons";
-import Tab from "@material-ui/core/Tab";
-import {SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
-import {ErrorBoundary} from "../../App/ErrorBoundary";
-import {Live} from "./Live";
-import {AuthDataStore, BackerType, IAuthContext} from "../../Global/AuthDataStore";
-import classNames from "classnames";
-import {useDataStore} from "../../Utility/HookUtils";
+import { CircularProgress, LinearProgress, Tabs } from '@material-ui/core';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import Tab from '@material-ui/core/Tab';
+import { LibraryBooks, ListAlt, PlayCircleOutline, Sync, TableChart } from '@material-ui/icons';
+import classNames from 'classnames';
+import React, { useEffect, useState } from 'react';
+import { Navigate, useParams } from 'react-router';
 
-interface IGameAreaProps extends RouteComponentProps<IGameParams>
-{
-}
+import { ErrorBoundary } from '../../App/ErrorBoundary';
+import { AuthDataStore, BackerType } from '../../Global/AuthDataStore';
+import { Respond } from '../../Global/Respond/Respond';
+import { RespondSizes } from '../../Global/Respond/RespondDataStore';
+import { GameTabs, IGameParams, IGameTabParams, SiteRoutes } from '../../Global/Routes/Routes';
+import { SettingsDataStore } from '../../Global/Settings/SettingsDataStore';
+import { useDataStore } from '../../Utility/HookUtils';
+import { BoxScore } from './BoxScore';
+import { GameDataStore, GameDataStoreContext } from './Components/GameDataStore';
+import styles from './GameArea.module.scss';
+import { Highlights } from './Highlights';
+import { Live } from './Live';
+import { Plays } from './Plays';
+import { Wrap } from './Wrap';
 
-interface DefaultProps
-{
-}
+let gameDataStore: GameDataStore;
 
-type Props = IGameAreaProps & DefaultProps;
-type State = IGameAreaState;
+const GameArea: React.FC = () => {
+	const params = useParams<IGameTabParams>();
+	const upsellAnchor = React.createRef<HTMLDivElement>();
 
-interface IGameAreaState
-{
-	tabValue: string;
-	gameData: IGameDataStorePayload;
-	authData: IAuthContext;
-}
+	const authData = useDataStore(AuthDataStore);
+	const [tabValue, setTabValue] = useState<string>(params.tab);
 
-class GameArea extends React.Component<Props, State>
-{
-	private readonly gameDataStore: GameDataStore;
-	private readonly upsellAnchor = React.createRef<HTMLDivElement>();
-
-	constructor(props: Props)
+	if(!gameDataStore)
 	{
-		super(props);
-
-		this.gameDataStore = new GameDataStore(this.props.match.params.gameId);
-
-		this.state = {
-			authData: AuthDataStore.state,
-			tabValue: props.match.params.tab,
-			gameData: this.gameDataStore.state
-		};
+		gameDataStore = new GameDataStore(params.gameId);
 	}
 
-	public componentDidMount(): void
-	{
-		this.gameDataStore.listen(gameData =>
-		{
-			this.setState({gameData});
-		});
+	const gameData = useDataStore(gameDataStore);
 
-		AuthDataStore.listen(authData =>
-		{
-			this.setState({authData});
-			this.gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
-		});
-	}
+	useEffect(() => {
+		gameDataStore.initialize(params.gameId)
+	},[params.gameId]);
 
-	public componentWillUnmount(): void
-	{
-		this.gameDataStore.cancel();
-	}
+	useEffect(() => {
+		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
+	}, [authData.levels]);
 
-	private handleChange = (e: React.ChangeEvent<{}>, value: string) =>
-	{
-		this.setState({
-			tabValue: value
-		});
+	const handleChange = (e: React.ChangeEvent<{}>, value: string) => {
+		setTabValue(value);
 
-		history.replaceState(null, null, this.getTab(value as GameTabs));
+		window.history.replaceState(null, null, getTab(value as GameTabs));
 	};
 
-	private renderTab()
-	{
-		if (!this.state.gameData)
-		{
-			return <CircularProgress/>;
+	const renderTab = () => {
+		if (!gameData) {
+			return <CircularProgress />;
 		}
 
 		let content = null;
-		switch (this.state.tabValue)
-		{
+		switch (tabValue) {
 			case "Wrap":
-				content = <Wrap media={this.state.gameData.media} liveData={this.state.gameData.liveData}/>;
+				content = <Wrap media={gameData.media} liveData={gameData.liveData} />;
 				break;
 			case "LiveGame":
-				content = <Live liveData={this.state.gameData.liveData}/>;
+				content = <Live liveData={gameData.liveData} />;
 				break;
 			case "Plays":
-				content = <Plays liveData={this.state.gameData.liveData}/>;
+				content = <Plays liveData={gameData.liveData} />;
 				break;
 			case "BoxScore":
-				content = <BoxScore liveData={this.state.gameData.liveData}/>;
+				content = <BoxScore liveData={gameData.liveData} />;
 				break;
 			case "Highlights":
-				content = <Highlights media={this.state.gameData.media} gamePk={this.props.match.params.gameId} liveData={this.state.gameData.liveData}/>;
+				content = <Highlights media={gameData.media} gamePk={params.gameId} liveData={gameData.liveData} />;
 				break;
 		}
 
@@ -119,9 +83,8 @@ class GameArea extends React.Component<Props, State>
 		);
 	}
 
-	private hasWrap()
-	{
-		const media = this.state.gameData.media;
+	const hasWrap = () => {
+		const media = gameData.media;
 
 		const noWrap = !media
 			|| !media.editorial
@@ -131,139 +94,132 @@ class GameArea extends React.Component<Props, State>
 		return !noWrap;
 	}
 
-	private getTab(tab: GameTabs)
-	{
-		const gameId = this.props.match.params.gameId;
-		return SiteRoutes.Game.resolve({gameId, tab, gameDate: "_"});
+	const getTab = (tab: GameTabs) => {
+		const gameId = params.gameId;
+		return SiteRoutes.GameTab.resolve({ gameId, tab, gameDate: "_" });
 	}
 
-	public render()
-	{
-		if (!this.props.match.params.tab)
+	if (!params.tab) {
+		return <Navigate to={SiteRoutes.GameTab.resolve({
+			...params as IGameParams,
+			tab: SettingsDataStore.state.defaultGameTab
+		})} />;
+	}
+
+	const tabs = [
 		{
-			return <Redirect to={SiteRoutes.Game.resolve({
-				...this.props.match.params,
-				tab: SettingsDataStore.state.defaultGameTab
-			})}/>;
-		}
+			label: "Videos",
+			disabled: false,
+			icon: <PlayCircleOutline />,
+			value: "Highlights",
+		},
+		{
+			label: "Live Play",
+			disabled: hasWrap(),
+			icon: <Sync />,
+			value: "LiveGame",
+		},
+		{
+			label: "Plays",
+			disabled: false,
+			icon: <ListAlt />,
+			value: "Plays",
+		},
+		{
+			label: "Box Score",
+			disabled: false,
+			icon: <TableChart />,
+			value: "BoxScore",
+		},
+		{
+			label: "Recap",
+			disabled: !hasWrap(),
+			icon: <LibraryBooks />,
+			value: "Wrap",
+		},
+	];
 
-		const tabs = [
-			{
-				label: "Videos",
-				disabled: false,
-				icon: <PlayCircleOutline/>,
-				value: "Highlights",
-			},
-			{
-				label: "Live Play",
-				disabled: this.hasWrap(),
-				icon: <Sync/>,
-				value: "LiveGame",
-			},
-			{
-				label: "Plays",
-				disabled: false,
-				icon: <ListAlt/>,
-				value: "Plays",
-			},
-			{
-				label: "Box Score",
-				disabled: false,
-				icon: <TableChart/>,
-				value: "BoxScore",
-			},
-			{
-				label: "Recap",
-				disabled: !this.hasWrap(),
-				icon: <LibraryBooks/>,
-				value: "Wrap",
-			},
-		];
+	const barValue = (gameData.secondsUntilRefresh - 1) / (gameDataStore.refreshSeconds - 1) * 100;
 
-		const barValue = (this.state.gameData.secondsUntilRefresh - 1) / (this.gameDataStore.refreshSeconds - 1) * 100;
-
-		return (
-			<>
-				<div className={styles.gameWrapper}>
-					<GameDataStoreContext.Provider value={this.gameDataStore.state}>
-						<Respond at={RespondSizes.medium} hide={false}>
-							{!this.state.gameData.cancelled && (
-								<RefreshTimer barValue={barValue}/>
+	return (
+		<>
+			<div className={styles.gameWrapper}>
+				<GameDataStoreContext.Provider value={gameDataStore.state}>
+					<Respond at={RespondSizes.medium} hide={false}>
+						{!gameData.cancelled && (
+							<RefreshTimer barValue={barValue} />
+						)}
+					</Respond>
+					<Respond at={RespondSizes.medium} hide={true}>
+						<Tabs
+							className={styles.tabs}
+							value={tabValue}
+							onChange={handleChange}
+							centered={true}
+							indicatorColor={"primary"}
+							textColor="primary"
+						>
+							{!gameData.cancelled && (
+								<RefreshTimer barValue={barValue} />
 							)}
-						</Respond>
-						<Respond at={RespondSizes.medium} hide={true}>
-							<Tabs
-								className={styles.tabs}
-								value={this.state.tabValue}
-								onChange={this.handleChange}
-								centered={true}
-								indicatorColor={"primary"}
-								textColor="primary"
-							>
-								{!this.state.gameData.cancelled && (
-									<RefreshTimer barValue={barValue}/>
-								)}
-								{tabs.filter(a => !a.disabled).map(tab => (
-									<Tab
-										key={tab.label}
-										style={{height: "3.5rem"}}
-										label={tab.label}
-										value={tab.value}
-									/>
-								))}
-							</Tabs>
-						</Respond>
-						<div className={styles.content}>
-							<ErrorBoundary>
-								{this.renderTab()}
-							</ErrorBoundary>
-						</div>
-						<Respond at={RespondSizes.medium} hide={false}>
-							<BottomNavigation
-								value={this.state.tabValue}
-								onChange={this.handleChange}
-								className={styles.root}
-								showLabels
-							>
-								{tabs.filter(a => !a.disabled).map(tab => (
-									<BottomNavigationAction
-										style={{minWidth: 0}}
-										key={tab.label}
-										label={tab.label}
-										icon={tab.icon}
-										value={tab.value}
-									/>
-								))}
-							</BottomNavigation>
-						</Respond>
-					</GameDataStoreContext.Provider>
-				</div>
-				<div className={styles.upsellAnchor} ref={this.upsellAnchor}/>
-			</>
-		);
-	}
+							{tabs.filter(a => !a.disabled).map(tab => (
+								<Tab
+									key={tab.label}
+									style={{ height: "3.5rem" }}
+									label={tab.label}
+									value={tab.value}
+								/>
+							))}
+						</Tabs>
+					</Respond>
+					<div className={styles.content}>
+						<ErrorBoundary>
+							{renderTab()}
+						</ErrorBoundary>
+					</div>
+					<Respond at={RespondSizes.medium} hide={false}>
+						<BottomNavigation
+							value={tabValue}
+							onChange={handleChange}
+							className={styles.root}
+							showLabels
+						>
+							{tabs.filter(a => !a.disabled).map(tab => (
+								<BottomNavigationAction
+									style={{ minWidth: 0 }}
+									key={tab.label}
+									label={tab.label}
+									icon={tab.icon}
+									value={tab.value}
+								/>
+							))}
+						</BottomNavigation>
+					</Respond>
+				</GameDataStoreContext.Provider>
+			</div>
+			<div className={styles.upsellAnchor} ref={upsellAnchor} />
+		</>
+	);
 }
 
 
-const RefreshTimer: React.FC<{ barValue: number }> = ({barValue}) =>
-{
+const RefreshTimer: React.FC<{ barValue: number }> = ({ barValue }) => {
 	const settings = useDataStore(SettingsDataStore);
 
-	if (!settings.showUpdateBar)
-	{
+	if (!settings.showUpdateBar) {
 		return null;
 	}
 
 	return (
 		<LinearProgress
 			classes={{
-				bar1Determinate: classNames(styles.progressBar, {[styles.progressBarNoAnim]: barValue >= 90})
+				bar1Determinate: classNames(styles.progressBar, { [styles.progressBarNoAnim]: barValue >= 90 })
 			}}
 			variant={"determinate"}
 			value={barValue}
-			style={{position: "absolute", top: 0, left: 0, right: 0, zIndex: 99}}
+			style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 99 }}
 		/>
 	);
 }
 
-export default withRouter(GameArea);
+export default GameArea;
