@@ -20,7 +20,7 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 	private interval: number = null;
 	private metaInterval: number = null;
 
-	constructor(private readonly gamePk: string, private ms: number = 30 * 1000)
+	constructor(private gamePk: string, private ms: number = 30 * 1000)
 	{
 		super({
 			updateTime: moment(),
@@ -34,6 +34,9 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 
 	public initialize(gamePk: string, ms = 30 * 1000)
 	{
+		this.gamePk = gamePk;
+		this.ms = ms;
+
 		this.cancel();
 		
 		this.update({

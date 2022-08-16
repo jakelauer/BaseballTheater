@@ -1,0 +1,2 @@
+schema: ./client/src/Global/GQL/schema.generated.gql
+documents: ./**/*.tsx

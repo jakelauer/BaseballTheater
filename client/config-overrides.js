@@ -1,4 +1,16 @@
-module.exports = function override(config, env) {
-    //do stuff with the webpack config...
-    return config;
-  }
+/* eslint-disable react-hooks/rules-of-hooks */
+const {
+  override,
+  addExternalBabelPlugin,
+  useBabelRc
+} = require("customize-cra");
+
+const relayBabelPlugin = require("babel-plugin-relay");
+
+
+module.exports = {
+  webpack: override(
+    useBabelRc(),
+    addExternalBabelPlugin(relayBabelPlugin)
+  ),
+};
