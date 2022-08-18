@@ -173,9 +173,7 @@ const GameArea: React.FC = () => {
 						</Tabs>
 					</Respond>
 					<div className={styles.content}>
-						<ErrorBoundary>
 							{renderTab()}
-						</ErrorBoundary>
 					</div>
 					<Respond at={RespondSizes.medium} hide={false}>
 						<BottomNavigation
