@@ -43,6 +43,10 @@ const GameArea: React.FC = () => {
 	},[params.gameId]);
 
 	useEffect(() => {
+		setTabValue(params.tab);
+	}, [params.tab]);
+
+	useEffect(() => {
 		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
 	}, [authData.levels]);
 
