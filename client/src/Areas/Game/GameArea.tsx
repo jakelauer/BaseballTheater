@@ -43,6 +43,10 @@ const GameArea: React.FC = () => {
 	},[params.gameId]);
 
 	useEffect(() => {
+		setTabValue(params.tab);
+	}, [params.tab]);
+
+	useEffect(() => {
 		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
 	}, [authData.levels]);
 
@@ -173,9 +177,7 @@ const GameArea: React.FC = () => {
 						</Tabs>
 					</Respond>
 					<div className={styles.content}>
-						<ErrorBoundary>
 							{renderTab()}
-						</ErrorBoundary>
 					</div>
 					<Respond at={RespondSizes.medium} hide={false}>
 						<BottomNavigation

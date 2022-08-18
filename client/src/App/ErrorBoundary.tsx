@@ -9,17 +9,6 @@ interface IErrorBoundaryProps {
 	children?: React.ReactNode;
 }
 
-interface IErrorBoundaryState {
-	error: Error;
-	errorInfo: React.ErrorInfo;
-}
-
-interface IErrorBoundaryState {
-	hasError: boolean;
-	error: Error;
-	errorInfo: React.ErrorInfo;
-}
-
 /** This class exists to handle error cases more gracefully than having the app just disappear.
  *  * If a child component errors out, it will display a message with error details */
 export const ErrorBoundary: React.FC<IErrorBoundaryProps> = (props) => {
@@ -32,7 +21,7 @@ export const ErrorBoundary: React.FC<IErrorBoundaryProps> = (props) => {
 		didCatch,
 		error,
 		reset,
-		ErrorBoundary
+		ErrorBoundary: InnerBoundary
 	} = useErrorBoundary({
 		onDidCatch: (error, errorInfo) => { setErrorInfo(errorInfo) }
 	});
@@ -45,8 +34,8 @@ export const ErrorBoundary: React.FC<IErrorBoundaryProps> = (props) => {
 	useEffect(() => {
 		setHasError(false);
 		setErrorInfo(null);
-		reset();
-	}, [location.key]);
+		//reset();
+	}, [location.pathname, reset]);
 
 	const generateReportLines = (joinWith: string) => {
 		return [
@@ -85,5 +74,5 @@ export const ErrorBoundary: React.FC<IErrorBoundaryProps> = (props) => {
 		</div>;
 	}
 
-	return <ErrorBoundary>{props.children}</ErrorBoundary>;
+	return <InnerBoundary>{props.children}</InnerBoundary>;
 }

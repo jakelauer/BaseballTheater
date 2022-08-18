@@ -79,7 +79,7 @@ const App: React.FC = () => {
 
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search);
-	}, [location.key]);
+	}, [location.pathname]);
 
 	const onInstallDialogClose = () => {
 		setShowInstallPromptDialog(false);

@@ -1,16 +1,17 @@
-import React, {useState} from "react";
-import {graphql, useLazyLoadQuery} from "react-relay";
-import moment from "moment/moment";
-import {NewSearchQuery, QueryType} from "./__generated__/NewSearchQuery.graphql";
-import {Grid} from "@material-ui/core";
-import {GqlSearchHighlight} from "../../UI/GqlSearchHighlight";
-import styles from "./SearchArea.module.scss";
+import { Grid } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import {makeStyles} from "@material-ui/styles";
-import Helmet from "react-helmet";
-import {useParams} from "react-router";
-import {ISearchAreaParams} from "./SearchArea";
-import {ContainerProgress} from "../../UI/ContainerProgress";
+import { makeStyles } from '@material-ui/styles';
+import moment from 'moment/moment';
+import React, { useEffect, useState } from 'react';
+import Helmet from 'react-helmet';
+import { graphql, useLazyLoadQuery } from 'react-relay';
+import { useParams } from 'react-router';
+
+import { ContainerProgress } from '../../UI/ContainerProgress';
+import { GqlSearchHighlight } from '../../UI/GqlSearchHighlight';
+import { NewSearchQuery, QueryType } from './__generated__/NewSearchQuery.graphql';
+import { ISearchAreaParams } from './SearchArea';
+import styles from './SearchArea.module.scss';
 
 export type GqlSearchMediaPlayback = NewSearchQuery["response"]["search"]["plays"][0]["mediaPlayback"][0]["feeds"][0]["playbacks"]
 export type GqlMediaCut = NewSearchQuery["response"]["search"]["plays"][0]["mediaPlayback"][0]["feeds"][0]["image"]["cuts"]
@@ -72,14 +73,16 @@ export const NewSearch: React.FC<NewSearchProps> = (props) =>
 	);
 }
 
-const Searcher = (props: {
+export const Searcher = (props: {
 	query: string,
-	queryType: QueryType
+	queryType: QueryType,
+	onUpdate?: (results: any) => void
 }) =>
 {
 	const {
 		query,
-		queryType
+		queryType,
+		onUpdate
 	} = props;
 
 	const classes = useStyles();
@@ -93,7 +96,8 @@ const Searcher = (props: {
                 plays{
                     gameDate
                     id
-                    gamePk
+					gamePk
+					ga
                     mediaPlayback {
                         id
                         slug
@@ -126,15 +130,18 @@ const Searcher = (props: {
         }
 	`, {
 		queryType,
-		query,
+		query, 
 		limit: 36,
 		page,
 		languagePreference: "EN",
 		contentPreference: "MIXED"
 	});
 
-	const length = data?.search?.plays?.length ?? 0;
 	const maxPages = Math.ceil((data?.search?.total ?? 0) / 36);
+
+	useEffect(() => {
+		onUpdate?.(data);
+	}, [data, onUpdate])
 
 	return (
 		<>

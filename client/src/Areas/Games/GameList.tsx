@@ -1,24 +1,26 @@
-import * as React from "react";
-import moment from "moment/moment";
-import "moment-duration-format";
-import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import {Chip, CircularProgress, Paper} from "@material-ui/core";
-import {GameSummary} from "./Components/GameSummary";
-import styles from "./GameList.module.scss";
-import Grid from "@material-ui/core/Grid";
-import {Link} from "react-router-dom";
-import {SiteRoutes} from "../../Global/Routes/Routes";
-import {IScheduleGame, IScheduleGameList} from "baseball-theater-engine/contract/teamschedule";
-import {MlbUtils} from "baseball-theater-engine/mlbutils";
-import {ContainerProgress} from "../../UI/ContainerProgress";
-import {ISettingsDataStorePayload, SettingsDataStore} from "../../Global/Settings/SettingsDataStore";
-import Helmet from "react-helmet";
-import Typography from "@material-ui/core/Typography";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import {Skeleton} from "@material-ui/lab";
-import classNames from "classnames";
+import 'moment-duration-format';
+
+import { CircularProgress, Paper } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { Skeleton } from '@material-ui/lab';
+import { IScheduleGameList } from 'baseball-theater-engine/contract/teamschedule';
+import { MlbUtils } from 'baseball-theater-engine/mlbutils';
+import classNames from 'classnames';
+import moment from 'moment/moment';
+import * as React from 'react';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
+
+import { MlbClientDataFetcher } from '../../Global/Mlb/MlbClientDataFetcher';
+import { SiteRoutes } from '../../Global/Routes/Routes';
+import { ISettingsDataStorePayload, SettingsDataStore } from '../../Global/Settings/SettingsDataStore';
+import { ContainerProgress } from '../../UI/ContainerProgress';
+import { GameSummary } from './Components/GameSummary';
+import styles from './GameList.module.scss';
 
 interface IGameListProps
 {
@@ -166,9 +168,6 @@ export class GameList extends React.Component<Props, State>
 							<Link to={SiteRoutes.Game.resolve({gameId: game.gamePk, gameDate: "_"})} className={styles.gameLink}>
 								<GameSummary game={game}/>
 							</Link>
-							{game.content?.media?.freeGame && (
-								<GameListPlaybackButton game={game}/>
-							)}
 						</Paper>
 					</Grid>
 				);
@@ -229,42 +228,4 @@ export class GameList extends React.Component<Props, State>
 			</React.Fragment>
 		);
 	}
-}
-
-const GameListPlaybackButton = (props: { game: IScheduleGame }) =>
-{
-	const {game} = props;
-
-	const gameTime = moment(game.gameDate).add(-15, "minutes");
-	const isFuture = gameTime.isAfter(moment());
-	const isPast = game.status.abstractGameCode === "F";
-	const timeUntil = gameTime.format("h:mma")
-	const label = isPast
-		? "WATCH PARTY OVER"
-		: isFuture
-			? <>
-				WATCH ON PLAYBACK <Chip size={"small"} label={timeUntil} color={"primary"} style={{marginLeft: 8, border: "1px solid white"}}/>
-			</>
-			: "WATCH ON PLAYBACK";
-
-	const color = isPast ? "secondary" : "primary";
-
-	return (
-		<div className={styles.playback}>
-			<Button href={"https://www.getplayback.com/mlb-game-of-the-day"}
-			        target={"_blank"}
-			        variant={"contained"}
-			        disabled={isPast}
-			        style={{
-				        paddingLeft: 8,
-				        paddingRight: 8
-			        }}
-			        color={color}
-			        className={styles.playbackButton}
-			        startIcon={<img src={"/assets/playback-logo.svg"} width={20} alt={"Playback"}/>}
-			>
-				{label}
-			</Button>
-		</div>
-	);
 }

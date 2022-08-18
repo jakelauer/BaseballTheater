@@ -42,6 +42,8 @@ export class RouteContainer extends React.Component<Props, State>
 				<Route path={SiteRoutes.Teams.path} element={<Suspender importer={() => import("../Areas/Teams/TeamsArea")} />} />
 				<Route path={SiteRoutes.Settings.path} element={<Suspender importer={() => import("../Areas/Settings/SettingsArea")} />} />
 				<Route path={SiteRoutes.Search.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
+				<Route path={SiteRoutes.SearchQuery.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
+				<Route path={SiteRoutes.SearchDate.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
 				<Route path={"/"} element={<Navigate to={SiteRoutes.Games.resolve({yyyymmdd: today})} />} />
 			</Routes>
 		);

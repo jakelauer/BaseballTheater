@@ -1,0 +1,12 @@
+{
+  "name": "MLB",
+  "schemaPath": "./client/src/Global/GQL/schema.generated.gql",
+  "extensions": {
+    "endpoints": {
+      "MLB": {
+        "url": "https://fastball-gateway.mlb.com/graphql",
+        "introspect": true
+      }
+    }
+  }
+}
