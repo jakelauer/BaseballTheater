@@ -104,7 +104,7 @@ const GameArea: React.FC = () => {
 	}
 
 	if (!params.tab) {
-		return <Navigate to={SiteRoutes.GameTab.resolve({
+		return <Navigate replace to={SiteRoutes.GameTab.resolve({
 			...params as IGameParams,
 			tab: SettingsDataStore.state.defaultGameTab
 		})} />;
