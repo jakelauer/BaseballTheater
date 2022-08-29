@@ -1,11 +1,11 @@
-import {fetch} from "cross-fetch";
-import {Express} from "express";
-import {NextFunction, Request, Response} from "express-serve-static-core";
-import {Auth} from "./auth";
-import {Search} from "./search";
-import apicache from "apicache";
-import {Config} from "../config/config";
-import {changelist} from "./changelist";
+import apicache from 'apicache';
+import { fetch } from 'cross-fetch';
+import { Express } from 'express';
+
+import { Config } from '../config/config';
+import { Auth } from './auth';
+import { changelist } from './changelist';
+import { Search } from './search';
 
 const cache = apicache.middleware;
 
@@ -76,9 +76,9 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 		}
 
 		let host = Config.host.replace("local:8000", "local:3000");
-		if (host.includes(":"))
+		if (host.match(/:[0-9]/))
 		{
-			host.replace("http", "https");
+			host = host.replace("http", "https");
 		}
 
 		const state = decodeURIComponent(req.query.state) || "/";
@@ -107,7 +107,7 @@ export const RegisterLocalEndpoints = (app: Express, clientFolder: string) =>
 		res.send(foundSettings);
 	});
 
-	app.get("*", (req: Request, res: Response, next: NextFunction) =>
+	app.get("*", (req, res, next) =>
 	{
 		res.sendFile("index.html", {root: clientFolder});
 	});

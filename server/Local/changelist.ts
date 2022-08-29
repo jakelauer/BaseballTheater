@@ -1,5 +1,8 @@
 export const changelist: { [datetime: string]: string[] } =
 	{
+		["2022-08-29"]: [
+			"Fix for Patreon login not working correct (service worker path blacklist needed to be reconfigured)"
+		],
 		["2022-08-27"]: [
 			"Fix for issue with back button not working in game details"
 		],

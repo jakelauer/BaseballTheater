@@ -38,7 +38,7 @@ const SidebarDrawer: React.FC<ISidebarDrawerProps> = ({authContext}) =>
 {
 	const navigate = useNavigate();
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	const [waitingForUpdate, setWaitingForUpdate] = useState(true);
+	const [waitingForUpdate, setWaitingForUpdate] = useState(false);
 	const location = useLocation();
 
 	useEffect(() => {

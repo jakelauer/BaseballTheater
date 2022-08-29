@@ -75,7 +75,8 @@ export class GameList extends React.Component<Props, State>
 	private fetchSchedule()
 	{
 		this.setState({
-			loading: true
+			loading: true,
+			scoreboard: null
 		});
 
 		MlbClientDataFetcher.getScoreboard(this.props.day)

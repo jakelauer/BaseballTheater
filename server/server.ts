@@ -1,26 +1,31 @@
-import {RegisterPlaybackEndpoints} from "./Playback/endpoints";
-import express from "express";
-import * as path from "path";
-import {RegisterLocalEndpoints} from "./Local/endpoints";
-import compression from "compression";
-import cookieParser from "cookie-parser";
-import serveStatic from "serve-static";
-import {Search} from "./Local/search";
-import bodyParser from "body-parser";
-import {Auth} from "./Local/auth";
-import {Database} from "./DB/Database";
-import {Populator} from "../workers/Populator";
-import moment from "moment";
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import moment from 'moment';
+import * as path from 'path';
+import serveStatic from 'serve-static';
+
+import { Populator } from '../workers/Populator';
+import { Database } from './DB/Database';
+import { Auth } from './Local/auth';
+import { RegisterLocalEndpoints } from './Local/endpoints';
+import { Search } from './Local/search';
+import { RegisterPlaybackEndpoints } from './Playback/endpoints';
 
 // Create the app
 const app = express();
-const port = process.env.port || 8000;
+const port = process.env.PORT || 8000;
 const clientFolder = path.join(process.cwd(), 'client');
 
-// Set up basic settings
-app.use(express.static(clientFolder, {
-	cacheControl: true
-}));
+console.log("clientFolder: " + clientFolder);
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(clientFolder, {
+		cacheControl: true,
+	}));
+}
+
 app.use(compression() as any);
 app.use(cookieParser() as any);
 app.use(bodyParser.json({

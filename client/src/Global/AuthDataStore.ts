@@ -1,4 +1,4 @@
-import {DataStore} from "./Intercom/DataStore";
+import { DataStore } from './Intercom/DataStore';
 
 // @ts-ignore
 
@@ -57,7 +57,7 @@ class _AuthDatastore extends DataStore<IAuthContext>
 			: [BackerType.None];
 
 		this.update({
-			authorized: !!user?.userId,
+			authorized: !!(user?.userId),
 			userId: user?.userId,
 			levels,
 			loaded: true
