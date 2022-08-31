@@ -100,7 +100,7 @@ export class GameList extends React.Component<Props, State>
 
 	private static getSearchLink(term: string, date: string)
 	{
-		return SiteRoutes.Search.resolve({
+		return SiteRoutes.SearchDate.resolve({
 			date,
 			query: term
 		});

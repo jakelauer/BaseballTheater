@@ -1,6 +1,8 @@
 export const changelist: { [datetime: string]: string[] } =
 	{
 		["2022-08-31"]: [
+			"Added back button to game detail",
+			"Fix for search shortcuts at the top of the game list",
 			"Remove auto-redirect at root URL",
 			"Show probable pitcher record and ERA",
 			"Fix for Plays tab so it default to the current inning instead of being blank"

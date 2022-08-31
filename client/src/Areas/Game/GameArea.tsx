@@ -1,11 +1,12 @@
-import { CircularProgress, LinearProgress, Tabs } from '@material-ui/core';
+import { CircularProgress, IconButton, LinearProgress, Tabs } from '@material-ui/core';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Tab from '@material-ui/core/Tab';
-import { LibraryBooks, ListAlt, PlayCircleOutline, Sync, TableChart } from '@material-ui/icons';
+import { ArrowBack, LibraryBooks, ListAlt, PlayCircleOutline, Sync, TableChart } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { ErrorBoundary } from '../../App/ErrorBoundary';
 import { AuthDataStore, BackerType } from '../../Global/AuthDataStore';
@@ -145,6 +146,8 @@ const GameArea: React.FC = () => {
 
 	const barValue = (gameData.secondsUntilRefresh - 1) / (gameDataStore.refreshSeconds - 1) * 100;
 
+	const validTabs = tabs.filter(a => !a.disabled);
+
 	return (
 		<>
 			<div className={styles.gameWrapper}>
@@ -163,15 +166,26 @@ const GameArea: React.FC = () => {
 							indicatorColor={"primary"}
 							textColor="primary"
 						>
+							{gameDataStore?.state?.liveData?.gameData && (
+								<Link to={SiteRoutes.Games.resolve({yyyymmdd: gameDataStore?.state?.liveData?.gameData?.datetime?.originalDate.replace(/-/g,"")})}>
+									<IconButton aria-label="back" color='primary' size={'medium'} style={{height: "3.5rem", zIndex: 4000}}>
+										<ArrowBack />
+									</IconButton>
+								</Link>
+							)}
 							{!gameData.cancelled && (
 								<RefreshTimer barValue={barValue} />
 							)}
-							{tabs.filter(a => !a.disabled).map(tab => (
+							{validTabs.map((tab, i) => (
 								<Tab
 									key={tab.label}
-									style={{ height: "3.5rem" }}
 									label={tab.label}
 									value={tab.value}
+									style={{
+										height: "3.5rem",
+										marginLeft: i === 0 ? "auto" : "",
+										marginRight: i === validTabs.length - 1 ? "auto" : undefined
+									}}
 								/>
 							))}
 						</Tabs>
@@ -186,7 +200,7 @@ const GameArea: React.FC = () => {
 							className={styles.root}
 							showLabels
 						>
-							{tabs.filter(a => !a.disabled).map(tab => (
+							{validTabs.map(tab => (
 								<BottomNavigationAction
 									style={{ minWidth: 0 }}
 									key={tab.label}
