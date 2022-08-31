@@ -1,5 +1,10 @@
 export const changelist: { [datetime: string]: string[] } =
 	{
+		["2022-08-31"]: [
+			"Remove auto-redirect at root URL",
+			"Show probable pitcher record and ERA",
+			"Fix for Plays tab so it default to the current inning instead of being blank"
+		],
 		["2022-08-29"]: [
 			"Fix for Patreon login not working correct (service worker path blacklist needed to be reconfigured)"
 		],

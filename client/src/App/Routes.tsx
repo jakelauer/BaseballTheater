@@ -1,7 +1,6 @@
-import moment from 'moment/moment';
 import * as React from 'react';
 import { ComponentType } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { SiteRoutes } from '../Global/Routes/Routes';
 import { ContainerProgress } from '../UI/ContainerProgress';
@@ -27,12 +26,11 @@ export class RouteContainer extends React.Component<Props, State>
 	}
 
 	public render() {
-		const today = moment().format("YYYYMMDD");
 
 		return (
 			<Routes>
 				<Route path={SiteRoutes.ApiTest.path} element={<Suspender importer={() => import("../Areas/ApiTest/ApiTestArea")} />} />
-				<Route path={SiteRoutes.GamesRoot.path} element={<Navigate to={SiteRoutes.Games.resolve({yyyymmdd: today})} />} />
+				<Route path={SiteRoutes.GamesRoot.path} element={<Suspender importer={() => import("../Areas/Games/GamesArea")} />} />
 				<Route path={SiteRoutes.Games.path} element={<Suspender importer={() => import("../Areas/Games/GamesArea")} />} />
 				<Route path={SiteRoutes.Game.path} element={<Suspender importer={() => import("../Areas/Game/GameArea")} />} />
 				<Route path={SiteRoutes.GameTab.path} element={<Suspender importer={() => import("../Areas/Game/GameArea")} />} />
@@ -44,7 +42,7 @@ export class RouteContainer extends React.Component<Props, State>
 				<Route path={SiteRoutes.Search.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
 				<Route path={SiteRoutes.SearchQuery.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
 				<Route path={SiteRoutes.SearchDate.path} element={<Suspender importer={() => import("../Areas/Search/SearchArea")} />} />
-				<Route path={"/"} element={<Navigate to={SiteRoutes.Games.resolve({yyyymmdd: today})} />} />
+				<Route path={"/"} element={<Suspender importer={() => import("../Areas/Games/GamesArea")} />} />
 			</Routes>
 		);
 	}

@@ -29,25 +29,32 @@ const GamesArea: React.FC = () => {
 	const params = useParams<IGamesAreaParams>();
 	const navigate = useNavigate();
 	const [translateX, setTranslateX] = useState(0);
-	const [dateString, setDateString] = useState(params.yyyymmdd || GamesUtils.StartingDate().format("YYYYMMDD"));
+
+	const yyyymmdd = params.yyyymmdd ?? moment().format("YYYYMMDD");
+
+	const [dateString, setDateString] = useState(yyyymmdd || GamesUtils.StartingDate().format("YYYYMMDD"));
 
 	useEffect(() => {
-		if (!params.yyyymmdd) {
+		if (!yyyymmdd) {
 			window.history.replaceState(null, null, SiteRoutes.Games.resolve({
 				yyyymmdd: dateString
 			}))
 		}
-	}, []);
+	}, [dateString, yyyymmdd]);
+
+	useEffect(() => {
+		setDateString(yyyymmdd);
+	}, [yyyymmdd]);
 
 	useEffect(() => {
 		const storedDateString = sessionStorage.getItem(SessionStorageDateStringKey);
 
-		const derivedDateString = params.yyyymmdd || storedDateString || GamesUtils.StartingDate().format("YYYYMMDD");
+		const derivedDateString = dateString || storedDateString || GamesUtils.StartingDate().format("YYYYMMDD");
 
 		sessionStorage.setItem(SessionStorageDateStringKey, derivedDateString);
 
 		setDateString(derivedDateString);
-	}, [params.yyyymmdd])
+	}, [dateString])
 
 	const onDateChange = (date: moment.Moment, value?: string) => {
 		if (date.isValid()) {
