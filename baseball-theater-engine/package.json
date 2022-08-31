@@ -12,7 +12,7 @@
     "apollo-link-http": "^1.5.16",
     "graphql-tag": "^2.10.3",
     "moment": "2.24.0",
-    "moment-timezone": "0.5.26",
+    "moment-timezone": "0.5.35",
     "node-fetch": "^2.6.1"
   },
   "files": [
