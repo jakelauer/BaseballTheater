@@ -42,7 +42,7 @@
     "graphql": "14.6.0",
     "graphql-tag": "2.10.3",
     "moment": "2.24.0",
-    "moment-timezone": "0.5.26",
+    "moment-timezone": "0.5.35",
     "mongodb": "3.3.2",
     "relay-compiler": "11.0.0",
     "relay-compiler-language-typescript": "13.0.6",
