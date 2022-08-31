@@ -71,7 +71,7 @@ export const Plays: React.FC<Props> = (props) => {
 			setHalfInnings(newHalfInnings);
 			sethalfInningsKeysSorted(newHalfInningsKeysSorted);
 		}
-	}, [props])
+	}, [halfInnings.length, props, selectedInning])
 
 	const onInningSelect = (inning: number) => setSelectedInning(inning);
 

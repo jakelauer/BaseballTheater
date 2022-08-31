@@ -1,6 +1,6 @@
-import {AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore, Player} from "./live";
-import {ITeams} from "./teams";
-import {GameMedia} from "./media";
+import { AbstractHomeAway, AbstractIdLinkName, LiveGameLinescore, Player, PlayerWithBoxScoreStats } from './live';
+import { GameMedia } from './media';
+import { ITeams } from './teams';
 
 export interface ISchedule
 {
@@ -72,7 +72,7 @@ export interface IScheduleGameDecisions
 export interface IScheduleTeamItem
 {
 	leagueRecord: IScheduleTeamRecord;
-	probablePitcher: Player;
+	probablePitcher: PlayerWithBoxScoreStats;
 	score: number;
 	team: IScheduleTeam;
 	isWinner: boolean;
