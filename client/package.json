@@ -37,7 +37,7 @@
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
     "moment-duration-format": "2.3.2",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.35",
     "path-to-regexp": "6.2.1",
     "react": "^18.2.0",
     "react-animated-burgers": "^1.2.7",
