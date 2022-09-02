@@ -215,14 +215,17 @@ const Score = (props: IScoreProps) =>
 
 const Preview = (props: ITeamRowProps) =>
 	{
-		const stats = props.team.probablePitcher.stats as any[];
-		const pitchingSeasonStats = stats?.find(a => a.group.displayName === "pitching" && a.type.displayName === "statsSingleSeason");
+		const probPitch = props.team?.probablePitcher;
+		const stats = probPitch?.stats as any[];
+		const pitchingSeasonStats = stats?.find(a => a.group?.displayName === "pitching" && a.type?.displayName === "statsSingleSeason");
 
 		return (
 			<TeamRow {...props}>
-				{props.team.probablePitcher &&
 				<div className={styles.preview}>
-					{props.team.probablePitcher.nameFirstLast} ({props.team.probablePitcher.pitchHand.code})
+					{!probPitch?.nameFirstLast && "TBD"}
+					{probPitch && (
+						<>
+					{probPitch?.nameFirstLast} ({probPitch?.pitchHand?.code})
 					{pitchingSeasonStats && (
 						<>
 							<div className={styles.record} style={{textAlign: "right"}}>
@@ -230,8 +233,9 @@ const Preview = (props: ITeamRowProps) =>
 							</div>
 						</>
 					)}
+					</>
+					)}
 				</div>
-				}
 			</TeamRow>
 		);
 	}

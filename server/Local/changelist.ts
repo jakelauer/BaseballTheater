@@ -1,5 +1,8 @@
 export const changelist: { [datetime: string]: string[] } =
 	{
+		["2022-09-01"]: [
+			"Fix for blank scoreboard when probable pitchers are TBD"
+		],
 		["2022-08-31"]: [
 			"Added back button to game detail",
 			"Fix for search shortcuts at the top of the game list",

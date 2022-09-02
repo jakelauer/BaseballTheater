@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "eslint:recommended"
+  ],
+  "rules": {},
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts?(x)"
+      ],
+      "rules": {}
+    }
+  ]
+}
