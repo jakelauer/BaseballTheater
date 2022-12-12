@@ -37,7 +37,7 @@
     "cross-fetch": "3.0.4",
     "customize-cra": "^1.0.0",
     "eslint-plugin-import": "2.20.1",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "express-serve-static-core": "0.1.1",
     "graphql": "14.6.0",
     "graphql-tag": "2.10.3",
