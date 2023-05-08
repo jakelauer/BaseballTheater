@@ -74,6 +74,7 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
+	"preinstall": "find . -type d -not -perm 777 -maxdepth 1 | grep node_modules && sudo chmod 777 node_modules || echo 'node_modules is already owned'",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",

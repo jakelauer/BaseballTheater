@@ -53,9 +53,12 @@ export const Highlights: React.FC<IHighlightsProps> = ({
 		? rest
 		: Array(20).fill(0);
 
-	const restRendered = videosOrSkeleton.map(item => (
+	const restRendered = videosOrSkeleton.map((item, index) => (
 		<Grid key={item.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
-			<Highlight media={item} className={styles.highlight} />
+			<Highlight media={item} className={styles.highlight} queue={{
+				highlights: videosOrSkeleton,
+				index
+			}} />
 		</Grid>
 	));
 

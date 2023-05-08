@@ -1,11 +1,12 @@
-import * as fs from "fs";
-import * as path from "path";
-import {Request, Response} from "express";
-import fetch from "cross-fetch";
-import {Database} from "../DB/Database";
-import ClientOAuth2 from "client-oauth2";
-import * as crypto from "crypto";
-import {Config} from "../config/config";
+import ClientOAuth2 from 'client-oauth2';
+import fetch from 'cross-fetch';
+import * as crypto from 'crypto';
+import { Request, Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
+
+import { Config } from '../config/config';
+import { Database } from '../DB/Database';
 
 interface TokenWithExpires extends ClientOAuth2.Token
 {

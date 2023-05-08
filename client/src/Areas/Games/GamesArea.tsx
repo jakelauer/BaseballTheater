@@ -126,8 +126,8 @@ const GamesArea: React.FC = () => {
 					</Link>
 				</div>
 				<div>
-					<Link to={today()}>
-						<Button variant={"contained"} style={{ marginLeft: "1rem", textDecoration: "none" }} color={"primary"}>
+					<Link to={today()} style={{ textDecoration: "none" }}>
+						<Button variant={"contained"} style={{ marginLeft: "1rem" }} color={"primary"}>
 							Today
 						</Button>
 					</Link>

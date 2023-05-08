@@ -2,11 +2,9 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import moment from 'moment';
 import * as path from 'path';
 import serveStatic from 'serve-static';
 
-import { Populator } from '../workers/Populator';
 import { Database } from './DB/Database';
 import { Auth } from './Local/auth';
 import { RegisterLocalEndpoints } from './Local/endpoints';
@@ -53,14 +51,3 @@ server.setTimeout(10000);
 Search.initialize();
 Auth.initialize();
 Database.initialize();
-
-const runPopulator = () =>
-{
-	Populator.initialize({
-		dateString: moment().add(-1, "days").format("YYYYMMDD")
-	});
-
-	setTimeout(runPopulator, 1000 * 60 * 60);
-};
-
-//runPopulator();

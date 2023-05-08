@@ -1,8 +1,7 @@
-import {MongoClient} from "mongodb";
-import * as fs from "fs";
-import * as path from "path";
-import AWS from "aws-sdk";
-import {IHighlightSearchItem} from "baseball-theater-engine";
+import AWS from 'aws-sdk';
+import { IHighlightSearchItem } from 'baseball-theater-engine';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface IUser
 {
@@ -16,22 +15,11 @@ export interface IUser
 class _Database
 {
 	public static Instance = new _Database();
-	private _client: MongoClient;
 	private _docClient: AWS.DynamoDB.DocumentClient;
 	private _table = "bbt-patrons";
-	private url: string;
 
 	constructor()
 	{
-		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
-		const keys = JSON.parse(keysFile)[0];
-		this.url = keys.mongo.url;
-
-		AWS.config.update({
-			region: 'us-west-2',
-			accessKeyId: keys.s3.AWS_ACCESS_KEY,
-			secretAccessKey: keys.s3.AWS_SECRET_ACCESS_KEY
-		});
 	}
 
 	private get client()
@@ -46,7 +34,16 @@ class _Database
 
 	public initialize()
 	{
-		this._docClient = new AWS.DynamoDB.DocumentClient();
+		const keysFile = fs.readFileSync(path.resolve(process.cwd(), "./server/config/keys.json"), "utf8");
+		const keys = JSON.parse(keysFile)[0];
+
+		console.log(keys.s3);
+
+		this._docClient = new AWS.DynamoDB.DocumentClient({
+			region: 'us-west-2',
+			accessKeyId: keys.s3.AWS_ACCESS_KEY,
+			secretAccessKey: keys.s3.AWS_SECRET_ACCESS_KEY
+		});
 	}
 
 	public async updateUser(id: string, update: Partial<IUser>)

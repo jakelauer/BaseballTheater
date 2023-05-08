@@ -13,6 +13,7 @@ import EventIcon from '@material-ui/icons/Event';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SportsBaseball from '@material-ui/icons/SportsBaseball';
 import carlsplace from 'assets/backers/carlsplace.png';
+import highinsky from 'assets/backers/highinsky.png';
 import storeporter from 'assets/backers/storeporter.png';
 import { Teams } from 'baseball-theater-engine';
 import cookies from 'browser-cookies';
@@ -190,6 +191,7 @@ class Sidebar extends React.Component<Props, State>
 				<div className={styles.sponsors}>
 					<p>Diamond Sponsors</p>
 					<Sponsor imagePath={carlsplace} url={"https://www.carlofet.com/?utm_medium=advertising&utm_source=baseballtheater&utm_campaign=baseballtheater"}/>
+					<Sponsor imagePath={highinsky} url={"https://highinsky.com"}/>
 					<Sponsor imagePath={storeporter} url={"https://storeporter.com"}/>
 					<Sponsor url={"https://www.patreon.com/jakelauer"}/>
 				</div>

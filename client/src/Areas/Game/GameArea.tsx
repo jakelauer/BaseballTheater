@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, LinearProgress, Tabs } from '@material-ui/core';
+import { CircularProgress, IconButton, Tabs } from '@material-ui/core';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Tab from '@material-ui/core/Tab';
@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { ErrorBoundary } from '../../App/ErrorBoundary';
 import { AuthDataStore, BackerType } from '../../Global/AuthDataStore';
 import { Respond } from '../../Global/Respond/Respond';
-import { RespondSizes } from '../../Global/Respond/RespondDataStore';
+import { RespondDataStore, RespondSizes } from '../../Global/Respond/RespondDataStore';
 import { GameTabs, IGameParams, IGameTabParams, SiteRoutes } from '../../Global/Routes/Routes';
 import { SettingsDataStore } from '../../Global/Settings/SettingsDataStore';
 import { useDataStore } from '../../Utility/HookUtils';
@@ -32,8 +32,7 @@ const GameArea: React.FC = () => {
 	const authData = useDataStore(AuthDataStore);
 	const [tabValue, setTabValue] = useState<string>(params.tab);
 
-	if(!gameDataStore)
-	{
+	if (!gameDataStore) {
 		gameDataStore = new GameDataStore(params.gameId);
 	}
 
@@ -41,14 +40,14 @@ const GameArea: React.FC = () => {
 
 	useEffect(() => {
 		gameDataStore.initialize(params.gameId)
-	},[params.gameId]);
+	}, [params.gameId]);
 
 	useEffect(() => {
 		setTabValue(params.tab);
 	}, [params.tab]);
 
 	useEffect(() => {
-		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 10000 : 30000);
+		gameDataStore.setMs(AuthDataStore.hasLevel(BackerType.Backer) ? 5000 : 30000);
 	}, [authData.levels]);
 
 	const handleChange = (e: React.ChangeEvent<{}>, value: string) => {
@@ -144,7 +143,7 @@ const GameArea: React.FC = () => {
 		},
 	];
 
-	const barValue = (gameData.secondsUntilRefresh - 1) / (gameDataStore.refreshSeconds - 1) * 100;
+	const barValue = (gameData.secondsUntilRefresh) / (gameDataStore.refreshSeconds) * 100;
 
 	const validTabs = tabs.filter(a => !a.disabled);
 
@@ -154,7 +153,7 @@ const GameArea: React.FC = () => {
 				<GameDataStoreContext.Provider value={gameDataStore.state}>
 					<Respond at={RespondSizes.medium} hide={false}>
 						{!gameData.cancelled && (
-							<RefreshTimer barValue={barValue} />
+							<RefreshTimer barValue={barValue} secondsUntilRefresh={gameData.secondsUntilRefresh} />
 						)}
 					</Respond>
 					<Respond at={RespondSizes.medium} hide={true}>
@@ -167,14 +166,14 @@ const GameArea: React.FC = () => {
 							textColor="primary"
 						>
 							{gameDataStore?.state?.liveData?.gameData && (
-								<Link to={SiteRoutes.Games.resolve({yyyymmdd: gameDataStore?.state?.liveData?.gameData?.datetime?.originalDate.replace(/-/g,"")})}>
-									<IconButton aria-label="back" color='primary' size={'medium'} style={{height: "3.5rem", zIndex: 4000}}>
+								<Link to={SiteRoutes.Games.resolve({ yyyymmdd: gameDataStore?.state?.liveData?.gameData?.datetime?.originalDate.replace(/-/g, "") })}>
+									<IconButton aria-label="back" color='primary' size={'medium'} style={{ height: "3.5rem", zIndex: 4000 }}>
 										<ArrowBack />
 									</IconButton>
 								</Link>
 							)}
 							{!gameData.cancelled && (
-								<RefreshTimer barValue={barValue} />
+								<RefreshTimer barValue={barValue} secondsUntilRefresh={gameData.secondsUntilRefresh} />
 							)}
 							{validTabs.map((tab, i) => (
 								<Tab
@@ -191,7 +190,7 @@ const GameArea: React.FC = () => {
 						</Tabs>
 					</Respond>
 					<div className={styles.content}>
-							{renderTab()}
+						{renderTab()}
 					</div>
 					<Respond at={RespondSizes.medium} hide={false}>
 						<BottomNavigation
@@ -219,22 +218,31 @@ const GameArea: React.FC = () => {
 }
 
 
-const RefreshTimer: React.FC<{ barValue: number }> = ({ barValue }) => {
+const RefreshTimer: React.FC<{ barValue: number, secondsUntilRefresh: number }> = ({ barValue, secondsUntilRefresh }) => {
 	const settings = useDataStore(SettingsDataStore);
+	const respond = useDataStore(RespondDataStore);
 
 	if (!settings.showUpdateBar) {
 		return null;
 	}
 
+	const secs = Math.floor(secondsUntilRefresh);
+
 	return (
-		<LinearProgress
-			classes={{
-				bar1Determinate: classNames(styles.progressBar, { [styles.progressBarNoAnim]: barValue >= 90 })
-			}}
-			variant={"determinate"}
-			value={barValue}
-			style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 99 }}
-		/>
+		<div className={classNames(styles.progressBar, {
+			[styles.mobile]: RespondDataStore.test(RespondSizes.medium)
+		})}>
+			<CircularProgress
+				classes={{
+					root: classNames({
+						[styles.progressBarNoAnim]: barValue >= 90,
+					})
+				}}
+				variant={secondsUntilRefresh <= 0 ? "indeterminate" : "determinate"}
+				value={barValue}
+			/>
+			<div className={styles.innerNumber}>{secs > 0 ? secs : ""}</div>
+		</div>
 	);
 }
 

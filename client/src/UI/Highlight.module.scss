@@ -1,29 +1,43 @@
-.highlight
-{
-	:global(.r-small) & .cardContent
-	{
+.highlight {
+	:global(.r-small) & .cardContent {
 		display: flex;
 	}
 }
 
-:global(.r-small) .title
-{
+:global(.r-small) .title {
 	font-size: 1rem !important;
 }
 
-.cardMedia
-{
-	height: 20vh;
+.cardMediaWrapper {
+	position: relative;
+	cursor: pointer;
+	.cardMedia {
+		height: 20vh;
 
-	:global(.r-small) &
+		:global(.r-small) & {
+			height: 100%;
+			width: 7rem;
+		}
+	}
+
+	.cardPlay {
+		position: absolute;
+		pointer-events: none;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+		color: white;
+		font-size: 3rem;
+		opacity: 0.5;
+	}
+
+	&:hover .cardPlay
 	{
-		height: 100%;
-		width: 7rem;
+		opacity: 1;
 	}
 }
 
-.actionArea
-{
+.actionArea {
 	flex: 1 0;
 	display: flex;
 	flex-direction: column;
@@ -31,8 +45,7 @@
 	justify-content: flex-start;
 }
 
-a
-{
+a {
 	text-decoration: none;
 	color: black;
 }

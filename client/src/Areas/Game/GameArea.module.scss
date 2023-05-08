@@ -54,7 +54,38 @@
 
 .progressBar
 {
+	position: absolute;
+	top: 7px !important;
+	right: 7px !important;
+	left: auto !important;
 	transition-duration: 1s;
+	padding: 3px 3px 0 3px;
+	z-index: 50;
+
+	&.mobile
+	{
+		background: white !important;
+		border-radius: 50%;
+		position: fixed;
+		bottom: 67px !important;
+		top: auto !important;
+		left: 7px !important;
+		right: auto !important;
+		box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+	}
+
+	.innerNumber
+	{
+		position: absolute;
+		display: flex;
+		top: 0;
+		left: 0;
+		width: 44px;
+		height: 43px;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+	}
 }
 
 .progressBarNoAnim

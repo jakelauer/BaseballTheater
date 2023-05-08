@@ -71,9 +71,12 @@ const TeamHighlights: React.FC = () => {
 	return (
 		<div className={styles.wrapper}>
 			<Grid container className={styles.rest} spacing={3} style={{ paddingLeft: 0, marginBottom: "2rem" }}>
-				{videos.map(video => (
+				{videos.map((video, index) => (
 					<Grid key={video.guid} item xs={12} sm={12} md={6} lg={4} xl={3}>
-						<Highlight media={video} className={styles.highlight} />
+						<Highlight media={video} className={styles.highlight} queue={{
+							highlights: videos,
+							index
+						}} />
 					</Grid>
 				))}
 			</Grid>

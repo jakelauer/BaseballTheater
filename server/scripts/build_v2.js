@@ -5,7 +5,6 @@ const buildSwagger = require("./swagger");
 const finalize = require("./finalize_v2");
 const webpack = require("webpack");
 const configFactory = require("../webpack.config");
-const popBuild = require("../../workers/scripts/build_populator");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolve = relativePath => path.resolve(appDirectory, relativePath);
@@ -22,20 +21,17 @@ fs.mkdirSync(outputDir);
 console.log("Starting Client");
 const compiler = webpack(configFactory(serverEnv, outputDir));
 compiler.run((err, stats) => {
-    console.log("Finished Client");
+	console.log("Finished Client");
 
-    popBuild(outputDir, () => {
-        console.log("Finished Populator");
 
-        finalize.finalize(buildDirName, buildDir, outputDir);
-        console.log("Finished Finalize");
+	finalize.finalize(buildDirName, buildDir, outputDir);
+	console.log("Finished Finalize");
 
-        buildSwagger.buildSwagger();
+	buildSwagger.buildSwagger();
 
-        console.log("Build is complete! Deleting build directory..");
-        setTimeout(() => {
-            fs.rmdir(buildDir, {recursive: true});
-            console.log("Finished at " + (new Date()));
-        }, 10000);
-    });
+	console.log("Build is complete! Deleting build directory..");
+	setTimeout(() => {
+		fs.rmdir(buildDir, { recursive: true });
+		console.log("Finished at " + (new Date()));
+	}, 10000);
 });

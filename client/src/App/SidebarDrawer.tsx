@@ -63,7 +63,7 @@ const SidebarDrawer: React.FC<ISidebarDrawerProps> = ({authContext}) =>
 		});
 	}
 
-		const hamburgerActive = !(location.pathname.includes("games"));
+		const hamburgerActive = !(location.pathname.includes("games")) && location.pathname !== "/";
 		const onClick = hamburgerActive
 			? () => navigate("/")
 			: openDrawer;

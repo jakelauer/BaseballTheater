@@ -27,12 +27,12 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 			media: null,
 			liveData: null,
 			lastRefresh: Date.now(),
-			secondsUntilRefresh: ms / 1000,
+			secondsUntilRefresh: Math.floor(ms / 1000),
 			cancelled: false
 		});
 	}
 
-	public initialize(gamePk: string, ms = 30 * 1000)
+	public initialize(gamePk: string, ms = 31 * 1000)
 	{
 		this.gamePk = gamePk;
 		this.ms = ms;
@@ -44,7 +44,7 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 			media: null,
 			liveData: null,
 			lastRefresh: Date.now(),
-			secondsUntilRefresh: ms / 1000,
+			secondsUntilRefresh: Math.floor(ms / 1000),
 			cancelled: false
 		});
 
@@ -89,7 +89,7 @@ export class GameDataStore extends DataStore<IGameDataStorePayload>
 			const sSinceRefresh = msSinceRefresh / 1000;
 
 			this.update({
-				secondsUntilRefresh: this.refreshSeconds - sSinceRefresh
+				secondsUntilRefresh: Math.max(0, Math.floor(this.refreshSeconds - sSinceRefresh))
 			});
 		}, 1000);
 	}
