@@ -9,5 +9,5 @@
   "ignore": [
     "server/**/*.spec.ts"
   ],
-  "exec": "yarn server"
+  "exec": "pnpm server:start"
 }

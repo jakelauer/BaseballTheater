@@ -15,6 +15,10 @@ const buildDirName = `build_${serverEnv}___${date.getFullYear()}_${date.getMonth
 const buildDir = resolve(`builds/${buildDirName}`);
 const outputDir = path.resolve(buildDir, "output");
 
+if(!fs.existsSync('builds')){
+	fs.mkdirSync('builds');
+}
+
 fs.mkdirSync(buildDir);
 fs.mkdirSync(outputDir);
 

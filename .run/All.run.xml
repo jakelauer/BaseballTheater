@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="All" type="CompoundRunConfigurationType">
-    <toRun name="server" type="js.build_tools.npm" />
-    <toRun name="relay" type="js.build_tools.npm" />
-    <toRun name="client" type="js.build_tools.npm" />
-    <method v="2" />
-  </configuration>
-</component>
