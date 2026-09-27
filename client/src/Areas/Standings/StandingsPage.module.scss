@@ -8,3 +8,15 @@
 	max-width: calc(100vw - 64px);
 	overflow-x: auto;
 }
+
+.cell.cutoff
+{
+	border-bottom: 1px dotted currentColor;
+}
+
+.hidden
+{
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+}

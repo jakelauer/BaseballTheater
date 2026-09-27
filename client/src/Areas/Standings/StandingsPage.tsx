@@ -1,19 +1,12 @@
 import * as React from "react";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
 import moment from "moment";
-import {Standings, StandingsRecord} from "baseball-theater-engine/contract/standings";
-import {TableContainer} from "@material-ui/core";
-import TableHead from "@material-ui/core/TableHead";
-import Table from "@material-ui/core/Table";
-import Tooltip from "@material-ui/core/Tooltip";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Typography from "@material-ui/core/Typography";
-import {Link} from "react-router-dom";
-import {SiteRoutes} from "../../Global/Routes/Routes";
-import {ITeams} from "baseball-theater-engine";
+import {Standings} from "baseball-theater-engine/contract/standings";
+import {Tab, Tabs} from "@material-ui/core";
+import classNames from "classnames";
 import {ContainerProgress} from "../../UI/ContainerProgress";
+import {DivisionStandings} from "./DivisionStandings";
+import {WildCardStandings} from "./WildCardStandings";
 import styles from "./StandingsPage.module.scss";
 
 interface IStandingsPageProps
@@ -30,6 +23,7 @@ type State = IStandingsPageState;
 interface IStandingsPageState
 {
 	standings: Standings;
+	tabIndex: number;
 }
 
 export class StandingsPage extends React.Component<Props, State>
@@ -39,7 +33,8 @@ export class StandingsPage extends React.Component<Props, State>
 		super(props);
 
 		this.state = {
-			standings: null
+			standings: null,
+			tabIndex: 0
 		};
 	}
 
@@ -56,6 +51,13 @@ export class StandingsPage extends React.Component<Props, State>
 			}));
 	}
 
+	private onTabSelect = (tabIndex: number) =>
+	{
+		this.setState({
+			tabIndex
+		});
+	};
+
 	public render()
 	{
 		if (!this.state.standings)
@@ -63,106 +65,30 @@ export class StandingsPage extends React.Component<Props, State>
 			return <ContainerProgress/>;
 		}
 
-		const records = this.state.standings.records;
+		const {tabIndex, standings} = this.state;
 
 		return (
 			<div>
-				{records.map(record => <Division {...record} />)}
+				<Tabs
+					value={tabIndex}
+					onChange={(e, i) => this.onTabSelect(i)}
+					centered={true}
+					indicatorColor={"primary"}
+					textColor="primary"
+				>
+					<Tab label={"Division"} value={0}/>
+					<Tab label={"Wild Card"} value={1}/>
+				</Tabs>
+
+				{/* Both stay rendered so the page keeps the wider tab's width and the tabs don't shift */}
+				<div className={classNames({[styles.hidden]: tabIndex !== 0})}>
+					<DivisionStandings standings={standings}/>
+				</div>
+
+				<div className={classNames({[styles.hidden]: tabIndex !== 1})}>
+					<WildCardStandings standings={standings}/>
+				</div>
 			</div>
 		);
 	}
 }
-
-const Division: React.FC<StandingsRecord> = (props) =>
-{
-	return (
-		<div style={{marginTop: "2rem"}}>
-			<Typography variant="h5">
-				{props.division.nameShort}
-			</Typography>
-			<TableContainer className={styles.table}>
-				<Table>
-					<TableHead>
-						<TableRow>
-							<TableCell>
-								Team
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Wins"} arrow placement={"top"}>
-									<span>W</span>
-								</Tooltip>
-							</TableCell>
-
-							<TableCell>
-								<Tooltip title={"Losses"} arrow placement={"top"}>
-									<span>L</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Winning Percentage"} arrow placement={"top"}>
-									<span>PCT</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Games Back"} arrow placement={"top"}>
-									<span>GB</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Magic Number"} arrow placement={"top"}>
-									<span>M#</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Runs Scored"} arrow placement={"top"}>
-									<span>RS</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Runs Allowed"} arrow placement={"top"}>
-									<span>RA</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Run Differential"} arrow placement={"top"}>
-									<span>Diff</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Expected Win-Loss"} arrow placement={"top"}>
-									<span>xWL</span>
-								</Tooltip>
-							</TableCell>
-							<TableCell>
-								<Tooltip title={"Expected Win-Loss (Projected)"} arrow placement={"top"}>
-									<span>xWLP</span>
-								</Tooltip>
-							</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{props.teamRecords.map(teamRecord => (
-							<TableRow>
-								<TableCell className={styles.cell}>
-									<Link to={SiteRoutes.Team.resolve({team: teamRecord.team.fileCode as keyof ITeams})}>
-										{teamRecord.team.teamName}
-									</Link>
-								</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.wins}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.losses}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.winningPercentage}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.gamesBack}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.magicNumber}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.runsScored}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.runsAllowed}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.runDifferential}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.records.expectedRecords[0].wins} - {teamRecord.records.expectedRecords[0].losses}</TableCell>
-								<TableCell className={styles.cell}>{teamRecord.records.expectedRecords[1].wins} - {teamRecord.records.expectedRecords[1].losses}</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</div>
-	);
-};
