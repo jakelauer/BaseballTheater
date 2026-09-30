@@ -97,11 +97,26 @@ export class MlbDataServer
 		);
 	}
 
-	public async getStandings(asOfDate: moment.Moment)
+	public async getStandings(asOfDate?: moment.Moment)
 	{
-		const date = asOfDate.format("YYYY-MM-DD");
-		const year = asOfDate.format("YYYY");
-		const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${year}&date=${date}&standingsTypes=regularSeason,springTraining,firstHalf,secondHalf&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))`;
+		// The API returns no records for dates after the regular season ends, so only send a date if asked
+		const season = parseInt((asOfDate || moment()).format("YYYY"), 10);
+		const dateParam = asOfDate ? `&date=${asOfDate.format("YYYY-MM-DD")}` : "";
+
+		const standings = await this.loadStandings(season, dateParam);
+
+		// Before opening day the new season has no standings yet, so fall back to last season's
+		if (!asOfDate && !standings.records.length)
+		{
+			return await this.loadStandings(season - 1, dateParam);
+		}
+
+		return standings;
+	}
+
+	private async loadStandings(season: number, dateParam: string)
+	{
+		const url = `https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${season}${dateParam}&standingsTypes=regularSeason&hydrate=division,conference,sport,league,team(nextSchedule(team,gameType=[R,F,D,L,W,C],inclusive=false),previousSchedule(team,gameType=[R,F,D,L,W,C],inclusive=true))`;
 
 		return await Internal_DataLoader.load<Standings>(
 			url,

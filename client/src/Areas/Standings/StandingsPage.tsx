@@ -1,6 +1,5 @@
 import * as React from "react";
 import {MlbClientDataFetcher} from "../../Global/Mlb/MlbClientDataFetcher";
-import moment from "moment";
 import {Standings, StandingsRecord} from "baseball-theater-engine/contract/standings";
 import {TableContainer} from "@material-ui/core";
 import TableHead from "@material-ui/core/TableHead";
@@ -50,7 +49,7 @@ export class StandingsPage extends React.Component<Props, State>
 
 	private loadStandings()
 	{
-		MlbClientDataFetcher.getStandings(moment())
+		MlbClientDataFetcher.getStandings()
 			.then(data => this.setState({
 				standings: data
 			}));
